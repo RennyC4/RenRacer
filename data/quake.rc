@@ -1,0 +1,69 @@
+//
+// allow quake to run the mod
+//
+
+registered 1
+
+//
+// load user settings
+//
+
+exec settings.cfg
+
+//
+// stuff command line statements
+//
+
+stuffcmds
+
+//
+// load up immediately
+//
+
+map map1
+
+//
+// set RenRacer defaults
+//
+
+scr_conspeed 9999
+crosshair 0
+cl_bob 0
+cl_rollangle 0
+volume 0.5
+sv_mintic 0.013
+sv_gameplayfix_qwplayerphysics 0
+sv_gameplayfix_findradiusdistancetobox 1
+sv_nqplayerphysics 1
+sv_bigcoords 1
+m_preset_chosen 1
+cl_lerp_maxinterval 0.3
+sv_autosave 0
+gl_blendsprites 1
+v_gunkick 1
+s_al_use_reverb 0
+cl_lerp_driftfrac 1
+seta m_preset_chosen 1
+snd_ignoregamespeed 1
+r_coronas_occlusion 1 // fix flicker corona effect
+r_sprite_backfacing 1 // oriented sprite fix
+r_keepimages 1 // skybox fix
+cfg_save_auto 1 // fte auto saves configs after certain times
+s_al_disable 2 // sound fix (disable OpenAL) for non-mono sounds
+r_meshpitch 0 // don't fix mesh pitch (breaks func_vechicle)
+pr_droptofloorunits 9999 // match raisetoroof
+
+//
+// bind regular quake stuff
+//
+
+bind "TAB" "+showscores"
+bind "`" "toggleconsole"
+bind "F12" "screenshot"
+bind "PAUSE" "pause"
+bind "f1" "help"
+bind "f9" "quit"
+
+//
+exec fte.cfg
+//

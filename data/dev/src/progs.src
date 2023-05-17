@@ -1,0 +1,32 @@
+../../progs.dat
+
+defs.qc
+subs.qc
+math.qc
+
+// func_vehicle
+maths.qc
+phys_defs.qc
+phys_matrix.qc
+phys_exec.qc
+
+chars/func_vehicle.qc
+func_vehicle_builtins.qc
+// func_vehicle
+
+misc.qc
+main.qc
+
+client.qc
+dummys.qc
+
+misc/headlights.qc
+misc/impulses.qc
+
+chars/marker.qc
+chars/rallygoal.qc
+
+// decorations
+chars/decor/stfinflag.qc
+chars/decor/pylon.qc
+chars/decor/barricade.qc

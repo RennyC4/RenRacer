@@ -1,0 +1,9 @@
+//documentation on this file can be found at https://sourceforge.net/p/fteqw/code/HEAD/tree/trunk/specs/fte_manifests.txt
+
+FTEManifestVer 1
+game renracer
+protocolname "renracer"
+basegame data
+disablehomedir 1
+MAXVER FTE 6262
+MINVER FTE 6262
