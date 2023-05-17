@@ -83,7 +83,7 @@ float bound2 (float bmin, float bvalue, float bmax)
 
 entity(vector org, float rad) searchradius =
 {
-	local entity y, head, ent;
+	local entity y, head, ent = world;
 	local vector v;
 
 	head = world;

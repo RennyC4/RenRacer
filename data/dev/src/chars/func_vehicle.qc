@@ -7,12 +7,10 @@ float VEHICLE_PERMANENT_GUN = 2;
 entity() hotrod;
 entity() triton;
 
-void PushAndDamageThink()
-{
+void PushAndDamageThink(){
 	entity e = self.p_damage_next;
-	while(e)
-	{
-		//T_Damage (e, self, self, e.p_damage_val);
+	while(e){
+//		T_Damage (e, self, self, e.p_damage_val);
 		e.p_damage_val = 0;
 		entity temp = e.p_damage_next;
 		e.p_damage_next = world;
@@ -24,11 +22,9 @@ void PushAndDamageThink()
 }
 
 // FIXME: need to take attacker mass into account
-void PushAndDamageTarget(entity instigator, entity targ)
-{
+void PushAndDamageTarget(entity instigator, entity targ){
 	vector vel = instigator.velocity;
-	if (!p_damage_thinker)
-	{
+	if (!p_damage_thinker){
 		p_damage_thinker = spawn();
 		p_damage_thinker.think = PushAndDamageThink;
 		p_damage_thinker.nextthink = time + 0.2;
@@ -65,8 +61,7 @@ void() PhysCrush =
 	PushAndDamageTarget(other, self);
 };
 
-void Car_TirePlace(entity tire)
-{
+void Car_TirePlace(entity tire){
 	entity tireparticle = tire.enemy;
 	tire.angles = vectoangles2(tireparticle.lmat_forward, tireparticle.lmat_up);
 
@@ -306,8 +301,7 @@ void(entity car) Car_InitVehicle =
 	}
 };
 
-float TryPlacePlayer(entity exit)
-{
+float TryPlacePlayer(entity exit){
 	setorigin(self, exit.origin);
 	if (!droptofloor())
 		return FALSE;
@@ -325,13 +319,13 @@ float modelindex_null;
 void(entity ply, entity car) Car_AttachToVehicle =
 {
 	entity oself;
-	if (ply.driving)
-	{ // already sitting in car
+	if (ply.driving){ // already sitting in car
 		ply.driving = world;
 		ply.solid = SOLID_SLIDEBOX;
 		ply.movetype = MOVETYPE_WALK;
 		ply.modelindex = modelindex_player;
-		stuffcmd(ply, "chase_active 1\n");
+		stuffcmd(ply, "chase_active 0\n");
+		stuffcmd(ply, "crosshair 1\n");
 		oself = self;
 		self = ply;
 		if (!TryPlacePlayer(FindStaticOfName("rightdoor", car)))
@@ -343,8 +337,7 @@ void(entity ply, entity car) Car_AttachToVehicle =
 		self = oself;
 		car.driving = world;
 	}
-	else
-	{
+	else {
 		//ply.view_ofs = '0 0 16';
 		ply.driving = car;
 		ply.solid = SOLID_NOT;
@@ -352,20 +345,21 @@ void(entity ply, entity car) Car_AttachToVehicle =
 		//ply.flags |= FL_FLY;
 		ply.modelindex = modelindex_null;
 		stuffcmd(ply, "chase_active 1\n");
+		stuffcmd(ply, "crosshair 0\n");
 		setorigin(ply, car.origin);
 		car.driving = ply;
 	}
 };
 
-void Car_CheckAttach()
-{
+void Car_CheckAttach(){
+	if (self.driving){
+		Car_AttachToVehicle(self, self.driving);
+		return;
+	}
 	entity e = findradius(self.origin + self.view_ofs, 100);
-	while(e)
-	{
-		if (e.classname == "physics_object")
-		{
-			if (!e.driving)
-			{
+	while(e){
+		if (e.classname == "physics_object"){
+			if (!e.driving){
 				Car_AttachToVehicle(self, e);
 				break;
 			}
@@ -377,7 +371,7 @@ void Car_CheckAttach()
 void(entity attacker, float damage) Car_Pain = {
 	if (!self.realowner.driving)
 		return;
-	//T_Damage(self.realowner.driving, attacker, attacker, damage * 0.5); // driving provides protection
+//	T_Damage(self.realowner.driving, attacker, attacker, damage * 0.5); // driving provides protection
 };
 
 void(float turn) Car_Turn =
@@ -484,15 +478,16 @@ void(float speed, float maxspeed) Car_Roll =
 	}
 }
 
-void TryUpdateVehicle()
-{
+void TryUpdateVehicle(){
 	if (!check_camera_state){
 		check_camera_state = TRUE;
 		if (self.driving){
 			stuffcmd(self, "chase_active 1\n");
+			stuffcmd(self, "crosshair 0\n");
 		}
 		else {
 			stuffcmd(self, "chase_active 0\n");
+			stuffcmd(self, "crosshair 1\n");
 		}
 	}
 	if (!self.driving)
@@ -609,11 +604,9 @@ void() StartFuncVehicle =
 	matrix_forward = v_forward;
 	matrix_left = -v_right;
 	matrix_up = v_up;
-	if (self.phys_particle_target)
-	{
+	if (self.phys_particle_target) {
 		e = find(world, targetname, self.phys_particle_target);
-		while(e)
-		{
+		while(e) {
 			e.physobj_next = self.physobj_particlelist;
 			self.physobj_particlelist = e;
 			e.owner = self;
@@ -628,11 +621,9 @@ void() StartFuncVehicle =
 			e = find(e, targetname, self.phys_particle_target);
 		}
 	}
-	if (self.phys_hitmodel_target)
-	{
+	if (self.phys_hitmodel_target) {
 		e = find(world, targetname, self.phys_hitmodel_target);
-		while(e)
-		{
+		while(e) {
 			e.physobj_next = self.physobj_hitmodel;
 			self.physobj_hitmodel = e;
 			e.owner = self;
@@ -645,11 +636,9 @@ void() StartFuncVehicle =
 			e = find(e, targetname, self.phys_hitmodel_target);
 		}
 	}
-	if (self.phys_static_target)
-	{
+	if (self.phys_static_target){
 		e = find(world, targetname, self.phys_static_target);
-		while(e)
-		{
+		while(e) {
 			e.physobj_next = self.physobj_staticlist;
 			self.physobj_staticlist = e;
 			e.owner = self;
@@ -689,7 +678,6 @@ void() func_vehicle =
 	self.think = StartFuncVehicle;
 	self.nextthink = 0.2;
 };
-
 /*QUAKED phys_hitmodel (1 0 0) (-8 -8 -8) (8 8 8)
 Hitmodels are brushes that move together with the physics-object and push entities around (for example monsters).
 
@@ -697,7 +685,6 @@ Hitmodels are brushes that move together with the physics-object and push entiti
 "model" must be defined, loads a .bsp model to use for pushing objects around
 "angle" base-pose for the physics object
 */
-
 void() phys_hitmodel =
 {
 	self.physobj_flags = self.physobj_flags | PHFLAGS_BSPMODEL; // this is always a bmodel
@@ -714,12 +701,10 @@ Hitmodels are brushes that move together with the physics-object and push entiti
 
 "targetname" must be defined, used by the physics object to find the particle
 */
-
 void() func_vehicle_hitmodel =
 {
 	phys_hitmodel();
 }
-
 /*QUAKED phys_particle (1 0 0) (-8 -8 -8) (8 8 8)
 Particles are what define the simulation-shape of a physics-object. These collide with the world and other entities.
 
@@ -737,7 +722,6 @@ Particles are what define the simulation-shape of a physics-object. These collid
 "physobj_bounce" 1 means no bounce, 2 means perfect reflection-bounce, good default 1.025
 "physobj_buoyancy" gravity multiplier when under-water, good default -0.75
 */
-
 void() phys_particle =
 {
 	setorigin (self, self.origin);
@@ -746,7 +730,6 @@ void() phys_particle =
 		setmodel (self, self.model);
 	}
 }
-
 /*QUAKED phys_static (1 0 0) (-8 -8 -8) (8 8 8)
 Statics are objects which follow the physics-object around but don't affect the physics themselves. Useful for models visually representing the physics-object, and for entrances/exits in a vehicle.
 
@@ -755,7 +738,6 @@ Statics are objects which follow the physics-object around but don't affect the 
 "netname" in vehicle-contexts useful names are chassis, roof, driver, but also rightdoor, leftdoor, topexit, botexit, backexit, frontexit
 "angle" base-pose angle for this static in the physics-object
 */
-
 void() phys_static =
 {
 	setorigin (self, self.origin);
@@ -764,7 +746,6 @@ void() phys_static =
 		setmodel (self, self.model);
 	}
 }
-
 /*QUAKED func_vehicle_static (1 0 0) ?
 Brush version of phys_static.
 
@@ -773,7 +754,6 @@ Statics are objects which follow the physics-object around but don't affect the 
 "targetname" must be defined, used by the physics-object to find the static
 "netname" in vehicle-contexts useful names are chassis, roof, driver, but also rightdoor, leftdoor, topexit, botexit, backexit, frontexit
 */
-
 void() func_vehicle_static =
 {
 	self.physobj_flags = self.physobj_flags | PHFLAGS_BSPMODEL;
@@ -799,7 +779,6 @@ Wheels are useful for vehicles! They're a combo of a particle and a static. Make
 "physobj_bounce" 1 means no bounce, 2 means perfect reflection-bounce, good default 1.025
 "physobj_buoyancy" gravity multiplier when under-water, good default -0.75
 */
-
 void() phys_wheel =
 {
 	setorigin (self, self.origin);
@@ -826,7 +805,6 @@ Wheels are useful for vehicles! They're a combo of a particle and a static. Make
 "physobj_bounce" 1 means no bounce, 2 means perfect reflection-bounce, good default 1.025
 "physobj_buoyancy" gravity multiplier when under-water, good default -0.75
 */
-
 void() func_vehicle_wheel =
 {
 	self.physobj_flags = self.physobj_flags | PHFLAGS_BSPMODEL;
@@ -836,22 +814,24 @@ void() func_vehicle_wheel =
 // legacy, hopefully can remove in next release
 void() func_vehicle_builtins =
 {
-	if (cvar("developer") != 0)
-	{
+	precache_model("maps/cube16.bsp");
+	precache_model("maps/cube32.bsp");
+	precache_model("maps/round16.bsp");
+	precache_model("maps/round32.bsp");
+
+	if (cvar("developer") != 0){
 		precache_model("progs/debug/org.mdl");
 		precache_model("progs/debug/orgbig.mdl");
 	}
 	precache_model("progs/null.spr");
 
 	entity car;
-	if (self.netname == "triton")
-	{
+	if (self.netname == "triton"){
 		precache_model("progs/test/whl.mdl");
 		precache_model("progs/test/triton.mdl");
 		car = triton();
 	}
-	else if (self.netname == "hotrod")
-	{
+	else if (self.netname == "hotrod"){
 		precache_model("progs/HotRod_body.mdl");
 		precache_model("progs/HotRod_roof.mdl");
 		precache_model("progs/HotRod_player_driver.mdl");
@@ -871,7 +851,6 @@ void() func_vehicle_builtins =
 	car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
 	Car_InitVehicle(car);
 };
-
 // legacy, hopefully can remove in next release
 void() func_vehicle_triton =
 {
@@ -894,7 +873,6 @@ void() func_vehicle_triton =
 	car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
 	Car_InitVehicle(car);
 };
-
 /*QUAKED vehicle_hotrod (1 0 0) (-8 -8 -8) (8 8 8) VEHICLE_NO_ROOF VEHICLE_PERMANENT_GUN
 The built-in Mad Max styled hotrod. 
 
@@ -902,7 +880,6 @@ SPAWNFLAGS
 "vehicle_no_roof" convertible style
 "vehicle_permanent_gun" turret always active
 */
-
 void() vehicle_hotrod =
 {
 	precache_model("maps/cube16.bsp");
@@ -910,8 +887,7 @@ void() vehicle_hotrod =
 	precache_model("maps/round16.bsp");
 	precache_model("maps/round32.bsp");
 
-	if (cvar("developer") != 0)
-	{
+	if (cvar("developer") != 0){
 		precache_model("progs/debug/org.mdl");
 		precache_model("progs/debug/orgbig.mdl");
 	}
@@ -935,7 +911,6 @@ void() vehicle_hotrod =
 	car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
 	Car_InitVehicle(car);
 };
-
 // legacy, hopefully can remove in next release
 void() func_vehicle_hotrod =
 {

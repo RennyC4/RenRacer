@@ -6,11 +6,6 @@
 //| Math Functions are stored here.                                            |
 //+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
 
-float(float v) anglemod =
-{
-	return v - floor(v/360) * 360;
-};
-
 float (float y1, float y2) angcomp = 
 {
 	local float answer;

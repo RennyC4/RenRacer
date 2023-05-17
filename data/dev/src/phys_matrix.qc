@@ -165,6 +165,7 @@ void(entity obj) Matrix_CalculateObjectMatrix =
 	matrix_left    = obj.relative_forward_y * tpart_forward + obj.relative_left_y * tpart_left + obj.relative_up_y * tpart_up;
 	matrix_up      = obj.relative_forward_z * tpart_forward + obj.relative_left_z * tpart_left + obj.relative_up_z * tpart_up;
 };
+
 #ifndef QSSDEP
 vector randomvec(){
 	vector v;

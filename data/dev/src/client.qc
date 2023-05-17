@@ -9,7 +9,7 @@
 void() CheckImpulses;
 
 void() ClientKill = {};
-void() ClientConnect = {};
+void(optional float csqcactive) ClientConnect = {};
 void() ClientDisconnect ={};
 void() PlayerPreThink = 
 {
@@ -30,7 +30,7 @@ void() PlayerPreThink =
 	if (!self.driving)
 	{
 		Car_CheckAttach();
-		centerprint (self, "RenRacer Alpha v0.3\n");
+		centerprint (self, "Welcome to RenRacer\n");
 	}
 };
 

@@ -25,6 +25,7 @@ void() rally_goal_touch =
 			self.think = rally_goal_nextmap;
 			self.nextthink = time + 5;
 			centerprint(other.owner.driving, "!!! YOU WIN !!!\n");
+			bprint (other.owner.driving.netname, " won the race!\n");
 			sound (self, CHAN_AUTO, "finish.wav", 1, ATTN_NONE);
 		}
 		else

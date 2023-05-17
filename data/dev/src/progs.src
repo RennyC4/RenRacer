@@ -1,5 +1,6 @@
 ../../progs.dat
 
+fteextensions.qc
 defs.qc
 subs.qc
 math.qc
