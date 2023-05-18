@@ -32,6 +32,29 @@ void() PlayerPreThink =
 		Car_CheckAttach();
 		centerprint (self, "Welcome to RenRacer\n");
 	}
+	else
+	{
+		if (self.start_laptime) // turned on by start/finish goal
+		{
+			if (self.laptime_tic_second < time)
+			{
+				self.laptime = self.laptime + 1; // count seconds
+				self.laptime_tic_second = time + 1;
+
+				self.overall_time = self.overall_time + 1;
+			}
+			if (self.laptime_tic_fastsecond < time)
+			{
+				self.laptime = self.laptime + 0.01; // count half seconds
+				self.laptime_tic_fastsecond = time + 0.01;
+
+				self.overall_time = self.overall_time + 0.01;
+			}
+			//TODO: Show on HUD
+			//local string d = ftos(self.laptime);
+			//bprint (d, "\n");
+		}
+	}
 };
 
 void() PlayerPostThink =

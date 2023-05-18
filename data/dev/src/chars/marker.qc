@@ -31,8 +31,9 @@ void() marker_think =
 			if (OK) // Do check point confirm
 			{
 				self.cnt = TRUE; // Start animation
-				self.effects = self.effects | EF_MUZZLEFLASH;
-				centerprint (targ, "! Checkpoint !\n");
+				self.effects = self.effects | EF_DIMLIGHT;
+				local string l = ftos(targ.laptime);
+				centerprint (targ, "! Checkpoint !\n", "\n Time: ", l, "\n");
 				sound (self, CHAN_AUTO, "checkpoint.wav", 1, ATTN_NORM);
 			}
 		}
@@ -51,6 +52,7 @@ void() marker_think =
 		}
 		else
 		{
+			self.effects = 0;
 			self.cnt = FALSE;
 			self.frame = 0;
 		}

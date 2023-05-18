@@ -5,7 +5,7 @@
 void() rally_barricade_think =
 {
 	local vector v;
-	local entity targ = searchradius(self.origin, 90);
+	local entity targ = searchradius(self.origin, 50);
 	while (targ)
 	{
 		if (targ.classname == "player" && self.hitobject_finished < time)

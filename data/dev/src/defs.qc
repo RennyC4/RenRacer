@@ -397,6 +397,7 @@ void() SUB_Remove = {remove(self);};
 float	modelindex_player;
 
 // RenRacer
+.string music;
 .string hitme; // used for searchradius collision looks for "TRUE"
 .float cnt; // misc counter
 .float lap;
@@ -404,5 +405,11 @@ float	modelindex_player;
 .float hitobject_finished;
 .float animation_finished;
 .float headlights;
-.float lap_time;
+
+// Lap time stats
+.float start_laptime; // ON / OFF
+.float laptime_tic_second;
+.float laptime_tic_fastsecond;
+.float laptime;
 .float fastest_lap;
+.float overall_time;
