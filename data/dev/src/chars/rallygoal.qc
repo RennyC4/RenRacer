@@ -16,12 +16,17 @@ void() rally_goal_touch =
 	//bprint (other.owner.driving.classname);
 	//bprint ("\n");
 
-	// Race Start
+	// Race start
 	if (other.owner.driving.checkpoint == 0 && !self.cnt)
 	{
-		self.cnt = TRUE; // Touched first
+		self.cnt = TRUE; // run once
 		other.owner.driving.start_laptime = TRUE; // Start counter
-		centerprint(other.owner.driving, "!!! GAS GAS GAS !!!\n");
+
+		if (!self.message)
+			centerprint(other.owner.driving, "!!! GAS GAS GAS !!!\n");
+		else
+			centerprint(other.owner.driving, self.message); // custom mapper message
+		
 		if (other.owner.driving.music != self.music)
 		{
 			stuffcmd (other.owner.driving, sprintf("music %s\n", self.music));
@@ -84,6 +89,7 @@ void() rally_goal_touch =
 	}
 };
 
+// Supports .message which is used for custom race start centerprints
 void() rally_goal =
 {
 	precache_sound ("lap.wav");
