@@ -6,7 +6,7 @@ void() marker_think =
 {
 	local float OK = 0;
 
-	local entity targ = searchradius(self.origin, 80);
+	local entity targ = searchradius(self.origin, 100);
 	while (targ)
 	{
 		if (targ.classname == "player")

@@ -52,6 +52,14 @@ cfg_save_auto 1 // fte auto saves configs after certain times
 s_al_disable 2 // sound fix (disable OpenAL) for non-mono sounds
 r_meshpitch 0 // don't fix mesh pitch (breaks func_vechicle)
 pr_droptofloorunits 9999 // match raisetoroof
+r_shadow_bumpscale_basetexture 1.75 // slight bump mapping with dlights
+r_shadows 0.75 // blob shadow
+r_hdr_framebuffer 1 // HDR on
+r_hdr_irisadaptation 1 // adapt to light/dark conditions
+r_hdr_irisadaptation_maxvalue 1.5 // adjustment value
+r_deluxemapping 0 // needs to be 0 with bumpscale base textures
+r_shadow_shadowmapping 1 // draw shadow maps (stencil is faster however)
+r_dynamic 0 // fixes odd ugly lighting
 
 //
 // bind regular quake stuff
