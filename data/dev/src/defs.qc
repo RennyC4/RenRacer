@@ -405,6 +405,8 @@ float	modelindex_player;
 .float hitobject_finished;
 .float animation_finished;
 .float headlights;
+.float engine_sound_time;
+.float realspeed; // send real speed from func_vehicle to client entity
 
 // Lap time stats
 .float start_laptime; // ON / OFF

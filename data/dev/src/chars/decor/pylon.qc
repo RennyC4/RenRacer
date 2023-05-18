@@ -8,7 +8,7 @@ void() rally_cone_think =
 	local entity targ = searchradius(self.origin, 40);
 	while (targ)
 	{
-		if (targ.classname == "player" && self.hitobject_finished < time)
+		if (targ.classname == "player" && self.hitobject_finished < time && targ.realspeed >= 12)
 		{
 			v_x = (other.velocity_x * 2 + 50 * random());
 			v_y = (other.velocity_y * 2 + 50 * random());

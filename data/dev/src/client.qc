@@ -11,6 +11,36 @@ void() CheckImpulses;
 void() ClientKill = {};
 void(optional float csqcactive) ClientConnect = {};
 void() ClientDisconnect ={};
+
+void() EngineSounds =
+{
+	if (time < self.engine_sound_time)
+		return;
+
+	if (self.realspeed < 10)
+	{
+		sound (self, CHAN_BODY, "engine/aa01.wav", 0.25, ATTN_NORM);
+		self.engine_sound_time = time + 0.3;
+	}
+	else if (self.realspeed > 10 && self.realspeed < 15)
+		sound (self, CHAN_BODY, "engine/aa02.wav", 0.28, ATTN_NORM);
+	else if (self.realspeed > 14 && self.realspeed < 20)
+		sound (self, CHAN_BODY, "engine/aa03.wav", 0.30, ATTN_NORM);
+	else if (self.realspeed > 19 && self.realspeed < 25)
+		sound (self, CHAN_BODY, "engine/aa04.wav", 0.32, ATTN_NORM);
+	else if (self.realspeed > 24 && self.realspeed < 30)
+		sound (self, CHAN_BODY, "engine/aa05.wav", 0.34, ATTN_NORM);
+	else if (self.realspeed > 29 && self.realspeed < 35)
+		sound (self, CHAN_BODY, "engine/aa06.wav", 0.36, ATTN_NORM);
+	else if (self.realspeed > 34 && self.realspeed < 40)
+		sound (self, CHAN_BODY, "engine/aa07.wav", 0.38, ATTN_NORM);
+	else if (self.realspeed > 45)
+		sound (self, CHAN_BODY, "engine/aa08.wav", 0.40, ATTN_NORM);
+
+	if (!(self.engine_sound_time > time))
+		self.engine_sound_time = time + 0.15;
+};
+
 void() PlayerPreThink = 
 {
 	// Player origin debugging
@@ -26,6 +56,14 @@ void() PlayerPreThink =
 	bprint (self.classname, "_Z: ", s_z, "\n");
 	*/
 	
+	// Player speed debugging
+	// 'real speed' is sent from func_vehicles Car_ChassiThink(); function
+	/*
+	local string f;
+	f = ftos(self.realspeed);
+	bprint ("Speed: ", f, "\n");
+	*/
+
 	// Force player in car, give greetings message
 	if (!self.driving)
 	{
@@ -34,6 +72,7 @@ void() PlayerPreThink =
 	}
 	else
 	{
+		EngineSounds();
 		if (self.start_laptime) // turned on by start/finish goal
 		{
 			if (self.laptime_tic_second < time)
@@ -50,9 +89,6 @@ void() PlayerPreThink =
 
 				self.overall_time = self.overall_time + 0.01;
 			}
-			//TODO: Show on HUD
-			//local string d = ftos(self.laptime);
-			//bprint (d, "\n");
 		}
 	}
 };

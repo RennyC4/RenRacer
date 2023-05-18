@@ -56,6 +56,15 @@ void() worldspawn =
 	// func_vehicle - end
 	//
 
+	precache_sound ("engine/aa01.wav");
+	precache_sound ("engine/aa02.wav");
+	precache_sound ("engine/aa03.wav");
+	precache_sound ("engine/aa04.wav");
+	precache_sound ("engine/aa05.wav");
+	precache_sound ("engine/aa06.wav");
+	precache_sound ("engine/aa07.wav");
+	precache_sound ("engine/aa08.wav");
+
 	world_lights();
 };
 

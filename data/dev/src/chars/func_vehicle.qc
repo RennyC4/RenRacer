@@ -115,6 +115,12 @@ void() Car_ChassiThink =
 #else
 	self.nextthink = time;
 #endif
+
+	// RennyC - Send real speed to player entity
+	local float r = vlen(car.velocity) * 0.1;
+	if (car.driving.classname == "player")
+		car.driving.realspeed = r;
+	//
 };
 
 #if defined(SMOOTH)
