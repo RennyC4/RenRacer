@@ -31,3 +31,6 @@ chars/rallygoal.qc
 chars/decor/stfinflag.qc
 chars/decor/pylon.qc
 chars/decor/barricade.qc
+
+//CSQC extensions start here.
+#pragma sourcefile "csprogs.src"
