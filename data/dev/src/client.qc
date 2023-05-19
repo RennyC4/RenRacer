@@ -7,10 +7,17 @@
 //+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
 
 void() CheckImpulses;
-
 void() ClientKill = {};
-void(optional float csqcactive) ClientConnect = {};
-void() ClientDisconnect ={};
+
+void(optional float csqcactive) ClientConnect =
+{
+	ClientInRankings(); // FrikBot
+};
+
+void() ClientDisconnect =
+{
+	ClientDisconnected(); // FrikBot
+};
 
 void() EngineSounds =
 {
@@ -43,6 +50,9 @@ void() EngineSounds =
 
 void() PlayerPreThink = 
 {
+	if (BotPreFrame()) // FrikBot
+		return;
+
 	// Player origin debugging
 	/*
 	local string s_x, s_y, s_z;
@@ -95,6 +105,9 @@ void() PlayerPreThink =
 
 void() PlayerPostThink =
 {
+	if (BotPostFrame()) // FrikBot
+		return;
+
 	TryUpdateVehicle();
 	CheckImpulses();
 };

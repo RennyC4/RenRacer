@@ -1401,13 +1401,15 @@ void() breakpoint = #6; /*
 float() random = #7; /*
 		Returns a random value between 0 and 1. Be warned, this builtin can return 1 in most engines, which can break arrays. */
 
-void(entity e, float chan, string samp, float vol, float atten, optional float speedpct, optional float flags, optional float timeofs) sound = #8; /*
+//void(entity e, float chan, string samp, float vol, float atten, optional float speedpct, optional float flags, optional float timeofs) sound = #8;
+ /*
 		Starts a sound centered upon the given entity.
 		chan is the entity sound channel to use, channel 0 will allow you to mix many samples at once, others will replace the old sample
 		'samp' must have been precached first
 		if specified, 'speedpct' should normally be around 100 (or =0), 200 for double speed or 50 for half speed.
 		If flags is specified, the reliable flag in the channels argument is used for additional channels. Flags should be made from SOUNDFLAG_* constants
-		timeofs should be negative in order to provide a delay before the sound actually starts. */
+		timeofs should be negative in order to provide a delay before the sound actually starts.
+*/
 
 vector(vector v) normalize = #9; /*
 		Shorten or lengthen a direction vector such that it is only one quake unit long. */
@@ -1462,9 +1464,9 @@ string(string s) precache_model = #20; /*
 
 #endif
 #ifdef SSQC
-void(entity client, string s) stuffcmd = #21; /*
-		Sends a console command (or cvar) to the client, where it will be executed. Different clients support different commands. Do NOT forget the final \n.
-		This builtin is generally considered evil. */
+//void(entity client, string s) stuffcmd = #21; /*
+//		Sends a console command (or cvar) to the client, where it will be executed. Different clients support different commands. Do NOT forget the final \n.
+//		This builtin is generally considered evil. */
 
 void(entity client, float flags, string s) stuffcmdflags = #0:stuffcmdflags; /* Part of FTE_QC_STUFFCMDFLAGS
 		Sends a console command (or cvar) to the client, where it will be executed. Different clients support different commands. Do NOT forget the final \n.
@@ -1487,8 +1489,8 @@ void(float msglvl, string s, optional string s2, optional string s3, optional st
 
 #endif
 #if defined(NQSSQC)
-void(entity client, string s, optional string s2, optional string s3, optional string s4, optional string s5, optional string s6, optional string s7) sprint = #24; /*
-		NQ: Concatenates all string arguments, and prints the messsage on the named client's console */
+//void(entity client, string s, optional string s2, optional string s3, optional string s4, optional string s5, optional string s6, optional string s7) sprint = #24; /*
+//		NQ: Concatenates all string arguments, and prints the messsage on the named client's console */
 
 #endif
 #if defined(QWSSQC)
@@ -1557,11 +1559,12 @@ float(float) fabs = #43; /*
 		Removes the sign of the float, making it positive if it is negative. */
 
 #endif
-#ifdef SSQC
-vector(entity player, float missilespeed) aim = #44; /*
-		Returns a direction vector (specifically v_forward on error). This builtin attempts to guess what pitch angle to fire projectiles at for people that don't know about mouselook. Does not affect yaw angles. */
 
-#endif
+//#ifdef SSQC
+//vector(entity player, float missilespeed) aim = #44; /*
+//		Returns a direction vector (specifically v_forward on error). This builtin attempts to guess what pitch angle to fire projectiles at for people that don't know about mouselook. Does not affect yaw angles. */
+//#endif
+
 #if defined(CSQC) || defined(SSQC)
 float(string) cvar = #45; /*
 		Returns the numeric value of the named cvar */
@@ -1583,18 +1586,20 @@ vector(vector fwd, optional vector up) vectoangles = #51; /*
 		Returns the angles (+x=UP) required to orient an entity to look in the given direction. The 'up' argument is required if you wish to set a roll angle, otherwise it will be limited to just monster-style turning. */
 
 #endif
-#ifdef SSQC
-void(float to, float val) WriteByte = #52; /*
-		Writes a single byte into a network message buffer. Typically you will find a more correct alternative to writing arbitary data. 'to' should be one of the MSG_* constants. MSG_ONE must have msg_entity set first. */
 
-void(float to, float val) WriteChar = #53;
-void(float to, float val) WriteShort = #54;
-void(float to, float val) WriteLong = #55;
-void(float to, float val) WriteCoord = #56;
-void(float to, float val) WriteAngle = #57;
-void(float to, string val) WriteString = #58;
-void(float to, entity val) WriteEntity = #59;
+#ifdef SSQC
+//void(float to, float val) WriteByte = #52; /*
+//		Writes a single byte into a network message buffer. Typically you will find a more correct alternative to writing arbitary data. 'to' should be one of the MSG_* constants. MSG_ONE must have msg_entity set first. */
+
+//void(float to, float val) WriteChar = #53;
+//void(float to, float val) WriteShort = #54;
+//void(float to, float val) WriteLong = #55;
+//void(float to, float val) WriteCoord = #56;
+//void(float to, float val) WriteAngle = #57;
+//void(float to, string val) WriteString = #58;
+//void(float to, entity val) WriteEntity = #59;
 #endif
+
 #if defined(CSQC) || defined(SSQC)
 //float(float angle) sin = #60; /* Part of DP_QC_SINCOSSQRTPOW
 //		Forgive me father, for I have trigonometry homework. */
@@ -1629,9 +1634,9 @@ void(string cvarname, string valuetoset) cvar_set = #72; /*
 		Instantly sets a cvar to the given string value. */
 
 #endif
-#ifdef SSQC
-void(entity ent, string text, optional string text2, optional string text3, optional string text4, optional string text5, optional string text6, optional string text7) centerprint = #73;
-#endif
+//#ifdef SSQC
+//void(entity ent, string text, optional string text2, optional string text3, optional string text4, optional string text5, optional string text6, optional string text7) centerprint = #73;
+//#endif
 #if defined(CSQC) || defined(SSQC)
 void (vector pos, string samp, float vol, float atten) ambientsound = #74;
 string(string str) precache_model2 = #75;
@@ -1639,7 +1644,7 @@ string(string str) precache_sound2 = #76;
 string(string str) precache_file2 = #77;
 #endif
 #ifdef SSQC
-void(entity player) setspawnparms = #78;
+//void(entity player) setspawnparms = #78;
 void(entity killer, entity killee) logfrag = #79; /* Part of QW_ENGINE*/
 #endif
 #if defined(CSQC) || defined(SSQC)

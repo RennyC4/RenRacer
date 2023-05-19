@@ -66,14 +66,15 @@ void() worldspawn =
 	precache_sound ("engine/aa08.wav");
 
 	world_lights();
+	BotInit();  // FrikBot
 };
 
 void() SetNewParms = {};
 void() SetChangeParms = {};
 
-float framecount;
 void() StartFrame = 
 {
+	BotFrame(); // FrikBot
 	framecount = framecount + 1;
 };
 

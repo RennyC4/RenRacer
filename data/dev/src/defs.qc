@@ -145,7 +145,7 @@ entity() checkclient				= #17;		// returns a client to look for
 entity(entity start, .string fld, string match) find = #18;
 string(string s) precache_sound			= #19;
 string(string s) precache_model			= #20;
-void(entity client, string s)stuffcmd		= #21;
+//void(entity client, string s)stuffcmd		= #21;
 //entity(vector org, float rad) findradius	= #22;
 void(string s) dprint				= #25;
 string(float f) ftos				= #26;
@@ -163,20 +163,20 @@ float(float v) ceil				= #38;		// smallest integer >= v
 float(entity e) checkbottom			= #40;		// true if self is on ground
 float(vector v) pointcontents			= #41;		// returns a CONTENT_*
 float(float f) fabs				= #43;
-vector(entity e, float speed) aim		= #44;		// returns the shooting vector
+//vector(entity e, float speed) aim		= #44;		// returns the shooting vector
 float(string s) cvar				= #45;		// return cvar.value
 void(string s) localcmd				= #46;		// put string into local que
 entity(entity e) nextent			= #47;		// for looping through all ents
 void() ChangeYaw 				= #49;		// turn towards self.ideal_yaw
 //vector(vector v) vectoangles			= #51;
-void(float to, float f) WriteByte		= #52;
-void(float to, float f) WriteChar		= #53;
-void(float to, float f) WriteShort		= #54;
-void(float to, float f) WriteLong		= #55;
-void(float to, float f) WriteCoord		= #56;
-void(float to, float f) WriteAngle		= #57;
-void(float to, string s) WriteString		= #58;
-void(float to, entity s) WriteEntity		= #59;
+//void(float to, float f) WriteByte		= #52;
+//void(float to, float f) WriteChar		= #53;
+//void(float to, float f) WriteShort		= #54;
+//void(float to, float f) WriteLong		= #55;
+//void(float to, float f) WriteCoord		= #56;
+//void(float to, float f) WriteAngle		= #57;
+//void(float to, string s) WriteString		= #58;
+//void(float to, entity s) WriteEntity		= #59;
 void(float step) movetogoal			= #67;
 string(string s) precache_file			= #68;		// no effect except for -copy
 void(entity e) makestatic			= #69;
@@ -193,7 +193,7 @@ void(vector pos, string samp, float vol, float atten) ambientsound = #74;
 string(string s) precache_model2		= #75;	// registered version only
 string(string s) precache_sound2		= #76;	// registered version only
 string(string s) precache_file2			= #77;	// registered version only
-void(entity e) setspawnparms			= #78;	// set parm1... to the
+//void(entity e) setspawnparms			= #78;	// set parm1... to the
 
 //
 // constants
@@ -397,6 +397,8 @@ void() SUB_Remove = {remove(self);};
 float	modelindex_player;
 
 // RenRacer
+float framecount;
+
 .string music;
 .string hitme; // used for searchradius collision looks for "TRUE"
 .float cnt; // misc counter
@@ -415,3 +417,13 @@ float	modelindex_player;
 .float laptime;
 .float fastest_lap;
 .float overall_time;
+
+// FrikBot X
+.float count;
+.float search_time;
+.float state;
+.float air_finished;
+
+.vector dest1;
+.vector dest2;
+float	IT_INVISIBILITY			= 524288;
