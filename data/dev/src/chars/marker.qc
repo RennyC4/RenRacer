@@ -71,6 +71,7 @@ void() rally_marker =
 	setsize(self, '-60 -60 0', '60 60 0');
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
+	self.classname = "marker";
 	droptofloor();
 
 	self.think = marker_think;

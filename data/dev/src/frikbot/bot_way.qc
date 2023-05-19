@@ -239,6 +239,7 @@ entity(entity start) FindWayPoint =
 	return best;
 };
 
+
 /*
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -277,6 +278,51 @@ entity(vector org) make_waypoint =
 	if (waypoint_mode > WM_LOADED) // editor modes
 		setmodel(point, "progs/s_bubble.spr"); 
 	return point;
+};
+
+/*
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+bot_lost
+
+Bot has lost its target.
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+*/
+
+void(entity targ, float success) bot_lost =
+{
+	if (!targ)
+		return;
+
+	if (targ.classname == "waypoint")
+		targ.b_sound = targ.b_sound - (targ.b_sound & ClientBitFlag(self.b_clientno));
+
+	// find a new route
+	if (!success)
+	{
+		self.target1 = self.target2 = self.target3 = self.target4 = world;
+		self.last_way = FindWayPoint(self.current_way);
+		self.b_aiflags = 0;
+	}
+        else
+        {
+		if (targ.classname == "item_artifact_invisibility")
+			if (self.items & 524288)
+				bot_start_topic(3);
+                
+                if (targ.flags & FL_ITEM)
+                {
+                        if (targ.model == string_null)
+                                targ._last = world;
+                        else
+                                targ._last = self;
+                }
+        }
+
+
+	if (targ.classname != "player")
+		targ.search_time = time + 5;
 };
 
 /*
@@ -980,6 +1026,55 @@ void(vector org, vector bit1, float bit4, float flargs) make_way =
 	}
 };
 
+/*
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+target_onstack
+
+checks to see if an entity is on the bot's stack
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+*/
+
+float(entity scot) target_onstack =
+{
+	if (scot == world)
+		return FALSE;
+	else if (self.target1 == scot)
+		return 1;
+	else if (self.target2 == scot)
+		return 2;
+	else if (self.target3 == scot)
+		return 3;
+	else if (self.target4 == scot)
+		return 4;
+	else
+		return FALSE;
+};
+
+/*
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+target_add
+
+adds a new entity to the stack, since it's a
+LIFO stack, this will be the bot's new target1
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+*/
+
+void(entity ent) target_add =
+{
+	if (ent == world)
+		return;
+	if (target_onstack(ent))
+		return;
+	self.target4 = self.target3;
+	self.target3 = self.target2;
+	self.target2 = self.target1;
+	self.target1 = ent;
+	self.search_time = time + 5;
+};
 
 /*
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

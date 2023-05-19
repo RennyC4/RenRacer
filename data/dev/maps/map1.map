@@ -1177,3 +1177,8 @@
 ( 1560 -8192 8192 ) ( 1560 8192 8192 ) ( 1560 8192 -8192 ) sumashrubb 40 0 0 1 1
 }
 }
+// entity 45
+{
+"origin" "1432 872 -120"
+"classname" "bot_waypoint_goal"
+}
