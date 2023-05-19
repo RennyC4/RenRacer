@@ -8,6 +8,7 @@ void() rally_goal_nextmap =
 	changelevel (nextmap);
 };
 
+.float goal_touched;
 void() rally_goal_touch =
 {
 	if (other.owner.driving.classname != "player")
@@ -17,9 +18,9 @@ void() rally_goal_touch =
 	//bprint ("\n");
 
 	// Race start
-	if (other.owner.driving.checkpoint == 0 && !self.cnt)
+	if (other.owner.driving.checkpoint == 0 && !other.owner.driving.goal_touched)
 	{
-		self.cnt = TRUE; // run once
+		other.owner.driving.goal_touched = TRUE; // run once
 		other.owner.driving.start_laptime = TRUE; // Start counter
 
 		if (!self.message)

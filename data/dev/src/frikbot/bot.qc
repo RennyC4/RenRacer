@@ -155,7 +155,7 @@ float SVC_UPDATEFRAGS	= 14;
 float SVC_UPDATECOLORS	= 17;
 
 // used for the physics & movement AI
-float KEY_MOVEUP 		= 1;
+float KEY_MOVEUP 	= 1;
 float KEY_MOVEDOWN 	= 2;
 float KEY_MOVELEFT 	= 4;
 float KEY_MOVERIGHT 	= 8;
@@ -194,7 +194,6 @@ float AI_ROUTE_FAILED	= 2;
 float AI_WAIT		= 4;
 float AI_DANGER		= 8;
 
-
 // addition masks
 float AI_POINT_TYPES 	= 29152;
 float AI_READAHEAD_TYPES	= 36528;
@@ -208,30 +207,29 @@ float WM_EDITOR		= 4;
 float WM_EDITOR_DYNAMIC	= 5;
 float WM_EDITOR_DYNLINK	= 6;
 
-
 float OPT_SAVEBOTS	= 1;
 float OPT_NOCHAT	= 2;
 
 // -------globals-----
 float 	active_clients;
-float		max_clients, real_frametime;
-float		bot_count, b_options;
-float		waypoint_mode, dump_mode; 
-float		waypoints, direct_route;
-float		sv_friction, sv_gravity;
-float		sv_accelerate, sv_maxspeed, sv_stopspeed;
+float	max_clients, real_frametime;
+float	bot_count, b_options;
+float	waypoint_mode, dump_mode; 
+float	waypoints, direct_route;
+float	sv_friction, sv_gravity;
+float	sv_accelerate, sv_maxspeed, sv_stopspeed;
 entity	fixer;
 entity	route_table;
 entity	b_temp1, b_temp2, b_temp3;
 entity 	player_head, phys_head, way_head;
-float		busy_waypoints;
-float		saved_bots, saved_skills1, saved_skills2, current_bots;
+float	busy_waypoints;
+float	saved_bots, saved_skills1, saved_skills2, current_bots;
 
 // -------ProtoTypes------
 // external
 void(optional float csqcactive) ClientConnect;
-void()				ClientDisconnect;
-void()				SetNewParms;
+void() ClientDisconnect;
+void() SetNewParms;
 
 // rankings
 float(float clientno)		ClientBitFlag;
@@ -305,9 +303,7 @@ void(float to, float f)		frik_WriteCoord = #56;
 void(float to, float f)		frik_WriteAngle = #57;
 void(float to, string s)	frik_WriteString	= #58;
 void(float to, entity s)	frik_WriteEntity	= #59;
-
-void(entity client, string s1, string s2, string s3, string s4, string s5, string s6, string s7)
-frik_big_centerprint = #73;
+void(entity client, string s1, string s2, string s3, string s4, string s5, string s6, string s7) frik_big_centerprint = #73;
 
 //----------------------------------------------------------------------------
 
@@ -361,6 +357,9 @@ void(entity	e) setspawnparms =
 		SetNewParms();
 	}
 };
+
+// TODO: Fix me for FTEExtesion compatibility
+/*
 void(entity client, string s, optional string s2, optional string s3, optional string s4, optional string s5, optional string s6, optional string s7) sprint =
 {
 	if (client.ishuman == 1)
@@ -378,10 +377,14 @@ void(entity client, string s, optional string s2, optional string s3, optional s
 	}
 
 };
+*/
+
+// TODO: Fix me for FTEExtesion compatibility
+/*
 void(entity client, string s, optional string text2, optional string text3, optional string text4, optional string text5, optional string text6, optional string text7) centerprint =
 {
 	if (client.ishuman == 1)
-		frik_centerprint(client, s);
+			frik_centerprint(client, s);
 	b_temp1 = player_head;
 
 	while(b_temp1)
@@ -394,6 +397,7 @@ void(entity client, string s, optional string text2, optional string text3, opti
 		b_temp1 = b_temp1._next;
 	}
 };
+*/
 
 vector(entity e, float sped) aim =
 {
@@ -403,7 +407,6 @@ vector(entity e, float sped) aim =
 
 void(entity e, float chan, string samp, float vol, float atten, optional float speedpct, optional float flags, optional float timeofs) sound = 
 {
-
 	frik_sound(e, chan, samp, vol, atten);
 	if (samp == "items/inv3.wav")
 		return;
@@ -461,6 +464,7 @@ void(float to, entity s) WriteEntity =
 		return;
 	frik_WriteEntity(to, s);
 };
+
 /*
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -551,8 +555,6 @@ void() botcam_u =
 	sprint(self, "\n");
 };
 
-
-
 /*
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -616,7 +618,6 @@ void() ClientInRankings =
 	self.switch_wallhug = time + 1;
 };
 
-
 void() ClientDisconnected =
 {
 	if (player_head == self)
@@ -628,6 +629,7 @@ void() ClientDisconnected =
 
 	active_clients = active_clients - active_clients & ClientBitFlag(self.b_clientno);
 };
+
 /*
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -636,7 +638,7 @@ bot easier to install
 
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 */
-float () BotPreFrame =
+float() BotPreFrame =
 {
 	if (self.b_clientno == -1)
 		return TRUE;
@@ -648,9 +650,9 @@ float () BotPreFrame =
 			return TRUE;
 		
 	}
+
 	if (self.b_frags != self.frags)
 	{
-		
 		if (self.b_frags > self.frags)
 		{
 			if (pointcontents(self.origin) == CONTENT_LAVA)
@@ -665,13 +667,13 @@ float () BotPreFrame =
 	DynamicWaypoint();
 	return FALSE;
 };
+
 float () BotPostFrame =
 {
 	if (self.b_clientno == -1)
 		return TRUE;
 	if (self.ishuman)
 	{
-
 		if (waypoint_mode > WM_LOADED)
 			bot_menu_display();
 
@@ -692,6 +694,7 @@ The rest of this code is in bot_misc.qc
 
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 */
+
 void(string h) BotSay = // simulate talking by composing a 'chat' message
 {
 	WriteByte(MSG_ALL, 8);
@@ -701,18 +704,21 @@ void(string h) BotSay = // simulate talking by composing a 'chat' message
 	WriteByte(MSG_ALL, 2);
 	WriteString(MSG_ALL, h);
 };
+
 void() BotSayInit =
 {
 	WriteByte(MSG_ALL, 8);
 	WriteByte(MSG_ALL, 1);
 	WriteString(MSG_ALL, self.netname);
 };
+
 void(string h) BotSay2 =
 {
 	WriteByte(MSG_ALL, 8);
 	WriteByte(MSG_ALL, 2);
 	WriteString(MSG_ALL, h);
 };
+
 void(string h) BotSayTeam = 
 {
 	local entity t;
@@ -736,6 +742,7 @@ void(string h) BotSayTeam =
 		t = t._next;
 	}
 };
+
 /*
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -743,7 +750,6 @@ BotInit
 
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 */
-
 
 void() BotInit =
 {
@@ -766,7 +772,6 @@ void() BotInit =
 	fisent = world;
 	while (numents < max_clients)
 	{
-
 		phys_head = spawn();
 		if (fisent)
 			fisent._next = phys_head;
@@ -792,7 +797,6 @@ signs on to the server.
 
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 */
-
 
 void(entity who) UpdateClient =
 {
@@ -857,7 +861,6 @@ float() ClientNextAvailable =
 		if(!(active_clients & ClientBitFlag(clientno)))
 			return clientno;
 	}
-
 	return -1;
 };
 
@@ -931,7 +934,8 @@ float(float tcolor) FindAnotherColor =
 BotConnect and related functions.
 
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-*/				
+*/
+			
 entity(float num) GetClientEntity =
 {
 	local entity upsy;
@@ -971,7 +975,6 @@ void(float whichteam, float whatbot, float whatskill) BotConnect =
 		self.netname = BotName(whatbot);
 	else
 		self.netname = PickARandomName();
-
 
 	// players can set skill all weird, so leave these checks in
 	whatskill = rint(whatskill);
@@ -1020,7 +1023,6 @@ void(float whichteam, float whatbot, float whatskill) BotConnect =
 	h = ftos(saved_skills2);
 	cvar_set("scratch3", h);
 	self = uself;
-
 };
 
 void(entity bot) BotDisconnect =
@@ -1034,7 +1036,6 @@ void(entity bot) BotDisconnect =
 	current_bots = current_bots - (current_bots & ClientBitFlag(self.b_num - 1));
 	h = ftos(current_bots);
 	cvar_set("scratch1", h);
-
 
 	ClientDisconnect();
 
@@ -1059,6 +1060,7 @@ void(entity bot) BotDisconnect =
    	}
 	self = uself;
 };
+
 /*
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -1142,7 +1144,6 @@ void() bot_return =
 	}
 };
 
-
 void() WaypointWatch =
 {
 	// Waypoint Baywatch
@@ -1197,6 +1198,7 @@ void() WaypointWatch =
 			waypoint_mode = WM_LOADED;
 	}
 };
+
 void() BotFrame =
 {
 	local float num;
@@ -1266,6 +1268,4 @@ void() BotImpulses =
 
 	self.impulse = 0;
 };
-
-
 

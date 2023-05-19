@@ -1489,8 +1489,8 @@ void(float msglvl, string s, optional string s2, optional string s3, optional st
 
 #endif
 #if defined(NQSSQC)
-//void(entity client, string s, optional string s2, optional string s3, optional string s4, optional string s5, optional string s6, optional string s7) sprint = #24; /*
-//		NQ: Concatenates all string arguments, and prints the messsage on the named client's console */
+void(entity client, string s, optional string s2, optional string s3, optional string s4, optional string s5, optional string s6, optional string s7) sprint = #24; /*
+		NQ: Concatenates all string arguments, and prints the messsage on the named client's console */
 
 #endif
 #if defined(QWSSQC)
@@ -1634,9 +1634,9 @@ void(string cvarname, string valuetoset) cvar_set = #72; /*
 		Instantly sets a cvar to the given string value. */
 
 #endif
-//#ifdef SSQC
-//void(entity ent, string text, optional string text2, optional string text3, optional string text4, optional string text5, optional string text6, optional string text7) centerprint = #73;
-//#endif
+#ifdef SSQC
+void(entity ent, string text, optional string text2, optional string text3, optional string text4, optional string text5, optional string text6, optional string text7) centerprint = #73;
+#endif
 #if defined(CSQC) || defined(SSQC)
 void (vector pos, string samp, float vol, float atten) ambientsound = #74;
 string(string str) precache_model2 = #75;
