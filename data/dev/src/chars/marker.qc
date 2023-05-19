@@ -9,7 +9,7 @@ void() marker_think =
 	local entity targ = searchradius(self.origin, 100);
 	while (targ)
 	{
-		if (targ.classname == "player" && targ.goal_touched)
+		if (targ.classname == "player" && targ.goal_touched && fisible(targ))
 		{
 			if (self.checkpoint == 1) // first check point
 			{

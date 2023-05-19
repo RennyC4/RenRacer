@@ -230,7 +230,7 @@ void() BotAI =
 		//bprint ("FindCheckPoint\n");
 		FindCheckPoint();
 		self.findcheckpoint_fail = self.findcheckpoint_fail + 1;
-		if (self.findcheckpoint_fail > 3)
+		if (self.findcheckpoint_fail > 1)
 			FindGoalPoint();
 	}
 	else
@@ -241,7 +241,49 @@ void() BotAI =
 
 	if (self.goalentity)
 	{
-		self.keys = KEY_MOVEFORWARD; // Car go forward
+		local float r = vlen(self.origin - self.goalentity.origin) * 0.1; // Find distance to goalentity target
+		
+		// Debug distance to goalentity
+		local string s = ftos(self.realspeed);
+		bprint (s, "\n");
+		
+		if (r >= 80)
+		{
+			self.keys = KEY_MOVEFORWARD; // Car go forward
+			bprint ("Full Speed\n");
+		}
+		else if (r < 80) // Stagger key press
+		{
+			if (random() < 0.75)
+			{
+				if (self.realspeed < 30)
+				{
+					bprint ("Random Full Speed\n");
+					self.keys = KEY_MOVEFORWARD; // Car go forward
+				}
+				else
+				{
+					bprint ("Going too fast, continue stagger\n");
+					self.keys = 0;
+				}
+			}
+			else
+			{
+				bprint ("Stagger\n");
+				self.keys = 0;
+			}
+		}
+		else if (r < 10)
+		{
+			bprint ("Back Up\n");
+			self.keys = KEY_MOVEBACK; // decelerate when near marker
+		}
+		else
+		{
+			bprint ("Lame Coast\n");
+			self.keys = 0; // Just coast
+		}
+
 		bot_angle_set();
 
 //		self.keys = KEY_MOVERIGHT;    // TODO: Detect when the car is toppled over
