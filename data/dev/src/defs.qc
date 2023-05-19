@@ -409,6 +409,7 @@ float framecount;
 .float headlights;
 .float engine_sound_time;
 .float realspeed; // send real speed from func_vehicle to client entity
+.float goal_touched; // client touched the beginning / end goal to start/end race
 
 // Lap time stats
 .float start_laptime; // ON / OFF

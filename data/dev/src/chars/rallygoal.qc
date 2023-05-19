@@ -5,10 +5,9 @@
 string nextmap;
 void() rally_goal_nextmap =
 {
-	changelevel (nextmap);
+	changelevel(nextmap);
 };
 
-.float goal_touched;
 void() rally_goal_touch =
 {
 	if (other.owner.driving.classname != "player")
