@@ -121,7 +121,7 @@ void() Car_ChassiThink =
 	if (car.driving.classname == "player")
 	{
 		car.driving.realspeed = r;
-		car.driving.carroll_angle = car.angles_z;
+		car.driving.carroll_angle = car.angles_z; // RennyC: Used by FrikBot
 	}
 	//
 };

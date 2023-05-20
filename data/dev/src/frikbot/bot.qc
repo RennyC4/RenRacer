@@ -951,7 +951,7 @@ void(float whichteam, float whatbot, float whatskill) BotConnect =
 	local float f;
 	local string h;
 	local entity uself;
-	
+
 	f = ClientNextAvailable();
 	uself = self;
 	if(f == -1)

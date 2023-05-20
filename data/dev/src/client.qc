@@ -136,7 +136,12 @@ void() PutClientInServer =
 	//func_vehicle
 	
 	setsize (self, VEC_HULL_MIN, VEC_HULL_MAX);
-	self.view_ofs = '0 0 22';
+
+	if (coop || deathmatch)
+		self.view_ofs = '0 0 17'; // Camera eye height in DM/Coop
+	else
+		self.view_ofs = '0 0 22';
+
 	self.velocity = '0 0 0';
 	self.modelindex = 0;
 
