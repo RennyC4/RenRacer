@@ -171,7 +171,7 @@ void() FindGoalPoint =
 	}
 	if (head)
 		ent.chain = world;
-	return head;
+//	return head;
 };
 
 void() FindCheckPoint =
@@ -191,7 +191,7 @@ void() FindCheckPoint =
 	}
 	if (head)
 		ent.chain = world;
-	return head;
+//	return head;
 };
 
 
@@ -207,6 +207,8 @@ frame, the ai_time limits it's actual updating
 */
 
 float stagger_think;
+.float bot_backup_finished;
+.float bot_dontbackup_finished;
 void() BotAI =
 {
 	// stagger the bot's AI out so they all don't think at the same time, causing game 'spikes'
@@ -244,46 +246,75 @@ void() BotAI =
 		local float r = vlen(self.origin - self.goalentity.origin) * 0.1; // Find distance to goalentity target
 		
 		// Debug distance to goalentity
-		local string s = ftos(self.realspeed);
-		bprint (s, "\n");
+		//local string f = ftos(self.realspeed);
+		//local string n = ftos(r);
+		//bprint ("Speed: ", f, " Dist: ", n, "\n");
+
+		//
+		// Get out of being toppled / rolling
+		//
 		
-		if (r >= 80)
+		if (self.carroll_angle > -330 && self.carroll_angle < -30)
 		{
-			self.keys = KEY_MOVEFORWARD; // Car go forward
-			bprint ("Full Speed\n");
-		}
-		else if (r < 80) // Stagger key press
-		{
-			if (random() < 0.75)
-			{
-				if (self.realspeed < 30)
-				{
-					bprint ("Random Full Speed\n");
-					self.keys = KEY_MOVEFORWARD; // Car go forward
-				}
-				else
-				{
-					bprint ("Going too fast, continue stagger\n");
-					self.keys = 0;
-				}
-			}
+			//bprint ("Car roll, get out\n");
+			if (self.carroll_angle < -180)
+				self.keys = self.keys = KEY_MOVELEFT;
 			else
-			{
-				bprint ("Stagger\n");
-				self.keys = 0;
-			}
-		}
-		else if (r < 10)
-		{
-			bprint ("Back Up\n");
-			self.keys = KEY_MOVEBACK; // decelerate when near marker
-		}
-		else
-		{
-			bprint ("Lame Coast\n");
-			self.keys = 0; // Just coast
+				self.keys = self.keys = KEY_MOVERIGHT;
+			return;
 		}
 
+		// Back up for a second, hit a wall or rolled over
+		// TODO: Should tracebox?, and seperate the roll over code into it's own thing
+		// FIXME: This is ran at the beginning of a race
+		if (self.keys == KEY_MOVEFORWARD && self.realspeed <= 2 && self.bot_dontbackup_finished < time)
+		{
+			self.keys = KEY_MOVEBACK;
+			self.bot_backup_finished = time + 0.65;
+			//bprint ("Hit wall, backup!\n");
+		}
+
+		if (self.bot_backup_finished < time)
+		{
+			if (r >= 80) // Far from goalentity
+				self.keys = KEY_MOVEFORWARD; // Full speed
+			else // Driving stuff when near market / target
+			{
+				if (r < 5)
+				{
+					if (self.realspeed > 10)
+						self.keys = KEY_MOVEBACK; // decelerate when near marker
+					else
+						self.keys = KEY_MOVEFORWARD;
+				}
+				if (r < 20)
+				{
+					if (self.realspeed > 15)
+						self.keys = KEY_MOVEBACK; // decelerate when near marker
+					else
+						self.keys = KEY_MOVEFORWARD;
+				}
+				else if (r < 40)
+				{
+					if (self.realspeed > 35)
+						self.keys = KEY_MOVEBACK; // decelerate when near marker
+					else
+						self.keys = KEY_MOVEFORWARD;
+				}
+				else if (r < 80)
+				{
+					if (random() < 0.5)
+					{
+						if (self.realspeed < 30)
+							self.keys = KEY_MOVEFORWARD; // Car go forward
+						else
+							self.keys = 0;
+					}
+					else
+						self.keys = 0;
+				}
+			}
+		}
 		bot_angle_set();
 
 //		self.keys = KEY_MOVERIGHT;    // TODO: Detect when the car is toppled over
@@ -337,7 +368,6 @@ void() BotAI =
 	self.button2 = 0;
 	self.button0 = 0;
 
-	/*
 	// target1 is like goalentity in normal Quake monster AI.
 	// it's the bot's most immediate target
 	if (route_table == self)
@@ -385,4 +415,4 @@ void() BotAI =
 	// bot_angle_set points the bot at it's goal (self.enemy or target1)
 	bot_angle_set();
 	bot_chat(); // don't want chat to screw him up if he's rjing or something
-	*/
+*/

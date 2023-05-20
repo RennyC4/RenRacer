@@ -116,10 +116,13 @@ void() Car_ChassiThink =
 	self.nextthink = time;
 #endif
 
-	// RennyC - Send real speed to player entity
+	// RennyC - Send real speed / roll angle (angle Z) to player entity
 	local float r = vlen(car.velocity) * 0.1;
 	if (car.driving.classname == "player")
+	{
 		car.driving.realspeed = r;
+		car.driving.carroll_angle = car.angles_z;
+	}
 	//
 };
 
@@ -480,7 +483,8 @@ void(float speed, float maxspeed) Car_Roll =
 		f_right.velocity = f_right.velocity + f_right.lmat_up *speed*frametime;
 		b_right.velocity = b_right.velocity + b_right.lmat_up *speed*frametime;
 		f_left.velocity = f_left.velocity - f_left.lmat_up *speed*frametime;	
-		b_left.velocity = b_left.velocity - b_left.lmat_up *speed*frametime;	
+		b_left.velocity = b_left.velocity - b_left.lmat_up *speed*frametime;
+		
 	}
 }
 
@@ -507,6 +511,7 @@ void TryUpdateVehicle(){
 	else if (forw < -100){
 		Car_Accelerate(-2500, 800);
 	}
+
 	float roll = v_right * self.velocity;
 	if (roll > 100){
 		Car_Roll(-2000, 350);
@@ -514,6 +519,7 @@ void TryUpdateVehicle(){
 	else if (roll < -100){
 		Car_Roll(2000, 350);
 	}
+	
 	float car_angs = self.driving.angles_y;
 	if (car_angs > 180)
 		car_angs -= 360;

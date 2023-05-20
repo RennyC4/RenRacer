@@ -145,6 +145,7 @@ void() PutClientInServer =
 
 	self.hitme = "TRUE"; // Allow searchradius to look for me
 	self.checkpoint = 0;
+	self.bot_dontbackup_finished = time + 1; // TODO: Remove me for tracebox
 
 	// Spawn car
 	local entity car = hotrod();
