@@ -19,8 +19,9 @@ Available options:
 #pragma warning error Q106 /*assignment to constant/lvalue. Define them as var if you want to initialise something.*/
 #pragma warning error Q208 /*system crc unknown. Compatibility goes out of the window if you disable this.*/
 #pragma warning disable F211 /*system crc outdated (eg: dp's csqc). Note that this may trigger emulation.*/
-#pragma warning enable F301 /*non-utf-8 strings. Think of the foreigners! Also think of text editors that insist on screwing up your char encodings.*/
+#pragma warning disable F301 /*non-utf-8 strings. Think of the foreigners! Also think of text editors that insist on screwing up your char encodings.*/
 #pragma warning disable F302 /*uninitialised locals. They usually default to 0 in qc (except in recursive functions), but its still probably a bug*/
+#pragma warning disable F306 /* Disable func_vehicle's local "sv_gravity" hides global with same name and type error*/
 #pragma target fte // RenRacer is FTE only and proud
 #if !defined(CSQC) && !defined(NQSSQC) && !defined(QWSSQC)&& !defined(MENU)
 #ifdef QUAKEWORLD

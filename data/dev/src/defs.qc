@@ -379,7 +379,7 @@ float	AS_MISSILE		= 4;
 void() SUB_Null2 = {};
 
 // Quake assumes these are defined.
-entity activator;
+//entity activator;
 string string_null = "";    // null string, nothing should be held here
 
 .string         wad, map;
