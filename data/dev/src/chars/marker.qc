@@ -9,33 +9,38 @@ void() marker_think =
 	local entity targ = searchradius(self.origin, 100);
 	while (targ)
 	{
-		if (targ.classname == "player" && targ.goal_touched && fisible(targ))
+		if (targ.classname == "player" && fisible(targ))
 		{
-			if (self.checkpoint == 1) // first check point
+			if (targ.goal_touched) // Player has to drive through the goals before markers are activated
 			{
-				if (targ.checkpoint == 0)
+				if (self.checkpoint == 1) // first check point
 				{
-					targ.checkpoint = self.checkpoint;
-					OK = TRUE;
+					if (targ.checkpoint == 0)
+					{
+						targ.checkpoint = self.checkpoint;
+						OK = TRUE;
+					}
 				}
-			}
-			else if (self.checkpoint > 1)
-			{
-				if (targ.checkpoint == (self.checkpoint - 1))
+				else if (self.checkpoint > 1)
 				{
-					targ.checkpoint = self.checkpoint;
-					OK = TRUE;
+					if (targ.checkpoint == (self.checkpoint - 1))
+					{
+						targ.checkpoint = self.checkpoint;
+						OK = TRUE;
+					}
 				}
-			}
 
-			if (OK) // Do check point confirm
-			{
-				self.cnt = TRUE; // Start animation
-				self.effects = self.effects | EF_DIMLIGHT;
-				local string l = ftos(targ.laptime);
-				centerprint (targ, "! Checkpoint !\n", "\n Time: ", l, "\n");
-				sound (self, CHAN_AUTO, "checkpoint.wav", 1, ATTN_NORM);
+				if (OK) // Do check point confirm
+				{
+					self.cnt = TRUE; // Start animation
+					self.effects = self.effects | EF_DIMLIGHT;
+					local string l = ftos(targ.laptime);
+					centerprint (targ, "! Checkpoint !\n", "\n Time: ", l, "\n");
+					sound (self, CHAN_AUTO, "checkpoint.wav", 1, ATTN_NORM);
+				}
 			}
+			else
+				centerprint (targ, "You must drive through the starting goal to properly start the race!");
 		}
 		targ = targ.chain;
 	}

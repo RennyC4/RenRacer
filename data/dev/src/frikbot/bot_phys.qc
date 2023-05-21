@@ -549,9 +549,6 @@ void() PostPhysics =
 						}
 						else
 						{
-							if (dst > 1)
-								frik_obstructed(obstr, FALSE); 
-
 							org = self.origin;
 							self.flags = cflags;
 							obstr = self.phys_obj.dest1;

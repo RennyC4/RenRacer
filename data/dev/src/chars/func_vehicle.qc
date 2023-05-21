@@ -10,7 +10,7 @@ entity() triton;
 void PushAndDamageThink(){
 	entity e = self.p_damage_next;
 	while(e){
-//		T_Damage (e, self, self, e.p_damage_val);
+		T_Damage (e, self, self, e.p_damage_val);
 		e.p_damage_val = 0;
 		entity temp = e.p_damage_next;
 		e.p_damage_next = world;
@@ -380,7 +380,7 @@ void Car_CheckAttach(){
 void(entity attacker, float damage) Car_Pain = {
 	if (!self.realowner.driving)
 		return;
-//	T_Damage(self.realowner.driving, attacker, attacker, damage * 0.5); // driving provides protection
+	T_Damage(self.realowner.driving, attacker, attacker, damage * 0.5); // driving provides protection
 };
 
 void(float turn) Car_Turn =

@@ -12,6 +12,7 @@ void() ClientKill = {};
 void(optional float csqcactive) ClientConnect =
 {
 	ClientInRankings(); // FrikBot
+	bprint (self.netname, " joined the race!\n");
 };
 
 void() ClientDisconnect =
@@ -48,37 +49,39 @@ void() EngineSounds =
 		self.engine_sound_time = time + 0.15;
 };
 
+.float welcomemsg_finished;
 void() PlayerPreThink = 
 {
 	if (BotPreFrame()) // FrikBot
 		return;
 
-	// Player origin debugging
-	/*
-	local string s_x, s_y, s_z;
-	
-	s_x = ftos(self.origin_x);
-	s_y = ftos(self.origin_y);
-	s_z = ftos(self.origin_z);
-	
-	bprint (self.classname, "_X: ", s_x, "\n");
-	bprint (self.classname, "_Y: ", s_y, "\n");
-	bprint (self.classname, "_Z: ", s_z, "\n");
-	*/
-	
-	// Player speed debugging
-	// 'real speed' is sent from func_vehicles Car_ChassiThink(); function
-	/*
-	local string f;
-	f = ftos(self.realspeed);
-	bprint ("Speed: ", f, "\n");
-	*/
-
 	// Force player in car, give greetings message
 	if (!self.driving)
 	{
 		Car_CheckAttach();
-		centerprint (self, "Welcome to RenRacer\n");
+		if (self.welcomemsg_finished < time)
+		{
+			centerprint (self, "Welcome to RenRacer\n\n===================\n\n\nPress [FIRE] to start the race");
+			self.welcomemsg_finished = time + 2;
+		}
+		if (framecount > 75 && self.button0 && !race_start)
+		{
+			race_start = TRUE;
+			
+			bprint ("Start Race!\n");
+			
+			// Spawn car
+			local entity car = hotrod();
+			makevectors(self.angles);
+			car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
+			Car_InitVehicle(car);
+			
+			local float i;
+			local float g = cvar("sv_playerslots");
+	
+			for (i = 0; i < g-1; i = i+1)
+			BotConnect(0, 0, 0);
+		}
 	}
 	else
 	{
@@ -110,21 +113,67 @@ void() PlayerPostThink =
 
 	TryUpdateVehicle();
 	CheckImpulses();
+	
+	// Enforce console variables
+	if (cvar("chase_active") > 0)
+		cvar_set("chase_active", "0");
 };
+
+//----
+// Select a proper spawn spot
+//----
+
+entity() SelectSpawnSpot =
+{
+	local	entity spot = lastspawn;
+	local	entity thing;
+	local	float  pcount;
+			
+	while (1)
+	{
+		spot = find(spot, classname, "info_player_deathmatch");
+		if (spot != world)
+		{
+			if (spot == lastspawn)
+				return lastspawn;
+
+			pcount = 0;
+
+			thing = findradius(spot.origin, 32);
+			while(thing)
+			{
+				if (thing.classname == "player")
+					pcount = pcount + 1;
+				thing = thing.chain;
+			}
+			if (pcount == 0)
+			{
+				lastspawn = spot;
+				return spot;
+			}
+		}
+	}
+
+	spot = find (world, classname, "info_player_start");
+	if (!spot)
+		error ("Cannot find spawn point in map");
+	
+	return spot;
+};
+
 
 //----
 // Spawning the Player
 //----
 void() PutClientInServer =
 {
-	local entity spawn_spot;
-	spawn_spot = find (world, classname, "info_player_start");
+	local entity spawn_spot = SelectSpawnSpot();
 
 	self.classname = "player";
 	self.health = self.max_health = 100;
-	self.takedamage = DAMAGE_AIM;
-	self.solid = SOLID_SLIDEBOX;
-	self.movetype = MOVETYPE_WALK;
+	self.takedamage = DAMAGE_NO;
+	self.solid = SOLID_NOT;
+	self.movetype = MOVETYPE_NONE;
 	self.flags = FL_CLIENT;
 	self.origin = spawn_spot.origin;
 	
@@ -137,11 +186,7 @@ void() PutClientInServer =
 	
 	setsize (self, VEC_HULL_MIN, VEC_HULL_MAX);
 
-	if (coop || deathmatch)
-		self.view_ofs = '0 0 17'; // Camera eye height in DM/Coop
-	else
-		self.view_ofs = '0 0 22';
-
+	self.view_ofs = '0 0 42'; // Best height for no CSQC chasecam
 	self.velocity = '0 0 0';
 	self.modelindex = 0;
 
@@ -152,9 +197,12 @@ void() PutClientInServer =
 	self.checkpoint = 0;
 	self.bot_dontbackup_finished = time + 1; // TODO: Remove me for tracebox
 
-	// Spawn car
-	local entity car = hotrod();
-	makevectors(self.angles);
-	car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
-	Car_InitVehicle(car);
+	// Frikbots Insta-spawn as the player does
+	if (!self.ishuman)
+	{
+		local entity car = hotrod();
+		makevectors(self.angles);
+		car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
+		Car_InitVehicle(car);
+	}
 };

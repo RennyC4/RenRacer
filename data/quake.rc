@@ -17,12 +17,6 @@ exec settings.cfg
 stuffcmds
 
 //
-// load up immediately
-//
-
-map map1
-
-//
 // set RenRacer defaults
 //
 
@@ -60,6 +54,15 @@ r_hdr_irisadaptation_maxvalue 1.5 // adjustment value
 r_deluxemapping 0 // needs to be 0 with bumpscale base textures
 r_shadow_shadowmapping 1 // draw shadow maps (stencil is faster however)
 r_dynamic 0 // fixes odd ugly lighting
+r_waterstyle 2 // pretty water, GPU perf hit
+sv_playerslots 4 // 4 racers, 1 player + 3 bots
+coop 1
+
+//
+// load up immediately
+//
+
+map map1
 
 //
 // bind regular quake stuff

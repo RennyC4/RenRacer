@@ -1,0 +1,9 @@
+TODO: Proper game start
+TODO: CSQC Chasecam?
+TODO: Terrain
+TODO: Proper waypoints for bots, if one exists.. they follow it around the course, otherwise default checkpoint follow behavior
+
+====
+Done: Add misc_model + TAoV's nice trees
+Done: T_Damage function implementation
+Done: Proper spawning for player + bots

@@ -398,6 +398,8 @@ float	modelindex_player;
 
 // RenRacer
 float framecount;
+entity lastspawn;
+float race_start;
 
 .string music;
 .string hitme; // used for searchradius collision looks for "TRUE"

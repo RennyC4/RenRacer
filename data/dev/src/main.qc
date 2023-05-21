@@ -28,6 +28,8 @@ void() world_lights =
 
 void() worldspawn = 
 {
+	lastspawn = world;
+
 	precache_model("progs/null.spr");
 
 	//

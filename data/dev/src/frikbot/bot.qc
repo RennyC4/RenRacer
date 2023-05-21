@@ -166,26 +166,7 @@ float KEY_LOOKDOWN	= 128;
 float KEY_LOOKLEFT	= 256;
 float KEY_LOOKRIGHT	= 512;
 
-// these are aiflags for waypoints
-// some overlap to the bot
-float AI_TELELINK_1	= 1; // link type
-float AI_TELELINK_2	= 2; // link type
-float AI_TELELINK_3	= 4; // link type
-float AI_TELELINK_4	= 8; // link type
-float AI_DOORFLAG		= 16; // read ahead
 float AI_PRECISION	= 32; // read ahead + point
-float AI_SURFACE		= 64; // point 
-float AI_BLIND		= 128; // read ahead + point
-float AI_JUMP		= 256; // point + ignore
-float AI_DIRECTIONAL	= 512; // read ahead + ignore
-float AI_PLAT_BOTTOM	= 1024; // read ahead 
-float AI_RIDE_TRAIN	= 2048; // read ahead 
-float AI_SUPER_JUMP	= 4096; // point + ignore + route test
-float AI_SNIPER		= 8192; // point type 
-float AI_AMBUSH		= 16384; // point type
-float AI_DOOR_NO_OPEN	= 32768; // read ahead
-float AI_DIFFICULT	= 65536; // route test
-float AI_TRACE_TEST	= 131072; // route test
 
 // these are flags for bots/players (dynamic/editor flags)
 float AI_OBSTRUCTED	= 1;
@@ -214,15 +195,10 @@ float OPT_NOCHAT	= 2;
 float 	active_clients;
 float	max_clients, real_frametime;
 float	bot_count, b_options;
-float	waypoint_mode, dump_mode; 
-float	waypoints, direct_route;
 float	sv_friction, sv_gravity;
 float	sv_accelerate, sv_maxspeed, sv_stopspeed;
-entity	fixer;
-entity	route_table;
-entity	b_temp1, b_temp2, b_temp3;
-entity 	player_head, phys_head, way_head;
-float	busy_waypoints;
+entity	b_temp1, b_temp2;
+entity 	player_head, phys_head;
 float	saved_bots, saved_skills1, saved_skills2, current_bots;
 
 // -------ProtoTypes------
@@ -239,26 +215,7 @@ void(entity bot)			BotDisconnect;
 void(float clientno)		BotInvalidClientNo;
 void(entity who)			UpdateClient;
 
-// waypointing
-void()				DynamicWaypoint;
-entity(vector org)		make_waypoint;
-void()				ClearAllWays;
-void()				FixWaypoints;
-float()				begin_route;
-void(entity this, float direct)			bot_get_path;
-void()				WaypointThink;
-entity(entity start)				FindWayPoint;
-
 // physics & movement
-float(entity e)			bot_can_rj;
-void()				bot_jump;
-void()				frik_bot_roam;
-float(vector weird)		frik_walkmove;
-void()				frik_movetogoal;
-void()				frik_obstacles;
-float(float flag)			frik_recognize_plat;
-float(vector sdir)		frik_KeysForDir;
-void(vector whichway, float danger) frik_obstructed;
 void()				SV_Physics_Client;
 void()				SV_ClientThink;
 void() 				CL_KeyMove;
@@ -277,13 +234,6 @@ string(float r)			BotName;
 float(float v)			frik_anglemod;
 void() bot_chat;
 void(float tpic) bot_start_topic;
-
-
-// editor stuffs
-
-void()				bot_way_edit;
-void()				bot_menu_display;
-
 
 // ----------Commands---------
 void(entity e, float chan, string samp, float vol, float atten) frik_sound = #8;
@@ -355,7 +305,7 @@ void(entity	e) setspawnparms =
 	}
 };
 
-// TODO: Fix me for FTEExtesion compatibility
+// TODO: Fix me for FTEExtesion compatibility?
 /*
 void(entity client, string s, optional string s2, optional string s3, optional string s4, optional string s5, optional string s6, optional string s7) sprint =
 {
@@ -405,14 +355,13 @@ vector(entity e, float sped) aim =
 void(entity e, float chan, string samp, float vol, float atten, optional float speedpct, optional float flags, optional float timeofs) sound = 
 {
 	frik_sound(e, chan, samp, vol, atten);
-	if (samp == "items/inv3.wav")
-		return;
-	else if (e.classname == "player")
+	if (e.classname == "player")
 		e.b_sound = time + 1;
 	else if (other.classname == "player")
 		other.b_sound = time + 1;
 
 };
+
 void(float to, float f) WriteByte =
 {
 	if ((to == MSG_ONE) && (msg_entity.ishuman != TRUE))
@@ -460,96 +409,6 @@ void(float to, entity s) WriteEntity =
 	if ((to == MSG_ONE) && (msg_entity.ishuman != TRUE))
 		return;
 	frik_WriteEntity(to, s);
-};
-
-/*
--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-Bot Cam, see what the bot sees (or any other player)
-
--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-*/
-
-float() botcam =
-{
-	if (self.classname != "botcam")
-		return FALSE;
-	setorigin(self, self.enemy.origin);
-	self.items = self.enemy.items;
-	self.weapon = self.enemy.weapon;
-	self.weaponmodel = self.enemy.weaponmodel;
-	self.currentammo = self.enemy.currentammo;
-	self.weaponframe = self.enemy.weaponframe;
-	self.ammo_shells = self.enemy.ammo_shells;
-	self.ammo_nails = self.enemy.ammo_nails;
-	self.ammo_rockets= self.enemy.ammo_rockets;
-	self.ammo_cells = self.enemy.ammo_cells;
-	self.view_ofs = self.enemy.view_ofs;
-	self.health = self.enemy.health;
-	self.armorvalue = self.enemy.armorvalue;
-	self.dmg_take = self.enemy.dmg_take;
-	self.dmg_save = self.enemy.dmg_save;
-	self.dmg_inflictor = self.enemy.dmg_inflictor;
-	self.punchangle = self.enemy.punchangle;
-	self.deadflag = self.enemy.deadflag;
-	msg_entity = self;
-	WriteByte (MSG_ONE,5);
-	WriteEntity (MSG_ONE, self.enemy); 
-	WriteByte (MSG_ONE, 10);
-     	WriteAngle (MSG_ONE,self.enemy.v_angle_x);
-     	WriteAngle (MSG_ONE,self.enemy.v_angle_y);
-     	WriteAngle (MSG_ONE,self.enemy.v_angle_z);
-	self.modelindex = 0;
-	
-	self.impulse = 0;	
-	return TRUE;
-	
-};
-
-void() botcam_u = 
-{
-
-	// sloppy cycling code
-	if (self.classname != "botcam")
-	{
-		self.enemy = player_head;
-	}
-	else
-	{
-		do
-			self.enemy = self.enemy._next;
-		while (self.enemy.classname == "botcam");
-	}
-	if (self.enemy == self)
-	{
-		do
-			self.enemy = self.enemy._next;
-		while (self.enemy.classname == "botcam");
-	}
-
-	self.classname = "botcam";
-	self.solid = SOLID_NOT;
-	self.movetype = MOVETYPE_NONE;
-	self.takedamage = DAMAGE_NO;
-
-
-	if (!self.enemy)
-	{
-		sprint(self, "No one left to track!\n");
-		msg_entity = self;
-		WriteByte (MSG_ONE,5);
-		WriteEntity (MSG_ONE, self);
-		PutClientInServer();
-		return;
-	}
-	if (!self.enemy.ishuman)
-	{
-		self.enemy.dmg_take = 0;
-		self.enemy.dmg_save = 0;
-	}
-	sprint(self, "Now tracking ");
-	sprint(self, self.enemy.netname);
-	sprint(self, "\n");
 };
 
 /*
@@ -661,7 +520,6 @@ float() BotPreFrame =
 			bot_start_topic(2);
 		self.b_frags = self.frags;
 	}
-	DynamicWaypoint();
 	return FALSE;
 };
 
@@ -670,15 +528,7 @@ float () BotPostFrame =
 	if (self.b_clientno == -1)
 		return TRUE;
 	if (self.ishuman)
-	{
-		if (waypoint_mode > WM_LOADED)
-			bot_menu_display();
-
 		BotImpulses();
-
-		if (botcam())
-			return TRUE;
-	}
 	return FALSE;
 };
 
@@ -1085,114 +935,27 @@ void(float clientno) BotInvalidClientNo =
 	}
 };
 
-/*
--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-Waypoint Loading from file
-
--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-*/
-void() LoadWaypoint = 
-{
-	local vector org;
-	local entity tep;
-	local float r;
-	org_x = cvar("saved1");
-	org_y = cvar("saved2");
-	org_z = cvar("saved3");
-	
-	tep = make_waypoint(org);
-
-	r = cvar("saved4");
-
-	tep.b_aiflags = floor(r / 4);
-	tep.b_pants = cvar("scratch1");
-	tep.b_skill = cvar("scratch2");
-	tep.b_shirt = cvar("scratch3");
-	tep.b_frags = cvar("scratch4");
-};
-
 void() bot_return =
 {
 	if (time > 2)
 	{
-		if ((waypoint_mode == WM_DYNAMIC) || (waypoint_mode == WM_LOADED))
-		{
-			// minor precaution
-
-			if (saved_bots & 1) BotConnect(0, 1, saved_skills1 & 3);
-			if (saved_bots & 2) BotConnect(0, 2, (saved_skills1 & 12) / 4);
-			if (saved_bots & 4) BotConnect(0, 3, (saved_skills1 & 48) / 16);
-			if (saved_bots & 8) BotConnect(0, 4, (saved_skills1 & 192) / 64);
-			if (saved_bots & 16) BotConnect(0, 5, (saved_skills1 & 768) / 256);
-			if (saved_bots & 32) BotConnect(0, 6, (saved_skills1 & 3072) / 1024);
-			if (saved_bots & 64) BotConnect(0, 7, (saved_skills1 & 12288) / 4096);
-			if (saved_bots & 128) BotConnect(0, 8, (saved_skills1 & 49152) / 16384);
-			if (saved_bots & 256) BotConnect(0, 9, saved_skills2 & 3);
-			if (saved_bots & 512) BotConnect(0, 10, (saved_skills2 & 12) / 4);
-			if (saved_bots & 1024) BotConnect(0, 11, (saved_skills2& 48) / 16);
-			if (saved_bots & 2048) BotConnect(0, 12, (saved_skills2 & 192) / 64);
-			if (saved_bots & 4096) BotConnect(0, 13, (saved_skills2 & 768) / 256);
-			if (saved_bots & 8192) BotConnect(0, 14, (saved_skills2 & 3072) / 1024);
-			if (saved_bots & 16384) BotConnect(0, 15, (saved_skills2 & 12288) / 4096);
-			if (saved_bots & 32768) BotConnect(0, 16, (saved_skills2 & 49152) / 16384);
-			saved_bots = 0;
-		}
-	}
-};
-
-void() WaypointWatch =
-{
-	// Waypoint Baywatch
-	local float bigboobs;
-	local string h;
-	if (framecount < 4)
-		return;
-	if (max_clients < 2)
-		return;
-	if (waypoint_mode != WM_UNINIT)
-	{
-		bigboobs = cvar("saved4");
-		if (bigboobs != 0)
-		{
-			if ((bigboobs & 3) == 1)
-				ClearAllWays();
-			else if ((bigboobs & 3) == 3)
-			{
-				FixWaypoints();
-				h = ftos(b_options);
-				cvar_set("saved1", h);
-				cvar_set("saved4", "0");
-				cvar_set("scratch1", "0");
-				waypoint_mode = WM_LOADED;
-				return;
-			}
-			LoadWaypoint();
-			waypoint_mode = WM_LOADING;
-			cvar_set("saved4", "0");
-		}
-	}
-	else
-	{
-		// the bots return!
-		b_options = cvar("saved1");
-		if (coop || (b_options & OPT_SAVEBOTS))
-		{
-			saved_bots = cvar("scratch1");
-			saved_skills1 = cvar("scratch2");
-			saved_skills2 = cvar("scratch3");
-		}
-		cvar_set ("saved4", "0");
-		if (max_clients > 1)
-		{
-			localcmd("exec maps/");
-			localcmd(mapname);
-			localcmd(".way\n");
-			waypoint_mode = WM_DYNAMIC;
-			bot_map_load();
-		}
-		else
-			waypoint_mode = WM_LOADED;
+		if (saved_bots & 1) BotConnect(0, 1, saved_skills1 & 3);
+		if (saved_bots & 2) BotConnect(0, 2, (saved_skills1 & 12) / 4);
+		if (saved_bots & 4) BotConnect(0, 3, (saved_skills1 & 48) / 16);
+		if (saved_bots & 8) BotConnect(0, 4, (saved_skills1 & 192) / 64);
+		if (saved_bots & 16) BotConnect(0, 5, (saved_skills1 & 768) / 256);
+		if (saved_bots & 32) BotConnect(0, 6, (saved_skills1 & 3072) / 1024);
+		if (saved_bots & 64) BotConnect(0, 7, (saved_skills1 & 12288) / 4096);
+		if (saved_bots & 128) BotConnect(0, 8, (saved_skills1 & 49152) / 16384);
+		if (saved_bots & 256) BotConnect(0, 9, saved_skills2 & 3);
+		if (saved_bots & 512) BotConnect(0, 10, (saved_skills2 & 12) / 4);
+		if (saved_bots & 1024) BotConnect(0, 11, (saved_skills2& 48) / 16);
+		if (saved_bots & 2048) BotConnect(0, 12, (saved_skills2 & 192) / 64);
+		if (saved_bots & 4096) BotConnect(0, 13, (saved_skills2 & 768) / 256);
+		if (saved_bots & 8192) BotConnect(0, 14, (saved_skills2 & 3072) / 1024);
+		if (saved_bots & 16384) BotConnect(0, 15, (saved_skills2 & 12288) / 4096);
+		if (saved_bots & 32768) BotConnect(0, 16, (saved_skills2 & 49152) / 16384);
+		saved_bots = 0;
 	}
 };
 
@@ -1216,7 +979,6 @@ void() BotFrame =
 		{
 			if (active_clients & ClientBitFlag(num))
 			{
-				frik_obstacles();
 				CL_KeyMove();
 				SV_ClientThink();
 				SV_Physics_Client();
@@ -1225,7 +987,6 @@ void() BotFrame =
 		self = nextent(self);
 		num = num + 1;
 	}
-	WaypointWatch();
 
 	if (saved_bots)
 		bot_return();
@@ -1256,10 +1017,6 @@ void() BotImpulses =
 	}
 	else if (self.impulse == 102)
 		KickABot();
-	else if (self.impulse == 103)
-		botcam_u();
-	else if (self.impulse == 104)
-		bot_way_edit();
 	else
 		return;
 

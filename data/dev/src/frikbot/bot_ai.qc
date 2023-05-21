@@ -42,17 +42,6 @@ this notice in its entirety.
 
 */
 
-
-/*
--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-bot_handle_ai
-
--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-*/
-
-void() bot_handle_ai = {};
-
 /*
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -67,7 +56,8 @@ void() bot_angle_set =
 {
 	local float h;
 	local vector view;
-	
+
+/*
 	if (self.enemy)
 	{
 		if (self.missile_speed == 0)
@@ -100,7 +90,10 @@ void() bot_angle_set =
 		view_x = view_x * -1;
 		self.b_angle = view;
 	}
-	else if (self.target1)
+	*/
+	//else if (self.target1)
+
+	if (self.target1)
 	{
 		view = realorigin(self.target1);
 		if (self.target1.flags & FL_ITEM)
