@@ -1,5 +1,8 @@
 void() headlights_toggle =
 {
+	if (!self.driving)
+		return;
+
 	if (self.headlights == FALSE)
 	{
 		self.effects = EF_MUZZLEFLASH;
