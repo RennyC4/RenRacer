@@ -62,7 +62,7 @@ void() PlayerPreThink =
 		if (self.welcomemsg_finished < time)
 		{
 			centerprint (self, "Welcome to RenRacer\n\n===================\n\n\nPress [FIRE] to start the race");
-			self.welcomemsg_finished = time + 2;
+			self.welcomemsg_finished = time + 1.5;
 		}
 		if (framecount > 75 && self.button0 && !race_start)
 		{

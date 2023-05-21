@@ -32,7 +32,7 @@ void() rally_cone =
         precache_sound ("pylon.wav");
 		
         setmodel (self, "progs/cone.mdl");
-        setsize (self, '-2 -2 -3', '2 2 3');
+        setsize (self, '-6 -6 -9', '6 6 9');
         self.movetype = MOVETYPE_BOUNCE;
         self.solid = SOLID_NOT;
 		droptofloor();
