@@ -1,4 +1,5 @@
 TODO: Proper game start - Half done.. needs 3,2,1,Go
+TODO: Car should match player shirt/pants colour
 TODO: CSQC Chasecam?
 TODO: Terrain
 TODO: Proper waypoints for bots, if one exists.. they follow it around the course, otherwise default checkpoint follow behavior
