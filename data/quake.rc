@@ -56,7 +56,7 @@ r_shadow_shadowmapping 1 // draw shadow maps (stencil is faster however)
 r_dynamic 0 // fixes odd ugly lighting
 r_waterstyle 2 // pretty water, GPU perf hit
 sv_playerslots 4 // 4 racers, 1 player + 3 bots
-r_shadows 1
+r_shadows 2 // realtime shadows
 
 //
 // load up immediately
