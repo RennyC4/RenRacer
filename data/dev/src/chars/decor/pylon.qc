@@ -35,6 +35,7 @@ void() rally_cone =
         setsize (self, '-6 -6 -9', '6 6 9');
         self.movetype = MOVETYPE_BOUNCE;
         self.solid = SOLID_NOT;
+		self.origin_z = self.origin_z + 1;
 		droptofloor();
 
 		self.think = rally_cone_think;

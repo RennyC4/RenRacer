@@ -15,7 +15,7 @@ void() rally_barricade_think =
 			v_z = 250 + 160 * random() + (other.velocity_y + other.velocity_x) * 0.30;
 
 			self.flags = self.flags - (self.flags & FL_ONGROUND);
-			self.velocity = v / 1.5;
+			self.velocity = v / 1.25;
 			self.avelocity = self.velocity * 0.25;
 
 			sound (self, CHAN_AUTO, "barricade.wav", 1, ATTN_NORM);
@@ -33,7 +33,7 @@ void() rally_barricade =
         setmodel (self, "progs/barricade.mdl");
         setsize (self, '-13 -29 -9', '13 23 21');
         self.movetype = MOVETYPE_TOSS;
-        self.solid = SOLID_SLIDEBOX;
+        self.solid = SOLID_NOT;
 		droptofloor();
 
 		self.think = rally_barricade_think;
