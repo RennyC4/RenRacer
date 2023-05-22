@@ -9,5 +9,6 @@ void() rally_startfinish_flag =
 	setsize(self, '0 0 0', '0 0 0');
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_NONE;
+	self.origin_z = self.origin_z + 1;
 	droptofloor();
 };

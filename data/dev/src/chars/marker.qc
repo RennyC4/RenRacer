@@ -77,6 +77,7 @@ void() rally_marker =
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_NOT;
 	self.classname = "marker";
+	self.origin_z = self.origin_z + 1;
 	droptofloor();
 
 	self.think = marker_think;

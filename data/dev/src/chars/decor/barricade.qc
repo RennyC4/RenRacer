@@ -30,10 +30,12 @@ void() rally_barricade =
 {
         precache_model("progs/barricade.mdl");
 		precache_sound("barricade.wav");
+
         setmodel (self, "progs/barricade.mdl");
         setsize (self, '-13 -29 -9', '13 23 21');
         self.movetype = MOVETYPE_TOSS;
         self.solid = SOLID_NOT;
+		self.origin_z = self.origin_z + 1;
 		droptofloor();
 
 		self.think = rally_barricade_think;
