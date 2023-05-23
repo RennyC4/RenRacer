@@ -145,6 +145,7 @@ void() PlayerPostThink =
 // Select a proper spawn spot
 //----
 
+void() racer_spawnpoint = {};
 entity() SelectSpawnSpot =
 {
 	local	entity spot = lastspawn;
@@ -153,7 +154,7 @@ entity() SelectSpawnSpot =
 			
 	while (1)
 	{
-		spot = find(spot, classname, "info_player_deathmatch");
+		spot = find(spot, classname, "racer_spawnpoint");
 		if (spot != world)
 		{
 			if (spot == lastspawn)

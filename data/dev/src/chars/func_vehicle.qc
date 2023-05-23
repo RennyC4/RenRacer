@@ -488,6 +488,16 @@ void(float speed, float maxspeed) Car_Roll =
 	}
 }
 
+//
+// Taken from Build-A-Delivery by shpuld
+//
+void(float strength) car_boost =
+{
+	makevectors([-self.driving.angles.x, self.driving.angles.y, self.driving.angles.z]);
+	vector worldorg = self.driving.origin + v_up * 9.12;
+	Phys_Force(self.driving, self.driving.physobj_mass * 0.35, v_forward * strength * frametime, worldorg - v_forward * 16, -v_forward);
+}
+
 void TryUpdateVehicle(){
 	if (!check_camera_state){
 		check_camera_state = TRUE;
@@ -522,7 +532,11 @@ void TryUpdateVehicle(){
 		else if (roll < -100){
 			Car_Roll(2000, 350);
 		}
-		
+		// Taken from Build-A-Delivery by shpuld
+		float turbo = self.button2;
+		if (turbo)
+			car_boost(1000);
+
 		float car_angs = self.driving.angles_y;
 		if (car_angs > 180)
 			car_angs -= 360;
