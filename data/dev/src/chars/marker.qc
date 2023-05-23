@@ -47,7 +47,7 @@ void() marker_think =
 
 	if (self.cnt) // Animation on
 	{
-		if (self.frame < 6)
+		if (self.frame < 5)
 		{
 			if (self.animation_finished < time)
 			{

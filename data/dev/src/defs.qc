@@ -413,6 +413,7 @@ float race_start;
 .float realspeed; // send real speed from func_vehicle to client entity
 .float carroll_angle; // z angle of func_vehicle sent to client entity
 .float goal_touched; // client touched the beginning / end goal to start/end race
+.float onground; // Car airborne status update
 
 // Lap time stats
 .float start_laptime; // ON / OFF

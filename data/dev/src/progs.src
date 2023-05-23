@@ -45,6 +45,3 @@ chars/decor/barricade.qc
 
 //CSQC extension start here.
 #pragma sourcefile "csprogs.src"
-
-//CSAddon extension start here.
-#pragma sourcefile "csaddon/csaddon.src"

@@ -1,4 +1,7 @@
 TODO: Proper game start - Half done.. needs 3,2,1,Go
+TODO: Breakable brushes (request by xaGe)
+TODO: Impact sounds including landing from a jump
+TODO: info_player_deathmatch should turn into racer_spawnpoint
 TODO: Car should match player shirt/pants colour
 TODO: CSQC Chasecam?
 TODO: Terrain (Needs fixing)
