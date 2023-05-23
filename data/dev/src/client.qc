@@ -54,6 +54,11 @@ void() PlayerPreThink =
 {
 	if (BotPreFrame()) // FrikBot
 		return;
+		
+	// Send players origin to CSQC
+	self.player_x = self.origin_x;
+	self.player_y = self.origin_y;
+	self.player_z = self.origin_z;
 
 	// Force player in car, give greetings message
 	if (!self.driving)

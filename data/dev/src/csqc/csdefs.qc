@@ -2193,4 +2193,11 @@ const float DRAWFLAG_2XMODULATE = 3;
 const float DRAWFLAG_SCREEN = 4;
 const float DRAWFLAG_MIPMAP = 0x100; // only for R_BeginPolygon
 
+// RenRacer
 float framecount;
+vector campos;
+vector camang;
+
+#define STAT_ORIGINX 32
+#define STAT_ORIGINY 33
+#define STAT_ORIGINZ 34

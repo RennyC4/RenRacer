@@ -9,6 +9,13 @@
 
 void() main = {};
 
+void() CSEv_GrabCSQCValues =
+{
+	clientstat(STAT_ORIGINX, EV_FLOAT, player_x);
+	clientstat(STAT_ORIGINY, EV_FLOAT, player_y);
+	clientstat(STAT_ORIGINZ, EV_FLOAT, player_z);
+};
+
 void() world_lights =
 {
 	lightstyle(0, "m");
@@ -70,6 +77,7 @@ void() worldspawn =
 
 	world_lights();
 	BotInit();  // FrikBot
+	CSEv_GrabCSQCValues(); //CSQC Setup
 };
 
 void() SetNewParms = {};

@@ -417,6 +417,16 @@ float countdown_count;
 .float goal_touched; // client touched the beginning / end goal to start/end race
 .float onground; // Car airborne status update
 
+// CSQC
+#define STAT_ORIGINX 32
+#define STAT_ORIGINY 33
+#define STAT_ORIGINZ 34
+
+// Send player origin to CSQC
+.float player_x;
+.float player_y;
+.float player_z;
+
 // Lap time stats
 .float start_laptime; // ON / OFF
 .float laptime_tic_second;

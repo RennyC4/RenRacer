@@ -2,4 +2,5 @@
 
 //CSQC extensions start here.
 csqc/csdefs.qc
+csqc/camera.qc
 csqc/main.qc
