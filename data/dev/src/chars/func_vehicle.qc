@@ -503,51 +503,55 @@ void TryUpdateVehicle(){
 	if (!self.driving)
 		return;
 	setorigin(self, Car_SpringyOrigin());
-	makevectors(self.v_angle);
-	float forw = v_forward * self.velocity;
-	if (forw > 100){
-		Car_Accelerate(3000, 950);
-	}
-	else if (forw < -100){
-		Car_Accelerate(-2500, 800);
-	}
 
-	float roll = v_right * self.velocity;
-	if (roll > 100){
-		Car_Roll(-2000, 350);
-	}
-	else if (roll < -100){
-		Car_Roll(2000, 350);
-	}
-	
-	float car_angs = self.driving.angles_y;
-	if (car_angs > 180)
-		car_angs -= 360;
-	float move = car_angs - self.v_angle_y;
-	if (car_angs > self.v_angle_y)
+	if (countdown_count <= -1) //RennyC
 	{
-		if (move > 180)
-			move = move - 360;
-	}
-	else
-	{
-		if (move < -180)
-			move = move + 360;
-	}
-	Car_Turn(move);
-	car_angs = self.driving.angles_x;
-	if (car_angs > 180)
-		car_angs -= 360;
-	float pitch = car_angs - self.v_angle_x;
-	if (car_angs > self.v_angle_x)
-	{
-		if (pitch > 180)
-			pitch = pitch - 360;
-	}
-	else
-	{
-		if (pitch < -180)
-			pitch = pitch + 360;
+		makevectors(self.v_angle);
+		float forw = v_forward * self.velocity;
+		if (forw > 100){
+			Car_Accelerate(3000, 950);
+		}
+		else if (forw < -100){
+			Car_Accelerate(-2500, 800);
+		}
+
+		float roll = v_right * self.velocity;
+		if (roll > 100){
+			Car_Roll(-2000, 350);
+		}
+		else if (roll < -100){
+			Car_Roll(2000, 350);
+		}
+		
+		float car_angs = self.driving.angles_y;
+		if (car_angs > 180)
+			car_angs -= 360;
+		float move = car_angs - self.v_angle_y;
+		if (car_angs > self.v_angle_y)
+		{
+			if (move > 180)
+				move = move - 360;
+		}
+		else
+		{
+			if (move < -180)
+				move = move + 360;
+		}
+		Car_Turn(move);
+		car_angs = self.driving.angles_x;
+		if (car_angs > 180)
+			car_angs -= 360;
+		float pitch = car_angs - self.v_angle_x;
+		if (car_angs > self.v_angle_x)
+		{
+			if (pitch > 180)
+				pitch = pitch - 360;
+		}
+		else
+		{
+			if (pitch < -180)
+				pitch = pitch + 360;
+		}
 	}
 	Gun_Turn(move, pitch);
 	self.velocity = '0 0 0';

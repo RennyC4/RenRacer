@@ -28,6 +28,7 @@ void() world_lights =
 
 void() worldspawn = 
 {
+	countdown_count = 3;
 	lastspawn = world;
 
 	precache_model("progs/null.spr");

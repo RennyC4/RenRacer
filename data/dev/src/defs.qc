@@ -400,6 +400,8 @@ float	modelindex_player;
 float framecount;
 entity lastspawn;
 float race_start;
+float countdown_finished;
+float countdown_count;
 
 .string music;
 .string hitme; // used for searchradius collision looks for "TRUE"

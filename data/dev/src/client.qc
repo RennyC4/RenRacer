@@ -66,10 +66,9 @@ void() PlayerPreThink =
 		}
 		if (framecount > 75 && self.button0 && !race_start)
 		{
+			centerprint (self, ""); // clear centerprint
 			race_start = TRUE;
-			
-			bprint ("Start Race!\n");
-			
+
 			// Spawn car
 			local entity car = hotrod();
 			makevectors(self.angles);
@@ -81,11 +80,36 @@ void() PlayerPreThink =
 	
 			for (i = 0; i < g-1; i = i+1)
 			BotConnect(0, 0, 0);
+			
+			// Start countdown
+			countdown_finished = time + 1;
 		}
 	}
 	else
 	{
 		EngineSounds();
+		if (countdown_finished < time)
+		{
+			if (countdown_count > -1)
+			{
+				local string f = ftos(countdown_count);
+				if (countdown_count != 0)
+				{
+					bprint (f, "\n");
+					localsound("cntdwn.wav");
+				}
+				else
+				{
+					localsound("gogo.wav");
+					centerprint (self, "GO GO GO\n");
+				}
+
+				countdown_count = countdown_count - 1;
+				countdown_finished = time + 1;
+				self.bot_dontbackup_finished = time + 1; // TODO: Remove me for tracebox
+			}
+		}
+
 		if (self.start_laptime) // turned on by start/finish goal
 		{
 			if (self.laptime_tic_second < time)
@@ -195,8 +219,7 @@ void() PutClientInServer =
 
 	self.hitme = "TRUE"; // Allow searchradius to look for me
 	self.checkpoint = 0;
-	self.bot_dontbackup_finished = time + 1; // TODO: Remove me for tracebox
-
+	
 	// Frikbots Insta-spawn as the player does
 	if (!self.ishuman)
 	{
