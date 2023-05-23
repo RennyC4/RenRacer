@@ -66,7 +66,7 @@ void() PlayerPreThink =
 		}
 		if (framecount > 75 && self.button0 && !race_start)
 		{
-			centerprint (self, ""); // clear centerprint
+			//centerprint (self, ""); // clear centerprint
 			race_start = TRUE;
 
 			// Spawn car
@@ -88,26 +88,24 @@ void() PlayerPreThink =
 	else
 	{
 		EngineSounds();
-		if (countdown_finished < time)
-		{
-			if (countdown_count > -1)
-			{
-				local string f = ftos(countdown_count);
-				if (countdown_count != 0)
-				{
-					bprint (f, "\n");
-					localsound("cntdwn.wav");
-				}
-				else
-				{
-					localsound("gogo.wav");
-					centerprint (self, "GO GO GO\n");
-				}
 
-				countdown_count = countdown_count - 1;
-				countdown_finished = time + 1;
-				self.bot_dontbackup_finished = time + 1; // TODO: Remove me for tracebox
+		// Race start countdown
+		// TODO: Figure out why centerprint(self, "foo"); doesn't work?
+		if (countdown_finished < time && countdown_count > -1)
+		{
+			local string f = ftos(countdown_count);
+			if (countdown_count != 0)
+			{
+				bprint (f, "\n");
+				localsound("cntdwn.wav");
 			}
+			else
+			{
+				localsound("gogo.wav");
+				self.bot_dontbackup_finished = time + 3; // TODO: Remove me for tracebox
+			}
+			countdown_count = countdown_count - 1;
+			countdown_finished = time + 1;
 		}
 
 		if (self.start_laptime) // turned on by start/finish goal

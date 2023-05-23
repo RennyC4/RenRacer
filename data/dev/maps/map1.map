@@ -2,7 +2,7 @@
 // Format: Standard
 // entity 0
 {
-"wad" "C:/Games/RenRacer/data/dev/wads/goldcup.wad"
+"wad" "C:/Games/RenRacer/data/dev/wads/goldcup.wad;C:/Games/RenRacer/data/dev/wads/fence.wad"
 "classname" "worldspawn"
 "_sunlight" "300"
 "_sunlight_penumbra" "4"
@@ -897,6 +897,15 @@
 ( 1536 144 -74 ) ( 1344 104 -74 ) ( 1344 144 -74 ) lgmetal2 -256 96 0 1 1
 ( 1536 144 -74 ) ( 1344 144 -128 ) ( 1536 144 -128 ) sumawooda 0 0 0 1 1
 ( 1536 144 -74 ) ( 1536 -112 -128 ) ( 1536 104 -74 ) modramp15 -144 -64 0 1 1
+}
+// brush 97
+{
+( -32 1024 96 ) ( -32 -576 96 ) ( -32 -576 0 ) {kjwintex_ad 0 0 0 1 1
+( -32 -576 96 ) ( -16 -576 96 ) ( -16 -576 0 ) {kjwintex_ad 0 0 0 1 1
+( -16 -576 0 ) ( -16 1024 0 ) ( -32 1024 0 ) {kjwintex_ad 0 0 0 1 1
+( -32 1024 96 ) ( -16 1024 96 ) ( -16 -576 96 ) {kjwintex_ad 0 0 0 1 1
+( -16 1024 0 ) ( -16 1024 96 ) ( -32 1024 96 ) {kjwintex_ad 0 0 0 1 1
+( -16 -576 96 ) ( -16 1024 96 ) ( -16 1024 0 ) {kjwintex_ad 0 0 0 1 1
 }
 }
 // entity 1
