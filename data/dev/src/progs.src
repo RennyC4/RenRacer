@@ -34,6 +34,7 @@ misc/impulses.qc
 
 chars/marker.qc
 chars/rallygoal.qc
+chars/countdown.qc
 
 // decorations
 chars/decor/stfinflag.qc

@@ -49,61 +49,13 @@ void() EngineSounds =
 		self.engine_sound_time = time + 0.15;
 };
 
-void(float type) countdown_announce =
-{
-	local entity y, head, ent = world;
-	head = world;
-
-	local string f = ftos(countdown_count);
-
-	y = find(world, classname, "player");
-	while(y)
-	{
-		if (!type)
-			centerprint (y, "RACE STARTS IN\n\n[", f, "]\n");
-		else
-			centerprint (y, "! GO GO GO !\n");
-		y = find(y, classname, "player");
-	}
-	if (head)
-		ent.chain = world;
-};
-
-void() countdown_think = // Race start countdown
-{
-	if (countdown_finished < time && countdown_count > -1)
-	{
-		local string f = ftos(countdown_count);
-		if (countdown_count > 0)
-		{
-			localsound("cntdwn.wav");
-			countdown_announce(0);
-		}
-		else
-		{
-			localsound("gogo.wav");
-			countdown_announce(1);
-			race_status = RACE_STARTED;
-		}
-		countdown_count = countdown_count - 1;
-		countdown_finished = time + 1;
-	}
-	frameskip(0.1);
-};
-
-void() spawn_countdown =
-{
-	local entity cd = spawn();
-	cd.think = countdown_think;
-	cd.nextthink = time + 0.1;
-};
-
 .float welcomemsg_finished;
+void() spawn_countdown;
 void() PlayerPreThink = 
 {
 	if (BotPreFrame()) // FrikBot
 		return;
-		
+
 	// Send players origin to CSQC
 	self.player_x = self.origin_x;
 	self.player_y = self.origin_y;
@@ -141,28 +93,6 @@ void() PlayerPreThink =
 	{
 		EngineSounds();
 
-		/*
-		// Race start countdown
-		if (countdown_finished < time && countdown_count > -1)
-		{
-			local string f = ftos(countdown_count);			
-			if (countdown_count > 0)
-			{
-				localsound("cntdwn.wav");
-				bprint (f, "\n");
-			}
-			else
-			{
-				localsound("gogo.wav");
-				bprint ("GO!\n");
-			}
-
-			countdown_count = countdown_count - 1;
-			countdown_finished = time + 1;
-			self.bot_dontbackup_finished = time + 1;
-		}
-		*/
-		
 		if (self.start_laptime) // turned on by start/finish goal
 		{
 			if (self.laptime_tic_second < time)
@@ -228,7 +158,7 @@ entity() SelectSpawnSpot =
 		}
 	}
 	if (!spot)
-		error ("Cannot find spawn point in map");
+		error ("Cannot find entity racer_spawnpoint in map");
 	
 	return spot;
 };
