@@ -11,7 +11,7 @@ void() marker_think =
 	{
 		if (targ.classname == "player" && fisible(targ))
 		{
-			if (targ.goal_touched) // Player has to drive through the goals before markers are activated
+			if (targ.goal_touched && race_status == RACE_STARTED) // Player has to drive through the goals before markers are activated
 			{
 				if (self.checkpoint == 1) // first check point
 				{

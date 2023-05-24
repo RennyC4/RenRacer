@@ -49,6 +49,55 @@ void() EngineSounds =
 		self.engine_sound_time = time + 0.15;
 };
 
+void(float type) countdown_announce =
+{
+	local entity y, head, ent = world;
+	head = world;
+
+	local string f = ftos(countdown_count);
+
+	y = find(world, classname, "player");
+	while(y)
+	{
+		if (!type)
+			centerprint (y, "RACE STARTS IN\n\n[", f, "]\n");
+		else
+			centerprint (y, "! GO GO GO !\n");
+		y = find(y, classname, "player");
+	}
+	if (head)
+		ent.chain = world;
+};
+
+void() countdown_think = // Race start countdown
+{
+	if (countdown_finished < time && countdown_count > -1)
+	{
+		local string f = ftos(countdown_count);
+		if (countdown_count > 0)
+		{
+			localsound("cntdwn.wav");
+			countdown_announce(0);
+		}
+		else
+		{
+			localsound("gogo.wav");
+			countdown_announce(1);
+			race_status = RACE_STARTED;
+		}
+		countdown_count = countdown_count - 1;
+		countdown_finished = time + 1;
+	}
+	frameskip(0.1);
+};
+
+void() spawn_countdown =
+{
+	local entity cd = spawn();
+	cd.think = countdown_think;
+	cd.nextthink = time + 0.1;
+};
+
 .float welcomemsg_finished;
 void() PlayerPreThink = 
 {
@@ -69,50 +118,51 @@ void() PlayerPreThink =
 			centerprint (self, "Welcome to RenRacer\n\n===================\n\n\nPress [FIRE] to start the race");
 			self.welcomemsg_finished = time + 1.5;
 		}
-		if (framecount > 75 && self.button0 && !race_start)
+		if (framecount > 75 && self.button0 && race_status == RACE_NOTSTARTED)
 		{
 			centerprint (self, ""); // clear centerprint
-			race_start = TRUE;
+			race_status = RACE_COUNTDOWN;
+			spawn_countdown(); // Start countdown
 
 			// Spawn car
 			local entity car = hotrod();
 			makevectors(self.angles);
 			car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
 			Car_InitVehicle(car);
-			
+
+			// Add bots
 			local float i;
 			local float g = cvar("sv_playerslots");
 			for (i = 0; i < g-1; i = i+1)
 				BotConnect(0, 0, 0);
-			
-			// Start countdown
-			countdown_finished = time + 1;
 		}
 	}
 	else
 	{
 		EngineSounds();
 
+		/*
 		// Race start countdown
-		// TODO: Figure out why centerprint(self, "foo"); doesn't work?
 		if (countdown_finished < time && countdown_count > -1)
 		{
-			local string f = ftos(countdown_count);
-			if (countdown_count != 0)
+			local string f = ftos(countdown_count);			
+			if (countdown_count > 0)
 			{
-				bprint (f, "\n");
 				localsound("cntdwn.wav");
-				self.bot_dontbackup_finished = time + 3; // TODO: Remove me for tracebox
+				bprint (f, "\n");
 			}
 			else
 			{
 				localsound("gogo.wav");
-				self.bot_dontbackup_finished = time + 3; // TODO: Remove me for tracebox
+				bprint ("GO!\n");
 			}
+
 			countdown_count = countdown_count - 1;
 			countdown_finished = time + 1;
+			self.bot_dontbackup_finished = time + 1;
 		}
-
+		*/
+		
 		if (self.start_laptime) // turned on by start/finish goal
 		{
 			if (self.laptime_tic_second < time)
@@ -140,10 +190,6 @@ void() PlayerPostThink =
 
 	TryUpdateVehicle();
 	CheckImpulses();
-	
-	// Enforce console variables
-	if (cvar("chase_active") > 0)
-		cvar_set("chase_active", "0");
 };
 
 //----

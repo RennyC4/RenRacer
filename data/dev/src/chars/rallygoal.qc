@@ -59,6 +59,7 @@ void() rally_goal_touch =
 
 			sound (self, CHAN_AUTO, "finish.wav", 1, ATTN_NONE);
 			other.owner.driving.start_laptime = FALSE; // Turn off lap time recording
+			race_status = RACE_FINISHED;
 		}
 		else
 		{

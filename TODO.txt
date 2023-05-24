@@ -1,3 +1,5 @@
+TODO: Have bots figure out if they properly went through the beginning goal
+TODO: Polish head lights
 TODO: Breakable brushes (request by xaGe)
 TODO: Impact sounds including landing from a jump
 TODO: Car should match player shirt/pants colour

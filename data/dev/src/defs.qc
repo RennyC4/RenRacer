@@ -399,7 +399,14 @@ float	modelindex_player;
 // RenRacer
 float framecount;
 entity lastspawn;
-float race_start;
+//float race_start;
+
+float race_status;
+float RACE_NOTSTARTED = 0;
+float RACE_COUNTDOWN = 1;
+float RACE_STARTED = 2;
+float RACE_FINISHED = 4;
+
 float countdown_finished;
 float countdown_count;
 

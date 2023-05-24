@@ -43,6 +43,25 @@ this notice in its entirety.
 */
 
 /*
+=============
+infront
+
+returns 1 if the entity is in front (in sight) of self
+=============
+*/
+float(entity targ) infront =
+{
+	makevectors (self.angles);
+	local vector vec = normalize (targ.origin - self.origin);
+	local float dot = vec * v_forward;
+
+	if (dot > 0.3)
+		return TRUE;
+	return FALSE;
+};
+
+
+/*
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 bot_angle_set
@@ -57,47 +76,11 @@ void() bot_angle_set =
 	local float h;
 	local vector view;
 
-/*
-	if (self.enemy)
+	//if (self.target1)
+	
+	if (self.goalentity)
 	{
-		if (self.missile_speed == 0)
-			self.missile_speed = 10000;
-		if (self.enemy.solid == SOLID_BSP)
-		{
-			view = (((self.enemy.absmin + self.enemy.absmax) * 0.5) - self.origin);
-		}
-		else
-		{
-			local float levels;
-
-			levels = 3;
-			view = self.enemy.origin;
-			while (levels)
-			{
-				h = vlen(view - self.origin) / self.missile_speed;
-				if (self.enemy.flags & FL_ONGROUND)
-					view = self.enemy.velocity * h + '0 0 -20';
-				else
-					view = (self.enemy.velocity - (sv_gravity * '0 0 1') * h) * h;
-				view = self.enemy.origin + view; 
-				traceline(self.enemy.origin, view, FALSE, self);
-				view = trace_endpos;
-				levels = levels - 1;
-			}
-			view = normalize(view - self.origin);
-		}
-		view = vectoangles(view);
-		view_x = view_x * -1;
-		self.b_angle = view;
-	}
-	*/
-	//else if (self.target1)
-
-	if (self.target1)
-	{
-		view = realorigin(self.target1);
-		if (self.target1.flags & FL_ITEM)
-				view = view + '0 0 48';
+		view = realorigin(self.goalentity);
 		view = view - (self.origin + self.view_ofs);
 		view = vectoangles(view);
 		view_x = view_x * -1;
@@ -109,8 +92,8 @@ void() bot_angle_set =
 	// HACK HACK HACK HACK
 	// The bot falls off ledges a lot because of "turning around"
 	// so let the bot use instant turn around when not hunting a player
-	if (self.b_skill == 3)
-	{
+	//if (self.b_skill == 3)
+	//{
 		self.keys = self.keys & 63;
 		self.v_angle = self.b_angle;
 		while (self.v_angle_x < -180)
@@ -118,7 +101,9 @@ void() bot_angle_set =
 		while (self.v_angle_x > 180)
 			self.v_angle_x = self.v_angle_x - 360;
 
-	}
+	//}
+	
+	/*
 	else if ((self.enemy == world || self.enemy.movetype == MOVETYPE_PUSH) && self.target1.classname != "player")
 	{
 		self.keys = self.keys & 63;
@@ -143,6 +128,7 @@ void() bot_angle_set =
 		else if (angcomp(self.b_angle_x, self.v_angle_x) > 10)
 			self.keys = self.keys | KEY_LOOKDOWN;
 	}
+	*/
 };
 
 // TODO: Count all checkpoints in the map and compare where the bot is at
@@ -164,7 +150,6 @@ void() FindGoalPoint =
 	}
 	if (head)
 		ent.chain = world;
-//	return head;
 };
 
 void() FindCheckPoint =
@@ -184,7 +169,6 @@ void() FindCheckPoint =
 	}
 	if (head)
 		ent.chain = world;
-//	return head;
 };
 
 
@@ -201,7 +185,6 @@ frame, the ai_time limits it's actual updating
 
 float stagger_think;
 .float bot_backup_finished;
-.float bot_dontbackup_finished;
 void() BotAI =
 {
 	// stagger the bot's AI out so they all don't think at the same time, causing game 'spikes'
@@ -220,18 +203,32 @@ void() BotAI =
 			return;
 	}
 
-	if (!self.goalentity)
+	if (!self.goal_touched)
 	{
-		//bprint ("FindCheckPoint\n");
-		FindCheckPoint();
-		self.findcheckpoint_fail = self.findcheckpoint_fail + 1;
-		if (self.findcheckpoint_fail > 1)
+		if (!self.goalentity)
+		{
 			FindGoalPoint();
+			//bprint ("FindGoalPoint_STARTRACE\n");
+		}
 	}
 	else
 	{
-		if (self.checkpoint == self.goalentity.checkpoint) // Find next checkpoint
-			self.goalentity = world;
+		if (!self.goalentity)
+		{
+			//bprint ("FindCheckPoint\n");
+			FindCheckPoint();
+			self.findcheckpoint_fail = self.findcheckpoint_fail + 1;
+			if (self.findcheckpoint_fail > 1)
+			{
+				FindGoalPoint();
+				//bprint ("FindGoalPoint\n");
+			}
+		}
+		else
+		{
+			if (self.checkpoint == self.goalentity.checkpoint) // Find next checkpoint
+				self.goalentity = world;
+		}
 	}
 
 	if (self.goalentity)
@@ -249,7 +246,6 @@ void() BotAI =
 		
 		if (self.carroll_angle > -330 && self.carroll_angle < -30)
 		{
-			//bprint ("Car roll, get out\n");
 			if (self.carroll_angle < -180)
 				self.keys = self.keys = KEY_MOVELEFT;
 			else
@@ -257,19 +253,17 @@ void() BotAI =
 			return;
 		}
 
-		// Back up for a second, hit a wall or rolled over
-		// TODO: Should tracebox?, and seperate the roll over code into it's own thing
-		// FIXME: This is ran at the beginning of a race
-		if (self.keys == KEY_MOVEFORWARD && self.realspeed <= 2 && self.bot_dontbackup_finished < time)
+		// Back up for a second, hit a wall or rolled over TODO: Make it better, use tracebox check
+		if (self.keys == KEY_MOVEFORWARD && self.realspeed <= 2 && self.goalentity.classname != "bot_waypoint_goal")
 		{
 			self.keys = KEY_MOVEBACK;
-			self.bot_backup_finished = time + 0.65;
+			self.bot_backup_finished = time + 0.5 + random()*0.5;
 			//bprint ("Hit wall, backup!\n");
 		}
 
 		if (self.bot_backup_finished < time)
 		{
-			if (r >= 80) // Far from goalentity
+			if (r >= 80 || (infront(self.goalentity) && self.goalentity.classname == "bot_waypoint_goal")) // Far from goalentity
 				self.keys = KEY_MOVEFORWARD; // Full speed
 			else // Driving stuff when near market / target
 			{
@@ -309,8 +303,6 @@ void() BotAI =
 			}
 		}
 		bot_angle_set();
-
-//		self.keys = KEY_MOVERIGHT;    // TODO: Detect when the car is toppled over
 
 		// Debugging prints
 		/*

@@ -32,6 +32,7 @@ void() CSQC_WorldLoaded  =
 	// Spawn sky
 	sky = spawn();
 	sky.scale = 6;
+	precache_model ("progs/sky.iqm");
 	setmodel(sky, "progs/sky.iqm");
 	
 	// Ask SSQC for values to send
