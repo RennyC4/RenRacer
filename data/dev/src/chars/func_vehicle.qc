@@ -486,13 +486,12 @@ void(float speed, float maxspeed) Car_Roll =
 		f_right.velocity = f_right.velocity + f_right.lmat_up *speed*frametime;
 		b_right.velocity = b_right.velocity + b_right.lmat_up *speed*frametime;
 		f_left.velocity = f_left.velocity - f_left.lmat_up *speed*frametime;	
-		b_left.velocity = b_left.velocity - b_left.lmat_up *speed*frametime;
-		
+		b_left.velocity = b_left.velocity - b_left.lmat_up *speed*frametime;	
 	}
 }
 
 //
-// Taken from Build-A-Delivery by shpuld
+// RennyC:Taken from Build-A-Delivery by shpuld
 //
 void(float strength) car_boost =
 {
@@ -516,7 +515,6 @@ void TryUpdateVehicle(){
 	if (!self.driving)
 		return;
 	setorigin(self, Car_SpringyOrigin());
-
 	if (countdown_count <= -1) //RennyC
 	{
 		makevectors(self.v_angle);
@@ -569,7 +567,7 @@ void TryUpdateVehicle(){
 			if (pitch < -180)
 				pitch = pitch + 360;
 		}
-	}
+	} // RennyC
 	Gun_Turn(move, pitch);
 	self.velocity = '0 0 0';
 	self.modelindex = modelindex_null;

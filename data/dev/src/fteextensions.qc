@@ -1687,8 +1687,8 @@ void(float style, float val, optional vector rgb) lightstylestatic = #5; /*
 void(vector start, vector mins, vector maxs, vector end, float nomonsters, entity ent) tracebox = #90; /* Part of DP_QC_TRACEBOX
 		Exactly like traceline, but a box instead of a uselessly thin point. Acceptable sizes are limited by bsp format, q1bsp has strict acceptable size values. */
 
-vector() randomvec = #91; /* Part of DP_QC_RANDOMVEC
-		Returns a vector with random values. Each axis is independantly a value between -1 and 1 inclusive. */
+//vector() randomvec = #91; /* Part of DP_QC_RANDOMVEC
+//		Returns a vector with random values. Each axis is independantly a value between -1 and 1 inclusive. */
 
 vector(vector org) getlight = #92;
 float(string cvarname, string defaultvalue) registercvar = #93; /* Part of DP_REGISTERCVAR
@@ -2067,8 +2067,8 @@ float(float modidx, float framenum, int eventidx, __out float timestamp, __out i
 
 #endif
 #define dotproduct(v1,v2) ((vector)(v1)*(vector)(v2))
-vector(vector v1, vector v2) crossproduct = #0:crossproduct; /* Part of FTE_QC_CROSSPRODUCT
-		Small helper function to calculate the crossproduct of two vectors. */
+//vector(vector v1, vector v2) crossproduct = #0:crossproduct; /* Part of FTE_QC_CROSSPRODUCT
+//		Small helper function to calculate the crossproduct of two vectors. */
 
 #if defined(CSQC) || defined(SSQC)
 float(entity pusher, vector move, vector amove) pushmove = #0:pushmove;

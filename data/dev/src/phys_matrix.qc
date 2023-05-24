@@ -1,4 +1,3 @@
-/*
 vector(vector a, vector b) crossproduct =
 {
 	local vector v;
@@ -7,7 +6,6 @@ vector(vector a, vector b) crossproduct =
 	v_z = a_x * b_y - a_y * b_x;
 	return v;
 };
-*/
 
 // Rodriguez vector aka Axis angle rotation, thanks LadyHavoc
 void(vector axis, float angle) Matrix_RotateByAxisAngle =
@@ -167,9 +165,7 @@ void(entity obj) Matrix_CalculateObjectMatrix =
 	matrix_left    = obj.relative_forward_y * tpart_forward + obj.relative_left_y * tpart_left + obj.relative_up_y * tpart_up;
 	matrix_up      = obj.relative_forward_z * tpart_forward + obj.relative_left_z * tpart_left + obj.relative_up_z * tpart_up;
 };
-
 #ifndef QSSDEP
-/*
 vector randomvec(){
 	vector v;
 	do {
@@ -180,7 +176,7 @@ vector randomvec(){
 	while(vlen(v) > 1);
 	return v;
 }
-*/
+
 float DotProduct2(vector x, vector y){
 	return x.x*y.x+x.y*y.y;
 }
