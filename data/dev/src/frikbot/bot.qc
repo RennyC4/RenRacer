@@ -305,47 +305,6 @@ void(entity	e) setspawnparms =
 	}
 };
 
-// TODO: Fix me for FTEExtesion compatibility?
-/*
-void(entity client, string s, optional string s2, optional string s3, optional string s4, optional string s5, optional string s6, optional string s7) sprint =
-{
-	if (client.ishuman == 1)
-		frik_sprint(client, s);
-	b_temp1 = player_head;
-
-	while(b_temp1)
-	{
-		if (b_temp1.classname == "botcam")
-		{
-			if ((b_temp1.enemy == client) && b_temp1.ishuman)
-				frik_sprint(b_temp1, s);
-		}
-		b_temp1 = b_temp1._next;
-	}
-
-};
-*/
-
-// TODO: Fix me for FTEExtesion compatibility
-/*
-void(entity client, string s, optional string text2, optional string text3, optional string text4, optional string text5, optional string text6, optional string text7) centerprint =
-{
-	if (client.ishuman == 1)
-			frik_centerprint(client, s);
-	b_temp1 = player_head;
-
-	while(b_temp1)
-	{
-		if (b_temp1.classname == "botcam")
-		{
-			if ((b_temp1.enemy == client) && b_temp1.ishuman)
-				frik_centerprint(b_temp1, s);
-		}
-		b_temp1 = b_temp1._next;
-	}
-};
-*/
-
 vector(entity e, float sped) aim =
 {
 	e.missile_speed = sped;
@@ -709,24 +668,6 @@ float() ClientNextAvailable =
 			return clientno;
 	}
 	return -1;
-};
-
-
-void(entity e1, entity e2, float flag) DeveloperLightning =
-{
-	// used to show waypoint links for debugging
-	WriteByte (MSG_BROADCAST, 23);
-	if (flag)
-		WriteByte (MSG_BROADCAST, 6);
-	else
-		WriteByte (MSG_BROADCAST, 13);
-	WriteEntity (MSG_BROADCAST, e2);
-	WriteCoord (MSG_BROADCAST, e1.origin_x);
-	WriteCoord (MSG_BROADCAST, e1.origin_y);
-	WriteCoord (MSG_BROADCAST, e1.origin_z);
-	WriteCoord (MSG_BROADCAST, e2.origin_x);
-	WriteCoord (MSG_BROADCAST, e2.origin_y);
-	WriteCoord (MSG_BROADCAST, e2.origin_z); 
 };
 
 /*

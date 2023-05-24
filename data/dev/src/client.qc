@@ -71,7 +71,7 @@ void() PlayerPreThink =
 		}
 		if (framecount > 75 && self.button0 && !race_start)
 		{
-			//centerprint (self, ""); // clear centerprint
+			centerprint (self, ""); // clear centerprint
 			race_start = TRUE;
 
 			// Spawn car
@@ -82,9 +82,8 @@ void() PlayerPreThink =
 			
 			local float i;
 			local float g = cvar("sv_playerslots");
-	
 			for (i = 0; i < g-1; i = i+1)
-			BotConnect(0, 0, 0);
+				BotConnect(0, 0, 0);
 			
 			// Start countdown
 			countdown_finished = time + 1;
@@ -103,6 +102,7 @@ void() PlayerPreThink =
 			{
 				bprint (f, "\n");
 				localsound("cntdwn.wav");
+				self.bot_dontbackup_finished = time + 3; // TODO: Remove me for tracebox
 			}
 			else
 			{
@@ -174,15 +174,13 @@ entity() SelectSpawnSpot =
 					pcount = pcount + 1;
 				thing = thing.chain;
 			}
-			if (pcount == 0)
+			if (!pcount)
 			{
 				lastspawn = spot;
 				return spot;
 			}
 		}
 	}
-
-	spot = find (world, classname, "info_player_start");
 	if (!spot)
 		error ("Cannot find spawn point in map");
 	

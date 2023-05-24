@@ -8,6 +8,8 @@ entity() hotrod;
 entity() triton;
 
 void PushAndDamageThink(){
+// RennyC: Disable this
+/*
 	entity e = self.p_damage_next;
 	while(e){
 		T_Damage (e, self, self, e.p_damage_val);
@@ -19,6 +21,7 @@ void PushAndDamageThink(){
 	self.p_damage_next = world;
 
 	self.nextthink = time + 0.2;
+*/
 }
 
 // FIXME: need to take attacker mass into account

@@ -1,6 +1,7 @@
 //
 // Main Loop
 //
+entity sky;
 
 void(float width, float height, float menushown) CSQC_UpdateView =
 {
@@ -14,9 +15,12 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 
 	GameCamera(); // Games camera
 
+	sky.origin = campos - '0 0 0';
+	sky.angles = '0 0 0';
+	addentity(sky);
+
 	addentities((intermission?0:MASK_VIEWMODEL)|MASK_ENGINE);
 	renderscene();
-	
 };
 
 //
@@ -25,6 +29,11 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 
 void() CSQC_WorldLoaded  =
 {
-	// Ask SSQC for values to send, fixes 0 display on HUD elements
+	// Spawn sky
+	sky = spawn();
+	sky.scale = 6;
+	setmodel(sky, "progs/sky.iqm");
+	
+	// Ask SSQC for values to send
 	sendevent("GrabCSQCValues", "");
 };

@@ -1,13 +1,14 @@
 TODO: Breakable brushes (request by xaGe)
 TODO: Impact sounds including landing from a jump
 TODO: Car should match player shirt/pants colour
-TODO: CSQC Chasecam?
 TODO: Proper waypoints for bots, if one exists.. they follow it around the course, otherwise default checkpoint follow behavior
 TODO: Turbo boost SFX
-TODO: Fix skies on terrain maps
 TODO: Figure out why centerprints are being "eaten" - 3,2,1, GO can't centerprint
+TODO: CSQC Chasecam polish
 
 ====
+Done: Fix skies on terrain maps
+Done: CSQC Chasecam
 Done: Turbo Boost
 Done: Add misc_model + TAoV's nice trees
 Done: T_Damage function implementation
