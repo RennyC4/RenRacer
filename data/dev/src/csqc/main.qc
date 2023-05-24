@@ -9,11 +9,13 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 
 	clearscene(); //wipe entity lists, reset view properties to their defaults
 
-	// Turn off crosshair & status bar
-	setproperty(VF_DRAWENGINESBAR, 0);	
-	setproperty(VF_DRAWCROSSHAIR, 0);
-
-	GameCamera(); // Games camera
+	setproperty(VF_DRAWENGINESBAR, 0); // Turn off status bar
+	
+	if (cvar("developer") == 0)
+	{
+		GameCamera(); // Games camera
+		setproperty(VF_DRAWCROSSHAIR, 0); // Turn off crosshair
+	}
 
 	sky.origin = campos - '0 0 0';
 	sky.angles = '0 0 0';

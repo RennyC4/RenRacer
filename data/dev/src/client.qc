@@ -61,6 +61,9 @@ void() PlayerPreThink =
 	self.player_y = self.origin_y;
 	self.player_z = self.origin_z;
 
+	if (cvar("developer") > 0)
+		return;
+
 	// Force player in car, give greetings message
 	if (!self.driving)
 	{
@@ -174,8 +177,17 @@ void() PutClientInServer =
 	self.classname = "player";
 	self.health = self.max_health = 100;
 	self.takedamage = DAMAGE_NO;
-	self.solid = SOLID_NOT;
-	self.movetype = MOVETYPE_NONE;
+
+	if (cvar("developer") == 0)
+	{
+		self.solid = SOLID_NOT;
+		self.movetype = MOVETYPE_NONE;
+	}
+	else
+	{
+		self.movetype = MOVETYPE_NOCLIP;
+	}
+
 	self.flags = FL_CLIENT;
 	self.origin = spawn_spot.origin;
 	
