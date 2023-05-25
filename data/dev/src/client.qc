@@ -139,7 +139,7 @@ entity() SelectSpawnSpot =
 	while (1)
 	{
 		spot = find(spot, classname, "racer_spawnpoint");
-		if (spot != world)
+		if (spot)
 		{
 			if (spot == lastspawn)
 				return lastspawn;
@@ -159,9 +159,14 @@ entity() SelectSpawnSpot =
 				return spot;
 			}
 		}
+		else
+		{
+			spot = find(spot, classname, "info_player_start");
+			return spot;
+		}
 	}
 	if (!spot)
-		error ("Cannot find entity racer_spawnpoint in map");
+		error ("Cannot find entity racer_spawnpoint / info_player_start in map");
 	
 	return spot;
 };

@@ -1,13 +1,17 @@
 TODO: Polish head lights
 TODO: Breakable brushes (request by xaGe)
 TODO: Impact sounds including landing from a jump
-TODO: Car should match player shirt/pants colour
 TODO: Proper waypoints for bots, if one exists.. they follow it around the course, otherwise default checkpoint follow behavior
 TODO: Turbo boost SFX
-TODO: Developer 1 support
+TODO: func_vehicle no longer ignores clip/sky brushes *important*
+TODO: Remove judder off CSQC Chase cam vs func_vehicle
+TODO: Car colors / Driver match .colormap - WIP
 
 ====
 
+Done: Basic shader implementation
+Done: "Mapedit" CSAddon terrain support
+Done: Developer 1 support
 Done: CSQC Chasecam polish
 Done: Figure out why centerprints are being "eaten" - 3,2,1, GO can't centerprint
 Done: Fix skies on terrain maps
@@ -16,7 +20,6 @@ Done: Turbo Boost
 Done: Add misc_model + TAoV's nice trees
 Done: T_Damage function implementation
 Done: Proper spawning for player + bots
-Done: Terrain support, creation/editing must be done using external textures+vanilla quake running FTE+csaddon.dat
 Done: Proper game start - Half done.. needs 3,2,1,Go
 Done: info_player_deathmatch should turn into racer_spawnpoint
 Done: Have bots figure out if they properly went through the beginning goal

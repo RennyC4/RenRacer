@@ -1,4 +1,4 @@
-skybox_nosky
+nosky
 {
 	surfaceparm nodraw
 }

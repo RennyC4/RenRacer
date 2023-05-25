@@ -8,7 +8,6 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 	framecount = framecount + 1;
 
 	clearscene(); //wipe entity lists, reset view properties to their defaults
-
 	setproperty(VF_DRAWENGINESBAR, 0); // Turn off status bar
 	
 	if (cvar("developer") == 0)

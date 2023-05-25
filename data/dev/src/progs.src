@@ -10,6 +10,7 @@ frikbot/bot_misc.qc
 frikbot/bot_phys.qc
 //frikbot x
 
+main.qc
 subs.qc
 math.qc
 damage.qc
@@ -25,7 +26,6 @@ func_vehicle_builtins.qc
 // func_vehicle
 
 misc.qc
-main.qc
 client.qc
 dummys.qc
 
