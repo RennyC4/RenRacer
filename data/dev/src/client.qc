@@ -62,7 +62,20 @@ void() PlayerPreThink =
 	self.player_z = self.origin_z;
 
 	if (cvar("developer") > 0)
+	{
+		local string x,y,z,ang_y;
+		x = ftos(self.origin_x);
+		y = ftos(self.origin_y);
+		z = ftos(self.origin_z);
+		ang_y = ftos(self.angles_y);
+		
+		bprint ("X: ", x, "\n");
+		bprint ("Y: ", y, "\n");
+		bprint ("Z: ", z, "\n");
+		bprint ("Angle_Y: ", ang_y, "\n");
+
 		return;
+	}
 
 	// Force player in car, give greetings message
 	if (!self.driving)

@@ -122,7 +122,7 @@ void() Car_ChassiThink =
 	// RennyC - Send real speed / roll angle (angle Z) to player entity
 	local float r = vlen(car.velocity) * 0.1;
 	if (car.driving.classname == "player")
-	{
+	{	
 		car.driving.realspeed = r;
 		car.driving.carroll_angle = car.angles_z; // RennyC: Used by FrikBot
 	}
@@ -360,6 +360,7 @@ void(entity ply, entity car) Car_AttachToVehicle =
 		stuffcmd(ply, "crosshair 0\n");
 		setorigin(ply, car.origin);
 		car.driving = ply;
+		car.colormap = ply.colormap; // RennyC TODO: Make this work
 	}
 };
 
@@ -491,7 +492,7 @@ void(float speed, float maxspeed) Car_Roll =
 }
 
 //
-// RennyC:Taken from Build-A-Delivery by shpuld
+// RennyC: Taken from Build-A-Delivery by shpuld
 //
 void(float strength) car_boost =
 {
@@ -568,6 +569,19 @@ void TryUpdateVehicle(){
 				pitch = pitch + 360;
 		}
 	} // RennyC
+
+	// RennyC: Check if the car is airborne by checking all tire onground flags
+	if (!(self.driving.frontright.flags & FL_ONGROUND && self.driving.frontleft.flags & FL_ONGROUND
+	&& self.driving.backright.flags & FL_ONGROUND && self.driving.backleft.flags & FL_ONGROUND)) // all tires are off the ground
+		self.airborne_cnt = self.airborne_cnt + 1;
+	else
+	{
+		if (self.airborne_cnt > 29) // landed
+			sound (self, CHAN_AUTO, "land.wav", 1, ATTN_NORM);
+		self.airborne_cnt = 0;
+	}
+	// RennyC
+ 
 	Gun_Turn(move, pitch);
 	self.velocity = '0 0 0';
 	self.modelindex = modelindex_null;

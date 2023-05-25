@@ -9,7 +9,7 @@ void() marker_think =
 	local entity targ = searchradius(self.origin, 100);
 	while (targ)
 	{
-		if (targ.classname == "player" && fisible(targ))
+		if (targ.classname == "player" && fisible(targ) && cvar("developer") == 0)
 		{
 			if (targ.goal_touched && race_status == RACE_STARTED) // Player has to drive through the goals before markers are activated
 			{

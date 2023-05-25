@@ -1,14 +1,16 @@
 TODO: Polish head lights
+TODO: Impact sound - Car smash (wall, other car)
 TODO: Breakable brushes (request by xaGe)
-TODO: Impact sounds including landing from a jump
 TODO: Proper waypoints for bots, if one exists.. they follow it around the course, otherwise default checkpoint follow behavior
 TODO: Turbo boost SFX
 TODO: func_vehicle no longer ignores clip/sky brushes *important*
 TODO: Remove judder off CSQC Chase cam vs func_vehicle
 TODO: Car colors / Driver match .colormap - WIP
+TODO: Freeze all cars in place until the race start countdown ends
 
 ====
 
+Done: Impact sound - landing from a jump
 Done: Basic shader implementation
 Done: "Mapedit" CSAddon terrain support
 Done: Developer 1 support

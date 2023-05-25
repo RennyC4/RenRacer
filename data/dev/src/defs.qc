@@ -422,7 +422,7 @@ float countdown_count;
 .float realspeed; // send real speed from func_vehicle to client entity
 .float carroll_angle; // z angle of func_vehicle sent to client entity
 .float goal_touched; // client touched the beginning / end goal to start/end race
-.float onground; // Car airborne status update
+.float airborne_cnt; // Car airborne counter
 
 // CSQC
 #define STAT_ORIGINX 32
