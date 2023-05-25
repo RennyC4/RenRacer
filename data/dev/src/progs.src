@@ -34,10 +34,10 @@ misc/impulses.qc
 
 chars/marker.qc
 chars/rallygoal.qc
+chars/stfinflag.qc
 chars/countdown.qc
 
 // decorations
-chars/decor/stfinflag.qc
 chars/decor/pylon.qc
 chars/decor/barricade.qc
 
