@@ -39,6 +39,7 @@ void() worldspawn =
 	lastspawn = world;
 
 	precache_model("progs/null.spr");
+	precache_model("progs/s_debug.spr");
 
 	//
 	// func_vehicle - start

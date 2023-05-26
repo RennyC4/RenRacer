@@ -7,6 +7,7 @@ TODO: func_vehicle no longer ignores clip/sky brushes *important*
 TODO: Remove judder off CSQC Chase cam vs func_vehicle
 TODO: Car colors / Driver match .colormap - WIP
 TODO: Freeze all cars in place until the race start countdown ends
+TODO: Start/Finish goal flag spawns invisible entity at model base if spawnflag & 1
 
 ====
 

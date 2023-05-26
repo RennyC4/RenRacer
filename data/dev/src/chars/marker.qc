@@ -39,7 +39,7 @@ void() marker_think =
 					sound (self, CHAN_AUTO, "checkpoint.wav", 1, ATTN_NORM);
 				}
 			}
-			else
+			else if (race_status != RACE_FINISHED)
 				centerprint (targ, "You must drive through the starting goal to properly start the race!");
 		}
 		targ = targ.chain;
@@ -82,4 +82,7 @@ void() rally_marker =
 
 	self.think = marker_think;
 	self.nextthink = time + 0.1;
+		
+	if (!self.checkpoint)
+		error("rally_marker with no checkpoint value set\n");
 };

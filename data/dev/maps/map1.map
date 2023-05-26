@@ -1135,133 +1135,128 @@
 }
 // entity 41
 {
-"origin" "1432 872 -120"
-"classname" "bot_waypoint_goal"
-}
-// entity 42
-{
 "origin" "1574.2 -1045.66 -120"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "75"
 }
-// entity 43
+// entity 42
 {
 "origin" "1442.93 -1066.93 -120"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "225"
 }
-// entity 44
+// entity 43
 {
 "origin" "1496 -1000 -120"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "75"
 }
-// entity 45
+// entity 44
 {
 "origin" "1557.66 -918.202 -120"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "0"
 }
-// entity 46
+// entity 45
 {
 "origin" "1493.66 -1078.2 -120"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "0"
 }
-// entity 47
+// entity 46
 {
 "origin" "363.314 -16 -119"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "300"
 }
-// entity 48
+// entity 47
 {
 "origin" "502.202 -101.657 -119"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "150"
 }
-// entity 49
+// entity 48
 {
 "origin" "469.072 34.9282 -119"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "15"
 }
-// entity 50
+// entity 49
 {
 "origin" "610.928 -42.9282 -119"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "225"
 }
-// entity 51
+// entity 50
 {
 "origin" "698.928 61.0718 -119"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "195"
 }
-// entity 52
+// entity 51
 {
 "origin" "760 -56 -119"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "75"
 }
-// entity 53
+// entity 52
 {
 "origin" "696 -88 -119"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "345"
 }
-// entity 54
+// entity 53
 {
 "origin" "1449.8 1381.66 -113"
 "classname" "rally_barricade"
 "angle" "225"
 }
-// entity 55
+// entity 54
 {
 "origin" "712 504 -120"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "75"
 }
-// entity 56
+// entity 55
 {
 "origin" "656 584 -120"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "225"
 }
-// entity 57
+// entity 56
 {
 "origin" "632 648 -120"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "15"
 }
-// entity 58
+// entity 57
 {
 "origin" "1384 256 -80"
 "angle" "90"
 "classname" "info_player_deathmatch"
 }
-// entity 59
+// entity 58
 {
 "origin" "1496 256 -80"
 "angle" "90"
 "classname" "info_player_deathmatch"
 }
-// entity 60
+// entity 59
 {
 "origin" "1384 416 -80"
 "angle" "90"

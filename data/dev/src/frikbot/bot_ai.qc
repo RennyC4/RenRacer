@@ -76,8 +76,6 @@ void() bot_angle_set =
 	local float h;
 	local vector view;
 
-	//if (self.target1)
-	
 	if (self.goalentity)
 	{
 		view = realorigin(self.goalentity);
@@ -89,53 +87,15 @@ void() bot_angle_set =
 	else
 		self.b_angle_x = 0;
 
-	// HACK HACK HACK HACK
-	// The bot falls off ledges a lot because of "turning around"
-	// so let the bot use instant turn around when not hunting a player
-	//if (self.b_skill == 3)
-	//{
-		self.keys = self.keys & 63;
-		self.v_angle = self.b_angle;
-		while (self.v_angle_x < -180)
-			self.v_angle_x = self.v_angle_x + 360;
-		while (self.v_angle_x > 180)
-			self.v_angle_x = self.v_angle_x - 360;
-
-	//}
-	
-	/*
-	else if ((self.enemy == world || self.enemy.movetype == MOVETYPE_PUSH) && self.target1.classname != "player")
-	{
-		self.keys = self.keys & 63;
-		self.v_angle = self.b_angle;
-		while (self.v_angle_x < -180)
-			self.v_angle_x = self.v_angle_x + 360;
-		while (self.v_angle_x > 180)
-			self.v_angle_x = self.v_angle_x - 360;
-	}
-	else if (self.b_skill < 2) // skill 2 handled in bot_phys
-	{
-		if (self.b_angle_x > 180)
-			self.b_angle_x = self.b_angle_x - 360;
-		self.keys = self.keys & 63;
-
-		if (angcomp(self.b_angle_y, self.v_angle_y) > 10)
-			self.keys = self.keys | KEY_LOOKLEFT;
-		else if (angcomp(self.b_angle_y, self.v_angle_y) < -10)
-			self.keys = self.keys | KEY_LOOKRIGHT;
-		if (angcomp(self.b_angle_x, self.v_angle_x) < -10)
-			self.keys = self.keys | KEY_LOOKUP;
-		else if (angcomp(self.b_angle_x, self.v_angle_x) > 10)
-			self.keys = self.keys | KEY_LOOKDOWN;
-	}
-	*/
+	self.keys = self.keys & 63;
+	self.v_angle = self.b_angle;
+	while (self.v_angle_x < -180)
+		self.v_angle_x = self.v_angle_x + 360;
+	while (self.v_angle_x > 180)
+		self.v_angle_x = self.v_angle_x - 360;
 };
 
-// TODO: Count all checkpoints in the map and compare where the bot is at
-// and when to race towards the goal
-
 .float findcheckpoint_fail;
-void() bot_waypoint_goal = {self.classname = "bot_waypoint_goal";};
 void() FindGoalPoint =
 {
 	local entity y, head, ent = world;

@@ -27,7 +27,7 @@ void() rally_goal_touch =
 		else
 			centerprint(other.owner.driving, self.message); // custom mapper message
 		
-		if (other.owner.driving.music != self.music)
+		if (other.owner.driving.music != self.music && self.music)
 		{
 			stuffcmd (other.owner.driving, sprintf("music %s\n", self.music));
 			other.owner.driving.music = self.music;
