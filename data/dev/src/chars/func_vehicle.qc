@@ -516,7 +516,7 @@ void TryUpdateVehicle(){
 	if (!self.driving)
 		return;
 	setorigin(self, Car_SpringyOrigin());
-	if (countdown_count <= -1) //RennyC
+	if (race_status == RACE_STARTED) // RennyC: Allow player to control the car
 	{
 		makevectors(self.v_angle);
 		float forw = v_forward * self.velocity;
@@ -568,7 +568,24 @@ void TryUpdateVehicle(){
 			if (pitch < -180)
 				pitch = pitch + 360;
 		}
-	} // RennyC
+		// Race started, unlock tires
+		if (self.driving.frontright.physobj_stiction != 10)
+			self.driving.frontright.physobj_stiction = 10;
+		if (self.driving.frontleft.physobj_stiction != 10)
+			self.driving.frontleft.physobj_stiction = 10;
+		if (self.driving.backright.physobj_stiction != 10)
+			self.driving.backright.physobj_stiction = 10;
+		if (self.driving.backleft.physobj_stiction != 10)
+			self.driving.backleft.physobj_stiction = 10;
+	}
+	else // Race not started, lock tires
+	{
+		self.driving.frontright.physobj_stiction = 99999;
+		self.driving.frontleft.physobj_stiction = 99999;
+		self.driving.backright.physobj_stiction = 99999;
+		self.driving.backleft.physobj_stiction = 99999;
+	}
+	// RennyC
 
 	// RennyC: Check if the car is airborne by checking all tire onground flags
 	if (!(self.driving.frontright.flags & FL_ONGROUND && self.driving.frontleft.flags & FL_ONGROUND

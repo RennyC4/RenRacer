@@ -37,7 +37,6 @@ void() rally_goal_proxy_think =
 			{
 				// Setup map change
 				nextmap = mapname;
-				self.touch = SUB_Null;
 				self.think = rally_goal_nextmap;
 				self.nextthink = time + 5;
 
@@ -55,8 +54,11 @@ void() rally_goal_proxy_think =
 					sprint (targ, "Overall Time: ", l6, "\n");
 
 				sound (self, CHAN_AUTO, "finish.wav", 1, ATTN_NONE);
+				sound (self, CHAN_AUTO, "camera.wav", 1, ATTN_NONE);
+				stuffcmd(targ, "wf\n");
 				targ.start_laptime = FALSE; // Turn off lap time recording
 				race_status = RACE_FINISHED;
+				return; // needed otherwise map change happens immediately
 			}
 			else
 			{
@@ -93,6 +95,9 @@ void() rally_goal_proxy_think =
 void() rally_startfinish_flag =
 {
 	precache_model ("progs/finish.mdl");
+	precache_sound ("lap.wav");
+	precache_sound ("finish.wav");
+
 	setmodel(self, "progs/finish.mdl");
 	setsize(self, '0 0 0', '0 0 0');
 	self.solid = SOLID_NOT;

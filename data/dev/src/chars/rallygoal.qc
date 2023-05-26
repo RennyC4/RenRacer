@@ -58,6 +58,8 @@ void() rally_goal_touch =
 				sprint (other.owner.driving, "Overall Time: ", l6, "\n");
 
 			sound (self, CHAN_AUTO, "finish.wav", 1, ATTN_NONE);
+			sound (self, CHAN_AUTO, "camera.wav", 1, ATTN_NONE);
+			stuffcmd(other.owner.driving, "wf\n");
 			other.owner.driving.start_laptime = FALSE; // Turn off lap time recording
 			race_status = RACE_FINISHED;
 		}

@@ -1,0 +1,111 @@
+{
+classname "worldspawn"
+message "Hill Valley"
+_sky "nosky"
+_fog "0.025 1 1 1"
+_maxdrawdist 0 /*overrides fog distance (if greater)*/
+_segmentsize 1024 /*how big each section is. this affects texturing and resolutions*/
+_minxsegment -2048
+_minysegment -2048
+_maxxsegment 2048
+_maxysegment 2048
+_seed "4" /*for auto-gen plugins*/
+_exterior solid
+_defaultgroundtexture "grass"
+_defaultgroundheight "0"
+_defaultwatertexture "water"
+_defaultwaterheight "4"
+}
+{
+classname info_player_start
+origin "0 0 1024" /*EDITME*/
+}
+
+// racerspawn point 1
+{
+classname racer_spawnpoint
+origin "247 997 313"
+angles "0 -90 0"
+}
+
+// racer spawn point 2
+{
+classname racer_spawnpoint
+origin "263 1223 340"
+angles "0 -90 0"
+}
+
+// racer spawn point 3
+{
+classname racer_spawnpoint
+origin "452 1145 355"
+angles "0 -110 0"
+}
+
+// racer spawn point 4
+{
+classname racer_spawnpoint
+origin "57 1156 331"
+angles "0 -85 0"
+}
+
+// start / finish goal
+{
+classname rally_startfinish_flag
+origin "250 -52 80"
+angles "0 80 0"
+spawnflags "1"
+lap "3"
+checkpoint "7" // must match last marker
+music "sound/music/race2.ogg"
+message "!! PEDAL TO THE METAL !!"
+}
+
+// marker 1
+{
+classname rally_marker
+origin "215 -1361 20"
+checkpoint "1"
+}
+
+// marker 2
+{
+classname rally_marker
+origin "1271 -1360 30"
+checkpoint "2"
+}
+
+// marker 3
+{
+classname rally_marker
+origin "2745 -1050 50"
+checkpoint "3"
+}
+
+// marker 4
+{
+classname rally_marker
+origin "3794 -1257 20"
+checkpoint "4"
+}
+
+// marker 5
+{
+classname rally_marker
+origin "2855 1024 15"
+checkpoint "5"
+}
+
+// marker 6
+{
+classname rally_marker
+origin "1662 3486 43"
+checkpoint "6"
+}
+
+// marker 7
+{
+classname rally_marker
+origin "-7 2617 260"
+checkpoint "7"
+}
