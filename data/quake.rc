@@ -17,6 +17,12 @@ exec settings.cfg
 stuffcmds
 
 //
+// load up immediately
+//
+
+map map1
+
+//
 // set RenRacer defaults
 //
 
@@ -59,11 +65,11 @@ sv_playerslots 4 // 4 racers, 1 player + 3 bots
 r_shadows 2 // realtime shadows
 musicvolume 0.5
 
-//
-// load up immediately
-//
 
-map map1
+// Fonts
+con_textfont "fonts/font"
+gl_font "fonts/font"
+vid_conautoscale 3
 
 //
 // bind regular quake stuff
