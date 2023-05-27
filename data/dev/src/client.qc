@@ -56,11 +56,6 @@ void() PlayerPreThink =
 	if (BotPreFrame()) // FrikBot
 		return;
 
-	// Send players origin to CSQC
-	self.player_x = self.origin_x;
-	self.player_y = self.origin_y;
-	self.player_z = self.origin_z;
-
 	if (cvar("developer") > 0)
 	{
 		local string x,y,z,ang_y;

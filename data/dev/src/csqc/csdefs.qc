@@ -2197,7 +2197,4 @@ const float DRAWFLAG_MIPMAP = 0x100; // only for R_BeginPolygon
 float framecount;
 vector campos;
 vector camang;
-
-#define STAT_ORIGINX 32
-#define STAT_ORIGINY 33
-#define STAT_ORIGINZ 34
+vector plyr_pos;

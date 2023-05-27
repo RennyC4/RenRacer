@@ -11,9 +11,11 @@ void() main = {};
 
 void() CSEv_GrabCSQCValues =
 {
+	/* Outdated
 	clientstat(STAT_ORIGINX, EV_FLOAT, player_x);
 	clientstat(STAT_ORIGINY, EV_FLOAT, player_y);
 	clientstat(STAT_ORIGINZ, EV_FLOAT, player_z);
+	*/
 };
 
 void() world_lights =
