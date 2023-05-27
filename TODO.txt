@@ -2,12 +2,13 @@ TODO: Polish head lights
 TODO: Impact sound - Car smash (wall, other car)
 TODO: Breakable brushes (request by xaGe)
 TODO: Proper waypoints for bots, if one exists.. they follow it around the course, otherwise default checkpoint follow behavior
-TODO: Turbo boost SFX
 TODO: func_vehicle no longer ignores clip/sky brushes *important*
 TODO: Car colors / Driver match .colormap - WIP
+TODO: Optimize tracelines on func_vehicle for heightmap
 
 ====
 
+Done: Turbo boost SFX
 Done: Remove judder off CSQC Chase cam vs func_vehicle
 Done: Start/Finish goal flag spawns invisible entity at model base if spawnflag & 1 (Great for heightmap levels)
 Done: Freeze all cars in place until the race start countdown ends - locked tires

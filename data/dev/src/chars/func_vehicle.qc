@@ -119,12 +119,13 @@ void() Car_ChassiThink =
 	self.nextthink = time;
 #endif
 
-	// RennyC - Send real speed / roll angle (angle Z) to player entity
+	// RennyC - Send real (car) speed / angles to player
 	local float r = vlen(car.velocity) * 0.1;
+	local vector v = car.angles;
 	if (car.driving.classname == "player")
-	{	
+	{
+		car.driving.realang = v;
 		car.driving.realspeed = r;
-		car.driving.carroll_angle = car.angles_z; // RennyC: Used by FrikBot
 	}
 	//
 };
@@ -500,6 +501,7 @@ void(float strength) car_boost =
 	vector worldorg = self.driving.origin + v_up * 9.12;
 	Phys_Force(self.driving, self.driving.physobj_mass * 0.35, v_forward * strength * frametime, worldorg - v_forward * 16, -v_forward);
 }
+//
 
 .float turbosfx_finished; // RennyC
 void TryUpdateVehicle(){
@@ -548,8 +550,6 @@ void TryUpdateVehicle(){
 			Car_Accelerate(3000, 1250);
 			car_boost(3000);
 		}
-		//else (self.turbosfx_finished > time) // Remove turbo sound
-//			sound (self, CHAN_VOICE, string_null, 1, ATTN_NORM);
 		//RennyC
 
 		float car_angs = self.driving.angles_y;
@@ -581,7 +581,7 @@ void TryUpdateVehicle(){
 			if (pitch < -180)
 				pitch = pitch + 360;
 		}
-		// Race started, unlock tires
+		// RennyC: Race started, unlock tires
 		if (self.driving.frontright.physobj_stiction != 10)
 			self.driving.frontright.physobj_stiction = 10;
 		if (self.driving.frontleft.physobj_stiction != 10)
@@ -591,7 +591,7 @@ void TryUpdateVehicle(){
 		if (self.driving.backleft.physobj_stiction != 10)
 			self.driving.backleft.physobj_stiction = 10;
 	}
-	else // Race not started, lock tires
+	else // RennyC: Race not started, lock tires
 	{
 		self.driving.frontright.physobj_stiction = 99999;
 		self.driving.frontleft.physobj_stiction = 99999;

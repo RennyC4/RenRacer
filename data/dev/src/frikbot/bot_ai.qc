@@ -203,10 +203,10 @@ void() BotAI =
 		//
 		// Get out of being toppled / rolling
 		//
-		
-		if (self.carroll_angle > -330 && self.carroll_angle < -30)
+
+		if (self.realang_z > -330 && self.realang_z < -30)
 		{
-			if (self.carroll_angle < -180)
+			if (self.realang_z < -180)
 				self.keys = self.keys = KEY_MOVELEFT;
 			else
 				self.keys = self.keys = KEY_MOVERIGHT;
