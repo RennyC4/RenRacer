@@ -501,6 +501,7 @@ void(float strength) car_boost =
 	Phys_Force(self.driving, self.driving.physobj_mass * 0.35, v_forward * strength * frametime, worldorg - v_forward * 16, -v_forward);
 }
 
+.float turbosfx_finished; // RennyC
 void TryUpdateVehicle(){
 	if (!check_camera_state){
 		check_camera_state = TRUE;
@@ -534,10 +535,22 @@ void TryUpdateVehicle(){
 		else if (roll < -100){
 			Car_Roll(2000, 350);
 		}
+		//RennyC
 		// Taken from Build-A-Delivery by shpuld
 		float turbo = self.button2;
 		if (turbo)
-			car_boost(1000);
+		{
+			if (self.turbosfx_finished < time)
+			{
+				sound (self, CHAN_AUTO, "turbo.wav", 1, ATTN_NORM);
+				self.turbosfx_finished = time + 2;
+			}
+			Car_Accelerate(3000, 1250);
+			car_boost(3000);
+		}
+		//else (self.turbosfx_finished > time) // Remove turbo sound
+//			sound (self, CHAN_VOICE, string_null, 1, ATTN_NORM);
+		//RennyC
 
 		float car_angs = self.driving.angles_y;
 		if (car_angs > 180)

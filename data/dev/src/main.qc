@@ -79,6 +79,7 @@ void() worldspawn =
 	precache_sound ("engine/aa08.wav");
 	precache_sound ("land.wav");
 	precache_sound ("camera.wav");
+	precache_sound ("turbo.wav");
 
 	world_lights();
 	BotInit();  // FrikBot
