@@ -65,7 +65,7 @@ sv_playerslots 4 // 4 racers, 1 player + 3 bots
 r_shadows 2 // realtime shadows
 r_coronas 0 // turn off, looks silly with headlights
 musicvolume 0.5
-
+sv_gravity 1000 // plays a bit better
 
 // Fonts
 con_textfont "fonts/font"
