@@ -32,6 +32,7 @@ void() marker_think =
 
 				if (OK) // Do check point confirm
 				{
+					targ.effects = EF_MUZZLEFLASH;
 					self.cnt = TRUE; // Start animation
 					self.effects = self.effects | EF_DIMLIGHT;
 					local string l = ftos(targ.laptime);

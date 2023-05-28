@@ -4,7 +4,7 @@
 
 void() GameCamera =
 {
-	campos = getproperty(VF_ORIGIN) - v_forward * 124 + v_up * 24;
+	campos = getproperty(VF_ORIGIN) - v_forward * 150 + v_up * 24;
 	camang = getproperty(VF_ANGLES);
 	plyr_pos = getproperty(VF_ORIGIN);
 

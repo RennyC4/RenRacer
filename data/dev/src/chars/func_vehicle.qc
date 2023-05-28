@@ -539,13 +539,13 @@ void TryUpdateVehicle(){
 		}
 		//RennyC
 		// Taken from Build-A-Delivery by shpuld
-		float turbo = self.button2;
-		if (turbo)
+		self.driving.turbo = self.button2;
+		if (self.driving.turbo)
 		{
 			if (self.turbosfx_finished < time)
 			{
-				sound (self, CHAN_AUTO, "turbo.wav", 1, ATTN_NORM);
-				self.turbosfx_finished = time + 2;
+				sound (self, CHAN_VOICE, "turbo.wav", 1, ATTN_NORM);
+				self.turbosfx_finished = time + 0.75;
 			}
 			Car_Accelerate(3000, 1250);
 			car_boost(3000);

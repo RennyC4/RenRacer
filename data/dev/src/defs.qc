@@ -422,7 +422,8 @@ float countdown_count;
 .float realspeed; // send real speed from func_vehicle to client entity
 .vector realang; // send real angles from func_vehicle to client entity
 .float goal_touched; // client touched the beginning / end goal to start/end race
-.float airborne_cnt; // Car airborne counter
+.float airborne_cnt; // car airborne counter
+.float turbo;
 
 // Lap time stats
 .float start_laptime; // ON / OFF

@@ -63,6 +63,7 @@ r_dynamic 0 // fixes odd ugly lighting
 //r_waterstyle 2 // pretty water, GPU perf hit (Disabled due to not acting correct with terrain editor)
 sv_playerslots 4 // 4 racers, 1 player + 3 bots
 r_shadows 2 // realtime shadows
+r_coronas 0 // turn off, looks silly with headlights
 musicvolume 0.5
 
 
