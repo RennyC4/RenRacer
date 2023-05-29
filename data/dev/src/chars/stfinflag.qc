@@ -25,7 +25,8 @@ void() rally_goal_proxy_think =
 			
 				if (targ.music != self.music && self.music)
 				{
-					stuffcmd (targ, sprintf("music %s\n", self.music));
+					if (checkextension("DP_QC_SPRINTF"))
+						stuffcmd (targ, sprintf("music %s\n", self.music));
 					targ.music = self.music;
 				}
 			}

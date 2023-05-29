@@ -9,7 +9,7 @@
 void() CheckImpulses;
 void() ClientKill = {};
 
-void(optional float csqcactive) ClientConnect =
+void() ClientConnect =
 {
 	ClientInRankings(); // FrikBot
 	bprint (self.netname, " joined the race!\n");

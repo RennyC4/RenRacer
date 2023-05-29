@@ -29,7 +29,8 @@ void() rally_goal_touch =
 		
 		if (other.owner.driving.music != self.music && self.music)
 		{
-			stuffcmd (other.owner.driving, sprintf("music %s\n", self.music));
+			if (checkextension("DP_QC_SPRINTF"))
+				stuffcmd (other.owner.driving, sprintf("music %s\n", self.music));
 			other.owner.driving.music = self.music;
 		}
 	}

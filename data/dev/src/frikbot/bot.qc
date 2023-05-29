@@ -203,7 +203,7 @@ float	saved_bots, saved_skills1, saved_skills2, current_bots;
 
 // -------ProtoTypes------
 // external
-void(optional float csqcactive) ClientConnect;
+void() ClientConnect;
 void() ClientDisconnect;
 void() SetNewParms;
 
@@ -268,6 +268,8 @@ direct messages to the bots, it crashes quake :-(
 
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 */
+
+/*
 void(entity	client, string s) stuffcmd =
 {
 	if (client.ishuman == 1)
@@ -284,6 +286,7 @@ void(entity	client, string s) stuffcmd =
 		b_temp1 = b_temp1._next;
 	}
 };
+*/
 
 void(entity	e) setspawnparms =
 {

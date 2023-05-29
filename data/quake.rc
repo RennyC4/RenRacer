@@ -45,7 +45,7 @@ s_al_use_reverb 0
 cl_lerp_driftfrac 1
 seta m_preset_chosen 1
 snd_ignoregamespeed 1
-r_coronas_occlusion 1 // fix flicker corona effect
+//r_coronas_occlusion 1 // fix flicker corona effect
 r_sprite_backfacing 1 // oriented sprite fix
 r_keepimages 1 // skybox fix
 cfg_save_auto 1 // fte auto saves configs after certain times

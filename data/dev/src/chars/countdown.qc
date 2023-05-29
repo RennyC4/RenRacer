@@ -12,6 +12,7 @@ void(float type) countdown_announce =
 			centerprint (y, "RACE STARTS IN\n\n[", f, "]\n");
 		else
 			centerprint (y, "! GO GO GO !\n");
+		self.enemy = y;
 		y = find(y, classname, "player");
 	}
 	if (head)
@@ -25,17 +26,22 @@ void() countdown_think = // Race start countdown
 		local string f = ftos(countdown_count);
 		if (countdown_count > 0)
 		{
-			localsound("cntdwn.wav");
+			sound (self, CHAN_AUTO, "cntdwn.wav", 1, ATTN_NONE);
 			countdown_announce(0);
 		}
 		else
 		{
-			localsound("gogo.wav");
+			sound (self, CHAN_AUTO, "gogo.wav", 1, ATTN_NONE);
 			countdown_announce(1);
 			race_status = RACE_STARTED;
 		}
 		countdown_count = countdown_count - 1;
 		countdown_finished = time + 1;
+		if (countdown_count < 0) // Done my job, goodbye!
+		{
+			remove(self);
+			return;
+		}
 	}
 	frameskip(0.1);
 };
