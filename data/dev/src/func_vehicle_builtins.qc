@@ -226,6 +226,7 @@ entity() hotrod =
 	part.relative_up = '0 0 1';
 	part.colormap = self.colormap; // RennyC
 
+/*
 	part = spawn();
 	part.physobj_next = obj.physobj_staticlist;
 	obj.physobj_staticlist = part;
@@ -249,7 +250,6 @@ entity() hotrod =
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
-
 	part = spawn();
 	part.physobj_next = obj.physobj_staticlist;
 	obj.physobj_staticlist = part;
@@ -273,7 +273,9 @@ entity() hotrod =
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
+*/
 
+/*
 	part = spawn();
 	part.physobj_next = obj.physobj_staticlist;
 	obj.physobj_staticlist = part;
@@ -339,6 +341,7 @@ entity() hotrod =
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
+*/
 
 	// frontleft
 	part = spawn();
@@ -477,6 +480,7 @@ entity() hotrod =
 	part.relative_up = '0 0 1';
 
 	// all various points
+/* RennyC: Simplify collision particles
 	part = spawn();
 	part.physobj_next = obj.physobj_particlelist;
 	obj.physobj_particlelist = part;
@@ -494,6 +498,7 @@ entity() hotrod =
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
+*/
 
 	part = spawn();
 	part.physobj_next = obj.physobj_particlelist;
@@ -531,6 +536,7 @@ entity() hotrod =
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
+/* RennyC: Simplify collision particles
 	part = spawn();
 	part.physobj_next = obj.physobj_particlelist;
 	obj.physobj_particlelist = part;
@@ -548,7 +554,9 @@ entity() hotrod =
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
+*/
 
+/* RennyC: Simplify collision particles
 	part = spawn();
 	part.physobj_next = obj.physobj_particlelist;
 	obj.physobj_particlelist = part;
@@ -566,7 +574,9 @@ entity() hotrod =
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
+*/
 
+/* RennyC: Simplify collision particles
 	part = spawn();
 	part.physobj_next = obj.physobj_particlelist;
 	obj.physobj_particlelist = part;
@@ -584,6 +594,7 @@ entity() hotrod =
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
+*/
 
 	part = spawn();
 	part.physobj_next = obj.physobj_particlelist;
@@ -621,6 +632,7 @@ entity() hotrod =
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
+/* RennyC: Simplify collision particles
 	part = spawn();
 	part.physobj_next = obj.physobj_particlelist;
 	obj.physobj_particlelist = part;
@@ -638,6 +650,7 @@ entity() hotrod =
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
+*/
 
 	part = spawn();
 	part.physobj_next = obj.physobj_particlelist;
@@ -675,6 +688,7 @@ entity() hotrod =
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
+/* RennyC: Simplify collision particles
 	part = spawn();
 	part.physobj_next = obj.physobj_particlelist;
 	obj.physobj_particlelist = part;
@@ -692,7 +706,9 @@ entity() hotrod =
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
+*/
 
+/* RennyC: Simplify collision particles
 	part = spawn();
 	part.physobj_next = obj.physobj_particlelist;
 	obj.physobj_particlelist = part;
@@ -710,6 +726,7 @@ entity() hotrod =
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
+*/
 
 	part = spawn();
 	part.physobj_next = obj.physobj_particlelist;

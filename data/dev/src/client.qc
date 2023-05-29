@@ -56,7 +56,7 @@ void() PlayerPreThink =
 	if (BotPreFrame()) // FrikBot
 		return;
 
-	if (cvar("developer") > 0)
+	if (cvar("developer") == 1)
 	{
 		local string x,y,z,ang_y;
 		x = ftos(self.origin_x);
@@ -191,15 +191,13 @@ void() PutClientInServer =
 	self.health = self.max_health = 100;
 	self.takedamage = DAMAGE_NO;
 
-	if (cvar("developer") == 0)
+	if (cvar("developer") != 1)
 	{
 		self.solid = SOLID_NOT;
 		self.movetype = MOVETYPE_NONE;
 	}
 	else
-	{
 		self.movetype = MOVETYPE_NOCLIP;
-	}
 
 	self.flags = FL_CLIENT;
 	self.origin = spawn_spot.origin;
