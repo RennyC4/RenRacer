@@ -161,7 +161,7 @@ pr_dumpplatform
 #define EXT_DIMENSION_VISIBILITY
 #define EXT_DIMENSION_PHYSICS
 #define EXT_DIMENSION_GHOST
-#define EX_PROMPT /* Engine-driven alternative to centerprint menus. */
+//#define EX_PROMPT /* Engine-driven alternative to centerprint menus. */
 #define FRIK_FILE
 #define FTE_CALLTIMEOFDAY /* Replication of mvdsv functionality (call calltimeofday to cause 'timeofday' to be called, with arguments that can be saved off to a global). Generally strftime is simpler to use. */
 #define FTE_CSQC_ALTCONSOLES /* The engine tracks multiple consoles. These may or may not be directly visible to the user. */
@@ -1963,35 +1963,35 @@ string(string str) precache_file2 = #77;
 #endif
 #ifdef SSQC
 //void(entity player) setspawnparms = #78;
-float() ex_finaleFinished = #0:ex_finaleFinished; /*
-		Behaviour is undocumented. */
+//float() ex_finaleFinished = #0:ex_finaleFinished; /*
+//		Behaviour is undocumented. */
 
-void(entity client, string sample) ex_localsound = #0:ex_localsound; /*
-		Behaviour is undocumented. */
+//void(entity client, string sample) ex_localsound = #0:ex_localsound; /*
+//		Behaviour is undocumented. */
 
-void(entity ent, string text, optional string s0, optional string s1, optional string s2, optional string s3, optional string s4, optional string s5) ex_centerprint = #0:ex_centerprint; /*
-		Remaster: Sends the strings to the client, which will order according to {#}. Also substitutes localised strings for $NAME strings. */
+//void(entity ent, string text, optional string s0, optional string s1, optional string s2, optional string s3, optional string s4, optional string s5) ex_centerprint = #0:ex_centerprint; /*
+//		Remaster: Sends the strings to the client, which will order according to {#}. Also substitutes localised strings for $NAME strings. */
 
-void(string s, optional string s0, optional string s1, optional string s2, optional string s3, optional string s4, optional string s5, optional string s6) ex_bprint = #0:ex_bprint; /*
-		Remaster: Sends the strings to all clients, which will order them according to {#}. Also substitutes localised strings for $NAME strings. */
+//void(string s, optional string s0, optional string s1, optional string s2, optional string s3, optional string s4, optional string s5, optional string s6) ex_bprint = #0:ex_bprint; /*
+//		Remaster: Sends the strings to all clients, which will order them according to {#}. Also substitutes localised strings for $NAME strings. */
 
-void(entity client, string s, optional string s0, optional string s1, optional string s2, optional string s3, optional string s4, optional string s5) ex_sprint = #0:ex_sprint; /*
-		Remaster: Sends the strings to the client, which will order according to {#}. Also substitutes localised strings for $NAME strings. */
+//void(entity client, string s, optional string s0, optional string s1, optional string s2, optional string s3, optional string s4, optional string s5) ex_sprint = #0:ex_sprint; /*
+//		Remaster: Sends the strings to the client, which will order according to {#}. Also substitutes localised strings for $NAME strings. */
 
-float(entity playerEnt) ex_CheckPlayerEXFlags = #0:ex_CheckPlayerEXFlags; /*
-		Behaviour is undocumented. */
+//float(entity playerEnt) ex_CheckPlayerEXFlags = #0:ex_CheckPlayerEXFlags; /*
+//		Behaviour is undocumented. */
 
-float(float movedist, vector goal) ex_walkpathtogoal = #0:ex_walkpathtogoal; /*
-		Behaviour is undocumented. */
+//float(float movedist, vector goal) ex_walkpathtogoal = #0:ex_walkpathtogoal; /*
+//		Behaviour is undocumented. */
 
-void(entity player, string text, float numchoices) ex_prompt = #0:ex_prompt; /* Part of EX_PROMPT
-		Initiates a user prompt. You must call ex_promptchoice once per choice. */
+//void(entity player, string text, float numchoices) ex_prompt = #0:ex_prompt; /* Part of EX_PROMPT
+//		Initiates a user prompt. You must call ex_promptchoice once per choice. */
 
-void(entity player, string text, float impulse) ex_promptchoice = #0:ex_promptchoice; /* Part of EX_PROMPT
-		Follows a call to ex_prompt. */
+//void(entity player, string text, float impulse) ex_promptchoice = #0:ex_promptchoice; /* Part of EX_PROMPT
+//		Follows a call to ex_prompt. */
 
-void(entity player) ex_clearprompt = #0:ex_clearprompt; /* Part of EX_PROMPT
-		Behaviour is undocumented. */
+//void(entity player) ex_clearprompt = #0:ex_clearprompt; /* Part of EX_PROMPT
+//		Behaviour is undocumented. */
 
 void(entity killer, entity killee) logfrag = #79; /* Part of QW_ENGINE*/
 #endif
