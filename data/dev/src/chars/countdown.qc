@@ -12,7 +12,6 @@ void(float type) countdown_announce =
 			centerprint (y, "RACE STARTS IN\n\n[", f, "]\n");
 		else
 			centerprint (y, "! GO GO GO !\n");
-		self.enemy = y;
 		y = find(y, classname, "player");
 	}
 	if (head)
