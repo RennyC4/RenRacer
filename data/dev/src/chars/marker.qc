@@ -6,7 +6,7 @@ void() marker_think =
 {
 	local float OK = 0;
 
-	local entity targ = searchradius(self.origin, 100);
+	local entity targ = findradius(self.origin, 150);
 	while (targ)
 	{
 		if (targ.classname == "player" && fisible(targ) && cvar("developer") != 1)
@@ -36,7 +36,8 @@ void() marker_think =
 					self.cnt = TRUE; // Start animation
 					self.effects = self.effects | EF_DIMLIGHT;
 					local string l = ftos(targ.laptime);
-					centerprint (targ, "! Checkpoint !\n", "\n Time: ", l, "\n");
+					centerprint (targ, "/P^4[^bCheckpoint^b]\n", "^7Time: ^5", l, "\n");
+					targ.clearcprint_finished = time + 1;
 					sound (self, CHAN_AUTO, "checkpoint.wav", 1, ATTN_NORM);
 				}
 			}

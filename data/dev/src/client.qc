@@ -78,7 +78,7 @@ void() PlayerPreThink =
 		Car_CheckAttach();
 		if (self.welcomemsg_finished < time)
 		{
-			centerprint (self, "Welcome to RenRacer\n\n===================\n\n\nPress [FIRE] to start the race");
+			centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________\n\n\nPress [^b^1FIRE^7^b] to start the race");
 			self.welcomemsg_finished = time + 1.5;
 		}
 		if (framecount > 75 && self.button0 && race_status == RACE_NOTSTARTED)
@@ -102,6 +102,17 @@ void() PlayerPreThink =
 	}
 	else
 	{
+		if (self.clearcprint_finished < time)
+		{
+			if (!self.clearcprint)
+			{
+				centerprint(self, string_null); // mainly used to clear /P centerprints
+				self.clearcprint = TRUE;
+			}
+		}
+		else
+			self.clearcprint = FALSE;
+			
 		EngineSounds();
 
 		if (self.start_laptime) // turned on by start/finish goal
@@ -215,11 +226,11 @@ void() PutClientInServer =
 	self.velocity = '0 0 0';
 	self.modelindex = 0;
 
+	self.flags = FL_FINDABLE_NONSOLID; // Needed for findradius to find me
 	self.angles = spawn_spot.angles;
 	self.fixangle = TRUE;
-
-	self.hitme = "TRUE"; // Allow searchradius to look for me
 	self.checkpoint = 0;
+	self.clearcprint = TRUE;
 	
 	// Frikbots Insta-spawn as the player does
 	if (!self.ishuman)

@@ -9,9 +9,9 @@ void(float type) countdown_announce =
 	while(y)
 	{
 		if (!type)
-			centerprint (y, "RACE STARTS IN\n\n[", f, "]\n");
+			centerprint (y, "/PRACE STARTS IN\n\n[^1^b", f, "^b^7]\n");
 		else
-			centerprint (y, "! GO GO GO !\n");
+			centerprint (y, "^1! GO GO GO !\n");
 		y = find(y, classname, "player");
 	}
 	if (head)

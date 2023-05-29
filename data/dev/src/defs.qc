@@ -411,7 +411,6 @@ float countdown_finished;
 float countdown_count;
 
 .string music;
-.string hitme; // used for searchradius collision looks for "TRUE"
 .float cnt; // misc counter
 .float lap;
 .float checkpoint;
@@ -424,6 +423,8 @@ float countdown_count;
 .float goal_touched; // client touched the beginning / end goal to start/end race
 .float airborne_cnt; // car airborne counter
 .float turbo;
+.float clearcprint_finished;
+.float clearcprint;
 
 // Lap time stats
 .float start_laptime; // ON / OFF

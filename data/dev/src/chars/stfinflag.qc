@@ -1,13 +1,14 @@
 //
-// Goldcup Start / Finish flag - decoration
+// Goldcup Start / Finish flag 
 //
 
+// spawnflag 1:
 // The same as rally_goal_touch, except it spawns at the bottom of
-// the goal flag and uses searchradius(); - mostly used for hmp maps
+// the goal flag and uses findradius(); - mostly used for hmp maps
 // since adding brush entities is more difficult
 void() rally_goal_proxy_think =
 {
-	local entity targ = searchradius(self.origin, 150);
+	local entity targ = findradius(self.origin, 175);
 	while (targ)
 	{
 		// Race start
@@ -41,7 +42,7 @@ void() rally_goal_proxy_think =
 				self.think = rally_goal_nextmap;
 				self.nextthink = time + 5;
 
-				centerprint(targ, "!!! YOU WIN !!!\n");
+				centerprint(targ, "/P^3!!! ^3^bYOU WIN^b^7 ^3!!!\n");
 				bprint (targ.netname, " won the race!\n");
 
 				if (targ.laptime < targ.fastest_lap) // Update best lap time if need be on race finish
@@ -84,7 +85,13 @@ void() rally_goal_proxy_think =
 					sprint (targ, "Best Lap: ", l4, "\n");
 
 				targ.laptime = 0; // Reset lap time
-				centerprint(targ, "Lap: ", l, " of ", l2, "\n Lap Time: ", l3);
+
+				if (targ.lap == self.lap)
+					centerprint(targ, "/P^b^1!! FINAL LAP !!^b\n", "^7Lap Time: ^4", l3);
+				else
+					centerprint(targ, "/PLap [^3", l, " ^7/ ^1", l2, "^7]\n ^7Lap Time: ^4", l3);
+
+				targ.clearcprint_finished = time + 2;
 				sound (self, CHAN_AUTO, "lap.wav", 1, ATTN_NORM);
 			}
 		}

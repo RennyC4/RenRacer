@@ -13,9 +13,6 @@ void() rally_goal_touch =
 	if (other.owner.driving.classname != "player")
 		return;
 
-	//bprint (other.owner.driving.classname);
-	//bprint ("\n");
-
 	// Race start
 	if (other.owner.driving.checkpoint == 0 && !other.owner.driving.goal_touched)
 	{
@@ -45,7 +42,7 @@ void() rally_goal_touch =
 			self.think = rally_goal_nextmap;
 			self.nextthink = time + 5;
 
-			centerprint(other.owner.driving, "!!! YOU WIN !!!\n");
+			centerprint(other.owner.driving, "/P^3!!! ^3^bYOU WIN^b^7 ^3!!!\n");
 			bprint (other.owner.driving.netname, " won the race!\n");
 
 			if (other.owner.driving.laptime < other.owner.driving.fastest_lap) // Update best lap time if need be on race finish
@@ -87,7 +84,12 @@ void() rally_goal_touch =
 				sprint (other.owner.driving, "Best Lap: ", l4, "\n");
 
 			other.owner.driving.laptime = 0; // Reset lap time
-			centerprint(other.owner.driving, "Lap: ", l, " of ", l2, "\n Lap Time: ", l3);
+
+			if (other.owner.driving.lap == self.lap)
+				centerprint(other.owner.driving, "/P^b^1!! FINAL LAP !!^b\n", "^7Lap Time: ^4", l3);
+			else
+				centerprint(other.owner.driving, "/PLap [^3", l, " ^7/ ^1", l2, "^7]\n ^7Lap Time: ^4", l3);
+			other.owner.driving.clearcprint_finished = time + 2;
 			sound (self, CHAN_AUTO, "lap.wav", 1, ATTN_NORM);
 		}
 	}

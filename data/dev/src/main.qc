@@ -98,48 +98,6 @@ void() StartFrame =
 };
 
 // =======
-// new hit detection method
-// =======
-
-float bound2 (float bmin, float bvalue, float bmax)
-{
- 	if (bvalue < bmin)
- 		return bmin;
- 	else if (bvalue > bmax)
- 		return bmax;
-	return bvalue;
-};
-
-entity(vector org, float rad) searchradius =
-{
-	local entity y, head, ent = world;
-	local vector v;
-
-	head = world;
-
-	y = find(world, hitme, "TRUE");
-	while(y)
-	{
-		v_x = bound2(y.absmin_x, org_x, y.absmax_x);
-		v_y = bound2(y.absmin_y, org_y, y.absmax_y);
-		v_z = bound2(y.absmin_z, org_z, y.absmax_z);
-
-		if(vlen(v - org) < rad)
-		{
-			if (head)
-				ent.chain = y;
-			else
-				head = y;
-			ent = y;
-		}
-		y = find(y, hitme, "TRUE");
-	}
-	if (head)
-		ent.chain = world;
-	return head;
-};
-
-// =======
 // Help keep low framerates in sync
 // =======
 
