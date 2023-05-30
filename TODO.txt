@@ -3,6 +3,7 @@ TODO: Breakable brushes (request by xaGe)
 TODO: Proper waypoints for bots, if one exists.. they follow it around the course, otherwise default checkpoint follow behavior
 TODO: func_vehicle no longer ignores clip/sky brushes *important*
 TODO: Car colors / Driver match .colormap - WIP
+TODO: Borrow Qrallys "final lap" sound
 
 ====
 

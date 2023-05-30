@@ -1,15 +1,18 @@
 //
 // Main Loop
 //
-entity sky;
 
+entity sky;
 void(float width, float height, float menushown) CSQC_UpdateView =
 {
+	g_width = width;
+	g_height = height;
+
 	framecount = framecount + 1;
 
 	clearscene(); //wipe entity lists, reset view properties to their defaults
 	setproperty(VF_DRAWENGINESBAR, 0); // Turn off status bar
-	
+
 	if (cvar("developer") != 1)
 	{
 		GameCamera(); // Games camera
@@ -21,8 +24,11 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 	addentity(sky);
 
 	addentities((intermission?0:MASK_VIEWMODEL)|MASK_ENGINE);
+
 	renderscene();
 };
+
+noref void(float apiver, string enginename, float enginever) CSQC_Init = {};
 
 //
 // First loaded, run once
@@ -35,7 +41,7 @@ void() CSQC_WorldLoaded  =
 	sky.scale = 6;
 	precache_model ("progs/sky.iqm");
 	setmodel(sky, "progs/sky.iqm");
-	
+
 	// Ask SSQC for values to send
 	sendevent("GrabCSQCValues", "");
 };

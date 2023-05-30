@@ -2198,3 +2198,4 @@ float framecount;
 vector campos;
 vector camang;
 vector plyr_pos;
+float g_width, g_height; /* Globals for screen width and height */

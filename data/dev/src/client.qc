@@ -49,6 +49,25 @@ void() EngineSounds =
 		self.engine_sound_time = time + 0.15;
 };
 
+// This is ugly
+void() Setup_level_effects =
+{
+	if (framecount > 10)
+		return;
+
+	if (world.model == "maps/map1.bsp")
+	{
+		stuffcmd (self, "r_sun_colour 0.2 0.2 0.2\n");
+		stuffcmd (self, "r_sun_dir -1 0.5 0.8\n");
+		stuffcmd (self, "r_waterstyle 3\n");
+	}
+	else
+	{
+		stuffcmd (self, "r_sun_colour 0 0 0\n");
+		stuffcmd (self, "r_waterstyle 1\n");
+	}
+};
+
 .float welcomemsg_finished;
 void() spawn_countdown;
 void() PlayerPreThink = 
@@ -71,6 +90,9 @@ void() PlayerPreThink =
 
 		return;
 	}
+	
+	if (framecount == 10)
+		Setup_level_effects();
 
 	// Force player in car, give greetings message
 	if (!self.driving)
@@ -189,7 +211,6 @@ entity() SelectSpawnSpot =
 	
 	return spot;
 };
-
 
 //----
 // Spawning the Player
