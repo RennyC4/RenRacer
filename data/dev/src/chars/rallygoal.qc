@@ -43,6 +43,7 @@ void() rally_goal_touch =
 			self.nextthink = time + 5;
 
 			centerprint(other.owner.driving, "/P^3!!! ^3^bYOU WIN^b^7 ^3!!!\n");
+			stuffcmd (other.owner.driving, "play youwin.wav\n"); // FIXME: Ugly
 			bprint (other.owner.driving.netname, " won the race!\n");
 
 			if (other.owner.driving.laptime < other.owner.driving.fastest_lap) // Update best lap time if need be on race finish
@@ -76,17 +77,24 @@ void() rally_goal_touch =
 			else
 			{
 				if (other.owner.driving.laptime < other.owner.driving.fastest_lap) // Update best lap time
+				{
+					if (other.owner.driving.lap != self.lap) // Don't play fastlap over finallap
+						stuffcmd (other.owner.driving, "play fastlap.wav\n"); // FIXME: Ugly
 					other.owner.driving.fastest_lap = other.owner.driving.laptime;
+				}
 			}
 
 			local string l4 = ftos(other.owner.driving.fastest_lap);
-			if (other.owner.driving.fastest_lap > 0) // Print best time
+			if (other.owner.driving.fastest_lap > 0 && other.owner.driving.lap > 1) // Print best time
 				sprint (other.owner.driving, "Best Lap: ", l4, "\n");
 
 			other.owner.driving.laptime = 0; // Reset lap time
 
 			if (other.owner.driving.lap == self.lap)
+			{
+				stuffcmd (other.owner.driving, "play finallap.wav\n"); // FIXME: Ugly
 				centerprint(other.owner.driving, "/P^b^1!! FINAL LAP !!^b\n", "^7Lap Time: ^4", l3);
+			}
 			else
 				centerprint(other.owner.driving, "/PLap [^3", l, " ^7/ ^1", l2, "^7]\n ^7Lap Time: ^4", l3);
 			other.owner.driving.clearcprint_finished = time + 2;

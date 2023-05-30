@@ -43,6 +43,7 @@ void() rally_goal_proxy_think =
 				self.nextthink = time + 5;
 
 				centerprint(targ, "/P^3!!! ^3^bYOU WIN^b^7 ^3!!!\n");
+				stuffcmd (targ, "play youwin.wav\n"); // FIXME: Ugly
 				bprint (targ.netname, " won the race!\n");
 
 				if (targ.laptime < targ.fastest_lap) // Update best lap time if need be on race finish
@@ -77,17 +78,24 @@ void() rally_goal_proxy_think =
 				else
 				{
 					if (targ.laptime < targ.fastest_lap) // Update best lap time
+					{
+						if (targ.lap != self.lap) // Don't play fastlap over finallap
+							stuffcmd (targ, "play fastlap.wav\n"); // FIXME: Ugly
 						targ.fastest_lap = targ.laptime;
+					}
 				}
 
 				local string l4 = ftos(targ.fastest_lap);
-				if (targ.fastest_lap > 0) // Print best time
+				if (targ.fastest_lap > 0 && targ.lap > 1) // Print best time
 					sprint (targ, "Best Lap: ", l4, "\n");
 
 				targ.laptime = 0; // Reset lap time
 
 				if (targ.lap == self.lap)
+				{
+					stuffcmd (targ, "play finallap.wav\n"); // FIXME: Ugly
 					centerprint(targ, "/P^b^1!! FINAL LAP !!^b\n", "^7Lap Time: ^4", l3);
+				}
 				else
 					centerprint(targ, "/PLap [^3", l, " ^7/ ^1", l2, "^7]\n ^7Lap Time: ^4", l3);
 
