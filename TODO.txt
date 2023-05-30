@@ -1,12 +1,14 @@
 TODO: Impact sound - Car smash (wall, other car)
 TODO: Breakable brushes (request by xaGe)
 TODO: Proper waypoints for bots, if one exists.. they follow it around the course, otherwise default checkpoint follow behavior
-TODO: func_vehicle no longer ignores clip/sky brushes *important*
 TODO: Car colors / Driver match .colormap - WIP
-TODO: Borrow Qrallys "final lap" sound
 
 ====
 
+Done: func_vehicle no longer ignores clip/sky brushes *important*
+	- hitcontents in phys_exec.qc
+Done: Borrow Qrallys "final lap" sound
+	- Just made my own instead, along with other voices
 Done: Optimize tracelines on func_vehicle for heightmap (WIP/Very difficult)
 	- Done by determining which point particles to remove in hotrod();
 Done: Polish head lights

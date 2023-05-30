@@ -117,6 +117,7 @@ void(entity targ) Phys_CheckStatus =
 		}
 
 		//tracebox(part.origin, part.mins, part.maxs, part.origin, TRUE, part);
+		part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
 		traceline(part.origin, part.origin, TRUE, part);
 		if (trace_startsolid) // we got jammed by a hitmodel or are generally stuck
 		{
@@ -139,8 +140,11 @@ void(entity targ) Phys_CheckStatus =
 				if (stick.physobj_p1 == part)
 				{
 					if (stick.physobj_p2.relative_size >= stick.physobj_p1.relative_size)
+					{
+						stick.physobj_p2.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
 						traceline(stick.physobj_p2.origin, stick.physobj_p1.origin, FALSE, stick.physobj_p2);
-						//tracebox(stick.physobj_p2.origin, stick.physobj_p2.mins, stick.physobj_p2.maxs, stick.physobj_p1.origin, FALSE, stick.physobj_p2);
+					}
+					//tracebox(stick.physobj_p2.origin, stick.physobj_p2.mins, stick.physobj_p2.maxs, stick.physobj_p1.origin, FALSE, stick.physobj_p2);
 					if (trace_fraction < 1)
 					{
 						dot = normalize(stick.physobj_p1.origin-stick.physobj_p2.origin)*trace_plane_normal*-1;
@@ -156,8 +160,11 @@ void(entity targ) Phys_CheckStatus =
 				else if (stick.physobj_p2 == part)
 				{
 					if (stick.physobj_p1.relative_size >= stick.physobj_p2.relative_size)
+					{
+						stick.physobj_p1.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
 						traceline(stick.physobj_p1.origin, stick.physobj_p2.origin, FALSE, stick.physobj_p1);
-						//tracebox(stick.physobj_p1.origin, stick.physobj_p1.mins, stick.physobj_p1.maxs, stick.physobj_p2.origin, FALSE, stick.physobj_p1);
+					}
+					//tracebox(stick.physobj_p1.origin, stick.physobj_p1.mins, stick.physobj_p1.maxs, stick.physobj_p2.origin, FALSE, stick.physobj_p1);
 					if (trace_fraction < 1)
 					{
 						dot = normalize(stick.physobj_p2.origin-stick.physobj_p1.origin)*trace_plane_normal*-1;
@@ -223,6 +230,7 @@ void(float fscale, float ftime, float sv_gravity) Phys_Acceleration =
 	part = self.physobj_particlelist;
 	while(part)
 	{
+		part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
 		traceline(part.origin, part.origin, FALSE, part);
 		//tracebox(part.origin, part.mins, part.maxs, part.origin, FALSE, part);
 		if (trace_inwater)
@@ -340,11 +348,13 @@ void() Phys_CheckOnGround =
 	part = self.physobj_particlelist;
 	while (part)
 	{
+		part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
 		traceline(part.origin, part.origin + '0 0 -1', FALSE, part);
 		//tracebox(part.origin, part.mins, part.maxs, part.origin + '0 0 -1', FALSE, part);
 		if (part.physobj_spring_length) // check for springs
 		{
 			spring = -part.lmat_up * part.physobj_spring_length;
+			part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
 			traceline(part.origin, part.origin + spring, FALSE, part);
 			//tracebox(part.origin, part.mins, part.maxs, part.origin + spring, FALSE, part);
 			//print(ftos(trace_fraction), "\n");
@@ -417,6 +427,7 @@ void(float ftime) Phys_Deceleration =
 				part.velocity = part.velocity - part.lmat_up*vlen(part.velocity)*(normalize(part.velocity)*part.lmat_up)*part.physobj_friction_ground_z*2*ftime;//(1+dot)*ftime;
 			//print(ftos(vlen(part.lmat_up*vlen(part.velocity)*(normalize(part.velocity)*part.lmat_up)*part.physobj_friction_ground_z*(1+dot)*ftime)), "\n");
 		}
+		part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
 		traceline(part.origin, part.origin, TRUE, part);
 		//tracebox(part.origin, part.mins, part.maxs, part.origin, TRUE, part);
 		// Water friction
@@ -489,6 +500,7 @@ void(float ftime) Phys_Move =
 		stuck = FALSE;
 		t = ftime;
 		test_org = part.origin;
+		part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
 		while (bump < 24)
 		{
 			// let's test if we're stuck first
@@ -515,6 +527,7 @@ void(float ftime) Phys_Move =
 				else
 					test_org = part.origin;
 			}
+			part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
 			traceline(test_org, test_org + part.velocity*t, part.physobj_movetype, part);
 			//tracebox(test_org, part.mins, part.maxs, test_org + part.velocity*t, part.physobj_movetype, part);
 			save_fraction = trace_fraction;
@@ -698,6 +711,7 @@ float() Phys_CheckCollisionDot =
 	part = self.physobj_particlelist;
 	while(part)
 	{
+		part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
 		traceline(part.origin, part.origin + part.velocity*frametime, part.physobj_movetype, part);
 		//tracebox(part.origin, part.mins, part.maxs, part.origin + part.velocity*frametime, part.physobj_movetype, part);
 		dot = trace_plane_normal*normalize(part.velocity)*-1;
