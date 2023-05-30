@@ -194,7 +194,7 @@ float OPT_NOCHAT	= 2;
 // -------globals-----
 float 	active_clients;
 float	max_clients, real_frametime;
-float	bot_count, b_options;
+float	bot_count;
 float	sv_friction, sv_gravity;
 float	sv_accelerate, sv_maxspeed, sv_stopspeed;
 entity	b_temp1, b_temp2;
@@ -232,8 +232,6 @@ void()				KickABot;
 void()				BotImpulses;
 string(float r)			BotName;
 float(float v)			frik_anglemod;
-void() bot_chat;
-void(float tpic) bot_start_topic;
 
 // ----------Commands---------
 void(entity e, float chan, string samp, float vol, float atten) frik_sound = #8;
@@ -464,23 +462,6 @@ float() BotPreFrame =
 	{
 		if (self.switch_wallhug)
 			ClientFixRankings();
-		if (self.classname == "botcam")
-			return TRUE;
-		
-	}
-
-	if (self.b_frags != self.frags)
-	{
-		if (self.b_frags > self.frags)
-		{
-			if (pointcontents(self.origin) == CONTENT_LAVA)
-				bot_start_topic(10);
-			else
-				bot_start_topic(9);
-		}
-		else
-			bot_start_topic(2);
-		self.b_frags = self.frags;
 	}
 	return FALSE;
 };
@@ -489,67 +470,9 @@ float () BotPostFrame =
 {
 	if (self.b_clientno == -1)
 		return TRUE;
-	if (self.ishuman)
-		BotImpulses();
+//	if (self.ishuman)
+//		BotImpulses();
 	return FALSE;
-};
-
-/*
--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-Bot Chat code
-
-The rest of this code is in bot_misc.qc
-
--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-*/
-
-void(string h) BotSay = // simulate talking by composing a 'chat' message
-{
-	WriteByte(MSG_ALL, 8);
-	WriteByte(MSG_ALL, 1);
-	WriteString(MSG_ALL, self.netname);
-	WriteByte(MSG_ALL, 8);
-	WriteByte(MSG_ALL, 2);
-	WriteString(MSG_ALL, h);
-};
-
-void() BotSayInit =
-{
-	WriteByte(MSG_ALL, 8);
-	WriteByte(MSG_ALL, 1);
-	WriteString(MSG_ALL, self.netname);
-};
-
-void(string h) BotSay2 =
-{
-	WriteByte(MSG_ALL, 8);
-	WriteByte(MSG_ALL, 2);
-	WriteString(MSG_ALL, h);
-};
-
-void(string h) BotSayTeam = 
-{
-	local entity t;
-	if (!teamplay)
-		return;
-	t = player_head;
-	while(t)
-	{
-		if (t.team == self.team)
-		{
-			msg_entity = t;
-			WriteByte(MSG_ONE, 8);
-			WriteByte(MSG_ONE, 1);
-			WriteByte(MSG_ONE, 40);
-			WriteString(MSG_ONE, self.netname);
-			WriteByte(MSG_ONE, 8);
-			WriteByte(MSG_ONE, 2);
-			WriteByte(MSG_ONE, 41);
-			WriteString(MSG_ONE, h);
-		}
-		t = t._next;
-	}
 };
 
 /*
@@ -756,8 +679,6 @@ void(float whichteam, float whatbot, float whatskill) BotConnect =
 
 	bot_count = bot_count + 1;
 	self = GetClientEntity(f);
-	if (!saved_bots)
-		bot_start_topic(1);
 	self.b_clientno = f;
 	self.colormap = f + 1;
 	if (whatbot)
@@ -945,6 +866,7 @@ related functions.
 
 void() BotImpulses =
 {
+/*
 	local float f;
 
 	if (self.impulse == 100)
@@ -963,5 +885,5 @@ void() BotImpulses =
 		return;
 
 	self.impulse = 0;
+*/
 };
-

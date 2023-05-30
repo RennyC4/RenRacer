@@ -388,6 +388,7 @@ void(entity attacker, float damage) Car_Pain = {
 	T_Damage(self.realowner.driving, attacker, attacker, damage * 0.5); // driving provides protection
 };
 
+
 void(float turn) Car_Turn =
 {
 	local float f;
@@ -498,9 +499,64 @@ void(float speed, float maxspeed) Car_Roll =
 void(float strength) car_boost =
 {
 	makevectors([-self.driving.angles.x, self.driving.angles.y, self.driving.angles.z]);
-	vector worldorg = self.driving.origin + v_up * 9.12;
+	vector worldorg = self.driving.origin;
 	Phys_Force(self.driving, self.driving.physobj_mass * 0.35, v_forward * strength * frametime, worldorg - v_forward * 16, -v_forward);
 }
+
+.float driftsfx_finished; // RennyC
+.float driftspeed_hold; // RennyC: Hold initial speed
+void(float strength) car_drift =
+{
+	if (self.driftspeed_hold < 1 || self.realspeed < 10)
+		return;
+
+	local entity f_right, f_left;
+	local entity b_right, b_left;
+
+	f_left = self.driving.frontleft;
+	f_right = self.driving.frontright;
+	b_left = self.driving.backleft;
+	b_right = self.driving.backright;
+
+	if (!(f_right.flags & FL_ONGROUND && f_left.flags & FL_ONGROUND && b_right.flags & FL_ONGROUND && b_left.flags & FL_ONGROUND)) // all tires have to touch ground
+		return;
+
+	if (self.driftspeed_hold > 0)
+		self.driftspeed_hold = self.driftspeed_hold - 1; // decrease speed
+
+	// Remove tire friction on drifts
+	f_left.physobj_friction_ground_y = 1;
+	f_right.physobj_friction_ground_y = 1;
+	b_left.physobj_friction_ground_y = 0;
+	b_right.physobj_friction_ground_y = 0;
+
+	strength = strength * 50;
+	
+	if (strength > 50000)
+		strength = 50000;
+
+	makevectors([-self.driving.angles.x, self.driving.angles.y, self.driving.angles.z]);
+	vector worldorg = self.driving.origin;
+
+	if (self.driftsfx_finished < time)
+	{
+		sound (self, CHAN_AUTO, "slide.wav", 1, ATTN_NORM);
+		self.driftsfx_finished = time + 0.6;
+	}
+
+	makevectors(self.v_angle);
+	float car_angs = self.driving.angles_y;
+	if (car_angs > 180)
+		car_angs -= 360;
+
+	if (car_angs > self.v_angle_y)
+		Phys_Force(self.driving, self.driving.physobj_mass * 0.35, (v_right * strength * frametime) * -1, worldorg - v_right * 16, -v_right);
+	else
+		Phys_Force(self.driving, self.driving.physobj_mass * 0.35, v_right * strength * frametime, worldorg + v_right * 16, +v_right);
+	
+	self.driving.angles_z = 0; // No flipping, cheap way of doing it
+};
+
 //
 
 .float turbosfx_finished; // RennyC
@@ -518,6 +574,16 @@ void TryUpdateVehicle(){
 	}
 	if (!self.driving)
 		return;
+	// RennyC	
+	local entity f_right, f_left;
+	local entity b_right, b_left;
+
+	f_left = self.driving.frontleft;
+	f_right = self.driving.frontright;
+	b_left = self.driving.backleft;
+	b_right = self.driving.backright;
+	//
+	
 	setorigin(self, Car_SpringyOrigin());
 	if (race_status == RACE_STARTED) // RennyC: Allow player to control the car
 	{
@@ -539,7 +605,7 @@ void TryUpdateVehicle(){
 		}
 		//RennyC
 		// Taken from Build-A-Delivery by shpuld
-		self.driving.turbo = self.button2;
+		self.driving.turbo = self.button0;
 		if (self.driving.turbo)
 		{
 			if (self.turbosfx_finished < time)
@@ -549,6 +615,28 @@ void TryUpdateVehicle(){
 			}
 			Car_Accelerate(3000, 1250);
 			car_boost(3000);
+		}
+
+		self.driving.drift = self.button2;
+		if (self.driving.drift)
+		{
+			if (!self.driftspeed_hold) // Hold speed to push car
+				self.driftspeed_hold = self.realspeed;
+				
+			CAR_DRIFT_STABILIZER = -6; // Harder to tip while drifting
+			if (self.airborne_cnt <= 10)
+				car_drift(self.driftspeed_hold);
+		}
+		else
+		{
+			// Restore tire friction
+			f_left.physobj_friction_ground_y = 4.4;
+			f_right.physobj_friction_ground_y = 4.4;
+			b_left.physobj_friction_ground_y = 4.4;
+			b_right.physobj_friction_ground_y = 4.4;
+	
+			CAR_DRIFT_STABILIZER = -1; // Restore stabilizer 
+			self.driftspeed_hold = 0;
 		}
 		//RennyC
 
@@ -582,21 +670,21 @@ void TryUpdateVehicle(){
 				pitch = pitch + 360;
 		}
 		// RennyC: Race started, unlock tires
-		if (self.driving.frontright.physobj_stiction != 10)
-			self.driving.frontright.physobj_stiction = 10;
-		if (self.driving.frontleft.physobj_stiction != 10)
-			self.driving.frontleft.physobj_stiction = 10;
-		if (self.driving.backright.physobj_stiction != 10)
-			self.driving.backright.physobj_stiction = 10;
-		if (self.driving.backleft.physobj_stiction != 10)
-			self.driving.backleft.physobj_stiction = 10;
+		if (f_right.physobj_stiction != 10)
+			f_right.physobj_stiction = 10;
+		if (f_left.physobj_stiction != 10)
+			f_left.physobj_stiction = 10;
+		if (b_right.physobj_stiction != 10)
+			b_right.physobj_stiction = 10;
+		if (b_left.physobj_stiction != 10)
+			b_left.physobj_stiction = 10;
 	}
 	else // RennyC: Race not started, lock tires
 	{
-		self.driving.frontright.physobj_stiction = 99999;
-		self.driving.frontleft.physobj_stiction = 99999;
-		self.driving.backright.physobj_stiction = 99999;
-		self.driving.backleft.physobj_stiction = 99999;
+		f_right.physobj_stiction = 99999;
+		f_left.physobj_stiction = 99999;
+		b_right.physobj_stiction = 99999;
+		b_left.physobj_stiction = 99999;
 	}
 	// RennyC
 

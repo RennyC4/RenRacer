@@ -423,8 +423,10 @@ float countdown_count;
 .float goal_touched; // client touched the beginning / end goal to start/end race
 .float airborne_cnt; // car airborne counter
 .float turbo;
+.float drift;
 .float clearcprint_finished;
 .float clearcprint;
+float CAR_DRIFT_STABILIZER;
 
 // Lap time stats
 .float start_laptime; // ON / OFF
