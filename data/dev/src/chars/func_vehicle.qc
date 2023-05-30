@@ -550,7 +550,7 @@ void(float strength) car_drift =
 		car_angs -= 360;
 
 	if (car_angs > self.v_angle_y)
-		Phys_Force(self.driving, self.driving.physobj_mass * 0.35, (v_right * strength * frametime) * -1, worldorg - v_right * 16, -v_right);
+		Phys_Force(self.driving, self.driving.physobj_mass * 0.35, (v_right * strength * -1) * frametime, worldorg - v_right * 16, -v_right);
 	else
 		Phys_Force(self.driving, self.driving.physobj_mass * 0.35, v_right * strength * frametime, worldorg + v_right * 16, +v_right);
 	
