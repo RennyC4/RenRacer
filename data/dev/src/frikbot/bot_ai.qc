@@ -207,9 +207,9 @@ void() BotAI =
 		if (self.realang_z > -330 && self.realang_z < -30)
 		{
 			if (self.realang_z < -180)
-				self.keys = self.keys = KEY_MOVELEFT;
+				self.keys = KEY_MOVELEFT;
 			else
-				self.keys = self.keys = KEY_MOVERIGHT;
+				self.keys = KEY_MOVERIGHT;
 			return;
 		}
 

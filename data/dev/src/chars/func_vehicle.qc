@@ -401,7 +401,8 @@ void(float turn) Car_Turn =
 	tright = car.frontright;
 	tright.physobj_flags = tright.physobj_flags - (tright.physobj_flags & PHFLAGS_RESTING);
 	tleft.physobj_flags = tleft.physobj_flags - (tleft.physobj_flags & PHFLAGS_RESTING);
-	f = 125;
+	//f = 125;
+	f=9999; // RennyC
 	float want_yaw = clamp(turn, -35, 35);
 	if (want_yaw < 0)
 		car.ideal_yaw = max(want_yaw, car.ideal_yaw - f*frametime);
@@ -437,7 +438,7 @@ void(float speed, float maxspeed) Car_Accelerate =
 {
 	local entity tright, tleft;
 
-	if (!self.driving)
+	if (!self.driving || self.driving.drift) // RennyC
 		return;
 	tleft = self.driving.backleft;
 	tright = self.driving.backright;
@@ -525,8 +526,8 @@ void(float strength) car_drift =
 		self.driftspeed_hold = self.driftspeed_hold - 1; // decrease speed
 
 	// Remove tire friction on drifts
-	f_left.physobj_friction_ground_y = 1;
-	f_right.physobj_friction_ground_y = 1;
+	f_left.physobj_friction_ground_y = 0;
+	f_right.physobj_friction_ground_y = 0;
 	b_left.physobj_friction_ground_y = 0;
 	b_right.physobj_friction_ground_y = 0;
 
@@ -553,13 +554,23 @@ void(float strength) car_drift =
 		Phys_Force(self.driving, self.driving.physobj_mass * 0.35, (v_right * strength * -1) * frametime, worldorg - v_right * 16, -v_right);
 	else
 		Phys_Force(self.driving, self.driving.physobj_mass * 0.35, v_right * strength * frametime, worldorg + v_right * 16, +v_right);
-	
-	self.driving.angles_z = 0; // No flipping, cheap way of doing it
 };
 
-//
+// RennyC
+// Helps to keep the car balanced if it's tipping in a cheaty manner
+void() CarStabilizeCheat =
+{
+	if (self.realang_z > -330 && self.realang_z < -30)
+	{
+		if (self.realang_z < -180)
+			Car_Roll(4000, 500);
+		else
+			Car_Roll(-4000, 500);
+	}
+};
+//RennyC
 
-.float turbosfx_finished; // RennyC
+.float turbosfx; // RennyC
 void TryUpdateVehicle(){
 	if (!check_camera_state){
 		check_camera_state = TRUE;
@@ -603,41 +614,76 @@ void TryUpdateVehicle(){
 		else if (roll < -100){
 			Car_Roll(2000, 350);
 		}
-		//RennyC
+		// RennyC
 		// Taken from Build-A-Delivery by shpuld
 		self.driving.turbo = self.button0;
 		if (self.driving.turbo)
 		{
-			if (self.turbosfx_finished < time)
+			if (!self.turbosfx)
 			{
 				sound (self, CHAN_VOICE, "turbo.wav", 1, ATTN_NORM);
-				self.turbosfx_finished = time + 0.75;
+				self.turbosfx = TRUE;
 			}
-			Car_Accelerate(3000, 1250);
-			car_boost(3000);
+			Car_Accelerate(3000, 950);
+			car_boost(2000);
 		}
+		else
+			self.turbosfx = FALSE;
 
 		self.driving.drift = self.button2;
 		if (self.driving.drift)
 		{
-			if (!self.driftspeed_hold) // Hold speed to push car
-				self.driftspeed_hold = self.realspeed;
-				
-			CAR_DRIFT_STABILIZER = -6; // Harder to tip while drifting
 			if (self.airborne_cnt <= 10)
+			{
+				if (!self.driftspeed_hold) // Hold speed to push car
+					self.driftspeed_hold = self.realspeed;
+				CarStabilizeCheat();
+				CAR_DRIFT_STABILIZER = -6; // Harder to tip while drifting
 				car_drift(self.driftspeed_hold);
+			}
 		}
 		else
 		{
-			// Restore tire friction
-			f_left.physobj_friction_ground_y = 4.4;
-			f_right.physobj_friction_ground_y = 4.4;
-			b_left.physobj_friction_ground_y = 4.4;
-			b_right.physobj_friction_ground_y = 4.4;
-	
-			CAR_DRIFT_STABILIZER = -1; // Restore stabilizer 
-			self.driftspeed_hold = 0;
+			if (self.driftspeed_hold != 0)
+			{
+				if (self.driftspeed_hold > 0)
+				{
+					CarStabilizeCheat();
+					self.driftspeed_hold = self.driftspeed_hold - 5; // Remove it faster when button release
+				}
+				else
+					self.driftspeed_hold = 0;
+			}
+			else
+			{
+				if (CAR_DRIFT_STABILIZER < -1)
+					CAR_DRIFT_STABILIZER = CAR_DRIFT_STABILIZER + 0.1;
+				else
+					CAR_DRIFT_STABILIZER = -1; // Restore normal stablizer
+
+				if (f_left.physobj_friction_ground_y < 4.4)
+					f_left.physobj_friction_ground_y = f_left.physobj_friction_ground_y + 0.8;
+				else
+					f_left.physobj_friction_ground_y = 4.4;
+
+				if (f_right.physobj_friction_ground_y < 4.4)
+					f_right.physobj_friction_ground_y = f_right.physobj_friction_ground_y + 0.8;
+				else
+					f_right.physobj_friction_ground_y = 4.4;
+					
+				if (b_left.physobj_friction_ground_y < 4.4)
+					b_left.physobj_friction_ground_y = b_left.physobj_friction_ground_y + 0.8;
+				else
+					b_left.physobj_friction_ground_y = 4.4;
+
+				if (b_right.physobj_friction_ground_y < 4.4)
+					b_right.physobj_friction_ground_y = b_right.physobj_friction_ground_y + 0.8;
+				else
+					b_right.physobj_friction_ground_y = 4.4;
+			}	
 		}
+		//local string debug = ftos(self.driftspeed_hold);
+		//bprint ("Drift Speed: ", debug, "\n");
 		//RennyC
 
 		float car_angs = self.driving.angles_y;
