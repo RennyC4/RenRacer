@@ -402,7 +402,6 @@ void(float turn) Car_Turn =
 	tright.physobj_flags = tright.physobj_flags - (tright.physobj_flags & PHFLAGS_RESTING);
 	tleft.physobj_flags = tleft.physobj_flags - (tleft.physobj_flags & PHFLAGS_RESTING);
 	f = 125;
-	//f=9999; // RennyC
 	float want_yaw = clamp(turn, -35, 35);
 	if (want_yaw < 0)
 		car.ideal_yaw = max(want_yaw, car.ideal_yaw - f*frametime);
@@ -554,9 +553,6 @@ void(float strength) car_drift =
 		Phys_Force(self.driving, self.driving.physobj_mass * 0.35, (v_right * strength * -1) * frametime, worldorg - v_right * 16, -v_right);
 	else
 		Phys_Force(self.driving, self.driving.physobj_mass * 0.35, v_right * strength * frametime, worldorg + v_right * 16, +v_right);
-
-	local string ds = ftos(strength);
-		bprint(ds, "\n");
 };
 
 // RennyC
