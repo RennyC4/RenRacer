@@ -401,8 +401,8 @@ void(float turn) Car_Turn =
 	tright = car.frontright;
 	tright.physobj_flags = tright.physobj_flags - (tright.physobj_flags & PHFLAGS_RESTING);
 	tleft.physobj_flags = tleft.physobj_flags - (tleft.physobj_flags & PHFLAGS_RESTING);
-	//f = 125;
-	f=9999; // RennyC
+	f = 125;
+	//f=9999; // RennyC
 	float want_yaw = clamp(turn, -35, 35);
 	if (want_yaw < 0)
 		car.ideal_yaw = max(want_yaw, car.ideal_yaw - f*frametime);
@@ -531,10 +531,10 @@ void(float strength) car_drift =
 	b_left.physobj_friction_ground_y = 0;
 	b_right.physobj_friction_ground_y = 0;
 
-	strength = strength * 50;
+	strength = strength * 80;
 	
-	if (strength > 50000)
-		strength = 50000;
+	if (strength > 5000)
+		strength = 5000;
 
 	makevectors([-self.driving.angles.x, self.driving.angles.y, self.driving.angles.z]);
 	vector worldorg = self.driving.origin;
@@ -554,6 +554,9 @@ void(float strength) car_drift =
 		Phys_Force(self.driving, self.driving.physobj_mass * 0.35, (v_right * strength * -1) * frametime, worldorg - v_right * 16, -v_right);
 	else
 		Phys_Force(self.driving, self.driving.physobj_mass * 0.35, v_right * strength * frametime, worldorg + v_right * 16, +v_right);
+
+	local string ds = ftos(strength);
+		bprint(ds, "\n");
 };
 
 // RennyC
@@ -616,7 +619,8 @@ void TryUpdateVehicle(){
 		}
 		// RennyC
 		// Taken from Build-A-Delivery by shpuld
-		self.driving.turbo = self.button0;
+		if (!self.driving.drift)
+			self.driving.turbo = self.button0;
 		if (self.driving.turbo)
 		{
 			if (!self.turbosfx)
@@ -630,7 +634,8 @@ void TryUpdateVehicle(){
 		else
 			self.turbosfx = FALSE;
 
-		self.driving.drift = self.button2;
+		if (!self.driving.turbo)
+			self.driving.drift = self.button2;
 		if (self.driving.drift)
 		{
 			if (self.airborne_cnt <= 10)
@@ -657,7 +662,10 @@ void TryUpdateVehicle(){
 			else
 			{
 				if (CAR_DRIFT_STABILIZER < -1)
-					CAR_DRIFT_STABILIZER = CAR_DRIFT_STABILIZER + 0.1;
+				{
+					CAR_DRIFT_STABILIZER = CAR_DRIFT_STABILIZER + 0.05; // Lower # = more stability after letting go of drift
+					CarStabilizeCheat();
+				}
 				else
 					CAR_DRIFT_STABILIZER = -1; // Restore normal stablizer
 
