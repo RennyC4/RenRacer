@@ -6,7 +6,7 @@ void() marker_think =
 {
 	local float OK = 0;
 
-	local entity targ = findradius(self.origin, 150);
+	local entity targ = findradius(self.origin, 180);
 	while (targ)
 	{
 		if (targ.classname == "player" && fisible(targ) && cvar("developer") != 1)
