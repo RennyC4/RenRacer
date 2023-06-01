@@ -1,0 +1,118 @@
+{
+classname "worldspawn"
+message "figure 8"
+_sky "sky2"
+_fog "0.045 0.5 0.25 0"
+_maxdrawdist 0 /*overrides fog distance (if greater)*/
+_segmentsize 1024 /*how big each section is. this affects texturing and resolutions*/
+_minxsegment -2048
+_minysegment -2048
+_maxxsegment 2048
+_maxysegment 2048
+_seed "0" /*for auto-gen plugins*/
+_exterior solid
+_defaultgroundtexture "cliff"
+_defaultgroundheight "50"
+_defaultwatertexture "water"
+_defaultwaterheight "0"
+}
+{
+classname info_player_start
+origin "0 0 1024" /*EDITME*/
+}
+
+// start / finish goal
+{
+classname rally_startfinish_flag
+origin "-622 -300 80"
+angles "0 38 0"
+spawnflags "1"
+lap "8"
+checkpoint "8" // must match last marker
+music "sound/music/race3.ogg"
+message "!! THINGS ARE HEATING UP !!"
+}
+
+// racerspawn point 1
+{
+classname racer_spawnpoint
+origin "57 298 85"
+angles "0 -144 0"
+}
+
+// racerspawn point 2
+{
+classname racer_spawnpoint
+origin "128 162 85"
+angles "0 -156 0"
+}
+
+// racerspawn point 3
+{
+classname racer_spawnpoint
+origin "-45 442 85"
+angles "0 -135 0"
+}
+
+// racerspawn point 4
+{
+classname racer_spawnpoint
+origin "174 -56 85"
+angles "0 -166 0"
+}
+
+// marker 1
+{
+classname rally_marker
+origin "-1572 -1361 184"
+checkpoint "1"
+}
+
+// marker 2
+{
+classname rally_marker
+origin "-1157 -2503 291"
+checkpoint "2"
+}
+
+// marker 3
+{
+classname rally_marker
+origin "760 -2620 265"
+checkpoint "3"
+}
+
+// marker 4
+{
+classname rally_marker
+origin "1225 -683 155"
+checkpoint "4"
+}
+
+// marker 5
+{
+classname rally_marker
+origin "-988 824 0"
+checkpoint "5"
+}
+
+// marker 6
+{
+classname rally_marker
+origin "-1302 2953 20"
+checkpoint "6"
+}
+
+// marker 7
+{
+classname rally_marker
+origin "824 3039 -91"
+checkpoint "7"
+}
+
+// marker 8
+{
+classname rally_marker
+origin "1325 1513 -14"
+checkpoint "8"
+}
