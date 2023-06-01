@@ -8,7 +8,7 @@
 // since adding brush entities is more difficult
 void() rally_goal_proxy_think =
 {
-	local entity targ = findradius(self.origin, 175);
+	local entity targ = findradius(self.origin, 200);
 	while (targ)
 	{
 		// Race start

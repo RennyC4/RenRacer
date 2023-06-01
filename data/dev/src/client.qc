@@ -82,7 +82,7 @@ void() PlayerPreThink =
 		y = ftos(self.origin_y);
 		z = ftos(self.origin_z);
 		ang_y = ftos(self.angles_y);
-		
+
 		bprint ("X: ", x, "\n");
 		bprint ("Y: ", y, "\n");
 		bprint ("Z: ", z, "\n");
@@ -90,7 +90,7 @@ void() PlayerPreThink =
 
 		return;
 	}
-	
+
 	if (framecount == 10)
 		Setup_level_effects();
 

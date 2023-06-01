@@ -608,10 +608,10 @@ void TryUpdateVehicle(){
 
 		float roll = v_right * self.velocity;
 		if (roll > 100){
-			Car_Roll(-2000, 350);
+			Car_Roll(-4000, 350);
 		}
 		else if (roll < -100){
-			Car_Roll(2000, 350);
+			Car_Roll(4000, 350);
 		}
 		// RennyC
 		// Taken from Build-A-Delivery by shpuld

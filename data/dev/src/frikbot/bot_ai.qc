@@ -60,6 +60,28 @@ float(entity targ) infront =
 	return FALSE;
 };
 
+/*
+=============
+visible
+
+returns 1 if the entity is visible to self, even if not infront ()
+=============
+*/
+float (entity targ) visible =
+{
+	local vector	spot1, spot2;
+	
+	spot1 = self.origin + self.view_ofs;
+	spot2 = targ.origin + targ.view_ofs;
+	traceline (spot1, spot2, TRUE, self);	// see through other monsters
+	
+	if (trace_inopen && trace_inwater)
+		return FALSE;			// sight line crossed contents
+
+	if (trace_fraction == 1)
+		return TRUE;
+	return FALSE;
+};
 
 /*
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
