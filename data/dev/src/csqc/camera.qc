@@ -4,12 +4,12 @@
 
 void() GameCamera =
 {
-	campos = getproperty(VF_ORIGIN) - v_forward * 150 + v_up * 24;
 	camang = getproperty(VF_ANGLES);
-	plyr_pos = getproperty(VF_ORIGIN);
 
 	makevectors(camang);
-	tracebox(plyr_pos, '-8 -8 -8', '8 8 8', campos, FALSE, self);
+	campos = getproperty(VF_ORIGIN) - v_forward * 150 + v_up * 24;
+
+	tracebox(campos, '-8 -8 -8', '8 8 8', campos, TRUE, self);
 
 	setproperty(VF_ORIGIN, trace_endpos);
 	setproperty(VF_AFOV, 90);

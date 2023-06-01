@@ -12,7 +12,7 @@ void() rally_goal_proxy_think =
 	while (targ)
 	{
 		// Race start
-		if (targ.classname == "player" && fisible(targ) && cvar("developer") != 1)
+		if (targ.classname == "player" && visible(targ) && cvar("developer") != 1)
 		{
 			if (targ.checkpoint == 0 && !targ.goal_touched)
 			{
