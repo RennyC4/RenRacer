@@ -85,4 +85,5 @@ bind "f9" "quit"
 
 //
 exec fte.cfg
+exec haze.cfg
 //

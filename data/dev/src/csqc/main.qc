@@ -44,4 +44,7 @@ void() CSQC_WorldLoaded  =
 
 	// Ask SSQC for values to send
 	sendevent("GrabCSQCValues", "");
+	
+	// Stuffcmds
+	localcmd("exec haze.cfg\n");
 };
