@@ -44,18 +44,18 @@ this notice in its entirety.
 
 /*
 =============
-infront
+infront (of car)
 
 returns 1 if the entity is in front (in sight) of self
 =============
 */
 float(entity targ) infront =
 {
-	makevectors (self.angles);
+	makevectors (self.realang);
 	local vector vec = normalize (targ.origin - self.origin);
 	local float dot = vec * v_forward;
 
-	if (dot > 0.3)
+	if (dot > 0.9)
 		return TRUE;
 	return FALSE;
 };
@@ -225,7 +225,6 @@ void() BotAI =
 		//
 		// Get out of being toppled / rolling
 		//
-
 		if (self.realang_z > -330 && self.realang_z < -30)
 		{
 			if (self.realang_z < -180)
@@ -234,56 +233,54 @@ void() BotAI =
 				self.keys = KEY_MOVERIGHT;
 			return;
 		}
-
-		// Back up for a second, hit a wall or rolled over TODO: Make it better, use tracebox check
-		if (self.keys == KEY_MOVEFORWARD && self.realspeed <= 2 && self.goalentity.classname != "bot_waypoint_goal")
-		{
-			self.keys = KEY_MOVEBACK;
-			self.bot_backup_finished = time + 0.5 + random()*0.5;
-			//bprint ("Hit wall, backup!\n");
-		}
+		
+		// Back up for a second, hit a wall/obstacle
+		if (self.goal_touched && (self.keys == KEY_MOVEFORWARD || self.button0) && self.realspeed <= 3)
+			self.bot_backup_finished = time + 0.6 + random()*1.1;
 
 		if (self.bot_backup_finished < time)
 		{
-			if (r >= 80 || (infront(self.goalentity) && self.goalentity.classname == "bot_waypoint_goal")) // Far from goalentity
-				self.keys = KEY_MOVEFORWARD; // Full speed
-			else // Driving stuff when near market / target
+			local float goforgoal;
+			if (self.goalentity.classname == "bot_waypoint_goal" || infront(self.goalentity) && visible(self.goalentity))
+				goforgoal = TRUE;
+			else
+				goforgoal = FALSE;
+
+			if (r >= 80) // Far from goal
 			{
-				if (r < 5)
+				if (r > 125 || goforgoal)
+					if (infront(self.goalentity))
+						self.button0 = TRUE;
+				else
+					self.button0 = FALSE;
+				self.keys = KEY_MOVEFORWARD;
+			}
+			else // Close to goal
+			{
+				if (self.realspeed > 40)
 				{
-					if (self.realspeed > 10)
-						self.keys = KEY_MOVEBACK; // decelerate when near marker
+					if (!goforgoal)
+						self.keys = KEY_MOVEBACK;
 					else
 						self.keys = KEY_MOVEFORWARD;
 				}
-				if (r < 20)
-				{
-					if (self.realspeed > 15)
-						self.keys = KEY_MOVEBACK; // decelerate when near marker
-					else
-						self.keys = KEY_MOVEFORWARD;
-				}
-				else if (r < 40)
-				{
-					if (self.realspeed > 35)
-						self.keys = KEY_MOVEBACK; // decelerate when near marker
-					else
-						self.keys = KEY_MOVEFORWARD;
-				}
-				else if (r < 80)
-				{
-					if (random() < 0.5)
-					{
-						if (self.realspeed < 30)
-							self.keys = KEY_MOVEFORWARD; // Car go forward
-						else
-							self.keys = 0;
-					}
-					else
-						self.keys = 0;
-				}
+				else
+					self.keys = KEY_MOVEFORWARD;
+			}
+			// Fight inclines
+			if (self.goalentity.origin_z > self.origin_z && self.angles_x >= 5 && infront(self.goalentity))
+			{
+				self.keys = KEY_MOVEFORWARD;
+				self.button0 = TRUE;
+				//bprint ("Fighting an incline\n");
 			}
 		}
+		else
+		{
+			self.button0 = FALSE;
+			self.keys = KEY_MOVEBACK;
+		}
+
 		bot_angle_set();
 
 		// Debugging prints

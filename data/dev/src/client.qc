@@ -77,16 +77,18 @@ void() PlayerPreThink =
 
 	if (cvar("developer") == 1)
 	{
-		local string x,y,z,ang_y;
+		local string x,y,z,ang_y,ang_x;
 		x = ftos(self.origin_x);
 		y = ftos(self.origin_y);
 		z = ftos(self.origin_z);
 		ang_y = ftos(self.angles_y);
+		ang_x = ftos(self.angles_x);
 
 		bprint ("X: ", x, "\n");
 		bprint ("Y: ", y, "\n");
 		bprint ("Z: ", z, "\n");
 		bprint ("Angle_Y: ", ang_y, "\n");
+		bprint ("Angle_X: ", ang_x, "\n");
 
 		return;
 	}
@@ -136,7 +138,7 @@ void() PlayerPreThink =
 			self.clearcprint = FALSE;
 			
 		EngineSounds();
-
+		
 		if (self.start_laptime) // turned on by start/finish goal
 		{
 			if (self.laptime_tic_second < time)

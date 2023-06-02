@@ -470,8 +470,6 @@ float () BotPostFrame =
 {
 	if (self.b_clientno == -1)
 		return TRUE;
-//	if (self.ishuman)
-//		BotImpulses();
 	return FALSE;
 };
 

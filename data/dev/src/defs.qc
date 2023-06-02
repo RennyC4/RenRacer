@@ -427,6 +427,7 @@ float countdown_count;
 .float clearcprint_finished;
 .float clearcprint;
 .float cardrift_stabilizer;
+.float carhitsomething; // cheap tracebox check infront of the car, not always reliable (slopes)
 
 // Lap time stats
 .float start_laptime; // ON / OFF
