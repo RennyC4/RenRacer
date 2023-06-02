@@ -275,7 +275,6 @@ entity() hotrod =
 	part.relative_up = '0 0 1';
 */
 
-/*
 	part = spawn();
 	part.physobj_next = obj.physobj_staticlist;
 	obj.physobj_staticlist = part;
@@ -341,7 +340,6 @@ entity() hotrod =
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
-*/
 
 	// frontleft
 	part = spawn();
@@ -360,7 +358,7 @@ entity() hotrod =
 	part.physobj_stepup = 18;
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
-	part.physobj_friction_ground = '0.225 8.4 5';
+	part.physobj_friction_ground = '0.225 4.4 5';
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
@@ -394,7 +392,7 @@ entity() hotrod =
 	part.physobj_stepup = 18;
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
-	part.physobj_friction_ground = '0.225 8.4 5';
+	part.physobj_friction_ground = '0.225 4.4 5';
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
