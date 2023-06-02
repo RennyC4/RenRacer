@@ -1,5 +1,6 @@
 TODO: Attempt to remove car judder, is this possible?
-	- Seems to be sv_autooffload 1; or not. - Mystery! -
+	- Seems to be sv_autooffload 1; or not. - Ongoing Mystery! -
+	- Try adding back the 'optimized func_vehicle_builtins.qc' and see what happens now
 TODO: Impact sound - Car smash (wall, other car)
 TODO: Breakable brushes (request by xaGe)
 TODO: Proper waypoints for bots, if one exists.. they follow it around the course, otherwise default checkpoint follow behavior
@@ -7,13 +8,14 @@ TODO: Car colors / Driver match .colormap - WIP
 
 ====
 
+Done: Optimize find(); for findradius();
 Done: Unglobal CAR_STABILIZER, converted to cardrift_stabilizer
 Done: func_vehicle no longer ignores clip/sky brushes *important*
 	- hitcontents in phys_exec.qc
 Done: Borrow Qrallys "final lap" sound
 	- Just made my own instead, along with other voices
 Done: Optimize tracelines on func_vehicle for heightmap (WIP/Very difficult)
-	- Done by determining which point particles to remove in hotrod();
+	- Done by determining which point particles to remove in hotrod(); - Causes camera/car judder?
 Done: Polish head lights
 Done: Turbo boost SFX
 Done: Remove judder off CSQC Chase cam vs func_vehicle

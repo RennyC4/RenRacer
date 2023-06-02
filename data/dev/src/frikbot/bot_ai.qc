@@ -120,6 +120,18 @@ void() bot_angle_set =
 .float findcheckpoint_fail;
 void() FindGoalPoint =
 {
+	local entity y = findradius(self.origin, 99999);
+	while (y)
+	{
+		if (y.classname == "bot_waypoint_goal")
+		{
+			self.goalentity = self.target1 = y;
+			self.findcheckpoint_fail = 0;
+		}
+		y = y.chain;
+	}
+
+/*
 	local entity y, head, ent = world;
 	head = world;
 
@@ -132,10 +144,23 @@ void() FindGoalPoint =
 	}
 	if (head)
 		ent.chain = world;
+*/
 };
 
 void() FindCheckPoint =
 {
+	local entity y = findradius(self.origin, 99999);
+	while (y)
+	{
+		if (y.classname == "marker" && y.checkpoint == self.checkpoint + 1)
+		{
+			self.goalentity = self.target1 = y;
+			self.findcheckpoint_fail = 0;
+		}
+		y = y.chain;
+	}
+
+/*
 	local entity y, head, ent = world;
 	head = world;
 
@@ -151,6 +176,7 @@ void() FindCheckPoint =
 	}
 	if (head)
 		ent.chain = world;
+*/
 };
 
 
@@ -265,7 +291,11 @@ void() BotAI =
 						self.keys = KEY_MOVEFORWARD;
 				}
 				else
+				{
+					if (!self.goal_touched)
+						self.button0 = TRUE;						
 					self.keys = KEY_MOVEFORWARD;
+				}
 			}
 			// Fight inclines
 			if (self.goalentity.origin_z > self.origin_z && self.angles_x >= 5 && infront(self.goalentity))

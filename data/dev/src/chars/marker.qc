@@ -81,6 +81,7 @@ void() rally_marker =
 	self.classname = "marker";
 	self.effects = EF_FULLBRIGHT;
 	self.origin_z = self.origin_z + 1;
+	self.flags = FL_FINDABLE_NONSOLID; // Needed for findradius to find me
 	droptofloor();
 
 	self.think = marker_think;
