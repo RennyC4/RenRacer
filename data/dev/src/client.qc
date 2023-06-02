@@ -252,6 +252,7 @@ void() PutClientInServer =
 	self.fixangle = TRUE;
 	self.checkpoint = 0;
 	self.clearcprint = TRUE;
+	self.cardrift_stabilizer = -1;
 	
 	// Frikbots Insta-spawn as the player does
 	if (!self.ishuman)

@@ -1,5 +1,5 @@
 TODO: Attempt to remove car judder, is this possible?
-	- Seems to be sv_autooffload 1; or not.
+	- Seems to be sv_autooffload 1; or not. - Mystery! -
 TODO: Impact sound - Car smash (wall, other car)
 TODO: Breakable brushes (request by xaGe)
 TODO: Proper waypoints for bots, if one exists.. they follow it around the course, otherwise default checkpoint follow behavior

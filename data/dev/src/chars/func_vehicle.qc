@@ -505,9 +505,9 @@ void(float strength) car_boost =
 
 .float driftsfx_finished; // RennyC
 .float driftspeed_hold; // RennyC: Hold initial speed
-void(float strength) car_drift =
+void() car_drift =
 {
-	if (self.driftspeed_hold < 1 || self.realspeed < 10)
+	if (self.realspeed < 10)
 		return;
 
 	local entity f_right, f_left;
@@ -521,8 +521,9 @@ void(float strength) car_drift =
 	if (!(f_right.flags & FL_ONGROUND && f_left.flags & FL_ONGROUND && b_right.flags & FL_ONGROUND && b_left.flags & FL_ONGROUND)) // all tires have to touch ground
 		return;
 
-	if (self.driftspeed_hold > 0)
-		self.driftspeed_hold = self.driftspeed_hold - 1; // decrease speed
+	//Test
+	//if (self.driftspeed_hold > 0)
+	//	self.driftspeed_hold = self.driftspeed_hold - 1; // decrease speed
 
 	// Remove tire friction on drifts
 	f_left.physobj_friction_ground_y = 0;
@@ -530,10 +531,7 @@ void(float strength) car_drift =
 	b_left.physobj_friction_ground_y = 0;
 	b_right.physobj_friction_ground_y = 0;
 
-	strength = strength * 80;
-	
-	if (strength > 5000)
-		strength = 5000;
+	local float strength = 2500;
 
 	makevectors([-self.driving.angles.x, self.driving.angles.y, self.driving.angles.z]);
 	vector worldorg = self.driving.origin;
@@ -636,11 +634,11 @@ void TryUpdateVehicle(){
 		{
 			if (self.airborne_cnt <= 10)
 			{
-				if (!self.driftspeed_hold) // Hold speed to push car
-					self.driftspeed_hold = self.realspeed;
+				if (!self.driftspeed_hold) // Timer
+					self.driftspeed_hold = 10;
 				CarStabilizeCheat();
 				self.cardrift_stabilizer = -6; // Harder to tip while drifting
-				car_drift(self.driftspeed_hold);
+				car_drift();
 			}
 		}
 		else
@@ -650,7 +648,7 @@ void TryUpdateVehicle(){
 				if (self.driftspeed_hold > 0)
 				{
 					CarStabilizeCheat();
-					self.driftspeed_hold = self.driftspeed_hold - 5; // Remove it faster when button release
+					self.driftspeed_hold = self.driftspeed_hold - 1; // Remove it faster when button release
 				}
 				else
 					self.driftspeed_hold = 0;
@@ -665,25 +663,25 @@ void TryUpdateVehicle(){
 				else
 					self.cardrift_stabilizer = -1; // Restore normal stablizer
 
-				if (f_left.physobj_friction_ground_y < 4.4)
-					f_left.physobj_friction_ground_y = f_left.physobj_friction_ground_y + 0.1;
+				if (f_left.physobj_friction_ground_y < 8.4)
+					f_left.physobj_friction_ground_y = f_left.physobj_friction_ground_y + 1;
 				else
-					f_left.physobj_friction_ground_y = 4.4;
+					f_left.physobj_friction_ground_y = 8.4;
 
-				if (f_right.physobj_friction_ground_y < 4.4)
-					f_right.physobj_friction_ground_y = f_right.physobj_friction_ground_y + 0.1;
+				if (f_right.physobj_friction_ground_y < 8.4)
+					f_right.physobj_friction_ground_y = f_right.physobj_friction_ground_y + 1;
 				else
-					f_right.physobj_friction_ground_y = 4.4;
+					f_right.physobj_friction_ground_y = 8.4;
 					
-				if (b_left.physobj_friction_ground_y < 4.4)
-					b_left.physobj_friction_ground_y = b_left.physobj_friction_ground_y + 0.1;
+				if (b_left.physobj_friction_ground_y < 8.4)
+					b_left.physobj_friction_ground_y = b_left.physobj_friction_ground_y + 1;
 				else
-					b_left.physobj_friction_ground_y = 4.4;
+					b_left.physobj_friction_ground_y = 8.4;
 
-				if (b_right.physobj_friction_ground_y < 4.4)
-					b_right.physobj_friction_ground_y = b_right.physobj_friction_ground_y + 0.1;
+				if (b_right.physobj_friction_ground_y < 8.4)
+					b_right.physobj_friction_ground_y = b_right.physobj_friction_ground_y + 1;
 				else
-					b_right.physobj_friction_ground_y = 4.4;
+					b_right.physobj_friction_ground_y = 8.4;
 			}
 		}
 		//local string debug = ftos(self.driftspeed_hold);
