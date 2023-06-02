@@ -426,7 +426,7 @@ float countdown_count;
 .float drift;
 .float clearcprint_finished;
 .float clearcprint;
-float CAR_DRIFT_STABILIZER;
+.float cardrift_stabilizer;
 
 // Lap time stats
 .float start_laptime; // ON / OFF

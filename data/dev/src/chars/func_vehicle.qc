@@ -639,7 +639,7 @@ void TryUpdateVehicle(){
 				if (!self.driftspeed_hold) // Hold speed to push car
 					self.driftspeed_hold = self.realspeed;
 				CarStabilizeCheat();
-				CAR_DRIFT_STABILIZER = -6; // Harder to tip while drifting
+				self.cardrift_stabilizer = -6; // Harder to tip while drifting
 				car_drift(self.driftspeed_hold);
 			}
 		}
@@ -657,34 +657,34 @@ void TryUpdateVehicle(){
 			}
 			else
 			{
-				if (CAR_DRIFT_STABILIZER < -1)
+				if (self.cardrift_stabilizer < -1)
 				{
-					CAR_DRIFT_STABILIZER = CAR_DRIFT_STABILIZER + 0.05; // Lower # = more stability after letting go of drift
+					self.cardrift_stabilizer = self.cardrift_stabilizer + 0.05; // Lower # = more stability after letting go of drift
 					CarStabilizeCheat();
 				}
 				else
-					CAR_DRIFT_STABILIZER = -1; // Restore normal stablizer
+					self.cardrift_stabilizer = -1; // Restore normal stablizer
 
 				if (f_left.physobj_friction_ground_y < 4.4)
-					f_left.physobj_friction_ground_y = f_left.physobj_friction_ground_y + 0.8;
+					f_left.physobj_friction_ground_y = f_left.physobj_friction_ground_y + 0.1;
 				else
 					f_left.physobj_friction_ground_y = 4.4;
 
 				if (f_right.physobj_friction_ground_y < 4.4)
-					f_right.physobj_friction_ground_y = f_right.physobj_friction_ground_y + 0.8;
+					f_right.physobj_friction_ground_y = f_right.physobj_friction_ground_y + 0.1;
 				else
 					f_right.physobj_friction_ground_y = 4.4;
 					
 				if (b_left.physobj_friction_ground_y < 4.4)
-					b_left.physobj_friction_ground_y = b_left.physobj_friction_ground_y + 0.8;
+					b_left.physobj_friction_ground_y = b_left.physobj_friction_ground_y + 0.1;
 				else
 					b_left.physobj_friction_ground_y = 4.4;
 
 				if (b_right.physobj_friction_ground_y < 4.4)
-					b_right.physobj_friction_ground_y = b_right.physobj_friction_ground_y + 0.8;
+					b_right.physobj_friction_ground_y = b_right.physobj_friction_ground_y + 0.1;
 				else
 					b_right.physobj_friction_ground_y = 4.4;
-			}	
+			}
 		}
 		//local string debug = ftos(self.driftspeed_hold);
 		//bprint ("Drift Speed: ", debug, "\n");
