@@ -15,6 +15,7 @@ _defaultgroundtexture "grass"
 _defaultgroundheight "0"
 _defaultwatertexture "water"
 _defaultwaterheight "4"
+_wateralpha "0.8"
 }
 {
 classname info_player_start
