@@ -1,3 +1,4 @@
+TODO: Polish headlights, pflags / white lights instead of DIMLIGHT
 TODO: Attempt to remove car judder, is this possible?
 	- Seems to be sv_autooffload 1; or not. - Ongoing Mystery! -
 	- Try adding back the 'optimized func_vehicle_builtins.qc' and see what happens now

@@ -507,7 +507,7 @@ void(float strength) car_boost =
 .float driftspeed_hold; // RennyC: Hold initial speed
 void() car_drift =
 {
-	if (self.realspeed < 10)
+	if (self.driving.realspeed < 10)
 		return;
 
 	local entity f_right, f_left;
@@ -898,7 +898,7 @@ Hitmodels are brushes that move together with the physics-object and push entiti
 */
 void() phys_hitmodel =
 {
-	self.physobj_flags = self.physobj_flags | PHFLAGS_BSPMODEL; // this is always a bmodel
+	self.physobj_flags = self.physobj_flags | PHFLAGS_BSPMODEL; // this is always a bmodel	
 	setorigin (self, self.origin);
 	if (!self.model)
 		error("hitmodel with no model");

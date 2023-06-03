@@ -745,6 +745,9 @@ void() Phys_ObjectThink =
 
 	// Run every frame
 	self.nextthink = time;
+	
+	self.dimension_solid = 0; // RennyC
+	self.dimension_hit = 0; // RennyC
 
 	local float sv_gravity = cvar("sv_gravity");
 
@@ -1071,8 +1074,10 @@ entity(vector org, entity e, entity obj) Phys_InitHitmodel =
 	if (e.owner)
 		e.physobj_mass = obj.physobj_mass;
 	e.takedamage = DAMAGE_AIM;
-	e.solid = SOLID_BSP;
-	e.movetype = MOVETYPE_PUSH;
+	//e.solid = SOLID_BSP;
+	e.solid = SOLID_NOT; // RennyC: Disable this to prevent car -> car collisions going haywire
+	//e.movetype = MOVETYPE_PUSH; // RennyC: Disable this to prevent car -> car collisions going haywire
+	e.movetype = MOVETYPE_NOCLIP; // RennyC: Disable this to prevent car -> car collisions going haywire
 	e.health = 99999999;
 	//e.effects = EF_NOMODELFLAGS;
 	e.model = ""; // better way to nosend than EF_NODRAW

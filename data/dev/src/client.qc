@@ -68,7 +68,6 @@ void() Setup_level_effects =
 	}
 };
 
-.float welcomemsg_finished;
 void() spawn_countdown;
 void() PlayerPreThink = 
 {
@@ -100,14 +99,9 @@ void() PlayerPreThink =
 	if (!self.driving)
 	{
 		Car_CheckAttach();
-		if (self.welcomemsg_finished < time)
-		{
-			centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________\n\n\nPress [^b^1FIRE^7^b] to start the race");
-			self.welcomemsg_finished = time + 1.5;
-		}
 		if (framecount > 75 && self.button0 && race_status == RACE_NOTSTARTED)
 		{
-			centerprint (self, ""); // clear centerprint
+			centerprint (self, ""); // clear /P centerprint
 			race_status = RACE_COUNTDOWN;
 			spawn_countdown(); // Start countdown
 
@@ -230,7 +224,7 @@ void() PutClientInServer =
 		self.solid = SOLID_NOT;
 		self.movetype = MOVETYPE_NONE;
 	}
-	else
+	//else
 		self.movetype = MOVETYPE_NOCLIP;
 
 	self.flags = FL_CLIENT;
@@ -264,4 +258,5 @@ void() PutClientInServer =
 		car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
 		Car_InitVehicle(car);
 	}
+	centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________\n\n\nPress [^b^1FIRE^7^b] to start the race");
 };

@@ -188,7 +188,7 @@ entity() hotrod =
 	obj.netname = "hotrod";
 	obj.physobj_mass = 1000;
 	obj.physobj_impactevent = PushAndDamageTarget;
-	
+
 	part = spawn();
 	part.physobj_next = obj.physobj_staticlist;
 	obj.physobj_staticlist = part;
