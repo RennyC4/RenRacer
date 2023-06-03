@@ -22,7 +22,8 @@ phys_matrix.qc
 phys_exec.qc
 
 chars/func_vehicle.qc
-opt_func_vehicle_builtins.qc
+opt_func_vehicle_builtins.qc // RennyC optimized *Judderfest!*
+//func_vehicle_builtins.qc // Original func_vehicle, Urre
 // func_vehicle
 
 misc.qc

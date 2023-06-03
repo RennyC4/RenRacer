@@ -70,7 +70,8 @@ r_shadows 2 // realtime shadows
 r_coronas 0 // turn off, looks silly with headlights
 musicvolume 0.5
 sv_gravity 1200 // subject to change
-sv_autooffload 1 // smoother performance (causes car judder)
+sv_autooffload 0 // 1 = smoother performance (?)
+cl_lerp_smooth 1
 
 // Fonts
 con_textfont "fonts/font"
