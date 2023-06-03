@@ -57,103 +57,103 @@ string(float r) BotName =
 	{	
 		self.b_pants = 11;
 		self.b_shirt = 0; 
-		return "Vincent";
+		return "Vigil";
 	}
 	else if (r == 2)
 	{
 		self.b_pants = 1;
 		self.b_shirt = 3;
-		return "Bishop";
+		return "xaGe";
 	}
 	else if (r == 3)
 	{	
 		self.b_pants = 13;
 		self.b_shirt = 2;
-		return "Nomad";
+		return "KyleMac";
 	}
 	else if (r == 4)
 	{
 		self.b_pants = 7;
 		self.b_shirt = 6;
-		return "Hudson";
+		return "Spoike";
 	} 
 	else if (r == 5)
 	{
 		self.b_pants = 12;
 		self.b_shirt = 6;
-		return "Lore";
+		return "FrikaC";
 	}
 	else if (r == 6)
 	{
 		self.b_pants = 4;
 		self.b_shirt = 4;
-		return "Servo";
+		return "Reki";
 	}
 	else if (r == 7)
 	{
 		self.b_pants = 2;
 		self.b_shirt = 5;
-		return "Gort";
+		return "ericw";
 	} 
 	else if (r == 8)
 	{	
 		self.b_pants = 10;
 		self.b_shirt = 3;
-		return "Kryten";
+		return "kristus";
 	}
 	else if (r == 9)
 	{
 		self.b_pants = 9;
 		self.b_shirt = 4;
-		return "Pimp Bot";
+		return "Zwiffle";
 	}
 	else if (r == 10)
 	{
 		self.b_pants = 4;
 		self.b_shirt = 7;
-		return "Max";
+		return "Tomaz";
 	}
 	else if (r == 11)
 	{
 		self.b_pants = 3;
 		self.b_shirt = 11;
-		return "Marvin";
+		return "scar3crow";
 	} 
 	else if (r == 12)
 	{
 		self.b_pants = 13;
 		self.b_shirt = 12;
-		return "Erwin";
+		return "khreathor";
 	}
 	else if (r == 13)
 	{
 		self.b_pants = 11;
 		self.b_shirt = 2;
-		return "FrikBot";
+		return "Harbinger";
 	}
 	else if (r == 14)
 	{
 		self.b_pants = 0;
 		self.b_shirt = 2;
-		return "Krosis";
+		return "Corporal";
 	}
 	else if (r == 15)
 	{
 		self.b_pants = 8;
 		self.b_shirt = 9;
-		return "Gypsy";
+		return "E-Werd";
 	}
 	else if (r == 16)
 	{
 		self.b_pants = 5;
 		self.b_shirt = 10;
-		return "Hal";
+		return "MauveBib";
 	}
 	else
 	{
 		self.b_pants = 0;
 		self.b_shirt = 0;
-		return "Null";
+		return "CleanRacer";
 	}
 };
 string () PickARandomName =
