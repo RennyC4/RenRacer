@@ -26,6 +26,9 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 	addentities((intermission?0:MASK_VIEWMODEL)|MASK_ENGINE);
 
 	renderscene();
+
+	if (framecount == 10)
+		localcmd("exec haze.cfg\n");
 };
 
 noref void(float apiver, string enginename, float enginever) CSQC_Init = {};
@@ -44,7 +47,4 @@ void() CSQC_WorldLoaded  =
 
 	// Ask SSQC for values to send
 	sendevent("GrabCSQCValues", "");
-	
-	// Stuffcmds
-	localcmd("exec haze.cfg\n");
 };

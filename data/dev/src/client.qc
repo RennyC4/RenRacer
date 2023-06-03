@@ -224,7 +224,7 @@ void() PutClientInServer =
 		self.solid = SOLID_NOT;
 		self.movetype = MOVETYPE_NONE;
 	}
-	//else
+	else
 		self.movetype = MOVETYPE_NOCLIP;
 
 	self.flags = FL_CLIENT;
@@ -249,6 +249,7 @@ void() PutClientInServer =
 	self.checkpoint = 0;
 	self.clearcprint = TRUE;
 	self.cardrift_stabilizer = -1;
+	centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________\n\n\nPress [^b^1FIRE^7^b] to start the race");
 	
 	// Frikbots Insta-spawn as the player does
 	if (!self.ishuman)
@@ -258,5 +259,4 @@ void() PutClientInServer =
 		car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
 		Car_InitVehicle(car);
 	}
-	centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________\n\n\nPress [^b^1FIRE^7^b] to start the race");
 };

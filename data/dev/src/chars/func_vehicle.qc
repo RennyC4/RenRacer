@@ -507,7 +507,7 @@ void(float strength) car_boost =
 .float driftspeed_hold; // RennyC: Hold initial speed
 void() car_drift =
 {
-	if (self.driving.realspeed < 10)
+	if (self.realspeed < 3)
 		return;
 
 	local entity f_right, f_left;

@@ -1,7 +1,9 @@
+TODO: "Float car bug", stick physics issue; player collisions disabled doesn't fix it (but fixes being launched out of the map)
 TODO: Polish headlights, pflags / white lights instead of DIMLIGHT
 TODO: Attempt to remove car judder, is this possible?
 	- Seems to be sv_autooffload 1; or not. - Ongoing Mystery! -
 	- Try adding back the 'optimized func_vehicle_builtins.qc' and see what happens now
+	- Always judder on player car
 TODO: Impact sound - Car smash (wall, other car)
 TODO: Breakable brushes (request by xaGe)
 TODO: Proper waypoints for bots, if one exists.. they follow it around the course, otherwise default checkpoint follow behavior

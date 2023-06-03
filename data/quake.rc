@@ -31,12 +31,16 @@ crosshair 0
 cl_bob 0
 cl_rollangle 0
 volume 0.5
-//sv_mintic 0.013
+sv_mintic 0.013
+sv_maxtic 0
 sv_gameplayfix_qwplayerphysics 0
 sv_gameplayfix_findradiusdistancetobox 1
 sv_nqplayerphysics 1
 sv_bigcoords 1
 m_preset_chosen 1
+// Fix for odd game speed 
+sys_clocktype 1
+//
 //cl_lerp_maxinterval 0.3
 sv_autosave 0
 gl_blendsprites 1
