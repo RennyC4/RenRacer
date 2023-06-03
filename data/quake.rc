@@ -31,16 +31,14 @@ crosshair 0
 cl_bob 0
 cl_rollangle 0
 volume 0.5
-sv_mintic 0.013
+sv_mintic 0.02 // best result with autooffload 0
 sv_maxtic 0
 sv_gameplayfix_qwplayerphysics 0
 sv_gameplayfix_findradiusdistancetobox 1
 sv_nqplayerphysics 1
 sv_bigcoords 1
 m_preset_chosen 1
-// Fix for odd game speed 
-sys_clocktype 1
-//
+sys_clocktype 1 // Fix for odd game speed 
 //cl_lerp_maxinterval 0.3
 sv_autosave 0
 gl_blendsprites 1
@@ -64,13 +62,12 @@ r_hdr_irisadaptation_maxvalue 1.5 // adjustment value
 r_deluxemapping 0 // needs to be 0 with bumpscale base textures
 r_shadow_shadowmapping 1 // draw shadow maps (stencil is faster however)
 r_dynamic 0 // fixes odd ugly lighting
-//r_waterstyle 2 // pretty water, GPU perf hit (Disabled due to not acting correct with terrain editor)
 sv_playerslots 4 // 4 racers, 1 player + 3 bots
 r_shadows 2 // realtime shadows
 r_coronas 0 // turn off, looks silly with headlights
 musicvolume 0.5
 sv_gravity 1200 // subject to change
-sv_autooffload 0 // 1 = smoother performance (?)
+sv_autooffload 0 // 1 = smoother performance? judderfest
 cl_lerp_smooth 1
 
 // Fonts
