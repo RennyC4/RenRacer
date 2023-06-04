@@ -8,7 +8,7 @@
 // since adding brush entities is more difficult
 void() rally_goal_proxy_think =
 {
-	local entity targ = findradius(self.origin, 200);
+	local entity targ = findradius(self.origin, self.radius);
 	while (targ)
 	{
 		// Race start
@@ -148,6 +148,8 @@ void() rally_startfinish_flag =
 			goal.music = self.music;
 		if (self.message)
 			goal.message = self.message;
+		if (!goal.radius)
+			goal.radius = 200;
 
 		goal.think = rally_goal_proxy_think;
 		goal.nextthink = time + 0.1;

@@ -125,7 +125,7 @@ void() PlayerPreThink =
 		{
 			if (!self.clearcprint)
 			{
-				centerprint(self, string_null); // mainly used to clear /P centerprints
+				centerprint(self, string_null); // used to clear /P centerprints
 				self.clearcprint = TRUE;
 			}
 		}
@@ -143,7 +143,7 @@ void() PlayerPreThink =
 				if (self.ishuman)
 					self.turbo_fuel_finished = time + 0.1;
 				else
-					self.turbo_fuel_finished = time + 0.05;
+					self.turbo_fuel_finished = time + 0.05; // AI Cheats TODO: Teach them to drift?
 			}
 		}
 		else

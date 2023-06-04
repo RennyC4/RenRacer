@@ -25,14 +25,14 @@ origin "0 0 1024" /*EDITME*/
 // racerspawn point 1
 {
 classname racer_spawnpoint
-origin "247 997 313"
+origin "247 997 320"
 angles "0 -90 0"
 }
 
 // racer spawn point 2
 {
 classname racer_spawnpoint
-origin "263 1223 340"
+origin "263 1223 350"
 angles "0 -90 0"
 }
 

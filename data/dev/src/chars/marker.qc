@@ -6,7 +6,7 @@ void() marker_think =
 {
 	local float OK = 0;
 
-	local entity targ = findradius(self.origin, 250);
+	local entity targ = findradius(self.origin, self.radius);
 	while (targ)
 	{
 		if (targ.classname == "player" && visible(targ) && cvar("developer") != 1)
@@ -86,7 +86,9 @@ void() rally_marker =
 
 	self.think = marker_think;
 	self.nextthink = time + 0.1;
-		
+
+	if (!self.radius)
+		self.radius = 250;
 	if (!self.checkpoint)
 		error("rally_marker with no checkpoint value set\n");
 };

@@ -631,7 +631,7 @@ void TryUpdateVehicle(){
 		}
 		else
 		{
-			if (self.turbo_fuel > 0)
+			if (self.turbo_fuel > 0) // Stop sound spam
 				self.turbosfx = FALSE;
 		}
 

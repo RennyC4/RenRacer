@@ -116,9 +116,9 @@ void(entity targ) Phys_CheckStatus =
 			part.physobj_flags = part.physobj_flags - (part.physobj_flags & PHFLAGS_RESTING);
 		}
 
-		//tracebox(part.origin, part.mins, part.maxs, part.origin, TRUE, part);
 		part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
 		part.dimension_hit = part.dimension_solid = 0; // RennyC: Disable player collisions
+		//tracebox(part.origin, part.mins, part.maxs, part.origin, TRUE, part);
 		traceline(part.origin, part.origin, TRUE, part);
 		if (trace_startsolid) // we got jammed by a hitmodel or are generally stuck
 		{
@@ -144,9 +144,9 @@ void(entity targ) Phys_CheckStatus =
 					{
 						stick.physobj_p2.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
 						stick.dimension_hit = stick.dimension_solid = 0; // RennyC: Disable player collisions
+						//tracebox(stick.physobj_p2.origin, stick.physobj_p2.mins, stick.physobj_p2.maxs, stick.physobj_p1.origin, FALSE, stick.physobj_p2);
 						traceline(stick.physobj_p2.origin, stick.physobj_p1.origin, FALSE, stick.physobj_p2);
 					}
-					//tracebox(stick.physobj_p2.origin, stick.physobj_p2.mins, stick.physobj_p2.maxs, stick.physobj_p1.origin, FALSE, stick.physobj_p2);
 					if (trace_fraction < 1)
 					{
 						dot = normalize(stick.physobj_p1.origin-stick.physobj_p2.origin)*trace_plane_normal*-1;
@@ -165,9 +165,9 @@ void(entity targ) Phys_CheckStatus =
 					{
 						stick.physobj_p1.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
 						stick.dimension_hit = stick.dimension_solid = 0; // RennyC: Disable player collisions
+						//tracebox(stick.physobj_p1.origin, stick.physobj_p1.mins, stick.physobj_p1.maxs, stick.physobj_p2.origin, FALSE, stick.physobj_p1);
 						traceline(stick.physobj_p1.origin, stick.physobj_p2.origin, FALSE, stick.physobj_p1);
 					}
-					//tracebox(stick.physobj_p1.origin, stick.physobj_p1.mins, stick.physobj_p1.maxs, stick.physobj_p2.origin, FALSE, stick.physobj_p1);
 					if (trace_fraction < 1)
 					{
 						dot = normalize(stick.physobj_p2.origin-stick.physobj_p1.origin)*trace_plane_normal*-1;

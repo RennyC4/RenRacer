@@ -428,6 +428,7 @@ float countdown_count;
 .float clearcprint_finished;
 .float clearcprint;
 .float cardrift_stabilizer;
+.float radius;
 
 // Lap time stats
 .float start_laptime; // ON / OFF
@@ -449,3 +450,4 @@ float countdown_count;
 //CSQC 
 //
 #define STAT_TURBOFUEL 32
+#define STAT_SPEED 33
