@@ -52,9 +52,10 @@ BSP inside terrain Maps
 
 I have yet to experiment with this.
 
-Recommendations
+Recommendations / Comments
 ---
 
+* Height maps are an easy way to create race tracks and you can make a good one in a few hours, less if you're experienced
 * Be sure to set some fog, otherwise everything will be drawn in the entire map; unless you want that.
 * If you don't want water in your map, set the ground height to 50 and water height to 0
 

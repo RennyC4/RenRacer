@@ -2198,3 +2198,5 @@ float framecount;
 vector campos;
 vector camang;
 float g_width, g_height; /* Globals for screen width and height */
+
+#define STAT_TURBOFUEL 32

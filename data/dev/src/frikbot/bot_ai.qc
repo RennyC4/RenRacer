@@ -261,7 +261,7 @@ void() BotAI =
 		}
 		
 		// Back up for a second, hit a wall/obstacle
-		if (self.goal_touched && (self.keys == KEY_MOVEFORWARD || self.button0) && self.realspeed <= 3)
+		if (self.goal_touched && (self.keys == KEY_MOVEFORWARD || (self.button0 && self.turbo_fuel > 0)) && self.realspeed <= 3)
 			self.bot_backup_finished = time + 0.6 + random()*1.1;
 
 		if (self.bot_backup_finished < time)
@@ -276,9 +276,11 @@ void() BotAI =
 			{
 				if (r > 125 || goforgoal)
 					if (infront(self.goalentity))
-						self.button0 = TRUE;
+						if (self.turbo_fuel >= 25)
+							self.button0 = TRUE;
 				else
 					self.button0 = FALSE;
+
 				self.keys = KEY_MOVEFORWARD;
 			}
 			else // Close to goal
@@ -293,7 +295,7 @@ void() BotAI =
 				else
 				{
 					if (!self.goal_touched)
-						self.button0 = TRUE;						
+						self.button0 = TRUE;					
 					self.keys = KEY_MOVEFORWARD;
 				}
 			}
@@ -301,11 +303,12 @@ void() BotAI =
 			if (self.goalentity.origin_z > self.origin_z && self.angles_x >= 5 && infront(self.goalentity))
 			{
 				self.keys = KEY_MOVEFORWARD;
-				self.button0 = TRUE;
+				if (self.turbo_fuel >= 25)
+					self.button0 = TRUE;
 				//bprint ("Fighting an incline\n");
 			}
 		}
-		else
+		else // backing up
 		{
 			self.button0 = FALSE;
 			self.keys = KEY_MOVEBACK;

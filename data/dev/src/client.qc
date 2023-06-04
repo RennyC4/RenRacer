@@ -69,6 +69,7 @@ void() Setup_level_effects =
 };
 
 void() spawn_countdown;
+.float turbo_fuel_finished;
 void() PlayerPreThink = 
 {
 	if (BotPreFrame()) // FrikBot
@@ -132,7 +133,22 @@ void() PlayerPreThink =
 			self.clearcprint = FALSE;
 			
 		EngineSounds();
-		
+
+		// Slow turbo fuel recharge
+		if (self.turbo_fuel < 100)
+		{
+			if (self.turbo_fuel_finished < time)
+			{
+				self.turbo_fuel = self.turbo_fuel + 1;
+				if (self.ishuman)
+					self.turbo_fuel_finished = time + 0.1;
+				else
+					self.turbo_fuel_finished = time + 0.05;
+			}
+		}
+		else
+			self.turbo_fuel = 100;
+
 		if (self.start_laptime) // turned on by start/finish goal
 		{
 			if (self.laptime_tic_second < time)
@@ -249,6 +265,7 @@ void() PutClientInServer =
 	self.checkpoint = 0;
 	self.clearcprint = TRUE;
 	self.cardrift_stabilizer = -1;
+	self.turbo_fuel = 100;
 	centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________\n\n\nPress [^b^1FIRE^7^b] to start the race");
 	
 	// Frikbots Insta-spawn as the player does

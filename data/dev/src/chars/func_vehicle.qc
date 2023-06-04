@@ -504,7 +504,7 @@ void(float strength) car_boost =
 }
 
 .float driftsfx_finished; // RennyC
-.float driftspeed_hold; // RennyC: Hold initial speed
+.float driftspeed_timer; // RennyC: Hold initial speed
 void() car_drift =
 {
 	if (self.realspeed < 3)
@@ -520,10 +520,6 @@ void() car_drift =
 
 	if (!(f_right.flags & FL_ONGROUND && f_left.flags & FL_ONGROUND && b_right.flags & FL_ONGROUND && b_left.flags & FL_ONGROUND)) // all tires have to touch ground
 		return;
-
-	//Test
-	//if (self.driftspeed_hold > 0)
-	//	self.driftspeed_hold = self.driftspeed_hold - 1; // decrease speed
 
 	// Remove tire friction on drifts
 	f_left.physobj_friction_ground_y = 0;
@@ -613,45 +609,60 @@ void TryUpdateVehicle(){
 		}
 		// RennyC
 		// Taken from Build-A-Delivery by shpuld
-		if (!self.driving.drift)
-			self.driving.turbo = self.button0;
-		if (self.driving.turbo)
+		if (!self.drift)
+			self.turbo = self.button0;
+		if (self.turbo)
 		{
-			if (!self.turbosfx)
+			if (self.turbo_fuel > 0)
 			{
-				sound (self, CHAN_VOICE, "turbo.wav", 1, ATTN_NORM);
-				self.turbosfx = TRUE;
+				if (!self.turbosfx)
+				{
+					sound (self, CHAN_VOICE, "turbo.wav", 1, ATTN_NORM);
+					self.turbosfx = TRUE;
+				}
+				Car_Accelerate(3000, 950);
+				car_boost(2000);
+
+				if (self.turbo_fuel > 0)
+					self.turbo_fuel = self.turbo_fuel - 1;
+				else
+					self.turbo_fuel = 0; // prevent overflow
 			}
-			Car_Accelerate(3000, 950);
-			car_boost(2000);
 		}
 		else
-			self.turbosfx = FALSE;
+		{
+			if (self.turbo_fuel > 0)
+				self.turbosfx = FALSE;
+		}
 
-		if (!self.driving.turbo)
-			self.driving.drift = self.button2;
-		if (self.driving.drift)
+		if (!self.turbo)
+			self.drift = self.button2;
+		if (self.drift)
 		{
 			if (self.airborne_cnt <= 10)
 			{
-				if (!self.driftspeed_hold) // Timer
-					self.driftspeed_hold = 10;
+				if (!self.driftspeed_timer)
+					self.driftspeed_timer = 10;
 				CarStabilizeCheat();
 				self.cardrift_stabilizer = -6; // Harder to tip while drifting
 				car_drift();
+				if (self.turbo_fuel < 100)
+					self.turbo_fuel = self.turbo_fuel + 1;
+				else
+					self.turbo_fuel = 100;
 			}
 		}
 		else
 		{
-			if (self.driftspeed_hold != 0)
+			if (self.driftspeed_timer != 0)
 			{
-				if (self.driftspeed_hold > 0)
+				if (self.driftspeed_timer > 0)
 				{
 					CarStabilizeCheat();
-					self.driftspeed_hold = self.driftspeed_hold - 1; // Remove it faster when button release
+					self.driftspeed_timer = self.driftspeed_timer - 1; // Remove it faster when button release
 				}
 				else
-					self.driftspeed_hold = 0;
+					self.driftspeed_timer = 0;
 			}
 			else
 			{
@@ -684,7 +695,7 @@ void TryUpdateVehicle(){
 					b_right.physobj_friction_ground_y = 4.4;
 			}
 		}
-		//local string debug = ftos(self.driftspeed_hold);
+		//local string debug = ftos(self.driftspeed_timer);
 		//bprint ("Drift Speed: ", debug, "\n");
 		//RennyC
 

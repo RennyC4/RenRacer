@@ -3,4 +3,5 @@
 //CSQC extensions start here.
 csqc/csdefs.qc
 csqc/camera.qc
+csqc/turbo.qc
 csqc/main.qc
