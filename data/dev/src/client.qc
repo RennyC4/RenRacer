@@ -137,7 +137,7 @@ void() PlayerPreThink =
 		// Slow turbo fuel recharge
 		if (self.turbo_fuel < 100)
 		{
-			if (self.turbo_fuel_finished < time)
+			if (self.turbo_fuel_finished < time && !self.button2)
 			{
 				self.turbo_fuel = self.turbo_fuel + 1;
 				if (self.ishuman)

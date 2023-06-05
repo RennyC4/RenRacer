@@ -28,6 +28,8 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 	renderscene();
 
 	DrawTurbo('25 315'); // Draw Turbo Stats
+	DrawSpeed('25 325'); // Draw Speed Stats
+	DrawDrift('80 315'); // Draw Drift Stats
 
 	if (framecount == 10)
 		localcmd("exec haze.cfg\n");

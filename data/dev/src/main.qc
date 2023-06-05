@@ -13,6 +13,8 @@ void() main = {};
 void() CSEv_GrabCSQCValues =
 {
 	clientstat(STAT_TURBOFUEL, EV_FLOAT, turbo_fuel);
+	clientstat(STAT_SPEED, EV_FLOAT, realspeed);
+	clientstat(STAT_DRIFT, EV_FLOAT, drift);
 };
 
 void() world_lights =

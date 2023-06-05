@@ -4,4 +4,6 @@
 csqc/csdefs.qc
 csqc/camera.qc
 csqc/turbo.qc
+csqc/speed.qc
+csqc/drift.qc
 csqc/main.qc

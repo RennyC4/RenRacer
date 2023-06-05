@@ -437,7 +437,7 @@ void(float speed, float maxspeed) Car_Accelerate =
 {
 	local entity tright, tleft;
 
-	if (!self.driving || self.driving.drift) // RennyC
+	if (!self.driving || self.drift) // RennyC
 		return;
 	tleft = self.driving.backleft;
 	tright = self.driving.backright;
@@ -507,9 +507,6 @@ void(float strength) car_boost =
 .float driftspeed_timer; // RennyC: Hold initial speed
 void() car_drift =
 {
-	if (self.realspeed < 3)
-		return;
-
 	local entity f_right, f_left;
 	local entity b_right, b_left;
 
@@ -639,7 +636,7 @@ void TryUpdateVehicle(){
 			self.drift = self.button2;
 		if (self.drift)
 		{
-			if (self.airborne_cnt <= 10)
+			if (self.airborne_cnt <= 10 && self.realspeed >= 20)
 			{
 				if (!self.driftspeed_timer)
 					self.driftspeed_timer = 10;
@@ -647,7 +644,7 @@ void TryUpdateVehicle(){
 				self.cardrift_stabilizer = -6; // Harder to tip while drifting
 				car_drift();
 				if (self.turbo_fuel < 100)
-					self.turbo_fuel = self.turbo_fuel + 1;
+					self.turbo_fuel = self.turbo_fuel + 1; // Drift adds turbo fuel
 				else
 					self.turbo_fuel = 100;
 			}

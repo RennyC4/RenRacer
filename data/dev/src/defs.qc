@@ -451,3 +451,4 @@ float countdown_count;
 //
 #define STAT_TURBOFUEL 32
 #define STAT_SPEED 33
+#define STAT_DRIFT 34
