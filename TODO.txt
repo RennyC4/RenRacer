@@ -4,12 +4,14 @@ TODO: Tracebox on cars
 TODO: Race4: Moon textures + low graivty + dark (use headlights)
 TODO: Impact sound - Car smash (wall, other car)
 TODO: Breakable brushes (request by xaGe)
+TODO: New collision car->car physics, even if it's fake/lame
 TODO: Proper waypoints for bots, if one exists.. they follow it around the course, otherwise default checkpoint follow behavior
 TODO: Car colors / Driver match .colormap - WIP
-TODO: Warning sound when Turbo'ing and almost out == 10 or <
 TODO: Make checkpoints appear sky-high (Taller particles)
+
 ====
 
+Done: Warning sound when Turbo'ing and almost out == 10 or <
 Done: Race status sent to CSQC
 Done: CSQC engine sounds
 	- Checks if the player is in the car STAT_DRIVING

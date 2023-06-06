@@ -6,4 +6,5 @@ csqc/camera.qc
 csqc/turbo.qc
 csqc/speed.qc
 csqc/drift.qc
+csqc/time.qc
 csqc/main.qc

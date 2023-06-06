@@ -30,6 +30,7 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 	DrawTurbo('25 315'); // Draw Turbo Stats
 	DrawSpeed('25 325'); // Draw Speed Stats
 	DrawDrift('80 315'); // Draw Drift Stats
+	DrawTime ('25 335'); // Draw Lap Time Stats
 
 	//Race Status
 	//local float test = getstatf(STAT_RACESTATUS);
