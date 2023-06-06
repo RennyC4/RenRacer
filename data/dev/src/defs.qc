@@ -432,8 +432,7 @@ float countdown_count;
 
 // Lap time stats
 .float start_laptime; // ON / OFF
-.float laptime_tic_second;
-.float laptime_tic_fastsecond;
+.float laptime_tic;
 .float laptime;
 .float fastest_lap;
 .float overall_time;
