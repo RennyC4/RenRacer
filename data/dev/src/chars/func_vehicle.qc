@@ -561,6 +561,7 @@ void() CarStabilizeCheat =
 //RennyC
 
 .float turbosfx; // RennyC
+.float turbo_warning; // RennyC
 void TryUpdateVehicle(){
 	if (!check_camera_state){
 		check_camera_state = TRUE;
@@ -612,6 +613,14 @@ void TryUpdateVehicle(){
 		{
 			if (self.turbo_fuel > 0)
 			{
+				if (self.turbo_fuel <= 10 && !self.turbo_warning)
+				{
+					sound (self, CHAN_AUTO, "warning.wav", 1, ATTN_NORM);
+					self.turbo_warning = TRUE;
+				}
+				if (self.turbo_fuel > 10)
+					self.turbo_warning = FALSE;
+
 				if (!self.turbosfx)
 				{
 					sound (self, CHAN_VOICE, "turbo.wav", 1, ATTN_NORM);

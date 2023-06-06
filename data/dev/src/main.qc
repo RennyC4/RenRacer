@@ -16,6 +16,7 @@ void() CSEv_GrabCSQCValues =
 	clientstat(STAT_SPEED, EV_FLOAT, realspeed);
 	clientstat(STAT_DRIFT, EV_FLOAT, drift);
 	clientstat(STAT_DRIVING, EV_FLOAT, driving);
+	globalstat(STAT_RACESTATUS, EV_FLOAT, "race_status");
 };
 
 void() world_lights =
@@ -83,6 +84,7 @@ void() worldspawn =
 	precache_sound ("2.wav");
 	precache_sound ("3.wav");
 	precache_sound ("slide.wav");
+	precache_sound ("warning.wav");
 
 	world_lights();
 	BotInit();  // FrikBot
