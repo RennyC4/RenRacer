@@ -49,11 +49,13 @@ void() rally_goal_proxy_think =
 						targ.fastest_lap = targ.laptime;
 
 					local string l5 = ftos(targ.fastest_lap);
-					if (targ.fastest_lap > 0) // Print best time
-						sprint (targ, "Best Lap: ", l5, "\n");
+					l5 = sprintf("%.2f", targ.fastest_lap); // cut down numbers
+					if (targ.fastest_lap > 0) // Print fastest lap time
+						sprint (targ, "Fastest Lap: ", l5, "\n");
 
 					local string l6 = ftos(targ.overall_time);
-						sprint (targ, "Overall Time: ", l6, "\n");
+					l6 = sprintf("%.2f", targ.overall_time); // cut down numbers
+					sprint (targ, "Overall Time: ", l6, "\n");
 
 					sound (self, CHAN_AUTO, "finish.wav", 1, ATTN_NONE);
 					sound (self, CHAN_AUTO, "camera.wav", 1, ATTN_NONE);
@@ -70,6 +72,7 @@ void() rally_goal_proxy_think =
 					local string l = ftos(targ.lap);
 					local string l2 = ftos(self.lap);
 					local string l3 = ftos(targ.laptime);
+					l3 = sprintf("%.2f", targ.laptime); // cut down numbers
 
 					// Record best lap time
 					if (!targ.fastest_lap)
@@ -88,8 +91,9 @@ void() rally_goal_proxy_think =
 					}
 
 					local string l4 = ftos(targ.fastest_lap);
-					if (targ.fastest_lap > 0 && targ.lap > 1) // Print best time
-						sprint (targ, "Best Lap: ", l4, "\n");
+					l4 = sprintf("%.2f", targ.fastest_lap); // cut down numbers
+					if (targ.fastest_lap > 0 && targ.lap > 1) // Print fastest lap time
+						sprint (targ, "Fastest Lap: ", l4, "\n");
 
 					targ.laptime = 0; // Reset lap time
 

@@ -36,6 +36,7 @@ void() marker_think =
 					self.cnt = TRUE; // Start animation
 					self.effects = self.effects | EF_DIMLIGHT;
 					local string l = ftos(targ.laptime);
+					l = sprintf("%.2f", targ.laptime); // cut down numbers
 					centerprint (targ, "/P^4[^bCheckpoint^b]\n", "^7Time: ^5", l, "\n");
 					targ.clearcprint_finished = time + 1;
 					sound (self, CHAN_AUTO, "checkpoint.wav", 1, ATTN_NORM);

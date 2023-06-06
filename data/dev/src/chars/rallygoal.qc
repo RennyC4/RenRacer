@@ -50,11 +50,13 @@ void() rally_goal_touch =
 				other.owner.driving.fastest_lap = other.owner.driving.laptime;
 
 			local string l5 = ftos(other.owner.driving.fastest_lap);
-			if (other.owner.driving.fastest_lap > 0) // Print best time
-				sprint (other.owner.driving, "Best Lap: ", l5, "\n");
+			l5 = sprintf("%.2f", other.owner.driving.fastest_lap); // cut down numbers
+			if (other.owner.driving.fastest_lap > 0) // Print fastest lap time
+				sprint (other.owner.driving, "Fastest Lap: ", l5, "\n");
 
 			local string l6 = ftos(other.owner.driving.overall_time);
-				sprint (other.owner.driving, "Overall Time: ", l6, "\n");
+			l6 = sprintf("%.2f", other.owner.driving.overall_time); // cut down numbers
+			sprint (other.owner.driving, "Overall Time: ", l6, "\n");
 
 			sound (self, CHAN_AUTO, "finish.wav", 1, ATTN_NONE);
 			sound (self, CHAN_AUTO, "camera.wav", 1, ATTN_NONE);
@@ -70,6 +72,7 @@ void() rally_goal_touch =
 			local string l = ftos(other.owner.driving.lap);
 			local string l2 = ftos(self.lap);
 			local string l3 = ftos(other.owner.driving.laptime);
+			l3 = sprintf("%.2f", other.owner.driving.laptime); // cut down numbers
 
 			// Record best lap time
 			if (!other.owner.driving.fastest_lap)
@@ -88,8 +91,9 @@ void() rally_goal_touch =
 			}
 
 			local string l4 = ftos(other.owner.driving.fastest_lap);
-			if (other.owner.driving.fastest_lap > 0 && other.owner.driving.lap > 1) // Print best time
-				sprint (other.owner.driving, "Best Lap: ", l4, "\n");
+			l4 = sprintf("%.2f", other.owner.driving.fastest_lap); // cut down numbers
+			if (other.owner.driving.fastest_lap > 0 && other.owner.driving.lap > 1) // Print fastest lap time
+				sprint (other.owner.driving, "Fastest Lap: ", l4, "\n");
 
 			other.owner.driving.laptime = 0; // Reset lap time
 
