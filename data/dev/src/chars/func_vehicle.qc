@@ -562,6 +562,7 @@ void() CarStabilizeCheat =
 
 .float turbosfx; // RennyC
 .float turbo_warning; // RennyC
+.float handbreak_sfx; // RennyC
 void TryUpdateVehicle(){
 	if (!check_camera_state){
 		check_camera_state = TRUE;
@@ -615,7 +616,7 @@ void TryUpdateVehicle(){
 			{
 				if (self.turbo_fuel <= 10 && !self.turbo_warning)
 				{
-					sound (self, CHAN_AUTO, "warning.wav", 1, ATTN_NORM);
+					stuffcmd (self, "play warning.wav\n"); // FIXME: Ugly
 					self.turbo_warning = TRUE;
 				}
 				if (self.turbo_fuel > 10)
@@ -645,6 +646,11 @@ void TryUpdateVehicle(){
 			self.drift = self.button2;
 		if (self.drift)
 		{
+			if (!self.handbreak_sfx)
+			{
+				stuffcmd (self, "play handbreak.wav\n"); // FIXME: Ugly
+				self.handbreak_sfx = TRUE;
+			}
 			if (self.airborne_cnt <= 10 && self.realspeed >= 20)
 			{
 				if (!self.driftspeed_timer)
@@ -660,6 +666,7 @@ void TryUpdateVehicle(){
 		}
 		else
 		{
+			self.handbreak_sfx = FALSE;
 			if (self.driftspeed_timer != 0)
 			{
 				if (self.driftspeed_timer > 0)

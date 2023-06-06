@@ -8,6 +8,7 @@ TODO: New collision car->car physics, even if it's fake/lame
 TODO: Proper waypoints for bots, if one exists.. they follow it around the course, otherwise default checkpoint follow behavior
 TODO: Car colors / Driver match .colormap - WIP
 TODO: Make checkpoints appear sky-high (Taller particles)
+TODO: Show overall time & best lap on win screen
 
 ====
 
