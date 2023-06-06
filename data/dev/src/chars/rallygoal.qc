@@ -79,7 +79,10 @@ void() rally_goal_touch =
 				if (other.owner.driving.laptime < other.owner.driving.fastest_lap) // Update best lap time
 				{
 					if (other.owner.driving.lap != self.lap) // Don't play fastlap over finallap
+					{
 						stuffcmd (other.owner.driving, "play fastlap.wav\n"); // FIXME: Ugly
+						local float conflict = TRUE;
+					}
 					other.owner.driving.fastest_lap = other.owner.driving.laptime;
 				}
 			}
@@ -96,9 +99,12 @@ void() rally_goal_touch =
 				centerprint(other.owner.driving, "/P^b^1!! FINAL LAP !!^b\n", "^7Lap Time: ^4", l3);
 			}
 			else
+			{
 				centerprint(other.owner.driving, "/PLap [^3", l, " ^7/ ^1", l2, "^7]\n ^7Lap Time: ^4", l3);
+				if (!conflict)
+					stuffcmd (self, "play lap.wav\n"); // FIXME: Ugly
+			}
 			other.owner.driving.clearcprint_finished = time + 2;
-			sound (self, CHAN_AUTO, "lap.wav", 1, ATTN_NORM);
 		}
 	}
 };

@@ -78,8 +78,11 @@ void() rally_goal_proxy_think =
 					{
 						if (targ.laptime < targ.fastest_lap) // Update best lap time
 						{
-							if (targ.lap != self.lap) // Don't play fastlap over finallap
+							if (targ.lap != self.lap) // Don't play fastlap.wav over finallap.wav
+							{
+								local float conflict = TRUE;
 								stuffcmd (targ, "play fastlap.wav\n"); // FIXME: Ugly
+							}
 							targ.fastest_lap = targ.laptime;
 						}
 					}
@@ -96,10 +99,12 @@ void() rally_goal_proxy_think =
 						centerprint(targ, "/P^b^1!! FINAL LAP !!^b\n", "^7Lap Time: ^4", l3);
 					}
 					else
+					{
 						centerprint(targ, "/PLap [^3", l, " ^7/ ^1", l2, "^7]\n ^7Lap Time: ^4", l3);
-
+						if (!conflict)
+							stuffcmd (targ, "play lap.wav\n"); // FIXME: Ugly
+					}
 					targ.clearcprint_finished = time + 2;
-					sound (self, CHAN_AUTO, "lap.wav", 1, ATTN_NORM);
 				}
 			}
 		}
