@@ -5,7 +5,6 @@ float MOVE_NOMONSTERS = 1; // same as TRUE
 float MOVE_MISSILE = 2; // save as movement with .movetype == MOVETYPE_FLYMISSILE
 
 .entity realowner;
-.entity driving;
 
 nosave float check_camera_state;
 

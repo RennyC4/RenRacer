@@ -15,6 +15,7 @@ void() CSEv_GrabCSQCValues =
 	clientstat(STAT_TURBOFUEL, EV_FLOAT, turbo_fuel);
 	clientstat(STAT_SPEED, EV_FLOAT, realspeed);
 	clientstat(STAT_DRIFT, EV_FLOAT, drift);
+	clientstat(STAT_DRIVING, EV_FLOAT, driving);
 };
 
 void() world_lights =
@@ -68,14 +69,8 @@ void() worldspawn =
 	// func_vehicle - end
 	//
 
-	precache_sound ("engine/aa01.wav");
-	precache_sound ("engine/aa02.wav");
-	precache_sound ("engine/aa03.wav");
-	precache_sound ("engine/aa04.wav");
-	precache_sound ("engine/aa05.wav");
-	precache_sound ("engine/aa06.wav");
-	precache_sound ("engine/aa07.wav");
-	precache_sound ("engine/aa08.wav");
+	precache_sound ("engine/engine.wav");
+	precache_sound ("engine/start.wav");
 	precache_sound ("land.wav");
 	precache_sound ("camera.wav");
 	precache_sound ("turbo.wav");

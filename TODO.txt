@@ -10,6 +10,9 @@ TODO: Warning sound when Turbo'ing and almost out == 10 or <
 TODO: Make checkpoints appear sky-high (Taller particles)
 ====
 
+Done: Race status sent to CSQC
+Done: CSQC engine sounds
+	- Checks if the player is in the car STAT_DRIVING
 Done: Have bots drift to increase turbo, or make them cheat (lame...)
 	- Cheating for now
 Done: Add "Speed: km/h" + "Drift!"

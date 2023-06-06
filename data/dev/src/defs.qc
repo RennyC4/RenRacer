@@ -399,7 +399,6 @@ float	modelindex_player;
 // RenRacer
 float framecount;
 entity lastspawn;
-//float race_start;
 
 float race_status;
 float RACE_NOTSTARTED = 0;
@@ -429,6 +428,7 @@ float countdown_count;
 .float clearcprint;
 .float cardrift_stabilizer;
 .float radius;
+.entity driving;
 
 // Lap time stats
 .float start_laptime; // ON / OFF
@@ -452,3 +452,5 @@ float countdown_count;
 #define STAT_TURBOFUEL 32
 #define STAT_SPEED 33
 #define STAT_DRIFT 34
+#define STAT_DRIVING 35
+#define STAT_RACESTATUS 36

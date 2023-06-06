@@ -312,6 +312,7 @@ vector(entity e, float sped) aim =
 	return frik_aim(e, sped);
 };
 
+/*
 void(entity e, float chan, string samp, float vol, float atten, optional float speedpct, optional float flags, optional float timeofs) sound = 
 {
 	frik_sound(e, chan, samp, vol, atten);
@@ -321,6 +322,7 @@ void(entity e, float chan, string samp, float vol, float atten, optional float s
 		other.b_sound = time + 1;
 
 };
+*/
 
 void(float to, float f) WriteByte =
 {

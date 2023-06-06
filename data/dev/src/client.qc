@@ -20,35 +20,6 @@ void() ClientDisconnect =
 	ClientDisconnected(); // FrikBot
 };
 
-void() EngineSounds =
-{
-	if (time < self.engine_sound_time)
-		return;
-
-	if (self.realspeed < 10)
-	{
-		sound (self, CHAN_BODY, "engine/aa01.wav", 0.25, ATTN_NORM);
-		self.engine_sound_time = time + 0.3;
-	}
-	else if (self.realspeed > 10 && self.realspeed < 15)
-		sound (self, CHAN_BODY, "engine/aa02.wav", 0.28, ATTN_NORM);
-	else if (self.realspeed > 14 && self.realspeed < 20)
-		sound (self, CHAN_BODY, "engine/aa03.wav", 0.30, ATTN_NORM);
-	else if (self.realspeed > 19 && self.realspeed < 25)
-		sound (self, CHAN_BODY, "engine/aa04.wav", 0.32, ATTN_NORM);
-	else if (self.realspeed > 24 && self.realspeed < 30)
-		sound (self, CHAN_BODY, "engine/aa05.wav", 0.34, ATTN_NORM);
-	else if (self.realspeed > 29 && self.realspeed < 35)
-		sound (self, CHAN_BODY, "engine/aa06.wav", 0.36, ATTN_NORM);
-	else if (self.realspeed > 34 && self.realspeed < 40)
-		sound (self, CHAN_BODY, "engine/aa07.wav", 0.38, ATTN_NORM);
-	else if (self.realspeed > 45)
-		sound (self, CHAN_BODY, "engine/aa08.wav", 0.40, ATTN_NORM);
-
-	if (!(self.engine_sound_time > time))
-		self.engine_sound_time = time + 0.15;
-};
-
 // This is ugly
 void() Setup_level_effects =
 {
@@ -102,11 +73,12 @@ void() PlayerPreThink =
 		Car_CheckAttach();
 		if (framecount > 75 && self.button0 && race_status == RACE_NOTSTARTED)
 		{
-			centerprint (self, ""); // clear /P centerprint
 			race_status = RACE_COUNTDOWN;
 			spawn_countdown(); // Start countdown
 
 			// Spawn car
+			sound (self, CHAN_AUTO, "engine/start.wav", 1, ATTN_NORM);
+
 			local entity car = hotrod();
 			makevectors(self.angles);
 			car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
@@ -131,8 +103,6 @@ void() PlayerPreThink =
 		}
 		else
 			self.clearcprint = FALSE;
-			
-		EngineSounds();
 
 		// Slow turbo fuel recharge
 		if (self.turbo_fuel < 100)

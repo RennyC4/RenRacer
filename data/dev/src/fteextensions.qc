@@ -1693,13 +1693,13 @@ void() breakpoint = #6; /*
 float() random = #7; /*
 		Returns a random value between 0 and 1. Be warned, this builtin can return 1 in most engines, which can break arrays. */
 
-//void(entity e, float chan, string samp, float vol, float atten, optional float speedpct, optional float flags, optional float timeofs) sound = #8; /*
-//		Starts a sound centered upon the given entity.
-//		chan is the entity sound channel to use, channel 0 will allow you to mix many samples at once, others will replace the old sample
-//		'samp' must have been precached first
-//		if specified, 'speedpct' should normally be around 100 (or =0), 200 for double speed or 50 for half speed.
-//		If flags is specified, the reliable flag in the channels argument is used for additional channels. Flags should be made from SOUNDFLAG_* constants
-//		timeofs should be negative in order to provide a delay before the sound actually starts. */
+void(entity e, float chan, string samp, float vol, float atten, optional float speedpct, optional float flags, optional float timeofs) sound = #8; /*
+		Starts a sound centered upon the given entity.
+		chan is the entity sound channel to use, channel 0 will allow you to mix many samples at once, others will replace the old sample
+		'samp' must have been precached first
+		if specified, 'speedpct' should normally be around 100 (or =0), 200 for double speed or 50 for half speed.
+		If flags is specified, the reliable flag in the channels argument is used for additional channels. Flags should be made from SOUNDFLAG_* constants
+		timeofs should be negative in order to provide a delay before the sound actually starts. */
 
 vector(vector v) normalize = #9; /*
 		Shorten or lengthen a direction vector such that it is only one quake unit long. */
