@@ -40,11 +40,7 @@ void() rally_goal_touch =
 			nextmap = mapname;
 			self.touch = SUB_Null;
 			self.think = rally_goal_nextmap;
-			self.nextthink = time + 5;
-
-			centerprint(other.owner.driving, "/P^3!!! ^3^bYOU WIN^b^7 ^3!!!\n");
-			stuffcmd (other.owner.driving, "play youwin.wav\n"); // FIXME: Ugly
-			bprint (other.owner.driving.netname, " won the race!\n");
+			self.nextthink = time + 8;
 
 			if (other.owner.driving.laptime < other.owner.driving.fastest_lap) // Update best lap time if need be on race finish
 				other.owner.driving.fastest_lap = other.owner.driving.laptime;
@@ -52,11 +48,15 @@ void() rally_goal_touch =
 			local string l5 = ftos(other.owner.driving.fastest_lap);
 			l5 = sprintf("%.2f", other.owner.driving.fastest_lap); // cut down numbers
 			if (other.owner.driving.fastest_lap > 0) // Print fastest lap time
-				sprint (other.owner.driving, "Fastest Lap: ", l5, "\n");
+				bprint(other.owner.driving.netname, "'s Fastest lap: ", l5, "\n");
 
 			local string l6 = ftos(other.owner.driving.overall_time);
 			l6 = sprintf("%.2f", other.owner.driving.overall_time); // cut down numbers
-			sprint (other.owner.driving, "Overall Time: ", l6, "\n");
+			bprint(other.owner.driving.netname, "'s Overall Time: ", l6, "\n");
+
+			centerprint(other.owner.driving, "/P^3!!! ^3^bYOU WIN^b^7 ^3!!!\n\n^7Fastest Lap: ", l5, "\n Overall Time: ", l6, "\n");
+			stuffcmd (other.owner.driving, "play youwin.wav\n"); // FIXME: Ugly
+			bprint (other.owner.driving.netname, " won the race!\n");
 
 			sound (self, CHAN_AUTO, "finish.wav", 1, ATTN_NONE);
 			sound (self, CHAN_AUTO, "camera.wav", 1, ATTN_NONE);

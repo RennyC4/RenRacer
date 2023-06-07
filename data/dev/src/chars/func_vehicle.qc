@@ -64,6 +64,18 @@ void() PhysCrush =
 	PushAndDamageTarget(other, self);
 };
 
+// RennyC: From build a delivery by shpuld
+float sfx_skidding;
+void(entity e, float strength) play_skidding =
+{
+	if (time < sfx_skidding)
+		return;
+
+	sound(e, CHAN_AUTO, "skidding.wav", 0.025 + min(0.5, strength * 0.8), 0, 95 + strength * 60);
+	sfx_skidding = time + random(0, 2);
+}
+//
+
 void Car_TirePlace(entity tire){
 	entity tireparticle = tire.enemy;
 	tire.angles = vectoangles2(tireparticle.lmat_forward, tireparticle.lmat_up);
@@ -78,6 +90,25 @@ void Car_TirePlace(entity tire){
 	tire.frags = min(tire.frags + f*30, tracelen*trace_fraction);
 	tire.oldorigin = tire.origin;
 	setorigin(tire, trace_endpos + tireparticle.lmat_up * tireparticle.relative_size);
+	// RennyC: From build a delivery by shpuld
+	if (trace_fraction < 0.8)
+	{
+		if (fabs(tireparticle.velocity * tireparticle.lmat_left) > 80)
+		{
+			/* Unsupported on Terrain Maps :(
+			local float surfnum = getsurfacenearpoint(world, trace_endpos);
+			local string s = getsurfacetexture(world, surfnum);
+			local float r = strstrofs(s, "dirt", 0);
+			*/
+			//if (!r)
+			pointparticles(PART_DIRT, trace_endpos, normalize(tireparticle.velocity + '0 0 100'), 1);
+			play_skidding(tireparticle, (fabs(tireparticle.velocity * tireparticle.lmat_left) - 40) / 500);
+			
+			//local string v = ftos(r);
+			//bprint (v, "\n");
+		}
+	}
+	//
 }
 
 void() Car_ChassiThink =

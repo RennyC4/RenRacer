@@ -430,6 +430,8 @@ float countdown_count;
 .float radius;
 .entity driving;
 
+var float PART_DIRT;
+
 // Lap time stats
 .float start_laptime; // ON / OFF
 .float laptime_tic;

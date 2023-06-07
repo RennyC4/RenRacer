@@ -18,7 +18,7 @@ void() marker_think =
 					if (targ.checkpoint == 0)
 					{
 						targ.checkpoint = self.checkpoint;
-						OK = TRUE;
+						self.enemy = targ;
 					}
 				}
 				else if (self.checkpoint > 1)
@@ -26,20 +26,21 @@ void() marker_think =
 					if (targ.checkpoint == (self.checkpoint - 1))
 					{
 						targ.checkpoint = self.checkpoint;
-						OK = TRUE;
+						self.enemy = targ;
 					}
 				}
 
-				if (OK) // Do check point confirm
+				if (self.enemy) // Do check point confirm
 				{
-					targ.effects = EF_MUZZLEFLASH;
+					self.enemy.effects = EF_MUZZLEFLASH;
 					self.cnt = TRUE; // Start animation
 					self.effects = self.effects | EF_DIMLIGHT;
-					local string l = ftos(targ.laptime);
-					l = sprintf("%.2f", targ.laptime); // cut down numbers
-					centerprint (targ, "/P^4[^bCheckpoint^b]\n", "^7Time: ^5", l, "\n");
-					targ.clearcprint_finished = time + 1;
+					local string l = ftos(self.enemy.laptime);
+					l = sprintf("%.2f", self.enemy.laptime); // cut down numbers
+					centerprint (self.enemy, "/P^4[^bCheckpoint^b]\n", "^7Time: ^5", l, "\n");
+					self.enemy.clearcprint_finished = time + 1;
 					sound (self, CHAN_AUTO, "checkpoint.wav", 1, ATTN_NORM);
+					self.enemy = world;
 				}
 			}
 			else if (race_status != RACE_FINISHED)

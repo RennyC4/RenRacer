@@ -42,6 +42,8 @@ void() worldspawn =
 	countdown_count = 3;
 	lastspawn = world;
 
+	PART_DIRT = particleeffectnum("dirt");
+
 	precache_model("progs/null.spr");
 	precache_model("progs/s_debug.spr");
 
@@ -87,6 +89,7 @@ void() worldspawn =
 	precache_sound ("slide.wav");
 	precache_sound ("warning.wav");
 	precache_sound ("handbreak.wav");
+	precache_sound ("skidding.wav");
 
 	world_lights();
 	BotInit();  // FrikBot

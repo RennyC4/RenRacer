@@ -8,10 +8,13 @@ TODO: New collision car->car physics, even if it's fake/lame
 TODO: Proper waypoints for bots, if one exists.. they follow it around the course, otherwise default checkpoint follow behavior
 TODO: Car colors / Driver match .colormap - WIP
 TODO: Make checkpoints appear sky-high (Taller particles)
-TODO: Show overall time & best lap on win screen
 
 ====
 
+Done: Show overall time & best lap on win screen
+Done: Particles on tires (dirt)
+	- Currently makes dirt particles no matter what, need to get the texture name you're driving on somehow
+	- getsurfacenearpoint+getsurfacetexture is unsupported in height maps :(
 Done: Warning sound when Turbo'ing and almost out == 10 or <
 Done: Race status sent to CSQC
 Done: CSQC engine sounds

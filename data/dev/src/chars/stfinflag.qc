@@ -41,21 +41,21 @@ void() rally_goal_proxy_think =
 					self.think = rally_goal_nextmap;
 					self.nextthink = time + 5;
 
-					centerprint(targ, "/P^3!!! ^3^bYOU WIN^b^7 ^3!!!\n");
-					stuffcmd (targ, "play youwin.wav\n"); // FIXME: Ugly
-					bprint (targ.netname, " won the race!\n");
-
 					if (targ.laptime < targ.fastest_lap) // Update best lap time if need be on race finish
 						targ.fastest_lap = targ.laptime;
 
 					local string l5 = ftos(targ.fastest_lap);
 					l5 = sprintf("%.2f", targ.fastest_lap); // cut down numbers
 					if (targ.fastest_lap > 0) // Print fastest lap time
-						sprint (targ, "Fastest Lap: ", l5, "\n");
+						bprint(targ.netname, "'s Fastest Lap: ", l5, "\n");
 
 					local string l6 = ftos(targ.overall_time);
 					l6 = sprintf("%.2f", targ.overall_time); // cut down numbers
-					sprint (targ, "Overall Time: ", l6, "\n");
+					bprint(targ.netname, "'s Overall Time: ", l6, "\n");
+
+					centerprint(targ, "/P^3!!! ^3^bYOU WIN^b^7 ^3!!!\n\n^7Fastest Lap: ", l5, "\n Overall Time: ", l6, "\n");
+					stuffcmd (targ, "play youwin.wav\n"); // FIXME: Ugly
+					bprint (targ.netname, " won the race!\n");
 
 					sound (self, CHAN_AUTO, "finish.wav", 1, ATTN_NONE);
 					sound (self, CHAN_AUTO, "camera.wav", 1, ATTN_NONE);
