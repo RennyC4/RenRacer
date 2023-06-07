@@ -7,10 +7,10 @@ TODO: Breakable brushes (request by xaGe)
 TODO: New collision car->car physics, even if it's fake/lame
 TODO: Proper waypoints for bots, if one exists.. they follow it around the course, otherwise default checkpoint follow behavior
 TODO: Car colors / Driver match .colormap - WIP
-TODO: Make checkpoints appear sky-high (Taller particles)
 
 ====
 
+Done: Make checkpoints appear sky-high
 Done: Show overall time & best lap on win screen
 Done: Particles on tires (dirt)
 	- Currently makes dirt particles no matter what, need to get the texture name you're driving on somehow

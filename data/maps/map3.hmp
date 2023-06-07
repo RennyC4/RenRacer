@@ -101,6 +101,7 @@ checkpoint "5"
 classname rally_marker
 origin "-1302 2953 20"
 checkpoint "6"
+radius "350"
 }
 
 // marker 7
