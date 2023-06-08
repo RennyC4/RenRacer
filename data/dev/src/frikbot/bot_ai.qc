@@ -215,7 +215,7 @@ void() BotAI =
 	
 	// Turn on headlights once
 	// TODO: Have the AI detect when in a dark map / area
-	if (!self.headlights)// && world.model == "maps/map4.hmp")
+	if (!self.headlights && world.model == "maps/map4.hmp")
 	{
 		self.headlights = TRUE;
 		headlights_on();

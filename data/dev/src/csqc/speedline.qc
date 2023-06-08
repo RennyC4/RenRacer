@@ -1,5 +1,3 @@
-// Currently suffers from a glitch with engine sounds...
-
 entity speedline;
 float speedline_move;
 void() speedline_think =
