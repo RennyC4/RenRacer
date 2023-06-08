@@ -3,8 +3,9 @@ void() SUB_Remove = {remove(self);return;};
 //
 // Main Loop
 //
-entity sky;
 
+entity sky;
+entity engine_sound;
 void(float width, float height, float menushown) CSQC_UpdateView =
 {
 	g_width = width;
@@ -21,9 +22,12 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 		setproperty(VF_DRAWCROSSHAIR, 0); // Turn off crosshair
 	}
 
-	sky.origin = campos - '0 0 0';
-	sky.angles = '0 0 0';
-	addentity(sky);
+	if (sky)
+	{
+		sky.origin = campos - '0 0 0';
+		sky.angles = '0 0 0';
+		addentity(sky);
+	}
 
 	addentities((intermission?0:MASK_VIEWMODEL)|MASK_ENGINE);
 
@@ -37,11 +41,6 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 	// Race Status
 	//local float test = getstatf(STAT_RACESTATUS);
 	//print(ftos(test), "\n");
-	
-	// Turbo Press Status
-	local float speedl = getstatf(STAT_TURBO);
-	if (speedl)
-		DrawSpeedLines(); // Draw Speed Lines on Turbo
 
 	// Engine sounds (taken from build a delivery, optimized (thanks spike))
 	local float speed = getstatf(STAT_SPEED);
@@ -51,8 +50,15 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 		float vol = min(1, 0.25 + (speed / 4));
 		float pitchadd = min(1000, speed);
 		float pitch = 120 + pitchadd;
-		soundupdate(self, CHAN_BODY, "engine/engine.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
+		soundupdate(engine_sound, CHAN_BODY, "engine/engine.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
 	}
+	//
+	
+	// Turbo Press Status
+	local float speedl = getstatf(STAT_TURBO);
+	local float turbof = getstatf(STAT_TURBOFUEL);
+	if (speedl && turbof > 0)
+		DrawSpeedLines(); // Draw Speed Lines on Turbo
 	//
 
 	if (framecount == 10)
@@ -69,11 +75,16 @@ void() CSQC_WorldLoaded  =
 {
 	precache_model ("progs/v_speed.mdl");
 	precache_sound ("engine/engine.wav");
-	// Spawn sky
-	sky = spawn();
-	sky.scale = 6;
-	precache_model ("progs/sky.iqm");
-	setmodel(sky, "progs/sky.iqm");
+
+	engine_sound = spawn();
+	if (world.model != "maps/map4.hmp")
+	{
+		// Spawn sky
+		sky = spawn();
+		sky.scale = 6;
+		precache_model ("progs/sky.iqm");
+		setmodel(sky, "progs/sky.iqm");
+	}
 
 	// Ask SSQC for values to send
 	sendevent("GrabCSQCValues", "");

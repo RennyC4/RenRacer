@@ -36,6 +36,14 @@ void() Setup_level_effects =
 	{
 		stuffcmd (self, "r_sun_colour 0 0 0\n");
 		stuffcmd (self, "r_waterstyle 1\n");
+		
+		if (world.model == "maps/map4.hmp") // Low gravity & RT Lights
+		{
+			stuffcmd (self, "sv_gravity 600\n");
+			stuffcmd (self, "r_shadow_realtime_world 1\n");
+		}
+		else
+			stuffcmd (self, "sv_gravity 1200\n");
 	}
 };
 
@@ -46,7 +54,7 @@ void() PlayerPreThink =
 	if (BotPreFrame()) // FrikBot
 		return;
 
-	if (cvar("developer") == 1)
+	if (cvar("developer") == 1) // Coord/Angle reporting, helps insert entities in hmp maps
 	{
 		local string x,y,z,ang_y,ang_x;
 		x = ftos(self.origin_x);
@@ -55,11 +63,11 @@ void() PlayerPreThink =
 		ang_y = ftos(self.angles_y);
 		ang_x = ftos(self.angles_x);
 
-		bprint ("X: ", x, "\n");
-		bprint ("Y: ", y, "\n");
-		bprint ("Z: ", z, "\n");
-		bprint ("Angle_Y: ", ang_y, "\n");
-		bprint ("Angle_X: ", ang_x, "\n");
+		sprint (self, "X: ", x, "\n");
+		sprint (self, "Y: ", y, "\n");
+		sprint (self, "Z: ", z, "\n");
+		sprint (self, "Angle_Y: ", ang_y, "\n");
+		sprint (self, "Angle_X: ", ang_x, "\n");
 
 		return;
 	}
@@ -229,6 +237,7 @@ void() PutClientInServer =
 	self.clearcprint = TRUE;
 	self.cardrift_stabilizer = -1;
 	self.turbo_fuel = 100;
+	if (!cvar("developer"))
 	centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________\n\n\nPress [^b^1FIRE^7^b] to start the race");
 	
 	// Frikbots Insta-spawn as the player does

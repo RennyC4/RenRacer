@@ -1,0 +1,133 @@
+{
+classname "worldspawn"
+message "Darkside of the Moon"
+_sky "blacksky"
+_fog "0.05 0 0 0"
+_maxdrawdist 0 /*overrides fog distance (if greater)*/
+_segmentsize 1024 /*how big each section is. this affects texturing and resolutions*/
+_minxsegment -2048
+_minysegment -2048
+_maxxsegment 2048
+_maxysegment 2048
+_seed "4" /*for auto-gen plugins*/
+_exterior solid
+_defaultgroundtexture "moon"
+_defaultgroundheight "50"
+_defaultwatertexture "water"
+_defaultwaterheight "4"
+_gravity "600"
+}
+{
+classname info_player_start
+origin "6 0 80"
+}
+
+// start / finish goal
+{
+classname rally_startfinish_flag
+origin "1128 26 80"
+angles "0 0 0"
+spawnflags "1"
+lap "4"
+checkpoint "8" // must match last marker
+music "sound/music/race4.ogg"
+message "!! TURN ON YOUR HEADLIGHTS !!"
+}
+
+// racerspawn point 1
+{
+classname racer_spawnpoint
+origin "6 0 85"
+angles "0 0 0"
+}
+
+// racerspawn point 2
+{
+classname racer_spawnpoint
+origin "6 130 85"
+angles "0 0 0"
+}
+
+// racerspawn point 3
+{
+classname racer_spawnpoint
+origin "6 -130 120"
+angles "0 0 0"
+}
+
+// racerspawn point 4
+{
+classname racer_spawnpoint
+origin "-150 0 85"
+angles "0 0 0"
+}
+
+// marker 1
+{
+classname rally_marker
+origin "4102 -227 80"
+checkpoint "1"
+}
+
+// marker 2
+{
+classname rally_marker
+origin "6180 -1325 167"
+checkpoint "2"
+}
+
+// marker 2b
+{
+classname rally_marker
+origin "5238 -2545 35"
+checkpoint "2"
+}
+
+// marker 3
+{
+classname rally_marker
+origin "8449 -3025 80"
+checkpoint "3"
+}
+
+// marker 4
+{
+classname rally_marker
+origin "9518 -483 80"
+checkpoint "4"
+}
+
+// marker 5
+{
+classname rally_marker
+origin "6632 893 80"
+checkpoint "5"
+}
+
+// marker 6
+{
+classname rally_marker
+origin "4485 2641 80"
+checkpoint "6"
+}
+
+// marker 6b
+{
+classname rally_marker
+origin "5494 3609 80"
+checkpoint "6"
+}
+
+// marker 7
+{
+classname rally_marker
+origin "1605 3988 80"
+checkpoint "7"
+}
+
+// marker 8
+{
+classname rally_marker
+origin "-3477 996 80"
+checkpoint "8"
+}

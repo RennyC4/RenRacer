@@ -193,6 +193,8 @@ frame, the ai_time limits it's actual updating
 
 float stagger_think;
 .float bot_backup_finished;
+void() headlights_on;
+
 void() BotAI =
 {
 	// stagger the bot's AI out so they all don't think at the same time, causing game 'spikes'
@@ -209,6 +211,14 @@ void() BotAI =
 		}
 		else
 			return;
+	}
+	
+	// Turn on headlights once
+	// TODO: Have the AI detect when in a dark map / area
+	if (!self.headlights)// && world.model == "maps/map4.hmp")
+	{
+		self.headlights = TRUE;
+		headlights_on();
 	}
 
 	if (!self.goal_touched)
@@ -326,7 +336,7 @@ void() BotAI =
 		bprint (d2, "\n");
 		bprint (d3, "\n");
 		*/
-	}	
+	}
 };
 
 

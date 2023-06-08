@@ -66,9 +66,10 @@ sv_playerslots 4 // 4 racers, 1 player + 3 bots
 r_shadows 2 // realtime shadows
 r_coronas 0 // turn off, looks silly with headlights
 musicvolume 0.5
-sv_gravity 1200 // subject to change
+sv_gravity 1200 // feels best
 sv_autooffload 0 // 1 = smoother performance? judderfest
 cl_lerp_smooth 1
+r_shadow_realtime_world 1
 
 //mod_terrain_shadows 1 // Broken?
 mod_terrain_ambient 0

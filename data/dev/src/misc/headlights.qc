@@ -6,12 +6,12 @@ void() headlight_update =
 	local vector middle;
 
 	self.pflags = PFLAGS_FULLDYNAMIC;
-	self.light_lev = 325;
+	self.light_lev = 1600;
 	self.color = [1, 1, 1];
 
 	makevectors (self.owner.realang);
-	traceline (self.owner.origin + v_forward * (40 + self.owner.realspeed), (self.owner.origin+(v_forward * 512)) , FALSE , self);
-	middle = (self.owner.origin - v_up * 32 + v_forward * (40 + self.owner.realspeed) + trace_endpos) / 2;
+	traceline (self.owner.origin + v_up * 64  + v_forward * (40 + self.owner.realspeed), (self.owner.origin+(v_forward * 1024)) , FALSE , self);
+	middle = (self.owner.origin + v_up * 128 + v_forward * (40 + self.owner.realspeed) + trace_endpos) / 2;
 
 	if (self.classname == "flash")
        	setorigin (self, trace_endpos + (v_forward * -5));
