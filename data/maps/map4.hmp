@@ -131,3 +131,63 @@ classname rally_marker
 origin "-3477 996 80"
 checkpoint "8"
 }
+
+// decor - flare 1
+{
+classname flare
+origin "1179 329 81"
+}
+
+// decor - flare 2
+{
+classname flare
+origin "1105 -262 83"
+}
+
+// decor - flare 3
+{
+classname flare
+origin "3157 84 95"
+}
+
+// decor - flare 4
+{
+classname flare
+origin "4952 -1521 26"
+}
+
+// decor - flare 5
+{
+classname flare
+origin "9072 -2501 81"
+}
+
+// decor - flare 6
+{
+classname flare
+origin "8676 1004 146"
+}
+
+// decor - flare 7
+{
+classname flare
+origin "6457 1557 81"
+}
+
+// decor - flare 8
+{
+classname flare
+origin "2874 4162 81"
+}
+
+// decor - flare 9
+{
+classname flare
+origin "-1310 3014 81"
+}
+
+// decor - flare 10
+{
+classname flare
+origin "-2618 129 81"
+}
