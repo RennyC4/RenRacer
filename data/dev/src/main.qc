@@ -18,6 +18,7 @@ void() CSEv_GrabCSQCValues =
 	clientstat(STAT_DRIVING, EV_FLOAT, driving);
 	globalstat(STAT_RACESTATUS, EV_FLOAT, "race_status");
 	clientstat(STAT_TIME, EV_FLOAT, laptime);
+	clientstat(STAT_TURBO, EV_FLOAT, turbo);
 };
 
 void() world_lights =

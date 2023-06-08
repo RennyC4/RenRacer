@@ -6,11 +6,39 @@
 +=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
 | Handle and execute "Impulse" commands - as entered from console.           |
 +=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
-*/      
+*/
+
+void(vector dest) car_teleport =
+{
+	// This is a WIP
+	sprint(self, "car_teleport(); called\n");
+	
+	// Update vehicle particle origins
+	local entity part = self.driving.physobj_particlelist;
+	while(part)
+	{
+		setorigin(part, dest);
+		//part.velocity = '0 0 0';
+		part.oldorigin = dest;
+		part = part.physobj_next;
+	}
+	// Update vehicle hitmodel origins
+	local entity hitmodel = self.driving.physobj_hitmodel;
+	while (hitmodel)
+	{
+		setorigin(hitmodel, dest);
+		//hitmodel.velocity = '0 0 0';
+		hitmodel.oldorigin = dest;
+		hitmodel = hitmodel.physobj_next;
+	}
+	force_retouch = 2;
+};
 
 void() CheckImpulses =
 {
 	if (self.impulse == 1)
 		headlights_toggle();
+	if (self.impulse == 2)
+		car_teleport('0 0 160');
 	self.impulse = 0;
 };

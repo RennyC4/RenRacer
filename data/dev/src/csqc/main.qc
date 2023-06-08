@@ -1,8 +1,10 @@
+void() SUB_Remove = {remove(self);return;};
+
 //
 // Main Loop
 //
-
 entity sky;
+
 void(float width, float height, float menushown) CSQC_UpdateView =
 {
 	g_width = width;
@@ -32,9 +34,14 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 	DrawDrift('80 315'); // Draw Drift Stats
 	DrawTime ('25 335'); // Draw Lap Time Stats
 
-	//Race Status
+	// Race Status
 	//local float test = getstatf(STAT_RACESTATUS);
 	//print(ftos(test), "\n");
+	
+	// Turbo Press Status
+	local float speedl = getstatf(STAT_TURBO);
+	if (speedl)
+		DrawSpeedLines(); // Draw Speed Lines on Turbo
 
 	// Engine sounds (taken from build a delivery, optimized (thanks spike))
 	local float speed = getstatf(STAT_SPEED);
@@ -60,6 +67,7 @@ noref void(float apiver, string enginename, float enginever) CSQC_Init = {};
 
 void() CSQC_WorldLoaded  =
 {
+	precache_model ("progs/v_speed.mdl");
 	precache_sound ("engine/engine.wav");
 	// Spawn sky
 	sky = spawn();

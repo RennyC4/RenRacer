@@ -2,9 +2,11 @@
 
 //CSQC extensions start here.
 csqc/csdefs.qc
+csqc/entdraw.qc
 csqc/camera.qc
 csqc/turbo.qc
 csqc/speed.qc
 csqc/drift.qc
 csqc/time.qc
+csqc/speedline.qc
 csqc/main.qc

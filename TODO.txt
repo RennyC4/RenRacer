@@ -1,7 +1,7 @@
 TODO: Polish headlights, pflags / white lights instead of DIMLIGHT
 TODO: Tracebox on cars
 	- Works but kind of broken: Maybe reducing the trace by 1's would work? Wheels get stuck
-TODO: Race4: Moon textures + low graivty + dark (use headlights)
+TODO: Race4: Moon textures + low graivty + dark (use headlights) + add flares
 TODO: Impact sound - Car smash (wall, other car)
 TODO: Breakable brushes (request by xaGe)
 TODO: New collision car->car physics, even if it's fake/lame
@@ -10,6 +10,7 @@ TODO: Car colors / Driver match .colormap - WIP
 
 ====
 
+Done: Speedlines on turboing
 Done: Make checkpoints appear sky-high
 Done: Show overall time & best lap on win screen
 Done: Particles on tires (dirt)

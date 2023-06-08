@@ -2618,3 +2618,4 @@ float g_width, g_height; /* Globals for screen width and height */
 #define STAT_DRIVING 35
 #define STAT_RACESTATUS 36
 #define STAT_TIME 37
+#define STAT_TURBO 38

@@ -456,3 +456,4 @@ var float PART_DIRT;
 #define STAT_DRIVING 35
 #define STAT_RACESTATUS 36
 #define STAT_TIME 37
+#define STAT_TURBO 38
