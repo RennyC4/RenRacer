@@ -25,7 +25,7 @@ origin "6 0 80"
 // start / finish goal
 {
 classname rally_startfinish_flag
-origin "1128 26 80"
+origin "1128 26 82"
 angles "0 0 0"
 spawnflags "1"
 lap "4"

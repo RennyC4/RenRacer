@@ -655,7 +655,7 @@ void TryUpdateVehicle(){
 
 				if (!self.turbosfx)
 				{
-					sound (self, CHAN_VOICE, "turbo.wav", 1, ATTN_NORM);
+					sound (self, CHAN_WEAPON, "turbo.wav", 1, ATTN_NORM);
 					self.turbosfx = TRUE;
 				}
 				Car_Accelerate(3000, 950);

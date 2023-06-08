@@ -6,47 +6,48 @@ void() marker_think =
 {
 	local float OK = 0;
 
-	local entity targ = findradius(self.origin, self.radius);
-	while (targ)
+	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
-		if (targ.classname == "player" && visible(targ) && cvar("developer") != 1)
+		if (vlen(targ.origin - self.origin ) <= self.radius)
 		{
-			if (targ.goal_touched && race_status == RACE_STARTED) // Player has to drive through the goals before markers are activated
+			if (targ.classname == "player" && visible(targ) && cvar("developer") != 1)
 			{
-				if (self.checkpoint == 1) // first check point
+				if (targ.goal_touched && race_status == RACE_STARTED) // Player has to drive through the goals before markers are activated
 				{
-					if (targ.checkpoint == 0)
+					if (self.checkpoint == 1) // first check point
 					{
-						targ.checkpoint = self.checkpoint;
-						self.enemy = targ;
+						if (targ.checkpoint == 0)
+						{
+							targ.checkpoint = self.checkpoint;
+							self.enemy = targ;
+						}
 					}
-				}
-				else if (self.checkpoint > 1)
-				{
-					if (targ.checkpoint == (self.checkpoint - 1))
+					else if (self.checkpoint > 1)
 					{
-						targ.checkpoint = self.checkpoint;
-						self.enemy = targ;
+						if (targ.checkpoint == (self.checkpoint - 1))
+						{
+							targ.checkpoint = self.checkpoint;
+							self.enemy = targ;
+						}
 					}
-				}
 
-				if (self.enemy) // Do check point confirm
-				{
-					self.enemy.effects = EF_MUZZLEFLASH;
-					self.cnt = TRUE; // Start animation
-					self.effects = self.effects | EF_DIMLIGHT;
-					local string l = ftos(self.enemy.laptime);
-					l = sprintf("%.2f", self.enemy.laptime); // cut down numbers
-					centerprint (self.enemy, "/P^4[^bCheckpoint^b]\n", "^7Time: ^5", l, "\n");
-					self.enemy.clearcprint_finished = time + 1;
-					sound (self, CHAN_AUTO, "checkpoint.wav", 1, ATTN_NORM);
-					self.enemy = world;
+					if (self.enemy) // Do check point confirm
+					{
+						self.enemy.effects = EF_MUZZLEFLASH;
+						self.cnt = TRUE; // Start animation
+						self.effects = self.effects | EF_DIMLIGHT;
+						local string l = ftos(self.enemy.laptime);
+						l = sprintf("%.2f", self.enemy.laptime); // cut down numbers
+						centerprint (self.enemy, "/P^4[^bCheckpoint^b]\n", "^7Time: ^5", l, "\n");
+						self.enemy.clearcprint_finished = time + 1;
+						sound (self, CHAN_AUTO, "checkpoint.wav", 1, ATTN_NORM);
+						self.enemy = world;
+					}
 				}
+				else if (race_status != RACE_FINISHED)
+					centerprint (targ, "You must drive through the starting goal to properly start the race!");
 			}
-			else if (race_status != RACE_FINISHED)
-				centerprint (targ, "You must drive through the starting goal to properly start the race!");
 		}
-		targ = targ.chain;
 	}
 
 	if (self.cnt) // Animation on

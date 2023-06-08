@@ -73,3 +73,4 @@ https://www.naturalreaders.com/online/ - Announcer voice
 MANUEL / GAS GAS GAS - Race1.ogg
 The End By A-ONE ft Odyssey - Race2.ogg
 https://freestocktextures.com/photos-ground/ - Some terrain textures
+kilomile - v_speed.mdl

@@ -2612,6 +2612,11 @@ vector campos;
 vector camang;
 float g_width, g_height; /* Globals for screen width and height */
 
+float RACE_NOTSTARTED = 0;
+float RACE_COUNTDOWN = 1;
+float RACE_STARTED = 2;
+float RACE_FINISHED = 4;
+
 #define STAT_TURBOFUEL 32
 #define STAT_SPEED 33
 #define STAT_DRIFT 34

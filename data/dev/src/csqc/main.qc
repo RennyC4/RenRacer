@@ -39,8 +39,7 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 	DrawTime ('25 335'); // Draw Lap Time Stats
 
 	// Race Status
-	//local float test = getstatf(STAT_RACESTATUS);
-	//print(ftos(test), "\n");
+	local float rs = getstatf(STAT_RACESTATUS);
 
 	// Engine sounds (taken from build a delivery, optimized (thanks spike))
 	local float speed = getstatf(STAT_SPEED);
@@ -57,7 +56,7 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 	// Turbo Press Status
 	local float speedl = getstatf(STAT_TURBO);
 	local float turbof = getstatf(STAT_TURBOFUEL);
-	if (speedl && turbof > 0)
+	if (speedl && turbof > 0 && rs != RACE_FINISHED)
 		DrawSpeedLines(); // Draw Speed Lines on Turbo
 	//
 
