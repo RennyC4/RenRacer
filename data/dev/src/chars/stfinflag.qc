@@ -10,9 +10,9 @@ void() rally_goal_proxy_think =
 {
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
-		if (vlen(targ.origin - self.origin ) <= self.radius)
+		if (vlen(targ.origin - self.origin) <= self.radius)
 		{ 	// Race start
-			if (targ && targ.classname == "player")// && visible(targ) && cvar("developer") != 1)
+			if (targ && targ.classname == "player" && visible(targ) && cvar("developer") != 1)
 			{
 				if (targ.checkpoint == 0 && !targ.goal_touched)
 				{

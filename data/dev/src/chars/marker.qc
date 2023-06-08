@@ -8,7 +8,7 @@ void() marker_think =
 
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
-		if (vlen(targ.origin - self.origin ) <= self.radius)
+		if (vlen(targ.origin - self.origin) <= self.radius)
 		{
 			if (targ.classname == "player" && visible(targ) && cvar("developer") != 1)
 			{
