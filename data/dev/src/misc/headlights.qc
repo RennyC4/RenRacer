@@ -5,10 +5,12 @@ void() headlight_update =
 {
 	local vector middle;
 
-	self.effects = EF_DIMLIGHT;  
+	self.pflags = PFLAGS_FULLDYNAMIC;
+	self.light_lev = 325;
+	self.color = [1, 1, 1];
 
 	makevectors (self.owner.realang);
-	traceline (self.owner.origin + v_forward * (40 + self.owner.realspeed), (self.owner.origin+(v_forward * 412)) , FALSE , self);
+	traceline (self.owner.origin + v_forward * (40 + self.owner.realspeed), (self.owner.origin+(v_forward * 512)) , FALSE , self);
 	middle = (self.owner.origin - v_up * 32 + v_forward * (40 + self.owner.realspeed) + trace_endpos) / 2;
 
 	if (self.classname == "flash")
