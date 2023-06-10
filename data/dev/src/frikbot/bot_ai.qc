@@ -120,63 +120,23 @@ void() bot_angle_set =
 .float findcheckpoint_fail;
 void() FindGoalPoint =
 {
-	local entity y = findradius(self.origin, 99999);
-	while (y)
-	{
-		if (y.classname == "bot_waypoint_goal")
-		{
-			self.goalentity = self.target1 = y;
-			self.findcheckpoint_fail = 0;
-		}
-		y = y.chain;
-	}
-
-/*
-	local entity y, head, ent = world;
-	head = world;
-
-	y = find(world, classname, "bot_waypoint_goal");
-	while(y)
+	for (entity y = world;(y = find(y, classname, "bot_waypoint_goal"));)
 	{
 		self.goalentity = self.target1 = y;
 		self.findcheckpoint_fail = 0;
-		y = find(y, classname, "bot_waypoint_goal");
 	}
-	if (head)
-		ent.chain = world;
-*/
 };
 
 void() FindCheckPoint =
 {
-	local entity y = findradius(self.origin, 99999);
-	while (y)
-	{
-		if (y.classname == "marker" && y.checkpoint == self.checkpoint + 1)
-		{
-			self.goalentity = self.target1 = y;
-			self.findcheckpoint_fail = 0;
-		}
-		y = y.chain;
-	}
-
-/*
-	local entity y, head, ent = world;
-	head = world;
-
-	y = find(world, classname, "marker");
-	while(y)
+	for (entity y = world;(y = find(y, classname, "marker"));)
 	{
 		if (y.checkpoint == self.checkpoint + 1)
 		{
 			self.goalentity = self.target1 = y;
 			self.findcheckpoint_fail = 0;
 		}
-		y = find(y, classname, "marker");
 	}
-	if (head)
-		ent.chain = world;
-*/
 };
 
 
@@ -197,7 +157,7 @@ void() headlights_on;
 
 void() BotAI =
 {
-	// stagger the bot's AI out so they all don't think at the same time, causing game 'spikes'
+	// stagger the bots AI out so they all don't think at the same time, causing game 'spikes'
 	if (self.b_skill < 2)
 	{
 		if (self.ai_time > time)
@@ -212,7 +172,7 @@ void() BotAI =
 		else
 			return;
 	}
-	
+
 	// Turn on headlights once
 	// TODO: Have the AI detect when in a dark map / area
 	if (!self.headlights && world.model == "maps/map4.hmp")
@@ -269,11 +229,16 @@ void() BotAI =
 				self.keys = KEY_MOVERIGHT;
 			return;
 		}
-		
+
+		//
 		// Back up for a second, hit a wall/obstacle
+		//
 		if (self.goal_touched && (self.keys == KEY_MOVEFORWARD || (self.button0 && self.turbo_fuel > 0)) && self.realspeed <= 3)
 			self.bot_backup_finished = time + 0.6 + random()*1.1;
 
+		//
+		// Normal driving routine
+		//
 		if (self.bot_backup_finished < time)
 		{
 			local float goforgoal;
