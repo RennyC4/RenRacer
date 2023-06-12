@@ -7,6 +7,9 @@
 //| does much, except to setup basic variables and entities.                   |
 //+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
 
+void() load_waypoints;
+void(vector org, float which, optional float speed) create_waypoint;
+
 void() main = {};
 
 // CSQC value requests
@@ -94,6 +97,7 @@ void() worldspawn =
 
 	world_lights();
 	BotInit();  // FrikBot
+	load_waypoints(); // Load waypoints
 	CSEv_GrabCSQCValues(); //CSQC Setup
 };
 

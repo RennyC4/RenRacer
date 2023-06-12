@@ -4,6 +4,9 @@ TODO: Impact sound - Car smash (wall, other car)
 TODO: Breakable brushes (request by xaGe) 
 TODO: New collision car->car physics, even if it's fake/lame
 TODO: Proper waypoints for bots, if one exists.. they follow it around the course, otherwise default checkpoint follow behavior
+	- Done the first particles
+	- .maxspeed on waypoints that bots have to adhere to - Done
+	- Have -1 waypoint speed cause the AI to turbo, WIP
 TODO: Car colors / Driver match .colormap - WIP
 
 ====

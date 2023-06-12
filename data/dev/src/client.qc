@@ -238,7 +238,7 @@ void() PutClientInServer =
 	self.cardrift_stabilizer = -1;
 	self.turbo_fuel = 100;
 	if (!cvar("developer"))
-	centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________\n\n\nPress [^b^1FIRE^7^b] to start the race");
+		centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________\n\n\nPress [^b^1FIRE^7^b] to start the race");
 	
 	// Frikbots Insta-spawn as the player does
 	if (!self.ishuman)

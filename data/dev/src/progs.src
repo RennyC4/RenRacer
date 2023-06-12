@@ -37,6 +37,7 @@ chars/marker.qc
 chars/rallygoal.qc
 chars/stfinflag.qc
 chars/countdown.qc
+chars/waypoint.qc
 
 // decorations
 chars/decor/pylon.qc

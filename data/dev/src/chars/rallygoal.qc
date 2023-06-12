@@ -96,6 +96,7 @@ void() rally_goal_touch =
 				sprint (other.owner.driving, "Fastest Lap: ", l4, "\n");
 
 			other.owner.driving.laptime = 0; // Reset lap time
+			other.owner.driving.waypoint = 0; // Reset bot waypoints
 
 			if (other.owner.driving.lap == self.lap)
 			{

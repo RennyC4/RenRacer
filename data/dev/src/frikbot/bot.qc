@@ -142,7 +142,7 @@ for all variable in the bot...
 .float route_failed, dyn_flags, dyn_time;
 .float dyn_plat;
 .entity	temp_way, last_way, phys_obj;
-.entity	target1, target2, target3, target4;
+//.entity	target1, target2, target3, target4;
 .entity	_next, _last;
 .entity	current_way;
 .vector	b_angle, b_dest, mouse_emu, obs_dir;

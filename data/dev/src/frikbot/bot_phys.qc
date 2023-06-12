@@ -138,7 +138,7 @@ void() SV_UserFriction =
 	local vector vel, start, stop;
 	local float sped, friction, newspeed;
 
-      vel = self.velocity;
+	vel = self.velocity;
 	vel_z =0;
 	sped = vlen(vel);
 	vel = self.velocity;
@@ -171,6 +171,7 @@ void() SV_UserFriction =
 	self.velocity_y = vel_y * newspeed;
 	self.velocity_x = vel_x * newspeed;
 };
+
 void() SV_WaterJump =
 {
 	if (time > self.teleport_time || !self.waterlevel)
@@ -192,7 +193,6 @@ void() DropPunchAngle =
 		len = 0;
 	self.punchangle = self.punchangle * len;
 };
-
 
 void(vector wishvel) SV_AirAccelerate =
 {
@@ -230,6 +230,7 @@ void(vector wishvel) SV_Accelerate =
 	
 	self.velocity = self.velocity + accelspeed * wishvel;	
 };
+
 void() SV_WaterMove =
 {
         local vector wishvel;
@@ -272,6 +273,7 @@ void() SV_WaterMove =
                 cspeed = addspeed;
         self.velocity = self.velocity + cspeed * wishvel;
 };
+
 void() SV_AirMove =
 {
 	local vector wishvel, vangle;
@@ -315,9 +317,10 @@ void() SV_ClientThink =
 	vangle = self.v_angle + self.punchangle;
 	if (!self.fixangle)
 	{
-                self.angles_x = (vangle_x / -3);
+		self.angles_x = (vangle_x / -3);
 		self.angles_y = vangle_y;
-	} else
+	}
+	else
 	{
 		self.v_angle = self.angles;
 		self.fixangle = 0;
@@ -335,6 +338,7 @@ void() SV_ClientThink =
 	SV_AirMove();
 
 };
+
 /*
 =========================================
 
@@ -379,8 +383,8 @@ float() SV_CheckWater =
 	cont = pointcontents(point);
 	if (cont <= CONTENT_WATER)
 	{
-                self.watertype = cont;
-                self.waterlevel = 1;
+        self.watertype = cont;
+        self.waterlevel = 1;
 		point_z = self.origin_z + (self.mins_z + self.maxs_z) * 0.5;
 		cont = pointcontents(point);
 		if (cont <= CONTENT_WATER)
@@ -393,8 +397,8 @@ float() SV_CheckWater =
 		}
 	}
 	return (self.waterlevel > 1);
-
 };
+
 void() RemoveThud = // well sometimes
 { 
 	local entity oself;
@@ -426,6 +430,7 @@ void() RemoveThud = // well sometimes
 	}
 
 };
+
 void() SV_CheckOnGround =
 {
 	local vector org, v;
@@ -454,6 +459,7 @@ void() SV_CheckOnGround =
 		self.flags = self.flags - FL_ONGROUND;
 	setorigin(self, org);
 };
+
 // Thanks to Alan Kivlin for this function
 // modified heavily by me
 float(vector dir) botCheckForStep =
@@ -488,6 +494,7 @@ float(vector dir) botCheckForStep =
 		setorigin(self, currentorigin);
 	return 0;
 }; 
+
 // this is merely here to fix a problem with e3m5
 void(vector dir) BruteForceStep =
 {
@@ -577,9 +584,9 @@ void() PostPhysics =
 	self.dmg_take = self.dmg_save = 0;
 
 };
+
 // Avoid calling BotAI and the physics at the same time
 // Can trip the runaway loop counter
-
 void() SV_FlyMove =
 {
 	// This is nothing like the Quake function.
@@ -613,7 +620,6 @@ void() SV_FlyMove =
 	self.phys_obj.nextthink = time;
 };
 
-
 void() SV_Physics_Toss =
 {
 	if (!SV_RunThink())
@@ -630,6 +636,7 @@ void() SV_Physics_Toss =
 	SV_FlyMove();
 
 };
+
 void() SV_Physics_Client =
 {
 
@@ -672,7 +679,6 @@ void() SV_Physics_Client =
 	}
 	else
 		error ("SV_Physics_Client: Bad Movetype (BOT)");
-
 };
 
 

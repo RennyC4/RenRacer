@@ -81,6 +81,11 @@ void() CSQC_WorldLoaded  =
 		// Spawn sky
 		sky = spawn();
 		sky.scale = 6;
+
+		// Sky colours here
+		if (world.model == "maps/map3.hmp")
+			sky.colormod = '2 .5 .5';
+
 		precache_model ("progs/sky.iqm");
 		setmodel(sky, "progs/sky.iqm");
 	}

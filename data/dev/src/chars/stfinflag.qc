@@ -96,6 +96,7 @@ void() rally_goal_proxy_think =
 							sprint (targ, "Fastest Lap: ", l4, "\n");
 
 						targ.laptime = 0; // Reset lap time
+						targ.waypoint = 0; // Reset bot waypoints
 
 						if (targ.lap == self.lap)
 						{

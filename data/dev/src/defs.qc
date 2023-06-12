@@ -443,6 +443,9 @@ var float PART_DIRT;
 .float count;
 .float search_time;
 .float state;
+.float waypoint;
+.float waypoint_speed;
+float total_waypoints;
 
 .vector dest1;
 .vector dest2;

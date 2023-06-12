@@ -6,6 +6,7 @@ nosky
 sky
 {
 	{
+		rgbgen entity
 		map progs/skygradient.tga
 	}
 }
