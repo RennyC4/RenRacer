@@ -42,14 +42,6 @@ this notice in its entirety.
 
 */
 
-float stagger_think;
-.float bot_backup_finished;
-.float bot_usewaypoint_system;
-.float bot_mode;
-.float bot_search_newgoal;
-.entity bot_oldgoal;
-void() headlights_on;
-
 /*
 =============
 infront (of car)
@@ -63,7 +55,7 @@ float(entity targ) infront =
 	local vector vec = normalize (targ.origin - self.origin);
 	local float dot = vec * v_forward;
 
-	if (dot > 0.6)
+	if (dot > 0.9)
 		return TRUE;
 	return FALSE;
 };
@@ -125,59 +117,39 @@ void() bot_angle_set =
 		self.v_angle_x = self.v_angle_x - 360;
 };
 
+.float findcheckpoint_fail;
 void() FindGoalPoint =
 {
 	for (entity y = world;(y = find(y, classname, "bot_waypoint_goal"));)
+	{
 		self.goalentity = y;
+		self.findcheckpoint_fail = 0;
+	}
 };
 
-float() FindCheckPoint =
+void() FindCheckPoint =
 {
 	for (entity y = world;(y = find(y, classname, "marker"));)
 	{
 		if (y.checkpoint == self.checkpoint + 1)
 		{
 			self.goalentity = y;
-			return TRUE;
+			self.findcheckpoint_fail = 0;
 		}
 	}
-	return FALSE;
 };
 
-float() FindWayPoint =
+void() FindWayPoint =
 {
 	for (entity y = world;(y = find(y, classname, "bot_waypoint"));)
 	{
-		if (y.waypoint == self.waypoint + 1)
+		if (/*infront(y) && */ visible(y) && self.waypoint < y.waypoint)
 		{
-			self.waypoint_speed = y.waypoint_speed; // Set waypoint speed on bot
-			if (self.goalentity)
-				self.bot_oldgoal = self.goalentity; // Stash the old goalentity
+			y.colormod = '1 1 5';
 			self.goalentity = y;
-			return TRUE;
+			self.waypoint_speed = y.waypoint_speed; // Set waypoint speed on bot
 		}
 	}
-	return FALSE;
-};
-
-entity() FindNextWayPoint =
-{
-	for (entity y = world;(y = find(y, classname, "bot_waypoint"));)
-	{
-		if (y.waypoint == self.waypoint + 2)
-			return y;
-	}
-	return FALSE;
-};
-
-float() FindAnyWayPoint =
-{
-	for (entity y = world;(y = find(y, classname, "bot_waypoint"));)
-	{
-		if (y.waypoint == self.waypoint + 1)
-			return TRUE;
-	}
-	return FALSE;
 };
 
 /*
@@ -190,6 +162,11 @@ frame, the ai_time limits it's actual updating
 
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 */
+
+float stagger_think;
+.float bot_backup_finished;
+.float bot_search_finished;
+void() headlights_on;
 
 void() BotAI =
 {
@@ -217,61 +194,31 @@ void() BotAI =
 		headlights_on();
 	}
 
-	if (!self.goal_touched) // Start the race
+	if (!self.goal_touched)
 	{
 		if (!self.goalentity)
+		{
 			FindGoalPoint();
+			//bprint ("FindGoalPoint_STARTRACE\n");
+		}
 	}
 	else
 	{
 		if (!self.goalentity)
 		{
-			if (self.bot_mode == 0) // Setup which mode wp vs cp
+			//bprint ("FindCheckPoint\n");
+			FindCheckPoint();
+			self.findcheckpoint_fail = self.findcheckpoint_fail + 1;
+			if (self.findcheckpoint_fail > 1)
 			{
-				local float awp = FindAnyWayPoint();
-				if (!awp)
-					self.bot_mode = 1; // checkpoint mode on
-				else
-					self.bot_mode = 2; // waypoint mode on
-			}
-
-			if (self.bot_mode == 1) // Checkpoint mode
-			{
-				local float fcp = FindCheckPoint();
-				if (!fcp)
-					FindGoalPoint();
-			}
-			else if (self.bot_mode == 2) // Waypoint mode
-			{
-				local float wp = FindWayPoint();
-				local entity nwp = FindNextWayPoint();
-
-				if (visible(nwp) && infront(nwp))
-				{
-					if (self.goalentity)
-						self.bot_oldgoal = self.goalentity; // Stash the old goalentity
-					self.goalentity = nwp;
-					self.waypoint_speed = nwp.waypoint_speed;
-				}				
-				if (!wp && !nwp)
-				{
-					FindGoalPoint();
-					bprint ("Go for goal\n");
-				}
+				FindGoalPoint();
+				//bprint ("FindGoalPoint\n");
 			}
 		}
 		else
 		{
-			if (self.bot_mode == 1)
-			{
-				if (self.checkpoint == self.goalentity.checkpoint) // Find next checkpoint
-					self.goalentity = world;
-			}
-			else
-			{
-				if (self.waypoint == self.goalentity.waypoint) // Find next waypoint
-					self.goalentity = world;
-			}
+			if (self.checkpoint == self.goalentity.checkpoint) // Find next checkpoint
+				self.goalentity = world;
 		}
 	}
 
@@ -299,18 +246,28 @@ void() BotAI =
 		//
 		// Back up for a second, hit a wall/obstacle
 		//
-
 		if (self.goal_touched && (self.keys == KEY_MOVEFORWARD || (self.button0 && self.turbo_fuel > 0)) && self.realspeed <= 3)
 			self.bot_backup_finished = time + 0.6 + random()*1.1;
 
 		//
 		// Normal driving routine
 		//
-
 		if (self.bot_backup_finished < time)
 		{
+			if (self.bot_search_finished < time)
+			{
+				if (self.goalentity.classname == "marker" && !visible(self.goalentity))
+					FindWayPoint(); // Find waypoints along the way
+				if (self.goalentity.classname == "bot_waypoint")
+					FindCheckPoint(); // Always refind markers
+
+				//if (!(self.origin_z < self.goalentity.origin_z + 20 && self.origin_z > self.goalentity.origin_z - 20))
+				//	bprint ("WHAT THE F\n");
+	
+				self.bot_search_finished = time + 0.1;
+			}
 			local float goforgoal;
-			if (self.goalentity.classname == "bot_waypoint_goal" || (infront(self.goalentity) && visible(self.goalentity)))
+			if (self.goalentity.classname == "bot_waypoint_goal")// || infront(self.goalentity) && visible(self.goalentity))
 				goforgoal = TRUE;
 			else
 				goforgoal = FALSE;
@@ -320,7 +277,6 @@ void() BotAI =
 				if (r > 125 || goforgoal)
 					if (infront(self.goalentity))
 						if (self.turbo_fuel >= 25)
-							if (!self.waypoint_speed)
 							self.button0 = TRUE;
 				else
 					self.button0 = FALSE;
@@ -344,47 +300,22 @@ void() BotAI =
 				}
 			}
 
-			// Waypoint mode specifics
-			if (self.bot_mode == 2)
+			// Adhere to waypoint set speeds
+			if (self.waypoint_speed > 0)
 			{
-				if (self.bot_search_newgoal < time) // Search out next waypoints while driving
-				{
-					nwp = FindNextWayPoint();
-					if (visible(nwp) && infront(nwp))
-					{
-						if (self.goalentity)
-							self.bot_oldgoal = self.goalentity; // Stash the old goalentity
-						self.goalentity = nwp;
-						self.waypoint_speed = nwp.waypoint_speed;
-					}
-					wp = FindWayPoint();
-					if (!wp) // && !nwp)
-					{
-						bprint ("Go for goal\n");
-						FindGoalPoint();
-						self.bot_search_newgoal = time + 1;
-					}
-					self.bot_search_newgoal = time + 0.25;
-				}
-
-				// Adhere to waypoint set speeds
-				if (self.waypoint_speed > 0)
-				{
-					if (self.realspeed > self.waypoint_speed)
-						self.keys = KEY_MOVEBACK;
-					else
-						self.keys = KEY_MOVEFORWARD;
-				}
-				else if (self.waypoint_speed == -1)
-					self.button0 = TRUE; // Waypoint says to Turbo
+				if (self.realspeed > self.waypoint_speed)
+					self.keys = KEY_MOVEBACK;
+				else
+					self.keys = KEY_MOVEFORWARD;
 			}
-			
+
 			// Fight inclines
 			if (self.goalentity.origin_z > self.origin_z && self.angles_x >= 5 && infront(self.goalentity))
 			{
 				self.keys = KEY_MOVEFORWARD;
 				if (self.turbo_fuel >= 25)
 					self.button0 = TRUE;
+				//bprint ("Fighting an incline\n");
 			}
 		}
 		else // backing up
@@ -432,7 +363,6 @@ void() BotAI =
 		self.last_way = world;
 		return;
 	}
-		
 
 	if (self.view_ofs == '0 0 0')
 		bot_start_topic(7);
