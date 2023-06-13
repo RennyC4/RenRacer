@@ -147,6 +147,7 @@ void() FindCheckPoint =
 				self.old_goalentity = self.goalentity; // Stash it
 
 			self.goalentity = y;
+			self.bot_search_count = 0;
 			self.waypoint_speed = y.waypoint_speed; // Set waypoint speed on bot if marker has one
 			self.findcheckpoint_fail = 0;
 		}
@@ -163,6 +164,7 @@ void() FindCheckPointDriving =
 				self.old_goalentity = self.goalentity; // Stash it
 
 			self.goalentity = y;
+			self.bot_search_count = 0;
 			self.waypoint_speed = y.waypoint_speed; // Set waypoint speed on bot if marker has one
 			self.findcheckpoint_fail = 0;
 		}
@@ -180,6 +182,7 @@ void() FindWayPoint =
 
 			y.colormod = '1 1 5';
 			self.goalentity = y;
+			self.bot_search_count = 0;
 			self.waypoint_speed = y.waypoint_speed; // Set waypoint speed on bot
 		}
 	}
@@ -214,6 +217,8 @@ void() BotAI =
 			return;
 	}
 
+	stagger_think = time;
+
 	// Turn on headlights once
 	// TODO: Have the AI detect when in a dark map / area
 	if (!self.headlights && world.model == "maps/map4.hmp")
@@ -222,13 +227,14 @@ void() BotAI =
 		headlights_on();
 	}
 
+	//
+	// Bot searches for stuff
+	//
+
 	if (!self.goal_touched)
 	{
 		if (!self.goalentity)
-		{
 			FindGoalPoint();
-			bprint ("FindGoalPoint_STARTRACE\n");
-		}
 	}
 	else
 	{
@@ -239,8 +245,7 @@ void() BotAI =
 			if (self.findcheckpoint_fail > 1) // Reached the end of checkpoints
 			{
 				FindGoalPoint();
-				//if (!visible(self.goalentity))
-				//	FindWayPoint(); // Can't see goal, find next waypoint for now
+				//bprint("Go for Goal!\n");
 			}
 		}
 		else
@@ -250,18 +255,23 @@ void() BotAI =
 		}
 	}
 
+	//
+	// Normal driving routine
+	//
+		
 	if (self.goalentity)
 	{
 		local float r = vlen(self.origin - self.goalentity.origin) * 0.1; // Find distance to goalentity target
 
 		// Debug distance to goalentity
-		//local string f = ftos(self.realspeed);
-		//local string n = ftos(r);
-		//bprint ("Speed: ", f, " Dist: ", n, "\n");
+		// local string f = ftos(self.realspeed);
+		// local string n = ftos(r);
+		// bprint ("Speed: ", f, " Dist: ", n, "\n");
 
 		//
 		// Get out of being toppled / rolling
 		//
+
 		if (self.realang_z > -330 && self.realang_z < -30)
 		{
 			if (self.realang_z < -180)
@@ -274,36 +284,50 @@ void() BotAI =
 		//
 		// Back up for a second, hit a wall/obstacle
 		//
+
 		if (self.goal_touched && (self.keys == KEY_MOVEFORWARD || (self.button0 && self.turbo_fuel > 0)) && self.realspeed <= 3)
 			self.bot_backup_finished = time + 0.6 + random()*1.1;
 
-		//
-		// Normal driving routine
-		//
 		if (self.bot_backup_finished < time)
 		{
 			if (self.bot_search_finished < time)
 			{
-				if (self.findcheckpoint_fail > 1) // Reached the end of valid checkpoints
-				{
-					FindGoalPoint(); // Go for goal
-					if (!visible(self.goalentity)) // Goal can't be seen
-						FindWayPoint(); // Find the next waypoint
-				}
 				if (self.goalentity.classname == "marker" && !visible(self.goalentity))
 					FindWayPoint(); // Find waypoints along the way
 				if (self.goalentity.classname == "bot_waypoint")
 					FindCheckPointDriving(); // Always find visible checkpoints
-
+				if (self.goalentity.classname == "bot_waypoint_goal" && self.goal_touched)
+				{
+					if (!visible(self.goalentity))
+						FindWayPoint();
+					else
+					{
+						if (self.goalentity.classname != "bot_waypoint_goal")
+							FindGoalPoint();
+					}
+				}
 				//if (!(self.origin_z < self.goalentity.origin_z + 20 && self.origin_z > self.goalentity.origin_z - 20))
 				//	bprint ("WHAT THE F\n");
 	
-				self.bot_search_finished = time + 0.1;
-				if (self.bot_search_count < time)
+			
+				if (race_status == RACE_STARTED)
 				{
-					self.bot_search_count = time + 3; // count till targ switch (TODO: Implement a way)
-					bprint ("bot search count done\n");
+					if (!visible(self.goalentity))
+						self.bot_search_count = self.bot_search_count + 1; // count till targ switch
+					else
+						self.bot_search_count = 0;
 				}
+				if (self.bot_search_count > 25) // Bot is stuck, so let's try and fix that
+				{
+					if (self.waypoint > 0)
+						self.waypoint = self.waypoint - 1;
+					if (self.goalentity != self.old_goalentity)
+						self.goalentity = self.old_goalentity;
+					else
+						FindWayPoint();
+					self.bot_search_count = 0;
+				}
+				self.bot_search_finished = time + 0.1;
 			}
 
 			if (self.goalentity.classname == "bot_waypoint_goal")
@@ -315,27 +339,18 @@ void() BotAI =
 			{
 				if (goforgoal)
 				{
-					if (r > 100)
-						if (infront(self.goalentity))
-							if (self.turbo_fuel >= 50)
-								self.button0 = TRUE;
-					else
+					if (infront(self.goalentity) && visible(self.goalentity))
 					{
-						if (self.realspeed > 30)
-						{
-							self.keys = KEY_MOVEBACK;
-							bprint ("Coming in too hot!\n");
-						}
-						self.button0 = FALSE;
+						if (self.turbo_fuel >= 0)
+							self.button0 = TRUE;
 					}
+					else
+						self.button0 = FALSE;
 				}
 				else
 				{
-					if (infront(self.goalentity) && visible(self.goalentity) && self.turbo_fuel > 0)
-					{
-						self.button0 = TRUE;
-						bprint ("Let's go!\n");
-					}
+					if (infront(self.goalentity) && visible(self.goalentity) && self.turbo_fuel > 0 && r >= 125)
+						self.button0 = TRUE; // Bot normal turbo
 					else
 						self.button0 = FALSE;
 				}
@@ -348,22 +363,24 @@ void() BotAI =
 					if (!goforgoal)
 					{
 						self.keys = KEY_MOVEBACK; // Slow down, coming in too fast!
-						bprint ("Moving in too hot!\n");
+						//bprint ("Moving in too hot!\n");
 					}
 					else
 						self.keys = KEY_MOVEFORWARD;
 				}
 				else
 				{
-					if (!self.goal_touched)
+					if (!self.goal_touched) // Go for goal point
 					{
 						self.button0 = TRUE;
 						self.keys = KEY_MOVEFORWARD;
 					}
 					else
 					{
-						if (self.realspeed < 40)
+						if (self.realspeed < 50)
 							self.keys = KEY_MOVEFORWARD;
+						else
+							self.keys = KEY_MOVEBACK;
 						self.button0 = FALSE;
 					}
 				}
@@ -382,7 +399,7 @@ void() BotAI =
 			if (self.goalentity.origin_z > self.origin_z && self.angles_x >= 5 && infront(self.goalentity))
 			{
 				self.keys = KEY_MOVEFORWARD;
-				if (self.turbo_fuel >= 25)
+				if (self.turbo_fuel >= 0)
 					self.button0 = TRUE;
 				//bprint ("Fighting an incline\n");
 			}
