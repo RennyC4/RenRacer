@@ -42,6 +42,13 @@ this notice in its entirety.
 
 */
 
+float stagger_think;
+.float bot_backup_finished;
+.float bot_search_finished;
+.entity old_goalentity;
+.float bot_search_count;
+void() headlights_on;
+
 /*
 =============
 infront (of car)
@@ -55,7 +62,7 @@ float(entity targ) infront =
 	local vector vec = normalize (targ.origin - self.origin);
 	local float dot = vec * v_forward;
 
-	if (dot > 0.9)
+	if (dot > 0.7)
 		return TRUE;
 	return FALSE;
 };
@@ -122,6 +129,9 @@ void() FindGoalPoint =
 {
 	for (entity y = world;(y = find(y, classname, "bot_waypoint_goal"));)
 	{
+		if (self.goalentity)
+			self.old_goalentity = self.goalentity; // Stash it
+
 		self.goalentity = y;
 		self.findcheckpoint_fail = 0;
 	}
@@ -133,7 +143,27 @@ void() FindCheckPoint =
 	{
 		if (y.checkpoint == self.checkpoint + 1)
 		{
+			if (self.goalentity)
+				self.old_goalentity = self.goalentity; // Stash it
+
 			self.goalentity = y;
+			self.waypoint_speed = y.waypoint_speed; // Set waypoint speed on bot if marker has one
+			self.findcheckpoint_fail = 0;
+		}
+	}
+};
+
+void() FindCheckPointDriving =
+{
+	for (entity y = world;(y = find(y, classname, "marker"));)
+	{
+		if (y.checkpoint == self.checkpoint + 1 && visible(y))
+		{
+			if (self.goalentity)
+				self.old_goalentity = self.goalentity; // Stash it
+
+			self.goalentity = y;
+			self.waypoint_speed = y.waypoint_speed; // Set waypoint speed on bot if marker has one
 			self.findcheckpoint_fail = 0;
 		}
 	}
@@ -143,8 +173,11 @@ void() FindWayPoint =
 {
 	for (entity y = world;(y = find(y, classname, "bot_waypoint"));)
 	{
-		if (/*infront(y) && */ visible(y) && self.waypoint < y.waypoint)
+		if (visible(y) && self.waypoint < y.waypoint)
 		{
+			if (self.goalentity)
+				self.old_goalentity = self.goalentity; // Stash it
+
 			y.colormod = '1 1 5';
 			self.goalentity = y;
 			self.waypoint_speed = y.waypoint_speed; // Set waypoint speed on bot
@@ -162,11 +195,6 @@ frame, the ai_time limits it's actual updating
 
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 */
-
-float stagger_think;
-.float bot_backup_finished;
-.float bot_search_finished;
-void() headlights_on;
 
 void() BotAI =
 {
@@ -199,20 +227,20 @@ void() BotAI =
 		if (!self.goalentity)
 		{
 			FindGoalPoint();
-			//bprint ("FindGoalPoint_STARTRACE\n");
+			bprint ("FindGoalPoint_STARTRACE\n");
 		}
 	}
 	else
 	{
 		if (!self.goalentity)
 		{
-			//bprint ("FindCheckPoint\n");
 			FindCheckPoint();
 			self.findcheckpoint_fail = self.findcheckpoint_fail + 1;
-			if (self.findcheckpoint_fail > 1)
+			if (self.findcheckpoint_fail > 1) // Reached the end of checkpoints
 			{
 				FindGoalPoint();
-				//bprint ("FindGoalPoint\n");
+				//if (!visible(self.goalentity))
+				//	FindWayPoint(); // Can't see goal, find next waypoint for now
 			}
 		}
 		else
@@ -225,7 +253,7 @@ void() BotAI =
 	if (self.goalentity)
 	{
 		local float r = vlen(self.origin - self.goalentity.origin) * 0.1; // Find distance to goalentity target
-		
+
 		// Debug distance to goalentity
 		//local string f = ftos(self.realspeed);
 		//local string n = ftos(r);
@@ -256,57 +284,98 @@ void() BotAI =
 		{
 			if (self.bot_search_finished < time)
 			{
+				if (self.findcheckpoint_fail > 1) // Reached the end of valid checkpoints
+				{
+					FindGoalPoint(); // Go for goal
+					if (!visible(self.goalentity)) // Goal can't be seen
+						FindWayPoint(); // Find the next waypoint
+				}
 				if (self.goalentity.classname == "marker" && !visible(self.goalentity))
 					FindWayPoint(); // Find waypoints along the way
 				if (self.goalentity.classname == "bot_waypoint")
-					FindCheckPoint(); // Always refind markers
+					FindCheckPointDriving(); // Always find visible checkpoints
 
 				//if (!(self.origin_z < self.goalentity.origin_z + 20 && self.origin_z > self.goalentity.origin_z - 20))
 				//	bprint ("WHAT THE F\n");
 	
 				self.bot_search_finished = time + 0.1;
+				if (self.bot_search_count < time)
+				{
+					self.bot_search_count = time + 3; // count till targ switch (TODO: Implement a way)
+					bprint ("bot search count done\n");
+				}
 			}
-			local float goforgoal;
-			if (self.goalentity.classname == "bot_waypoint_goal")// || infront(self.goalentity) && visible(self.goalentity))
-				goforgoal = TRUE;
+
+			if (self.goalentity.classname == "bot_waypoint_goal")
+				local float goforgoal = TRUE;
 			else
 				goforgoal = FALSE;
 
-			if (r >= 80) // Far from goal
+			if (r >= 100) // Far from goal
 			{
-				if (r > 125 || goforgoal)
-					if (infront(self.goalentity))
-						if (self.turbo_fuel >= 25)
-							self.button0 = TRUE;
+				if (goforgoal)
+				{
+					if (r > 100)
+						if (infront(self.goalentity))
+							if (self.turbo_fuel >= 50)
+								self.button0 = TRUE;
+					else
+					{
+						if (self.realspeed > 30)
+						{
+							self.keys = KEY_MOVEBACK;
+							bprint ("Coming in too hot!\n");
+						}
+						self.button0 = FALSE;
+					}
+				}
 				else
-					self.button0 = FALSE;
-
+				{
+					if (infront(self.goalentity) && visible(self.goalentity) && self.turbo_fuel > 0)
+					{
+						self.button0 = TRUE;
+						bprint ("Let's go!\n");
+					}
+					else
+						self.button0 = FALSE;
+				}
 				self.keys = KEY_MOVEFORWARD;
 			}
 			else // Close to goal
 			{
-				if (self.realspeed > 40)
+				if (self.realspeed > 50)
 				{
 					if (!goforgoal)
-						self.keys = KEY_MOVEBACK;
+					{
+						self.keys = KEY_MOVEBACK; // Slow down, coming in too fast!
+						bprint ("Moving in too hot!\n");
+					}
 					else
 						self.keys = KEY_MOVEFORWARD;
 				}
 				else
 				{
 					if (!self.goal_touched)
-						self.button0 = TRUE;					
-					self.keys = KEY_MOVEFORWARD;
+					{
+						self.button0 = TRUE;
+						self.keys = KEY_MOVEFORWARD;
+					}
+					else
+					{
+						if (self.realspeed < 40)
+							self.keys = KEY_MOVEFORWARD;
+						self.button0 = FALSE;
+					}
 				}
-			}
-
-			// Adhere to waypoint set speeds
-			if (self.waypoint_speed > 0)
-			{
-				if (self.realspeed > self.waypoint_speed)
-					self.keys = KEY_MOVEBACK;
-				else
-					self.keys = KEY_MOVEFORWARD;
+	
+				// Adhere to waypoint set speeds when close to waypoint/marker
+				if (self.waypoint_speed > 0)
+				{
+					if (self.realspeed > self.waypoint_speed)
+						self.keys = KEY_MOVEBACK;
+					else
+						self.keys = KEY_MOVEFORWARD;
+				}
 			}
 
 			// Fight inclines
