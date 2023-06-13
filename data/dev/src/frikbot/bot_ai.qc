@@ -175,12 +175,13 @@ void() FindWayPoint =
 {
 	for (entity y = world;(y = find(y, classname, "bot_waypoint"));)
 	{
+		//if (visible(y) && (y.waypoint == self.waypoint + 1 || y.waypoint == self.waypoint + 2))
 		if (visible(y) && self.waypoint < y.waypoint)
 		{
 			if (self.goalentity)
 				self.old_goalentity = self.goalentity; // Stash it
 
-			y.colormod = '1 1 5';
+			y.colormod = '1 1 5'; // For cvar developer 2
 			self.goalentity = y;
 			self.bot_search_count = 0;
 			self.waypoint_speed = y.waypoint_speed; // Set waypoint speed on bot
@@ -392,6 +393,13 @@ void() BotAI =
 						self.keys = KEY_MOVEBACK;
 					else
 						self.keys = KEY_MOVEFORWARD;
+					if (self.waypoint_speed == 999) // Waypoint tells bot to turbo
+					{
+						if (self.turbo_fuel > 0)
+							self.button0 = TRUE;
+						else
+							self.button0 = FALSE;
+					}
 				}
 			}
 
