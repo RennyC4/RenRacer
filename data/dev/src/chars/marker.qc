@@ -33,6 +33,9 @@ void() marker_think =
 
 					if (self.enemy) // Do check point confirm
 					{
+						if (cvar("developer") == 2)
+							sprint (targ, "CheckPoint_touch: ", ftos(self.checkpoint), "\n");
+
 						self.enemy.effects = EF_MUZZLEFLASH;
 						self.cnt = TRUE; // Start animation
 						self.effects = self.effects | EF_DIMLIGHT;

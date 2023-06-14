@@ -98,6 +98,8 @@ void() rally_goal_proxy_think =
 						targ.laptime = 0; // Reset lap time
 						targ.waypoint = 0; // Reset bot waypoints
 						targ.bot_search_count = 0; // Reset bot search counter
+						targ.findcheckpoint_fail = 0; // Reset bot 'end of checkpoints' check/counter
+						targ.goalentity = world; // Reset bot goalentity
 
 						if (targ.lap == self.lap)
 						{

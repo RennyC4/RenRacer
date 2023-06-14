@@ -67,6 +67,7 @@ message "!! PEDAL TO THE METAL !!"
 classname rally_marker
 origin "215 -1361 20"
 checkpoint "1"
+waypoint_speed "40"
 }
 
 // marker 2
@@ -74,6 +75,7 @@ checkpoint "1"
 classname rally_marker
 origin "1271 -1360 30"
 checkpoint "2"
+waypoint_speed "999"
 }
 
 // marker 3
@@ -88,6 +90,7 @@ checkpoint "3"
 classname rally_marker
 origin "3794 -1257 20"
 checkpoint "4"
+waypoint_speed "40"
 }
 
 // marker 5
@@ -95,6 +98,7 @@ checkpoint "4"
 classname rally_marker
 origin "2855 1024 15"
 checkpoint "5"
+waypoint_speed "999"
 }
 
 // marker 6
@@ -102,6 +106,7 @@ checkpoint "5"
 classname rally_marker
 origin "1662 3486 43"
 checkpoint "6"
+waypoint_speed "999"
 }
 
 // marker 7
@@ -109,4 +114,5 @@ checkpoint "6"
 classname rally_marker
 origin "-7 2617 260"
 checkpoint "7"
+waypoint_speed "40"
 }

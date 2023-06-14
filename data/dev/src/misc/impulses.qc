@@ -19,6 +19,7 @@ void(vector dest) car_teleport =
 	{
 		setorigin(part, dest);
 		//part.velocity = '0 0 0';
+		// Try angles next, Z/X to zero, set Y to dest
 		part.oldorigin = dest;
 		part = part.physobj_next;
 	}
@@ -28,6 +29,7 @@ void(vector dest) car_teleport =
 	{
 		setorigin(hitmodel, dest);
 		//hitmodel.velocity = '0 0 0';
+		// Try angles next, Z/X to zero, set Y to dest
 		hitmodel.oldorigin = dest;
 		hitmodel = hitmodel.physobj_next;
 	}
