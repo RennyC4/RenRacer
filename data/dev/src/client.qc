@@ -118,10 +118,7 @@ void() PlayerPreThink =
 			if (self.turbo_fuel_finished < time && !self.button2)
 			{
 				self.turbo_fuel = self.turbo_fuel + 1;
-				if (self.ishuman)
-					self.turbo_fuel_finished = time + 0.1;
-				else
-					self.turbo_fuel_finished = time + 0.05; // AI Cheats TODO: Teach them to drift?
+				self.turbo_fuel_finished = time + 0.1;
 			}
 		}
 		else

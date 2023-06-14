@@ -98,8 +98,8 @@ void() rally_goal_touch =
 			other.owner.driving.laptime = 0; // Reset lap time
 			other.owner.driving.waypoint = 0; // Reset bot waypoints
 			other.owner.driving.bot_search_count = 0; // Reset bot search counter
-			other.owner.findcheckpoint_fail = 0; // Reset bot 'end of checkpoints' check/counter
-			other.owner.goalentity = world; // Reset bot goalentity
+			other.owner.driving.findcheckpoint_fail = 0; // Reset bot 'end of checkpoints' check/counter
+			other.owner.driving.goalentity = world; // Reset bot goalentity
 
 			if (other.owner.driving.lap == self.lap)
 			{

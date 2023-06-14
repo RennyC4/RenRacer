@@ -444,7 +444,7 @@ void() BotAI =
 				}
 				else
 				{
-					if (infront(self.goalentity, 0.9) && visible(self.goalentity) && self.turbo_fuel > 0 && r >= 125)
+					if (infront(self.goalentity, 0.8) && visible(self.goalentity) && self.turbo_fuel > 0 && r >= 125)
 						self.button0 = TRUE; // Bot normal turbo
 					else
 						self.button0 = FALSE;
@@ -522,6 +522,10 @@ void() BotAI =
 		}
 
 		bot_angle_set();
+		
+		// AI Cheats
+		if (self.turbo_fuel < 100)
+			self.turbo_fuel = 100;
 
 		// Debugging prints
 		/*

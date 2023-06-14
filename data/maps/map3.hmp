@@ -66,6 +66,7 @@ angles "0 -166 0"
 classname rally_marker
 origin "-1572 -1361 184"
 checkpoint "1"
+waypoint_speed "999"
 }
 
 // marker 2
@@ -73,6 +74,7 @@ checkpoint "1"
 classname rally_marker
 origin "-1157 -2503 291"
 checkpoint "2"
+waypoint_speed "999"
 }
 
 // marker 3
@@ -80,6 +82,7 @@ checkpoint "2"
 classname rally_marker
 origin "760 -2620 265"
 checkpoint "3"
+waypoint_speed "999"
 }
 
 // marker 4
@@ -87,6 +90,7 @@ checkpoint "3"
 classname rally_marker
 origin "1225 -683 155"
 checkpoint "4"
+waypoint_speed "999"
 }
 
 // marker 5
@@ -94,6 +98,7 @@ checkpoint "4"
 classname rally_marker
 origin "-988 824 0"
 checkpoint "5"
+waypoint_speed "999"
 }
 
 // marker 6
@@ -102,6 +107,7 @@ classname rally_marker
 origin "-1302 2953 20"
 checkpoint "6"
 radius "350"
+waypoint_speed "999"
 }
 
 // marker 7
@@ -109,6 +115,7 @@ radius "350"
 classname rally_marker
 origin "824 3039 -91"
 checkpoint "7"
+waypoint_speed "999"
 }
 
 // marker 8
@@ -116,4 +123,5 @@ checkpoint "7"
 classname rally_marker
 origin "1325 1513 -14"
 checkpoint "8"
+waypoint_speed "999"
 }

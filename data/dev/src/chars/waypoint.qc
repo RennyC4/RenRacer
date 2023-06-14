@@ -41,6 +41,15 @@ void(vector org, float which, optional float cnt) create_waypoint =
 
 void() load_waypoints =
 {
+	if (world.model == "maps/map1.bsp")
+	{
+		create_waypoint ('1172.890991 1320.857056 -96.970322', 1, 0);
+		create_waypoint ('566.564392 1549.128540 -97.974670', 2, 0);
+		create_waypoint ('104.788315 1070.905273 -96.970680', 3, 0);
+		create_waypoint ('76.440895 -565.337891 -96.971107', 4, 0);
+		create_waypoint ('949.710999 -953.419189 -96.975060', 5, 0);
+		create_waypoint ('1402.754761 -728.587646 -96.991348', 6, 0);
+	}
 	if (world.model == "maps/map2.hmp")
 	{
 		create_waypoint ('217.083267 -424.322693 136.092682', 1, 0);
@@ -57,7 +66,9 @@ void() load_waypoints =
 		create_waypoint ('-63.726654 2320.773193 313.729980', 12, 0);
 		create_waypoint ('126.149734 1572.912476 540.592224', 13, 999);
 	}
-	//Map 3 doesn't need waypoints
+
+	//Map 3 doesn't need waypoints :P Feel free to make em though!
+
 	if (world.model == "maps/map4.hmp")
 	{
 		create_waypoint ('2570.022461 48.822002 98.845512', 1, 0);
