@@ -5,10 +5,10 @@ TODO: Tracebox on cars
 TODO: Impact sound - Car smash (wall, other car)
 TODO: Breakable brushes (request by xaGe) 
 TODO: New collision car->car physics, even if it's fake/lame
-TODO: Car colors / Driver match .colormap - WIP
 
 ====
 
+Done: Car colors / Driver match .colormap
 Done: Proper waypoints for bots, if one exists.. they follow it around the course
 	- Have 999 waypoint speed cause the AI to turbo, done.
 	- Hybrid checkpoint + waypoint system, done.

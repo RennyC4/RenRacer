@@ -19,13 +19,7 @@ void(vector dest) car_teleport =
 	{
 		part.oldorigin = dest;
 		setorigin(part, dest);
-		part.angles_x = part.angles_z = part.angles_y = 0;
-		part.velocity_x = 0;
-
-		//part.velocity_y = 0;
-		//part.velocity_z = 0;
-
-		//part.velocity = '0 0 0';
+		part.velocity = '0 0 0';
 
 		part = part.physobj_next;
 	}
@@ -35,13 +29,7 @@ void(vector dest) car_teleport =
 	{
 		hitmodel.oldorigin = dest;
 		setorigin(hitmodel, dest);
-		hitmodel.angles_x = hitmodel.angles_z = hitmodel.angles_y = 0;
-		hitmodel.velocity_x = 0;
-
-		//hitmodel.velocity_y = 0;
-		//hitmodel.velocity_z = 0;
-		
-		//hitmodel.velocity = '0 0 0';
+		hitmodel.velocity = '0 0 0';
 	
 		hitmodel = hitmodel.physobj_next;
 	}

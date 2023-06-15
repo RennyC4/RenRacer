@@ -290,6 +290,7 @@ void(entity car) Car_InitVehicle =
 	e = car.physobj_staticlist;
 	while (e)
 	{
+		e.colormap = self.colormap; // RennyC: Assign colourmaps
 		if (e.netname == "frontright")
 		{
 			car.frontright.enemy = e;
@@ -324,6 +325,7 @@ void(entity car) Car_InitVehicle =
 #if defined(SMOOTH)
 		else if (e.netname == "driver")
 		{
+			e.colormap = self.colormap; // RennyC: Assign colourmaps
 			e.think = DriverThink;
 			e.nextthink = time;
 		}
@@ -392,7 +394,6 @@ void(entity ply, entity car) Car_AttachToVehicle =
 		stuffcmd(ply, "crosshair 0\n");
 		setorigin(ply, car.origin);
 		car.driving = ply;
-		car.colormap = ply.colormap; // RennyC TODO: Make this work
 	}
 };
 
@@ -617,7 +618,7 @@ void TryUpdateVehicle(){
 	b_left = self.driving.backleft;
 	b_right = self.driving.backright;
 	//
-	
+
 	setorigin(self, Car_SpringyOrigin());
 	if (race_status == RACE_STARTED) // RennyC: Allow player to control the car
 	{
