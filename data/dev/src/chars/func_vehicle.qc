@@ -325,7 +325,6 @@ void(entity car) Car_InitVehicle =
 #if defined(SMOOTH)
 		else if (e.netname == "driver")
 		{
-			e.colormap = self.colormap; // RennyC: Assign colourmaps
 			e.think = DriverThink;
 			e.nextthink = time;
 		}
