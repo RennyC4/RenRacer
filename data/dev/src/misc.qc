@@ -150,4 +150,12 @@ void(vector dest) car_teleport =
 	makevectors(self.angles);
 	car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
 	Car_InitVehicle(car);
+	
+	// Restore stashed waypoint on being teleported, essentially starting back on the
+	// waypoint path properly
+	self.waypoint = self.last_waypoint;
+	if (!self.ishuman)
+		GetWayPoint();
+
+	//TODO: Have FrikBot run a GetWaypoint update
 };

@@ -185,6 +185,21 @@ void() FindWayPoint =
 	}
 };
 
+void() GetWayPoint =
+{
+	for (entity y = world;(y = find(y, classname, "bot_waypoint"));)
+	{
+		if (y.waypoint == self.waypoint + 1)
+		{
+			y.colormod = '1 1 5'; // For cvar developer 2
+			self.goalentity_waypoint = y;
+			self.goalentity_waypoint.waypoint = y.waypoint;
+			self.bot_search_count = 0;
+			self.waypoint_speed = y.waypoint_speed; // Set waypoint speed on bot
+		}
+	}
+};
+
 // Used to help the bot get unstuck
 void() ReverseGetWayPoint =
 {

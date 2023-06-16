@@ -9,6 +9,7 @@ void() waypoint_touch =
 	if (other.owner.driving.classname != "player")
 		return;
 
+	other.owner.driving.last_waypoint = self.waypoint; // Stash it for bot teleporting reasons
 	other.owner.driving.waypoint = self.waypoint;
 	other.owner.driving.goalentity = world; // find next waypoint
 
