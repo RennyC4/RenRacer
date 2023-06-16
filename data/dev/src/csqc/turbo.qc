@@ -1,5 +1,7 @@
-void(vector pos) DrawTurbo =
+void() DrawTurbo =
 {
+	local vector pos = [(g_width - stringwidth("", TRUE, '18 18 0'))/12-24, (g_height - 46)];
+
 	local float turbof = getstatf(STAT_TURBOFUEL);
 	local string f = ftos(turbof);
 	

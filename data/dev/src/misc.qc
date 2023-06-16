@@ -156,6 +156,4 @@ void(vector dest) car_teleport =
 	self.waypoint = self.last_waypoint;
 	if (!self.ishuman)
 		GetWayPoint();
-
-	//TODO: Have FrikBot run a GetWaypoint update
 };

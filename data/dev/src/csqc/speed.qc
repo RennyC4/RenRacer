@@ -1,5 +1,7 @@
-void(vector pos) DrawSpeed =
+void() DrawSpeed =
 {
+	local vector pos = [(g_width - stringwidth("", TRUE, '18 18 0'))/12-28, (g_height - 36)];
+
 	local float speed = getstatf(STAT_SPEED);
 	speed = ceil(speed);
 	if (speed < 5)
