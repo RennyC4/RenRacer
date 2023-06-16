@@ -96,6 +96,10 @@ void() worldspawn =
 	precache_sound ("skidding.wav");
 	precache_sound ("teleport1.wav");
 	precache_sound ("teleport2.wav");
+	precache_sound ("hit1.wav");
+	precache_sound ("hit2.wav");
+	precache_sound ("hit3.wav");
+	precache_sound ("hit4.wav");
 
 	world_lights();
 	BotInit();  // FrikBot

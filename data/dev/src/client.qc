@@ -47,6 +47,62 @@ void() Setup_level_effects =
 	}
 };
 
+//
+// RennyC: Work in progress to fake push other cars/players out of the way
+//
+.float collide_finished;
+void() PushPlayers =
+{
+	if (self.collide_finished > time)
+		return;
+
+	for (entity b = world;(b = find(b, classname, "player"));)
+	{
+		if (vlen(b.origin - self.origin ) < 100 && b != self && b.driving && self.realspeed > 9)
+		{
+			entity wheels[] =
+			{
+				b.driving.frontleft,
+				b.driving.frontright,
+				b.driving.backleft,
+				b.driving.backright
+			};
+			local entity oldself;
+			oldself = self;
+			self = b;
+
+			for (float i = 0; i < wheels.length; i++)
+			{
+				traceline(wheels[i].origin, wheels[i].origin - wheels[i].lmat_up * 24, MOVE_NOMONSTERS, wheels[i]);
+				if (trace_fraction < 1)
+					Phys_Force(self.driving, self.driving.physobj_mass, '0 0 1' * 640 * 1.0, trace_endpos, wheels[i].lmat_up);
+			}
+			vector worldorg = self.driving.origin;
+
+			local vector ran = '0 0 0';
+			ran_x = random()*360;
+			ran_y = random()*360;
+			ran_z = random()*360;
+			makevectors(ran);
+			Phys_Force(self.driving, self.driving.physobj_mass * 0.35, (v_right * 100000 * -1) * frametime, worldorg - v_right * 16, -v_right);
+
+			self = oldself;
+
+			b.collide_finished = time + 1;
+			self.collide_finished = time + 1;
+
+			if (random() < 0.25)
+				sound (self, CHAN_AUTO, "hit1.wav", 1, ATTN_NORM);
+			else if (random() < 0.5)
+				sound (self, CHAN_AUTO, "hit2.wav", 1, ATTN_NORM);
+			else if (random() < 0.75)
+				sound (self, CHAN_AUTO, "hit3.wav", 1, ATTN_NORM);
+			else
+				sound (self, CHAN_AUTO, "hit4.wav", 1, ATTN_NORM);
+		}
+	}
+};
+
 void() spawn_countdown;
 .float turbo_fuel_finished;
 void() PlayerPreThink = 
@@ -101,6 +157,9 @@ void() PlayerPreThink =
 	}
 	else
 	{
+		if (race_status == RACE_STARTED)
+			PushPlayers();
+
 		if (self.clearcprint_finished < time)
 		{
 			if (!self.clearcprint)
