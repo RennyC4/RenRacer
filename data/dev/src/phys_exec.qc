@@ -1178,7 +1178,9 @@ entity(entity basepart) Phys_ObjectSpawn =
 	e.physobj_mass = basepart.physobj_mass;
 	e.physobj_impactevent = basepart.physobj_impactevent;
 	e.think = Phys_ObjectThink;
-	e.nextthink = time + 0.2; // needs more leeway than a normal think tick otherwise there be errors for some reason when spawning from map entity
+	e.nextthink = time; // needs more leeway than a normal think tick otherwise there be errors for some reason when spawning from map entity
+						// RennyC: Doesn't happen in RenRacer, reducing the time makes spawning smoother
+	//e.nextthink = time + 0.2; // needs more leeway than a normal think tick otherwise there be errors for some reason when spawning from map entity
 	//e.contentstransition = SUB_Null;
 	e.solid = SOLID_TRIGGER;
 	return e;

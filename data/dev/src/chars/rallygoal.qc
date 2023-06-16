@@ -18,6 +18,7 @@ void() rally_goal_touch =
 	{
 		other.owner.driving.goal_touched = TRUE; // run once
 		other.owner.driving.start_laptime = TRUE; // Start counter
+		other.owner.checkpoint_lastpos = other.owner.origin + v_up * 64;
 
 		if (!self.message)
 			centerprint(other.owner.driving, "!!! GAS GAS GAS !!!\n");
@@ -100,6 +101,7 @@ void() rally_goal_touch =
 			other.owner.driving.bot_search_count = 0; // Reset bot search counter
 			other.owner.driving.findcheckpoint_fail = 0; // Reset bot 'end of checkpoints' check/counter
 			other.owner.driving.goalentity = world; // Reset bot goalentity
+			other.owner.checkpoint_lastpos = other.owner.origin + v_up * 64;
 
 			if (other.owner.driving.lap == self.lap)
 			{

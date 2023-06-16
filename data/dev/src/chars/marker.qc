@@ -27,7 +27,19 @@ void() marker_think =
 						if (targ.checkpoint == (self.checkpoint - 1))
 						{
 							targ.checkpoint = self.checkpoint;
+							targ.checkpoint_lastpos = targ.origin + v_up * 64;
 							self.enemy = targ;
+						}
+						if (self.checkpoint > targ.checkpoint)
+						{
+							centerprint (targ, "/P^1^bCheckpoint Missed!\n\n^2!!! Try again !!!\n");
+							targ.clearcprint_finished = time + 2;
+							local entity oldself;
+							oldself = self;
+							self = targ;
+							car_teleport(self.checkpoint_lastpos);
+							self.teleport_finished = time + 2;
+							self = oldself;
 						}
 					}
 

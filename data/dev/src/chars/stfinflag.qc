@@ -18,6 +18,7 @@ void() rally_goal_proxy_think =
 				{
 					targ.goal_touched = TRUE; // run once
 					targ.start_laptime = TRUE; // Start counter
+					targ.checkpoint_lastpos = targ.origin + v_up * 64;
 
 					if (!self.message)
 						centerprint(targ, "!!! GAS GAS GAS !!!\n");
@@ -100,6 +101,7 @@ void() rally_goal_proxy_think =
 						targ.bot_search_count = 0; // Reset bot search counter
 						targ.findcheckpoint_fail = 0; // Reset bot 'end of checkpoints' check/counter
 						targ.goalentity = world; // Reset bot goalentity
+						targ.checkpoint_lastpos = targ.origin + v_up * 64;
 
 						if (targ.lap == self.lap)
 						{

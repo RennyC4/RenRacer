@@ -429,6 +429,8 @@ float countdown_count;
 .float cardrift_stabilizer;
 .float radius;
 .entity driving;
+.vector checkpoint_lastpos;
+.float teleport_finished;
 
 var float PART_DIRT;
 

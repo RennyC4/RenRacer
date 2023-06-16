@@ -96,3 +96,58 @@ void() misc_model =
 	self.nextthink = time + self.speed;
 	self.think = misc_model_think;
 };
+
+void(string name) nukecar_with_classname =
+{
+	for(entity e = find(world, classname, name); e; e = find(e, classname, name))
+	{
+		if (e.realowner == self)
+			remove(e);
+	}
+};
+
+void(entity car) remove_car =
+{
+	// Detach player first
+	Car_AttachToVehicle(car.driving, car);
+	Phys_ObjectRemove(car);
+
+	// these should be removed with Phys_ObjectRemove, very worrying..
+	nukecar_with_classname("physics_object");
+	nukecar_with_classname("particle");
+	nukecar_with_classname("static");
+	nukecar_with_classname("stick");
+	nukecar_with_classname("hitmodel");
+};
+
+// HACK: Remove car, teleport player, recreate car and shove 'em back in
+void(vector dest) car_teleport =
+{
+	if (self.teleport_finished > time)
+		return;
+
+	if (random() < 0.5)
+		sound (self, CHAN_AUTO, "teleport1.wav", 1, ATTN_NONE);
+	else
+		sound (self, CHAN_AUTO, "teleport2.wav", 1, ATTN_NONE);
+
+	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST, TE_TELEPORT);
+	WriteCoord (MSG_BROADCAST, self.origin_x);
+	WriteCoord (MSG_BROADCAST, self.origin_y);
+	WriteCoord (MSG_BROADCAST, self.origin_z);
+
+	remove_car(self.driving);
+	setorigin(self, dest);
+
+	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST, TE_TELEPORT);
+	WriteCoord (MSG_BROADCAST, self.origin_x);
+	WriteCoord (MSG_BROADCAST, self.origin_y);
+	WriteCoord (MSG_BROADCAST, self.origin_z);
+
+	local entity car = hotrod();
+	makevectors(self.angles);
+	car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
+	Car_InitVehicle(car);
+};
