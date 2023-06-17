@@ -69,17 +69,13 @@ void() PushPlayers =
 				b.driving.backright
 			};
 
-/*
 			// TODO: Find a better way to 'bump' players - Start
-			local entity oldself;
-			oldself = self;
-			self = b;
 
 			for (float i = 0; i < wheels.length; i++)
 			{
 				traceline(wheels[i].origin, wheels[i].origin - wheels[i].lmat_up * 24, MOVE_NOMONSTERS, wheels[i]);
 				if (trace_fraction < 1)
-					Phys_Force(self.driving, self.driving.physobj_mass, '0 0 1' * 640 * 1.0, trace_endpos, wheels[i].lmat_up);
+					Phys_Force(self.driving, self.driving.physobj_mass, '0 0 1' * 240 * 1.0, trace_endpos, wheels[i].lmat_up);
 			}
 			vector worldorg = self.driving.origin;
 
@@ -91,9 +87,8 @@ void() PushPlayers =
 			else
 				Phys_Force(self.driving, self.driving.physobj_mass * 0.35, v_right * 10000 * frametime, worldorg + v_right * 16, +v_right);
 			
-			self = oldself;
 			// TODO: Find a better way to 'bump' players - End
-*/
+			
 			b.collide_finished = time + 1;
 			self.collide_finished = time + 1;
 
