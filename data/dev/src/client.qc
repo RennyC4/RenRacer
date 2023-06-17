@@ -69,6 +69,7 @@ void() PushPlayers =
 				b.driving.backright
 			};
 
+/*
 			// TODO: Find a better way to 'bump' players - Start
 			local entity oldself;
 			oldself = self;
@@ -92,7 +93,7 @@ void() PushPlayers =
 			
 			self = oldself;
 			// TODO: Find a better way to 'bump' players - End
-
+*/
 			b.collide_finished = time + 1;
 			self.collide_finished = time + 1;
 
