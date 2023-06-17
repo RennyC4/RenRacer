@@ -5,10 +5,9 @@
 void() rally_cone_think =
 {
 	local vector v;
-	local entity targ = findradius(self.origin, 40);
-	while (targ)
+	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
-		if (targ.classname == "player" && self.hitobject_finished < time && targ.realspeed >= 12)
+		if (vlen(targ.origin - self.origin) <= 40 && self.hitobject_finished < time && targ.realspeed >= 12)
 		{
 			v_x = (other.velocity_x * 2 + 50 * random());
 			v_y = (other.velocity_y * 2 + 50 * random());
@@ -21,9 +20,8 @@ void() rally_cone_think =
 			sound (self, CHAN_AUTO, "pylon.wav", 1, ATTN_NORM);
 			self.hitobject_finished = time + 1;
 		}
-		targ = targ.chain;
 	}
-	frameskip(0.01);
+	frameskip(0.05);
 };
 
 void() rally_cone =

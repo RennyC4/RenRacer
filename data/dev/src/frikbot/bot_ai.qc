@@ -369,6 +369,19 @@ void() BotAI =
 	}
 	
 	//
+	// Get out of being toppled / rolling
+	//
+
+	if (self.realang_z > -330 && self.realang_z < -30)
+	{
+		if (self.realang_z < -180)
+			self.keys = KEY_MOVELEFT;
+		else
+			self.keys = KEY_MOVERIGHT;
+		return;
+	}
+
+	//
 	// Normal driving routine
 	//
 
@@ -380,19 +393,6 @@ void() BotAI =
 		// local string f = ftos(self.realspeed);
 		// local string n = ftos(r);
 		// bprint ("Speed: ", f, " Dist: ", n, "\n");
-
-		//
-		// Get out of being toppled / rolling
-		//
-
-		if (self.realang_z > -330 && self.realang_z < -30)
-		{
-			if (self.realang_z < -180)
-				self.keys = KEY_MOVELEFT;
-			else
-				self.keys = KEY_MOVERIGHT;
-			return;
-		}
 
 		//
 		// Back up for randomly for a second, hit a wall/obstacle

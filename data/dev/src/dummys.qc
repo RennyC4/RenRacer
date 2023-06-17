@@ -17,7 +17,6 @@ void() trap_spikeshooter        = {remove(self);};
 void() trap_shooter             = {remove(self);};
 void() func_bossgate            = {remove(self);};
 void() func_episodegate         = {remove(self);};
-void() func_illusionary         = {remove(self);};
 void() func_train               = {remove(self);};
 void() func_button              = {remove(self);};
 void() func_door                = {remove(self);};

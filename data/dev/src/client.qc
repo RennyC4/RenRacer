@@ -26,11 +26,12 @@ void() Setup_level_effects =
 	if (framecount > 10)
 		return;
 
-	if (world.model == "maps/map1.bsp")
+	if (world.model == "maps/map1.bsp" || world.model == "maps/map5.bsp")
 	{
 		stuffcmd (self, "r_sun_colour 0.2 0.2 0.2\n");
 		stuffcmd (self, "r_sun_dir -1 0.5 0.8\n");
-		stuffcmd (self, "r_waterstyle 3\n");
+		if (world.model == "maps/map5.bsp")
+			stuffcmd (self, "r_waterstyle 1\n"); // Needed otherwise breakage
 	}
 	else
 	{
@@ -67,6 +68,8 @@ void() PushPlayers =
 				b.driving.backleft,
 				b.driving.backright
 			};
+
+			// TODO: Find a better way to 'bump' players - Start
 			local entity oldself;
 			oldself = self;
 			self = b;
@@ -80,13 +83,15 @@ void() PushPlayers =
 			vector worldorg = self.driving.origin;
 
 			local vector ran = '0 0 0';
-			ran_x = random()*360;
 			ran_y = random()*360;
-			ran_z = random()*360;
 			makevectors(ran);
-			Phys_Force(self.driving, self.driving.physobj_mass * 0.35, (v_right * 100000 * -1) * frametime, worldorg - v_right * 16, -v_right);
-
+			if (random() < 0.5)
+				Phys_Force(self.driving, self.driving.physobj_mass * 0.35, (v_right * 10000 * -1) * frametime, worldorg - v_right * 16, -v_right);
+			else
+				Phys_Force(self.driving, self.driving.physobj_mass * 0.35, v_right * 10000 * frametime, worldorg + v_right * 16, +v_right);
+			
 			self = oldself;
+			// TODO: Find a better way to 'bump' players - End
 
 			b.collide_finished = time + 1;
 			self.collide_finished = time + 1;
