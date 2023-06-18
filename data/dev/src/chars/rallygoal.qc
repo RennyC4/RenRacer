@@ -112,7 +112,7 @@ void() rally_goal_touch =
 			{
 				centerprint(other.owner.driving, "/PLap [^3", l, " ^7/ ^1", l2, "^7]\n ^7Lap Time: ^4", l3);
 				if (!conflict)
-					stuffcmd (self, "play lap.wav\n"); // FIXME: Ugly
+					stuffcmd (other.owner.driving, "play lap.wav\n"); // FIXME: Ugly
 			}
 			other.owner.driving.clearcprint_finished = time + 2;
 		}

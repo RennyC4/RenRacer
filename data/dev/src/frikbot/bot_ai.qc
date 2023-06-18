@@ -43,6 +43,7 @@ this notice in its entirety.
 */
 
 void() headlights_on;
+void() headlights_off;
 
 float stagger_think;
 
@@ -140,6 +141,18 @@ void() GetGoalPoint =
 	}
 };
 
+void() FindGoalPoint =
+{
+	for (entity y = world;(y = find(y, classname, "bot_waypoint_goal"));)
+	{
+		if (visible(y))
+		{
+			self.goalentity_goal = y;
+			self.findcheckpoint_fail = 0;
+		}
+	}
+};
+
 void() GetCheckPoint =
 {
 	for (entity y = world;(y = find(y, classname, "marker"));)
@@ -185,6 +198,22 @@ void() FindWayPoint =
 	}
 };
 
+float() FindAnyVisibleWayPoint =
+{
+	for (entity y = world;(y = find(y, classname, "bot_waypoint"));)
+	{
+		if (visible(y))
+		{
+			y.colormod = '1 1 5'; // For cvar developer 2
+			self.goalentity_waypoint = y;
+			self.goalentity_waypoint.waypoint = y.waypoint;
+			self.bot_search_count = 0;
+			self.waypoint_speed = y.waypoint_speed; // Set waypoint speed on bot
+			return TRUE;
+		}
+	}
+	return FALSE;
+};
 void() GetWayPoint =
 {
 	for (entity y = world;(y = find(y, classname, "bot_waypoint"));)
@@ -247,16 +276,30 @@ void() BotAI =
 
 	stagger_think = time;
 
-	// Turn on headlights once
-	// TODO: Have the AI detect when in a dark map / area
-	if (!self.headlights && world.model == "maps/map4.hmp")
+	//
+	// Bot headlights
+	//
+
+	local vector x = getlight(self.origin);
+	if (!self.headlights)
 	{
-		self.headlights = TRUE;
-		headlights_on();
+		if (world.model == "maps/map4.hmp")
+		{
+			self.headlights = TRUE;
+			headlights_on();
+		}
 	}
+	if (x_x <= 8 || x_y <= 8 || x_z <= 8)
+	{
+		if (!self.headlights)
+			headlights_on();
+	}
+	else
+		headlights_off();
+
 
 	//
-	// Bot searches for stuff
+	// Bot searches for stuff when there's no goalentity set
 	//
 
 	if (!self.goal_touched) // Bot searches for start/finish flag to start race
@@ -294,11 +337,13 @@ void() BotAI =
 	}
 
 	//
-	// Goalentity management: Compare distances - switch to closest
+	// Goalentity is set management: Compare distances - switch to closest
 	//
 
 	if (self.goalentity.classname != "bot_waypoint_goal")
 	{
+		if (self.findcheckpoint_fail > 1) // Start searching for goal point once all checkpoints are hit
+			FindGoalPoint();
 		if (self.goalentity_checkpoint || self.goalentity_waypoint)
 		{
 			local float check_dist_wp;
@@ -423,16 +468,19 @@ void() BotAI =
 				if (self.bot_search_count > 30) // Bot is stuck, so let's try and fix that
 				{
 					//bprint ("Bot WP: ", ftos(self.waypoint), "\n");
-
-					ReverseGetWayPoint();
-					if (self.goalentity_waypoint)
+					local float found = FindAnyVisibleWayPoint(); // Find visible / closest waypoint to me since I've lost my original goalentity						   
+					if (!found)
 					{
-						self.goalentity = self.goalentity_waypoint;
+						ReverseGetWayPoint();
+						if (self.goalentity_waypoint)
+						{
+							self.goalentity = self.goalentity_waypoint;
 
-						if (self.waypoint > 0)
-							self.waypoint = self.goalentity_waypoint.waypoint - 1;
+							if (self.waypoint > 0)
+								self.waypoint = self.goalentity_waypoint.waypoint - 1;
 
-						//bprint ("Bot WP: ", ftos(self.waypoint), "\n");
+							//bprint ("Bot WP: ", ftos(self.waypoint), "\n");
+						}
 					}
 					//bprint ("Running bot stuck stuff\n");
 					self.bot_search_count = 0;
@@ -537,7 +585,7 @@ void() BotAI =
 		}
 
 		bot_angle_set();
-		
+
 		// AI Cheats
 		if (self.turbo_fuel < 100)
 			self.turbo_fuel = 100;

@@ -26,6 +26,8 @@ void() headlights_on =
 	local entity myflash, myflash2;
 	local vector middle = self.owner.origin + v_forward * 50;
 
+	self.headlights = TRUE;
+
 	makevectors (self.realang);
 
 	//
@@ -71,6 +73,26 @@ void() headlights_on =
 	myflash2.nextthink = time;
 };
 
+void() headlights_off =
+{
+	self.effects = 0;
+	self.headlights = FALSE;
+	// Turn end light off
+	if (self.flash)
+	{
+		self.flash.think = SUB_Remove;
+		self.flash.nextthink = time;
+		self.flash = world;
+	}
+	// Turn middle light off
+	if (self.flash2)
+	{
+		self.flash2.think = SUB_Remove;
+		self.flash2.nextthink = time;
+		self.flash2 = world;
+	}
+}; 
+
 void() headlights_toggle =
 {
 	if (!self.driving)
@@ -79,19 +101,11 @@ void() headlights_toggle =
 	if (!self.headlights)
 	{
 		sprint(self, "Headlights: ON\n");
-		self.headlights = TRUE;
 		headlights_on();
 	}
 	else
 	{
 		sprint(self, "Headlights: OFF\n");
-		self.effects = 0;
-		self.headlights = FALSE;
-		// Turn end light off
-		self.flash.think = SUB_Remove;
-		self.flash.nextthink = time;
-		// Turn middle light off
-		self.flash2.think = SUB_Remove;
-		self.flash2.nextthink = time;
+		headlights_off();
 	}
 }; 
