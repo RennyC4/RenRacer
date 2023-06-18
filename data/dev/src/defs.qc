@@ -434,6 +434,7 @@ float countdown_count;
 .float speedboost_finished; // How long speed booster lasts for
 
 var float PART_DIRT;
+var float PART_TURBO;
 
 // Lap time stats
 .float start_laptime; // ON / OFF

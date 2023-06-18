@@ -47,6 +47,7 @@ void() worldspawn =
 	lastspawn = world;
 
 	PART_DIRT = particleeffectnum("dirt");
+	PART_TURBO = particleeffectnum("turbo");
 
 	precache_model("progs/null.spr");
 	precache_model("progs/s_debug.spr");

@@ -664,6 +664,8 @@ void TryUpdateVehicle(){
 				}
 				Car_Accelerate(3000, 950);
 				car_boost(2000);
+				makevectors(self.realang);
+				pointparticles(PART_TURBO, self.origin - v_up * 16 - v_forward * 32, '0 0 0', 1);
 
 				if (self.turbo_fuel > 0)
 					self.turbo_fuel = self.turbo_fuel - 1;
