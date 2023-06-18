@@ -1,3 +1,4 @@
+TODO: Check if bot stuck stuff is working correctly
 TODO: Add in TAB scoreboard (+showscores)
 TODO: sound/misc/talk.wav
 TODO: Tracebox on cars

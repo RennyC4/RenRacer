@@ -281,22 +281,21 @@ void() BotAI =
 	//
 
 	local vector x = getlight(self.origin);
-	if (!self.headlights)
-	{
-		if (world.model == "maps/map4.hmp")
-		{
-			self.headlights = TRUE;
-			headlights_on();
-		}
-	}
-	if (x_x <= 8 || x_y <= 8 || x_z <= 8)
+	if (world.model == "maps/map4.hmp")
 	{
 		if (!self.headlights)
 			headlights_on();
 	}
 	else
-		headlights_off();
-
+	{
+		if (x_x <= 8 || x_y <= 8 || x_z <= 8)
+		{
+			if (!self.headlights)
+				headlights_on();
+		}
+		else
+			headlights_off();
+	}
 
 	//
 	// Bot searches for stuff when there's no goalentity set
@@ -479,9 +478,9 @@ void() BotAI =
 							if (self.waypoint > 0)
 								self.waypoint = self.goalentity_waypoint.waypoint - 1;
 
-							//bprint ("Bot WP: ", ftos(self.waypoint), "\n");
 						}
 					}
+					//bprint ("Bot WP: ", ftos(self.waypoint), "\n");
 					//bprint ("Running bot stuck stuff\n");
 					self.bot_search_count = 0;
 				}
