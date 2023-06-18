@@ -431,6 +431,7 @@ float countdown_count;
 .entity driving;
 .vector checkpoint_lastpos;
 .float teleport_finished;
+.float speedboost_finished; // How long speed booster lasts for
 
 var float PART_DIRT;
 

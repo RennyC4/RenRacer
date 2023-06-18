@@ -630,6 +630,10 @@ void TryUpdateVehicle(){
 			Car_Accelerate(-2500, 800);
 		}
 
+		// RennyC: Speed Booster
+		if (self.speed > 0 && self.speedboost_finished > time)
+			car_boost(self.speed);
+
 		float roll = v_right * self.velocity;
 		if (roll > 100){
 			Car_Roll(-4000, 350);
