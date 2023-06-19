@@ -5,6 +5,7 @@
 void() marker_think =
 {
 	local float OK = 0;
+	local entity oldself;
 
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
@@ -32,14 +33,28 @@ void() marker_think =
 						}
 						if (self.checkpoint > targ.checkpoint)
 						{
-							centerprint (targ, "/P^1^bCheckpoint Missed!\n\n^2!!! Try again !!!\n");
-							targ.clearcprint_finished = time + 2;
-							local entity oldself;
-							oldself = self;
-							self = targ;
-							car_teleport(self.checkpoint_lastpos);
-							self.teleport_finished = time + 2;
-							self = oldself;
+							if (!targ.checkpoint)
+							{
+								centerprint (targ, "/P^1^bWrong Way!\n\n^2!!! Try again !!!\n");
+								targ.clearcprint_finished = time + 2;
+								oldself = self;
+								self = targ;
+								self.angles = self.spawn_loc_angles;
+								self.fixangle = TRUE;
+								car_teleport(self.spawn_loc);
+								self.teleport_finished = time + 2;
+								self = oldself;
+							}
+							else
+							{
+								centerprint (targ, "/P^1^bCheckpoint Missed!\n\n^2!!! Try again !!!\n");
+								targ.clearcprint_finished = time + 2;
+								oldself = self;
+								self = targ;
+								car_teleport(self.checkpoint_lastpos);
+								self.teleport_finished = time + 2;
+								self = oldself;
+							}
 						}
 					}
 
@@ -60,7 +75,10 @@ void() marker_think =
 					}
 				}
 				else if (race_status != RACE_FINISHED)
-					centerprint (targ, "You must drive through the starting goal to properly start the race!");
+				{
+					centerprint (targ, "/PYou must drive through the starting goal to properly start the race!");
+					targ.clearcprint_finished = time + 2.5;
+				}
 			}
 		}
 	}

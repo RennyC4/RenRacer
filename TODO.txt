@@ -1,4 +1,3 @@
-TODO: Check if bot stuck stuff is working correctly
 TODO: Add in TAB scoreboard (+showscores)
 TODO: sound/misc/talk.wav
 TODO: Tracebox on cars
@@ -9,6 +8,8 @@ TODO: Breakable brushes (request by xaGe)
 
 ====
 
+Done: Check if bot stuck stuff is working correctly
+Done: Checkpoint should warp player to original spawn spot if ZERO markers have been touched
 Done: Bots know how to use headlights (getlight();)
 Done: Speed booster pads
 Done: Resize HUD on different resolutions

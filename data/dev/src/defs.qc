@@ -432,6 +432,8 @@ float countdown_count;
 .vector checkpoint_lastpos;
 .float teleport_finished;
 .float speedboost_finished; // How long speed booster lasts for
+.vector spawn_loc;
+.vector spawn_loc_angles;
 
 var float PART_DIRT;
 var float PART_TURBO;

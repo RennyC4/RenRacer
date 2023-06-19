@@ -141,7 +141,7 @@ void() GetGoalPoint =
 	}
 };
 
-void() FindGoalPoint =
+float() FindGoalPoint =
 {
 	for (entity y = world;(y = find(y, classname, "bot_waypoint_goal"));)
 	{
@@ -149,8 +149,10 @@ void() FindGoalPoint =
 		{
 			self.goalentity_goal = y;
 			self.findcheckpoint_fail = 0;
+			return TRUE;
 		}
 	}
+	return FALSE;
 };
 
 void() GetCheckPoint =
@@ -202,7 +204,7 @@ float() FindAnyVisibleWayPoint =
 {
 	for (entity y = world;(y = find(y, classname, "bot_waypoint"));)
 	{
-		if (visible(y))
+		if (visible(y) && y.waypoint != total_waypoints) // Don't grab the last waypoint, usually these are placed close to the start/finish flag and can confuse the bot
 		{
 			y.colormod = '1 1 5'; // For cvar developer 2
 			self.goalentity_waypoint = y;
@@ -214,6 +216,7 @@ float() FindAnyVisibleWayPoint =
 	}
 	return FALSE;
 };
+
 void() GetWayPoint =
 {
 	for (entity y = world;(y = find(y, classname, "bot_waypoint"));)
@@ -342,7 +345,14 @@ void() BotAI =
 	if (self.goalentity.classname != "bot_waypoint_goal")
 	{
 		if (self.findcheckpoint_fail > 1) // Start searching for goal point once all checkpoints are hit
-			FindGoalPoint();
+		{
+			local float findgp = FindGoalPoint();
+			if (findgp)
+			{
+				//bprint ("Bot is going for goal point\n");
+				self.goalentity = self.goalentity_goal;
+			}
+		}
 		if (self.goalentity_checkpoint || self.goalentity_waypoint)
 		{
 			local float check_dist_wp;
@@ -464,25 +474,38 @@ void() BotAI =
 					else
 						self.bot_search_count = 0;
 				}
+				// Bot is stuck / lost
 				if (self.bot_search_count > 30) // Bot is stuck, so let's try and fix that
 				{
-					//bprint ("Bot WP: ", ftos(self.waypoint), "\n");
-					local float found = FindAnyVisibleWayPoint(); // Find visible / closest waypoint to me since I've lost my original goalentity						   
-					if (!found)
+					if (self.findcheckpoint_fail > 1) // Reached the end of valid checkpoints
 					{
-						ReverseGetWayPoint();
-						if (self.goalentity_waypoint)
-						{
-							self.goalentity = self.goalentity_waypoint;
-
-							if (self.waypoint > 0)
-								self.waypoint = self.goalentity_waypoint.waypoint - 1;
-
-						}
+						GetWayPoint(); // Go back and try the last waypoint
+						//bprint ("Bot ran GetWayPoint(); while out of valid checkpoints\n");
 					}
-					//bprint ("Bot WP: ", ftos(self.waypoint), "\n");
-					//bprint ("Running bot stuck stuff\n");
-					self.bot_search_count = 0;
+					else
+					{
+						local float found = FindAnyVisibleWayPoint(); // Find visible / closest waypoint to me since I've lost my original goalentity						   
+						//if (found)
+							//bprint ("Bot found any visible WayPoint\n");
+
+						if (!found)
+						{
+							//bprint ("Bot ran ReverseGetWaypoint\n");
+
+							ReverseGetWayPoint();
+							if (self.goalentity_waypoint)
+							{
+								self.goalentity = self.goalentity_waypoint;
+
+								if (self.waypoint > 0)
+									self.waypoint = self.goalentity_waypoint.waypoint - 1;
+							}
+						}
+						//bprint ("Bot WP: ", ftos(self.waypoint), "\n");
+						//bprint ("Running bot stuck stuff\n");
+						self.bot_search_count = 0;
+					}
+					
 				}
 				self.bot_search_finished = time + 0.1;
 			}

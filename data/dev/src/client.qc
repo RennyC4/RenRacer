@@ -295,6 +295,8 @@ void() PutClientInServer =
 	self.cardrift_stabilizer = -1;
 	self.turbo_fuel = 100;
 	self.checkpoint_lastpos = self.origin + v_up * 64;
+	self.spawn_loc = self.origin + v_up * 64; // Stash it
+	self.spawn_loc_angles = self.angles; // Stash it
 
 	if (cvar("developer") != 1)
 		centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________\n\n\nPress [^b^1FIRE^7^b] to start the race");
