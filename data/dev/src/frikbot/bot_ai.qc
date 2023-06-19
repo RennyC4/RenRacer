@@ -291,7 +291,7 @@ void() BotAI =
 	}
 	else
 	{
-		if (x_x <= 8 || x_y <= 8 || x_z <= 8)
+		if (x_x <= 3 || x_y <= 3 || x_z <= 3)
 		{
 			if (!self.headlights)
 				headlights_on();

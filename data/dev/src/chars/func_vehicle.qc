@@ -141,6 +141,23 @@ void() Car_ChassiThink =
 		hitmodel = hitmodel.physobj_next;
 	}
 
+	/* - abslight & getlight dont match up - *
+    //RennyC: Light func_vehicle static parts properly using getlight();
+	local vector lit = getlight(self.origin); 
+    local entity e = car.physobj_staticlist;
+    while (e)
+    {
+		e.abslight = lit_x * -1;
+
+		bprint (ftos(e.abslight), " = abs / lit_x: ");
+		bprint (ftos(lit_x), "\n");
+	
+        e.drawflags = 7; // override lighting
+        e = e.physobj_next;
+    }
+    //
+	*/
+	
 #if defined(SMOOTH)
 	car.frags = time + 0.1;
 	self.angles = vectoangles2(self.lmat_forward, self.lmat_up);

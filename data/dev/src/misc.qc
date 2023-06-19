@@ -127,9 +127,9 @@ void(vector dest) car_teleport =
 		return;
 
 	if (random() < 0.5)
-		sound (self, CHAN_AUTO, "teleport1.wav", 1, ATTN_NONE);
+		sound (self, CHAN_AUTO, "teleport1.wav", 1, ATTN_NORM);
 	else
-		sound (self, CHAN_AUTO, "teleport2.wav", 1, ATTN_NONE);
+		sound (self, CHAN_AUTO, "teleport2.wav", 1, ATTN_NORM);
 
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_TELEPORT);

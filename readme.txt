@@ -120,3 +120,4 @@ On The Moon By A-ONE ft Odyssey - Race4.ogg
 https://freestocktextures.com/photos-ground/ - Some terrain textures
 kilomile - v_speed.mdl
 Coffee - TutorBot waypoint system; modified
+HUD for Quake (https://github.com/whipowill/quake-mod-hud) - Used & Modified scoreboard CSQC code

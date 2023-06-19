@@ -11,6 +11,11 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 	g_width = width;
 	g_height = height;
 
+	local vector virtsize;
+	virtsize_x = width;
+	virtsize_y = height;
+	virtsize_z = 0;
+
 	framecount = framecount + 1;
 
 	clearscene(); //wipe entity lists, reset view properties to their defaults
@@ -38,6 +43,12 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 	DrawDrift(); // Draw Drift Stats
 	DrawTime (); // Draw Lap Time Stats
 
+	if (showscores)
+	{
+		Hud_UpdateScores();
+		Hud_Scoreboard('0 0 0', virtsize);
+	}
+
 	// Race Status
 	local float rs = getstatf(STAT_RACESTATUS);
 
@@ -62,6 +73,23 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 
 	if (framecount == 10)
 		localcmd("exec haze.cfg\n");
+};
+
+float(float evtype, float scanx, float chary, float devid) CSQC_InputEvent =
+{
+	switch (evtype)
+	{
+		case IE_KEYDOWN:
+		if (getkeybind(scanx) == "+showscores")
+		{
+			showscores = TRUE;
+			return TRUE;
+		}
+		case IE_KEYUP:
+			showscores = FALSE;
+		return FALSE;
+	}
+	return FALSE;
 };
 
 noref void(float apiver, string enginename, float enginever) CSQC_Init = {};

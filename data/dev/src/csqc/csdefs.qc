@@ -2608,6 +2608,7 @@ accessor jsonnode : json_t
 
 // RenRacer
 float framecount;
+float showscores;
 vector campos;
 vector camang;
 float g_width, g_height; /* Globals for screen width and height */

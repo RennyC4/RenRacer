@@ -9,4 +9,5 @@ csqc/speed.qc
 csqc/drift.qc
 csqc/time.qc
 csqc/speedline.qc
+csqc/scoreboard.qc
 csqc/main.qc
