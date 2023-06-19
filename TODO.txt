@@ -7,7 +7,7 @@ TODO: Breakable brushes (request by xaGe)
 
 ====
 
-Done: Add in TAB scoreboard (+showscores)
+Done: Add in TAB scoreboard (+showscores) - FrikBots laps don't update
 Done: sound/misc/talk.wav
 Done: Check if bot stuck stuff is working correctly
 Done: Checkpoint should warp player to original spawn spot if ZERO markers have been touched

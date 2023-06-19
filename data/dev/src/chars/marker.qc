@@ -41,6 +41,7 @@ void() marker_think =
 								self = targ;
 								self.angles = self.spawn_loc_angles;
 								self.fixangle = TRUE;
+								self.waypoint = 0;
 								car_teleport(self.spawn_loc);
 								self.teleport_finished = time + 2;
 								self = oldself;
