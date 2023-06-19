@@ -5,21 +5,37 @@ void(float type) countdown_announce =
 
 	local string f = ftos(countdown_count);
 
-	y = find(world, classname, "player");
-	while(y)
+	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
 		if (!type)
-			centerprint (y, "/PRACE STARTS IN\n\n[^1^b", f, "^b^7]\n");
+			centerprint (targ, "/PRACE STARTS IN\n\n[^1^b", f, "^b^7]\n");
 		else
-			centerprint (y, "^1! GO GO GO !\n");
-		y = find(y, classname, "player");
+			centerprint (targ, "^1! GO GO GO !\n");
 	}
-	if (head)
-		ent.chain = world;
 };
 
+.float spawncar;
 void() countdown_think = // Race start countdown
 {
+	local entity oself;
+	
+	// Spawn players cars
+	for (entity targ = world;(targ = find(targ, classname, "player"));)
+	{
+		if (!targ.spawncar)
+		{
+			oself = self;
+			self = targ;
+			sprint(self, "Spawn Car\n");
+			local entity car = hotrod();
+			makevectors(targ.angles);
+			car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
+			Car_InitVehicle(car);
+			self = oself;
+			targ.spawncar = TRUE;
+		}
+	}
+
 	if (countdown_finished < time && countdown_count > -1)
 	{
 		local string f = ftos(countdown_count);
@@ -51,7 +67,7 @@ void() countdown_think = // Race start countdown
 	frameskip(0.1);
 };
 
-void() spawn_countdown =
+void() spawn_car_countdown =
 {
 	local entity cd = spawn();
 	cd.think = countdown_think;

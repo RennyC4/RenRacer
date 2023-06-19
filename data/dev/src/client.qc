@@ -104,7 +104,7 @@ void() PushPlayers =
 	}
 };
 
-void() spawn_countdown;
+void() spawn_car_countdown;
 .float turbo_fuel_finished;
 void() PlayerPreThink = 
 {
@@ -138,22 +138,15 @@ void() PlayerPreThink =
 		Car_CheckAttach(); // Shove the player in the car
 		if (framecount > 75 && self.button0 && race_status == RACE_NOTSTARTED)
 		{
-			race_status = RACE_COUNTDOWN;
-			spawn_countdown(); // Start countdown
-
-			// Spawn car
-			sound (self, CHAN_AUTO, "engine/start.wav", 1, ATTN_NORM);
-
-			local entity car = hotrod();
-			makevectors(self.angles);
-			car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
-			Car_InitVehicle(car);
-
 			// Add bots
 			local float i;
 			local float g = cvar("sv_playerslots");
 			for (i = 0; i < g-1; i = i+1)
 				BotConnect(0, 0, 0);
+
+			race_status = RACE_COUNTDOWN;
+			spawn_car_countdown(); // Start countdown
+			sound (self, CHAN_AUTO, "engine/start.wav", 1, ATTN_NORM);
 		}
 	}
 	else
@@ -300,7 +293,8 @@ void() PutClientInServer =
 
 	if (cvar("developer") != 1)
 		centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________\n\n\nPress [^b^1FIRE^7^b] to start the race");
-	
+
+	/*
 	// Frikbots Insta-spawn as the player does
 	if (!self.ishuman)
 	{
@@ -309,4 +303,5 @@ void() PutClientInServer =
 		car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
 		Car_InitVehicle(car);
 	}
+	*/
 };

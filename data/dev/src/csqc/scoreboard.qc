@@ -21,7 +21,8 @@ float(string pants1, string pants2) ComparePants =
 
 	is_match = 0;
 
-	if (dist < .03) is_match = 1;
+	if (dist < .03)
+		is_match = 1;
 
 	return is_match;
 };
@@ -65,8 +66,6 @@ static string teamcolor[14] =
 
 void() Hud_UpdateScores =
 {
-	float fraglimit = cvar("fraglimit");
-
 	// reset all team scores to zero
 	for (float t = 0 ; t < 14 ; t++)
 	{
@@ -76,15 +75,16 @@ void() Hud_UpdateScores =
 		cl_teamscores[t].teamname = "";
 	}
 
-	// foreach player (negative numbers are players sorted by frags)
+	// for each player (negative numbers are players sorted by frags)
 	float i = -1;
 	while (1)
 	{
 		string name = getplayerkeyvalue(i, "name");
 
-		if not (name) break; // end the loop, no more players
+		if not (name)
+			break; // end the loop, no more players
 
-		float frags = stof(getplayerkeyvalue(i, "frags"));
+		float frags = stof(getplayerkeyvalue(i, "frags")); // RennyC: FIXME: Grab players 'lap' not 'frags'
 		string bottomcolor = getplayerkeyvalue(i, "bottomcolor_rgb");
 
 		// loop thru cl_teamscores looking for bottom color match
@@ -101,9 +101,7 @@ void() Hud_UpdateScores =
 
 		// if no teamnum was found
 		if (!teamnum)
-		{
 			teamnum = nextnum;
-		}
 
 		cl_teamscores[teamnum].is_team = 1;
 		cl_teamscores[teamnum].bottomcolor = bottomcolor;
@@ -169,11 +167,12 @@ void() Hud_UpdateScores =
 			}
 		}
 	}
-}
+};
 
 void(vector virtmin, vector virtsize) Hud_Scoreboard =
 {
 	vector pos = virtmin;
+
 	if not (getplayerkeyvalue(-16, "name"))
 		pos_y += (virtsize_y-200)/2;
 
@@ -198,10 +197,7 @@ void(vector virtmin, vector virtsize) Hud_Scoreboard =
 			if (cl_teamscores_ranked[t].is_team > 0)
 			{
 				players++;
-
 				local string name = cl_teamscores_ranked[t].teamname;
-				//name = strcat(teamname, " Team");
-
 				drawfill(pos+[0,0]+[0,10*players], ([40,8]), stov(cl_teamscores_ranked[t].bottomcolor), .75, 0);
 				drawstring(pos+[8,0]+[0,10*players], strpad(-3, ftos(cl_teamscores_ranked[t].frags)), [8,8], [1,1,1], 1, 0);
 				drawstring(pos+[64,0]+[0,10*players], strconv(0,2,2, name), [8,8], [1,1,1], 1, 0);
@@ -212,25 +208,25 @@ void(vector virtmin, vector virtsize) Hud_Scoreboard =
 
 	players++;
 	players++;
-	drawstring(pos+[5,10*players], strconv(0,2,2, "Frags"), [6,6], [1,1,1], 1, 0);
+	drawstring(pos+[5,10*players], strconv(0,2,2, "Laps"), [6,6], [1,1,1], 1, 0);
 	drawstring(pos+[64,0]+[0,10*players], strconv(0,2,2, "Name"), [6,6], [1,1,1], 1, 0);
-	drawstring(pos+[158,0]+[0,10*players], strconv(0,2,2, "Deaths"), [6,6], [1,1,1], 1, 0);
+	//drawstring(pos+[158,0]+[0,10*players], strconv(0,2,2, "Deaths"), [6,6], [1,1,1], 1, 0);
 	players++;
 
 	// negative numbers are players sorted by frags
 	for (float i=-1; ; i--)
 	{
 		string name = getplayerkeyvalue(i, "name");
-		if not (name) break;
+		if not (name)
+			break;
 
 		players++;
 
 		float isspec = stof(getplayerkeyvalue(i, "*spectator"));
-		float frags = stof(getplayerkeyvalue(i, "frags"));
+		float frags = stof(getplayerkeyvalue(i, "frags")); // RennyC: FIXME: Grab players 'lap' not 'frags'
 		string ping = getplayerkeyvalue(i, "ping");
 		vector top = stov(getplayerkeyvalue(i, "topcolor_rgb"));
 		vector bot = stov(getplayerkeyvalue(i, "bottomcolor_rgb"));
-		float deaths, kd;
 
 		if (player_localentnum == stof(getplayerkeyvalue(i, "viewentity")))
 		{

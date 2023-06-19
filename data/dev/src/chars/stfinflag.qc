@@ -68,6 +68,7 @@ void() rally_goal_proxy_think =
 					else
 					{
 						targ.lap = targ.lap + 1;
+						targ.frags = targ.lap; // FIXME: Hack for CSQC reading players 'frags' on scoreboard
 						targ.checkpoint = 0; // Reset lap checkpoint counter
 
 						local string l = ftos(targ.lap);

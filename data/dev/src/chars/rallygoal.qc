@@ -68,6 +68,7 @@ void() rally_goal_touch =
 		else
 		{
 			other.owner.driving.lap = other.owner.driving.lap + 1;
+			other.owner.driving.frags = other.owner.driving.lap; // FIXME: Hack for CSQC reading players 'frags' on scoreboard
 			other.owner.driving.checkpoint = 0; // Reset lap checkpoint counter
 
 			local string l = ftos(other.owner.driving.lap);
