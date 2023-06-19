@@ -17,7 +17,10 @@ void() ClientConnect =
 
 void() ClientDisconnect =
 {
+	bprint (self.netname, " has retired!\n");
 	ClientDisconnected(); // FrikBot
+	remove_car(self.driving);
+	remove(self);
 };
 
 // This is ugly

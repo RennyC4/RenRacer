@@ -26,7 +26,6 @@ void() countdown_think = // Race start countdown
 		{
 			oself = self;
 			self = targ;
-			sprint(self, "Spawn Car\n");
 			local entity car = hotrod();
 			makevectors(targ.angles);
 			car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
