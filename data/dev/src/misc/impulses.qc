@@ -12,6 +12,8 @@ void() CheckImpulses =
 {
 	if (self.impulse == 1)
 		headlights_toggle();
+	if (self.impulse == 2)
+		car_teleport('0 0 64', FALSE);
 	if (self.impulse == 3)
 	{
 		create_waypoint(self.origin, total_waypoints, 0);

@@ -44,6 +44,7 @@ this notice in its entirety.
 
 void() headlights_on;
 void() headlights_off;
+void(vector dest, float silent) car_teleport;
 
 float stagger_think;
 
@@ -232,22 +233,6 @@ void() GetWayPoint =
 	}
 };
 
-// Used to help the bot get unstuck
-void() ReverseGetWayPoint =
-{
-	for (entity y = world;(y = find(y, classname, "bot_waypoint"));)
-	{
-		if (y.waypoint == self.waypoint - 1 && self.waypoint > 0)
-		{
-			y.colormod = '1 5 1'; // For cvar developer 2
-			self.goalentity_waypoint = y;
-			self.goalentity_waypoint.waypoint = y.waypoint;
-			//self.bot_search_count = 0;
-			//self.waypoint_speed = y.waypoint_speed; // Set waypoint speed on bot
-		}
-	}
-};
-
 /*
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -276,7 +261,6 @@ void() BotAI =
 		else
 			return;
 	}
-
 	stagger_think = time;
 
 	//
@@ -301,7 +285,7 @@ void() BotAI =
 	}
 
 	//
-	// Bot searches for stuff when there's no goalentity set
+	// Bot searches for stuff
 	//
 
 	if (!self.goal_touched) // Bot searches for start/finish flag to start race
@@ -316,7 +300,7 @@ void() BotAI =
 	else
 	{
 		if (!self.goalentity)
-			GetCheckPoint(); // Bot finds first goalentity after hitting beginning goal
+			GetCheckPoint(); // Bot gets first goalentity waypoint after hitting beginning goal
 		else
 		{
 			if (self.checkpoint == self.goalentity.checkpoint) // Find next target
@@ -349,8 +333,8 @@ void() BotAI =
 			local float findgp = FindGoalPoint();
 			if (findgp)
 			{
-				//bprint ("Bot is going for goal point\n");
 				self.goalentity = self.goalentity_goal;
+				//bprint ("Bot is going for goal point\n");
 			}
 		}
 		if (self.goalentity_checkpoint || self.goalentity_waypoint)
@@ -404,36 +388,6 @@ void() BotAI =
 			}
 		}
 	}
-	else if (self.goal_touched)
-	{
-		// Find any remaining waypoints that are closer than the goal, 'hit em and go for the goal
-		if (!visible(self.goalentity))
-		{
-			//bprint ("Can't see end/start goal\n");
-			if (visible(self.goalentity_waypoint))
-			{
-				if (self.goalentity_waypoint.waypoint == self.waypoint + 1)
-					self.goalentity = self.goalentity_waypoint;
-				else
-					self.goalentity = self.goalentity_goal;
-				
-				//bprint ("Going for last waypoint before goal\n");
-			}
-		}
-	}
-	
-	//
-	// Get out of being toppled / rolling
-	//
-
-	if (self.realang_z > -330 && self.realang_z < -30)
-	{
-		if (self.realang_z < -180)
-			self.keys = KEY_MOVELEFT;
-		else
-			self.keys = KEY_MOVERIGHT;
-		return;
-	}
 
 	//
 	// Normal driving routine
@@ -441,6 +395,19 @@ void() BotAI =
 
 	if (self.goalentity)
 	{
+		//
+		// Get out of being toppled / rolling
+		//
+
+		if (self.realang_z > -330 && self.realang_z < -30)
+		{
+			if (self.realang_z < -180)
+				self.keys = KEY_MOVELEFT;
+			else
+				self.keys = KEY_MOVERIGHT;
+			return;
+		}
+
 		local float r = vlen(self.origin - self.goalentity.origin) * 0.1; // Find distance to goalentity target
 
 		// Debug distance to goalentity
@@ -459,13 +426,11 @@ void() BotAI =
 		{
 			if (self.bot_search_finished < time) // Bot searches while driving
 			{
-				if (self.goalentity.classname == "marker") // && !visible(self.goalentity))
+				if (self.goalentity.classname == "marker" || self.goalentity.classname == "bot_waypoint")
+				{
 					FindWayPoint(); // Find waypoints along the way
-				if (self.goalentity.classname == "bot_waypoint")
 					FindCheckPointDriving(); // Always looks for visible checkpoints
-
-				//if (!(self.origin_z < self.goalentity.origin_z + 20 && self.origin_z > self.goalentity.origin_z - 20))
-				//	bprint ("WHAT THE F\n");
+				}
 
 				if (race_status == RACE_STARTED)
 				{
@@ -474,42 +439,32 @@ void() BotAI =
 					else
 						self.bot_search_count = 0;
 				}
+
 				// Bot is stuck / lost
-				if (self.bot_search_count > 30) // Bot is stuck, so let's try and fix that
+				if (self.bot_search_count > 10) // Bot is stuck, so let's try and fix that
 				{
-					if (self.findcheckpoint_fail > 1) // Reached the end of valid checkpoints
+					for (entity targ = world;(targ = find(targ, classname, "player"));)
 					{
-						GetWayPoint(); // Go back and try the last waypoint
-						//bprint ("Bot ran GetWayPoint(); while out of valid checkpoints\n");
-					}
-					else
-					{
-						local float found = FindAnyVisibleWayPoint(); // Find visible / closest waypoint to me since I've lost my original goalentity						   
-						//if (found)
-							//bprint ("Bot found any visible WayPoint\n");
-
-						if (!found)
+						if (!visible(targ) && targ.trail && targ.trail.cnt && (targ.checkpoint >= self.checkpoint || targ.waypoint >= self.waypoint) && targ.lap >= self.lap)
 						{
-							//bprint ("Bot ran ReverseGetWaypoint\n");
+							// Steal player stats
+							self.checkpoint = targ.checkpoint;
+							self.waypoint = targ.waypoint;
+							self.lap = targ.lap;
+							self.angles_y = targ.trail.angles_y;
+							self.fixangle = TRUE; // Is this needed?
+							//
+							makevectors(self.realang);
+							car_teleport(targ.trail.origin, TRUE);
+							self.bot_search_count = 0;
 
-							ReverseGetWayPoint();
-							if (self.goalentity_waypoint)
-							{
-								self.goalentity = self.goalentity_waypoint;
-
-								if (self.waypoint > 0)
-									self.waypoint = self.goalentity_waypoint.waypoint - 1;
-							}
+							//bprint ("Teleported bot to player trail entity\n");
 						}
-						//bprint ("Bot WP: ", ftos(self.waypoint), "\n");
-						//bprint ("Running bot stuck stuff\n");
-						self.bot_search_count = 0;
 					}
-					
 				}
 				self.bot_search_finished = time + 0.1;
 			}
-	
+
 			if (self.goalentity.classname == "bot_waypoint_goal")
 				local float goforgoal = TRUE;
 			else
@@ -608,7 +563,7 @@ void() BotAI =
 
 		bot_angle_set();
 
-		// AI Cheats
+		// AI cheats, can always turbo
 		if (self.turbo_fuel < 100)
 			self.turbo_fuel = 100;
 
@@ -624,10 +579,6 @@ void() BotAI =
 		*/
 	}
 };
-
-
-
-
 
 //
 // Below is removed FrikBot AI code that won't work in RenRacer but is used for reference

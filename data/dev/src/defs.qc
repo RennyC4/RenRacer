@@ -434,6 +434,8 @@ float countdown_count;
 .float speedboost_finished; // How long speed booster lasts for
 .vector spawn_loc;
 .vector spawn_loc_angles;
+float human_players; // human players in-game
+.float collide_finished;
 
 var float PART_DIRT;
 var float PART_TURBO;
@@ -456,6 +458,8 @@ float total_waypoints;
 
 .vector dest1;
 .vector dest2;
+
+.entity trail; // Snail trail entity to help bots become unstuck
 
 //
 //CSQC 

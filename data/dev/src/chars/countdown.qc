@@ -18,8 +18,35 @@ void(float type) countdown_announce =
 void() countdown_think = // Race start countdown
 {
 	local entity oself;
-	
+
+	//
+	// Remove all bots if human_players > 1
+	//
+
+	if (!self.cnt)
+	{
+		for (entity targ = world;(targ = find(targ, classname, "player"));)
+		{
+			if (targ.ishuman)
+				human_players = human_players + 1;
+		}
+		bprint (ftos(human_players), "\n");
+		
+		if (human_players == 1) // Add bots
+		{
+			local float i;
+			local float g = cvar("sv_playerslots");
+			for (i = 0; i < g-1; i = i+1)
+				BotConnect(0, 0, 0);
+		}
+		self.cnt = TRUE; // run loop once
+	}
+	//
+
+	//
 	// Spawn players cars
+	//
+	
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
 		if (!targ.spawncar)
@@ -34,6 +61,11 @@ void() countdown_think = // Race start countdown
 			targ.spawncar = TRUE;
 		}
 	}
+	//
+
+	//
+	// Do Count Down
+	//
 
 	if (countdown_finished < time && countdown_count > -1)
 	{
@@ -63,6 +95,8 @@ void() countdown_think = // Race start countdown
 			return;
 		}
 	}
+	//
+
 	frameskip(0.1);
 };
 

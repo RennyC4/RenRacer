@@ -121,39 +121,44 @@ void(entity car) remove_car =
 };
 
 // HACK: Remove car, teleport player, recreate car and shove 'em back in
-void(vector dest) car_teleport =
+void(vector dest, float silent) car_teleport =
 {
 	if (self.teleport_finished > time)
 		return;
 
-	if (random() < 0.5)
-		sound (self, CHAN_AUTO, "teleport1.wav", 1, ATTN_NORM);
-	else
-		sound (self, CHAN_AUTO, "teleport2.wav", 1, ATTN_NORM);
+	self.collide_finished = time + 2; // Can't collide with other cars temporarily
 
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_TELEPORT);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
+	if (!silent)
+	{
+		if (random() < 0.5)
+			sound (self, CHAN_AUTO, "teleport1.wav", 1, ATTN_NORM);
+		else
+			sound (self, CHAN_AUTO, "teleport2.wav", 1, ATTN_NORM);
+
+		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+		WriteByte (MSG_BROADCAST, TE_TELEPORT);
+		WriteCoord (MSG_BROADCAST, self.origin_x);
+		WriteCoord (MSG_BROADCAST, self.origin_y);
+		WriteCoord (MSG_BROADCAST, self.origin_z);
+	}
 
 	remove_car(self.driving);
 	setorigin(self, dest);
 
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_TELEPORT);
-	WriteCoord (MSG_BROADCAST, self.origin_x);
-	WriteCoord (MSG_BROADCAST, self.origin_y);
-	WriteCoord (MSG_BROADCAST, self.origin_z);
+	if (!silent)
+	{
+		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+		WriteByte (MSG_BROADCAST, TE_TELEPORT);
+		WriteCoord (MSG_BROADCAST, self.origin_x);
+		WriteCoord (MSG_BROADCAST, self.origin_y);
+		WriteCoord (MSG_BROADCAST, self.origin_z);
+	}
 
 	local entity car = hotrod();
 	makevectors(self.angles);
 	car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
 	Car_InitVehicle(car);
 	
-	// Restore stashed waypoint on being teleported, essentially starting back on the
-	// waypoint path properly
-	self.waypoint = self.last_waypoint;
-	if (!self.ishuman)
-		GetWayPoint();
+	if (!silent)
+		self.alpha = 0.1; // Teleport effect
 };

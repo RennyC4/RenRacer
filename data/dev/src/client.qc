@@ -54,7 +54,6 @@ void() Setup_level_effects =
 //
 // RennyC: Work in progress to fake push other cars/players out of the way
 //
-.float collide_finished;
 void() PushPlayers =
 {
 	if (self.collide_finished > time)
@@ -141,14 +140,8 @@ void() PlayerPreThink =
 		Car_CheckAttach(); // Shove the player in the car
 		if (framecount > 75 && self.button0 && race_status == RACE_NOTSTARTED)
 		{
-			// Add bots
-			local float i;
-			local float g = cvar("sv_playerslots");
-			for (i = 0; i < g-1; i = i+1)
-				BotConnect(0, 0, 0);
-
-			race_status = RACE_COUNTDOWN;
 			spawn_car_countdown(); // Start countdown
+			race_status = RACE_COUNTDOWN;
 			sound (self, CHAN_AUTO, "engine/start.wav", 1, ATTN_NORM);
 		}
 	}
@@ -193,10 +186,77 @@ void() PlayerPreThink =
 	}
 };
 
+void() snailtrail_think =
+{
+	if (!self.owner)
+	{
+		remove(self);
+		return;
+	}
+
+	local float len = vlen(self.owner.origin - self.origin);
+	if (len > 500)
+	{
+		// FrikBot reads cnt
+		if (!visible(self.owner))
+			self.cnt = TRUE;
+		else
+			self.cnt = FALSE;
+		
+		if (len > 1250) // Update trail origin
+		{
+			self.angles = self.owner.angles;
+			setorigin(self, self.owner.origin);
+		}
+	}
+	else
+		self.cnt = FALSE;
+
+	frameskip(0.1);
+};
+
 void() PlayerPostThink =
 {
 	if (BotPostFrame()) // FrikBot
 		return;
+
+	//
+	// Player snail trail waypoint
+	//
+	
+	if (self.ishuman && race_status == RACE_STARTED && self.driving)
+	{
+		if (!self.trail)
+		{
+			local entity trail1 = spawn();
+			trail1.owner = self;
+			self.trail = trail1;
+			trail1.classname = "trail1";
+			setorigin (trail1, self.origin);
+			if (cvar("developer") == 2)
+			{
+				setmodel (trail1, "progs/s_debug.spr");
+				trail1.colormod = '1 10 10'; // debugging: remove me
+			}
+			else
+				setmodel (trail1, "progs/null.spr");
+
+			setsize (trail1, '0 0 0', '0 0 0');
+
+			trail1.think = snailtrail_think;
+			trail1.nextthink = time + 0.1;
+		}
+	}
+	
+	//
+	// Restore player transparency
+	//
+
+	if (race_status == RACE_STARTED)
+	{
+		if (self.alpha < 1)
+			self.alpha = self.alpha + 0.4 * frametime;
+	}
 
 	TryUpdateVehicle();
 	CheckImpulses();
@@ -293,18 +353,8 @@ void() PutClientInServer =
 	self.checkpoint_lastpos = self.origin + v_up * 64;
 	self.spawn_loc = self.origin + v_up * 64; // Stash it
 	self.spawn_loc_angles = self.angles; // Stash it
+	self.alpha = 1;
 
 	if (cvar("developer") != 1)
 		centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________\n\n\nPress [^b^1FIRE^7^b] to start the race");
-
-	/*
-	// Frikbots Insta-spawn as the player does
-	if (!self.ishuman)
-	{
-		local entity car = hotrod();
-		makevectors(self.angles);
-		car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
-		Car_InitVehicle(car);
-	}
-	*/
 };
