@@ -426,11 +426,10 @@ void() BotAI =
 		{
 			if (self.bot_search_finished < time) // Bot searches while driving
 			{
-				if (self.goalentity.classname == "marker" || self.goalentity.classname == "bot_waypoint")
-				{
+				if (self.goalentity.classname == "marker")				
 					FindWayPoint(); // Find waypoints along the way
+				if (self.goalentity.classname == "bot_waypoint")
 					FindCheckPointDriving(); // Always looks for visible checkpoints
-				}
 
 				if (race_status == RACE_STARTED)
 				{

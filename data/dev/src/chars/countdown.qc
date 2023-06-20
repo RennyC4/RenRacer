@@ -30,8 +30,7 @@ void() countdown_think = // Race start countdown
 			if (targ.ishuman)
 				human_players = human_players + 1;
 		}
-		bprint (ftos(human_players), "\n");
-		
+
 		if (human_players == 1) // Add bots
 		{
 			local float i;
