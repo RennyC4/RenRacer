@@ -477,7 +477,9 @@ void() BotAI =
 				{
 					for (entity targ = world;(targ = find(targ, classname, "player"));)
 					{
-						if (!visible(targ) && targ.trail.cnt && (targ.checkpoint > self.checkpoint || targ.lap > self.lap))
+						//if (!visible(targ) && targ.trail.cnt && (targ.checkpoint > self.checkpoint || (targ.lap > self.lap && (targ.checkpoint != 0 || targ.checkpoint != total_checkpoints))
+
+						if (!visible(targ) && targ.trail.cnt && (targ.checkpoint > self.checkpoint || targ.waypoint > self.waypoint))
 						{
 							// Steal player stats & update goal entities
 							if (targ.checkpoint >= self.checkpoint)
@@ -490,7 +492,9 @@ void() BotAI =
 								self.waypoint = targ.waypoint;
 								FindWayPoint();
 							}
-							self.lap = targ.lap;
+							if (targ.lap > self.lap)
+								self.lap = targ.lap;
+
 							self.checkpoint_lastpos = targ.checkpoint_lastpos;
 							self.angles_y = targ.trail.angles_y;
 							self.fixangle = TRUE; // Is this needed?
