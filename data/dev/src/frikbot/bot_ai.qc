@@ -477,7 +477,7 @@ void() BotAI =
 				{
 					for (entity targ = world;(targ = find(targ, classname, "player"));)
 					{
-						if (!visible(targ) && targ.trail.cnt && (targ.checkpoint >= self.checkpoint || targ.waypoint >= self.waypoint && targ.lap >= self.lap))
+						if (!visible(targ) && targ.trail.cnt && (targ.checkpoint > self.checkpoint || targ.lap > self.lap))
 						{
 							// Steal player stats & update goal entities
 							if (targ.checkpoint >= self.checkpoint)
