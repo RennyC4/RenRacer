@@ -62,7 +62,7 @@ void() marker_think =
 					if (self.enemy) // Do check point confirm
 					{
 						if (cvar("developer") == 2)
-							sprint (targ, "CheckPoint_touch: ", ftos(self.checkpoint), "\n");
+							sprint (targ, "CheckPoint_touch: ", ftos(self.checkpoint), " / ", ftos(total_checkpoints), "\n");
 
 						self.enemy.effects = EF_MUZZLEFLASH;
 						self.cnt = TRUE; // Start animation
@@ -78,6 +78,14 @@ void() marker_think =
 				else if (race_status != RACE_FINISHED)
 				{
 					centerprint (targ, "/PYou must drive through the starting goal to properly start the race!");
+					oldself = self;
+					self = targ;
+					self.angles = self.spawn_loc_angles;
+					self.fixangle = TRUE;
+					self.waypoint = 0;
+					car_teleport(self.spawn_loc, FALSE);
+					self.teleport_finished = time + 2;
+					self = oldself;
 					targ.clearcprint_finished = time + 2.5;
 				}
 			}
@@ -128,4 +136,6 @@ void() rally_marker =
 		self.radius = 250;
 	if (!self.checkpoint)
 		error("rally_marker with no checkpoint value set\n");
+		
+	total_checkpoints = total_checkpoints + 1;
 };

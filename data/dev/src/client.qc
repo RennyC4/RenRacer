@@ -194,23 +194,12 @@ void() snailtrail_think =
 		return;
 	}
 
-	local float len = vlen(self.owner.origin - self.origin);
-	if (len > 500)
+	local float len = vlen(self.origin - self.owner.origin);
+	if (len > 800) // Update trail origin
 	{
-		// FrikBot reads cnt
-		if (!visible(self.owner))
-			self.cnt = TRUE;
-		else
-			self.cnt = FALSE;
-		
-		if (len > 1250) // Update trail origin
-		{
-			self.angles = self.owner.angles;
-			setorigin(self, self.owner.origin);
-		}
+		self.angles = self.owner.angles;
+		setorigin(self, self.owner.origin);
 	}
-	else
-		self.cnt = FALSE;
 
 	frameskip(0.1);
 };
@@ -223,7 +212,7 @@ void() PlayerPostThink =
 	//
 	// Player snail trail waypoint
 	//
-	
+
 	if (self.ishuman && race_status == RACE_STARTED && self.driving)
 	{
 		if (!self.trail)
@@ -245,6 +234,17 @@ void() PlayerPostThink =
 
 			trail1.think = snailtrail_think;
 			trail1.nextthink = time + 0.1;
+		}
+		else
+		{
+			makevectors(self.v_angle);
+			local float len = vlen(self.origin - self.trail.origin);
+
+			if (infront2(self.trail, 0.3) || len < 250) // Removed visible();
+				self.trail.cnt = FALSE; // Frikbots can't teleport if the snail trail is being looked at or player visible
+			else
+				self.trail.cnt = TRUE;
+			//bprint ("Self.Trail.Cnt = ", ftos(self.trail.cnt), "\n");
 		}
 	}
 	

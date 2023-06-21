@@ -436,9 +436,12 @@ float countdown_count;
 .vector spawn_loc_angles;
 float human_players; // human players in-game
 .float collide_finished;
+float total_waypoints;
+float total_checkpoints;
 
 var float PART_DIRT;
 var float PART_TURBO;
+var float PART_SPEEDBOOST;
 
 // Lap time stats
 .float start_laptime; // ON / OFF
@@ -454,7 +457,6 @@ var float PART_TURBO;
 .float waypoint;
 .float last_waypoint;
 .float waypoint_speed;
-float total_waypoints;
 
 .vector dest1;
 .vector dest2;

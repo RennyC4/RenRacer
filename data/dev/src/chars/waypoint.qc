@@ -14,7 +14,7 @@ void() waypoint_touch =
 	other.owner.driving.goalentity = world; // find next waypoint
 
 	if (cvar("developer") == 2)
-		sprint (other.owner.driving, "Waypoint_touch: ", ftos(self.waypoint), " / ", ftos(other.owner.driving.waypoint), "\n");
+		sprint (other.owner.driving, "Waypoint_touch: ", ftos(self.waypoint), " / ", ftos(total_waypoints), "\n");
 	//bprint (other.owner.driving.classname, "\n");
 };
 

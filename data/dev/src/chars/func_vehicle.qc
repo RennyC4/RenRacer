@@ -651,7 +651,10 @@ void TryUpdateVehicle(){
 
 		// RennyC: Speed Booster
 		if (self.speed > 0 && self.speedboost_finished > time)
+		{
 			car_boost(self.speed);
+			pointparticles(PART_SPEEDBOOST, self.origin - v_up * 16 - v_forward * 32, '0 0 0', 1);
+		}
 
 		float roll = v_right * self.velocity;
 		if (roll > 100){

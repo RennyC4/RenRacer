@@ -48,6 +48,7 @@ void() worldspawn =
 
 	PART_DIRT = particleeffectnum("dirt");
 	PART_TURBO = particleeffectnum("turbo");
+	PART_SPEEDBOOST = particleeffectnum("speedboost");
 
 	precache_model("progs/null.spr");
 	precache_model("progs/s_debug.spr");
