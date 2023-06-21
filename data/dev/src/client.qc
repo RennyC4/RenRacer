@@ -225,7 +225,7 @@ void() PlayerPostThink =
 			if (cvar("developer") == 2)
 			{
 				setmodel (trail1, "progs/s_debug.spr");
-				trail1.colormod = '1 10 10'; // debugging: remove me
+				trail1.colormod = '1 10 10';
 			}
 			else
 				setmodel (trail1, "progs/null.spr");
@@ -241,7 +241,7 @@ void() PlayerPostThink =
 			local float len = vlen(self.origin - self.trail.origin);
 
 			if (infront2(self.trail, 0.3) || len < 250) // Removed visible();
-				self.trail.cnt = FALSE; // Frikbots can't teleport if the snail trail is being looked at or player visible
+				self.trail.cnt = FALSE; // Frikbots can't teleport if the snail trail is being looked at
 			else
 				self.trail.cnt = TRUE;
 			//bprint ("Self.Trail.Cnt = ", ftos(self.trail.cnt), "\n");

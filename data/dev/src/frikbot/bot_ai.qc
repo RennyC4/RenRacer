@@ -265,7 +265,6 @@ frame, the ai_time limits it's actual updating
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 */
 
-.float trailcheck_finished;
 void() BotAI =
 {
 	// stagger the bots AI out so they all don't think at the same time, causing game 'spikes'
@@ -474,16 +473,25 @@ void() BotAI =
 				}
 
 				// Bot is stuck / lost, or is taking too long to hit its goal
-				if (self.bot_search_count >= 15 || self.goalentity_time >= 30 && self.trailcheck_finished < time)
+				if (self.bot_search_count >= 15 || self.goalentity_time >= 30)
 				{
 					for (entity targ = world;(targ = find(targ, classname, "player"));)
 					{
-						if (targ.trail.cnt && (targ.checkpoint >= self.checkpoint || targ.waypoint >= self.waypoint) && targ.lap >= self.lap)
+						if (!visible(targ) && targ.trail.cnt && (targ.checkpoint >= self.checkpoint || targ.waypoint >= self.waypoint && targ.lap >= self.lap))
 						{
-							// Steal player stats
-							self.checkpoint = targ.checkpoint;
-							self.waypoint = targ.waypoint;
+							// Steal player stats & update goal entities
+							if (targ.checkpoint >= self.checkpoint)
+							{
+								self.checkpoint = targ.checkpoint;
+								GetCheckPoint();
+							}
+							if (targ.waypoint >= self.waypoint)
+							{
+								self.waypoint = targ.waypoint;
+								FindWayPoint();
+							}
 							self.lap = targ.lap;
+							self.checkpoint_lastpos = targ.checkpoint_lastpos;
 							self.angles_y = targ.trail.angles_y;
 							self.fixangle = TRUE; // Is this needed?
 							//
@@ -498,9 +506,7 @@ void() BotAI =
 								bprint ("Teleported bot to player trail entity\n");
 						}
 					}
-					self.trailcheck_finished = time + 0.1; // Don't spam "find"
 				}
-
 				self.bot_search_finished = time + 0.1;
 			}
 

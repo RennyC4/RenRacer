@@ -28,7 +28,7 @@ void() marker_think =
 						if (targ.checkpoint == (self.checkpoint - 1))
 						{
 							targ.checkpoint = self.checkpoint;
-							targ.checkpoint_lastpos = targ.origin + v_up * 64;
+							targ.checkpoint_lastpos = targ.origin;
 							self.enemy = targ;
 						}
 						if (self.checkpoint > targ.checkpoint)

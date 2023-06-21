@@ -148,7 +148,7 @@ void(vector dest, float silent) car_teleport =
     {
 		local vector v2 = part.origin;
 		v2 = v2 += displacement;
-		setorigin(part, v2);
+		setorigin(part, v2 + '0 0 32'); // add 32qu Z, helps keep cars out of the ground
 		part.velocity = part.velocity / 1000;
 		part = part.physobj_next;
 	}
