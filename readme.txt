@@ -117,6 +117,8 @@ MANUEL / GAS GAS GAS - Race1.ogg
 The End By A-ONE ft Odyssey - Race2.ogg
 Touhou Adequate By Odyssey - Race3.ogg
 On The Moon By A-ONE ft Odyssey - Race4.ogg
+King Of Eurobeat Majestic ReMix By Jordan - Race5.ogg
+Tokyo Yo Yo By Milena Farrow - Race6.ogg
 https://freestocktextures.com/photos-ground/ - Some terrain textures
 kilomile - v_speed.mdl
 Coffee - TutorBot waypoint system; modified
