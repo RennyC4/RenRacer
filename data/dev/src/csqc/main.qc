@@ -60,6 +60,8 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 		float vol = min(1, 0.25 + (speed / 4));
 		float pitchadd = min(1000, speed);
 		float pitch = 120 + pitchadd;
+		if (pitch > 300) // cap pitch since it's tied to velocity
+			pitch = 300;
 		soundupdate(engine_sound, CHAN_BODY, "engine/engine.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
 	}
 	//

@@ -12,6 +12,11 @@ void() CheckImpulses =
 {
 	if (self.impulse == 1)
 		headlights_toggle();
+	if (self.impulse == 2)
+	{
+		makevectors (self.angles);
+		car_angle(self.angles);
+	}
 	if (self.impulse == 3)
 	{
 		create_waypoint(self.origin, total_waypoints, 0);

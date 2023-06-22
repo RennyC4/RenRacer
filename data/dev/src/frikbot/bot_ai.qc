@@ -477,17 +477,15 @@ void() BotAI =
 				{
 					for (entity targ = world;(targ = find(targ, classname, "player"));)
 					{
-						//if (!visible(targ) && targ.trail.cnt && (targ.checkpoint > self.checkpoint || (targ.lap > self.lap && (targ.checkpoint != 0 || targ.checkpoint != total_checkpoints))
-
 						if (!visible(targ) && targ.trail.cnt && (targ.checkpoint > self.checkpoint || targ.waypoint > self.waypoint))
 						{
 							// Steal player stats & update goal entities
-							if (targ.checkpoint >= self.checkpoint)
+							if (targ.checkpoint > self.checkpoint)
 							{
 								self.checkpoint = targ.checkpoint;
 								GetCheckPoint();
 							}
-							if (targ.waypoint >= self.waypoint)
+							if (targ.waypoint > self.waypoint)
 							{
 								self.waypoint = targ.waypoint;
 								FindWayPoint();

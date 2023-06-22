@@ -1,4 +1,3 @@
-TODO: Cap pitch on engine sound
 TODO: Move checkpoint particles to CSQC and only have the next markers particle effects ran
 TODO: Tracebox on cars
 	- Works but kind of broken: Maybe reducing the trace by 1's would work? Wheels get stuck
@@ -8,6 +7,9 @@ TODO: Breakable brushes (request by xaGe)
 
 ====
 
+Done: Cap pitch on engine sound
+Done: Clip brush Map5 sky just to see how it interacts with the game camera
+	- Changes nothing.
 Done: Fix bot behavior near goal in map5
 Done: Bot/Player interaction with a waypoint snail trail system
 Done: Add in TAB scoreboard (+showscores) - FrikBots laps don't update

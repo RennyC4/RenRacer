@@ -165,3 +165,31 @@ void(vector dest, float silent) car_teleport =
 	if (!silent)
 		self.alpha = 0.1; // Teleport effect
 };
+
+// directly set the car angles WIP
+void(vector dir) car_angle =
+{
+	local entity part = self.driving.physobj_particlelist;
+    while(part)
+    {
+		bprint (ftos(part.angles_y), "\n");
+		part.angles = dir;
+		part = part.physobj_next;
+	}
+
+	entity hitmodel = self.driving.physobj_hitmodel;
+	while (hitmodel)
+	{
+		bprint (ftos(hitmodel.angles_y), "\n");
+		hitmodel.angles = dir;
+		hitmodel = hitmodel.physobj_next;
+	}
+	
+	local entity e = self.driving.physobj_staticlist;
+    while (e)
+    {
+		bprint (ftos(e.angles_y), "\n");
+		e.angles = dir;
+		e = e.physobj_next;
+    }
+};
