@@ -69,8 +69,12 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 	// Turbo Press Status
 	local float speedl = getstatf(STAT_TURBO);
 	local float turbof = getstatf(STAT_TURBOFUEL);
+	local float speedb = getstatf(STAT_SPEEDBOOST);
 	if (speedl && turbof > 0 && rs != RACE_FINISHED)
-		DrawSpeedLines(); // Draw Speed Lines on Turbo
+		DrawSpeedLines(FALSE); // Draw speed lines on turbo
+	if (speedb > time)
+		DrawSpeedLines(TRUE); // Draw blue speed lines on speed boost
+	
 	//
 
 	if (framecount == 10)
@@ -115,6 +119,8 @@ void() CSQC_WorldLoaded  =
 		// Sky colours here
 		if (world.model == "maps/map3.hmp")
 			sky.colormod = '2 .5 .5';
+		if (world.model == "maps/map6.hmp")
+			sky.colormod = '.01 .01 0.5';
 
 		precache_model ("progs/sky.iqm");
 		setmodel(sky, "progs/sky.iqm");

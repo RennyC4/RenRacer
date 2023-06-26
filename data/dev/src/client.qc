@@ -48,6 +48,10 @@ void() Setup_level_effects =
 		}
 		else
 			stuffcmd (self, "sv_gravity 1200\n");
+		if (world.model == "maps/map6.hmp") // Temproary FIXME/TODO: Remove this
+		{
+			self.effects = EF_BRIGHTFIELD;
+		}
 	}
 };
 
@@ -247,6 +251,25 @@ void() PlayerPostThink =
 			//bprint ("Self.Trail.Cnt = ", ftos(self.trail.cnt), "\n");
 		}
 	}
+
+	//
+	// Get liquid level - RennyC
+	//
+
+	local float contents = 0;
+	local vector point = self.origin;
+
+	point_z = point_z + self.mins_z + 1; // get the minimum water depth (waterlevel 1)
+	contents = pointcontents(point);
+	if (contents >= CONTENT_LAVA && contents <= CONTENT_WATER)
+		self.waterlevel = 1;
+	else
+		self.waterlevel = 0;
+
+	if (self.waterlevel > 0)
+		self.effects |= EF_BRIGHTFIELD;
+	else
+		self.effects &= ~(EF_BRIGHTFIELD);
 	
 	//
 	// Restore player transparency
@@ -257,7 +280,6 @@ void() PlayerPostThink =
 		if (self.alpha < 1)
 			self.alpha = self.alpha + 0.4 * frametime;
 	}
-
 	TryUpdateVehicle();
 	CheckImpulses();
 };

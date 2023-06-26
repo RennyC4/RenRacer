@@ -1,0 +1,10 @@
+a |= b; sets anything in a that was set in b (and not harming anything if it was already set in a, unlike += would).
+a &= ~(b); clears anything in a that is set in b.
+a &= b; clears everything in a which isn't also set in b. 'and' 
+a <<= b; multiples by pow(2,b)... ie: 1->2, 2->4, etc. (shifts every bit left by b) 
+a >>= b; divides as it were, while rounding down. 'right-shift' 
+a ^= b; flip everything in a that is set in b. 'xor' 
+Spoike — 06/16/2023 9:57 AM
+drop the = bit and it'll 'return' the new values instead of assigning to a. | and & are valid for vanilla, shifts, bitnot, xor, operate-and-assign operators are invalid for vanilla qcc, thus you're unlinkly to encounter them.
+bitwise operations on floats are basically bullpoop that no real langague would ever allow... in quakec they require the engine to cast them to ints first, and then back to floats ater.
+a float can thus hold only 24 bits... and a sign bit.

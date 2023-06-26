@@ -301,7 +301,7 @@ void() BotAI =
 			if (!self.headlights)
 				headlights_on();
 		}
-		else
+		else if (self.headlights)
 			headlights_off();
 	}
 

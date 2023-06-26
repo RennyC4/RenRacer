@@ -22,6 +22,7 @@ void() CSEv_GrabCSQCValues =
 	globalstat(STAT_RACESTATUS, EV_FLOAT, "race_status");
 	clientstat(STAT_TIME, EV_FLOAT, laptime);
 	clientstat(STAT_TURBO, EV_FLOAT, turbo);
+	clientstat(STAT_SPEEDBOOST, EV_FLOAT, speedboost_finished);
 };
 
 void() world_lights =
@@ -49,6 +50,7 @@ void() worldspawn =
 	PART_DIRT = particleeffectnum("dirt");
 	PART_TURBO = particleeffectnum("turbo");
 	PART_SPEEDBOOST = particleeffectnum("speedboost");
+	PART_BUBBLE = particleeffectnum("bubble");
 
 	precache_model("progs/null.spr");
 	precache_model("progs/s_debug.spr");
@@ -102,6 +104,7 @@ void() worldspawn =
 	precache_sound ("hit2.wav");
 	precache_sound ("hit3.wav");
 	precache_sound ("hit4.wav");
+	precache_sound ("spdboost.wav");
 
 	world_lights();
 	BotInit();  // FrikBot

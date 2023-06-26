@@ -357,7 +357,7 @@ entity() hotrod =
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
 	part.physobj_friction_ground = '0.225 4.4 5';
-	part.physobj_friction_water = '2 2 2';
+	part.physobj_friction_water = '0 0 0'; // RennyC: Removed water physics
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
@@ -391,7 +391,7 @@ entity() hotrod =
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
 	part.physobj_friction_ground = '0.225 4.4 5';
-	part.physobj_friction_water = '2 2 2';
+	part.physobj_friction_water = '0 0 0'; // RennyC: Removed water physics
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
@@ -425,7 +425,7 @@ entity() hotrod =
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
 	part.physobj_friction_ground = '0.225 3.3 5';
-	part.physobj_friction_water = '2 2 2';
+	part.physobj_friction_water = '0 0 0'; // RennyC: Removed water physics
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
@@ -459,7 +459,7 @@ entity() hotrod =
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
 	part.physobj_friction_ground = '0.225 3.3 5';
-	part.physobj_friction_water = '2 2 2';
+	part.physobj_friction_water = '0 0 0'; // RennyC: Removed water physics
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
@@ -490,7 +490,7 @@ entity() hotrod =
 	part.part_mass = 0.575;
 	part.physobj_stiction = 50;
 	part.physobj_friction_ground = '8 8 8';
-	part.physobj_friction_water = '2 2 2';
+	part.physobj_friction_water = '0 0 0'; // RennyC: Removed water physics
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
@@ -508,7 +508,7 @@ entity() hotrod =
 	part.part_mass = 0.52;
 	part.physobj_stiction = 50;
 	part.physobj_friction_ground = '8 8 8';
-	part.physobj_friction_water = '2 2 2';
+	part.physobj_friction_water = '0 0 0'; // RennyC: Removed water physics
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
@@ -526,7 +526,7 @@ entity() hotrod =
 	part.part_mass = 0.52;
 	part.physobj_stiction = 50;
 	part.physobj_friction_ground = '8 8 8';
-	part.physobj_friction_water = '2 2 2';
+	part.physobj_friction_water = '0 0 0'; // RennyC: Removed water physics
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
@@ -544,7 +544,7 @@ entity() hotrod =
 	part.part_mass = 0.52;
 	part.physobj_stiction = 50;
 	part.physobj_friction_ground = '8 8 8';
-	part.physobj_friction_water = '2 2 2';
+	part.physobj_friction_water = '0 0 0'; // RennyC: Removed water physics
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
@@ -562,7 +562,7 @@ entity() hotrod =
 	part.part_mass = 0.575;
 	part.physobj_stiction = 50;
 	part.physobj_friction_ground = '8 8 8';
-	part.physobj_friction_water = '2 2 2';
+	part.physobj_friction_water = '0 0 0'; // RennyC: Removed water physics
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
@@ -580,7 +580,7 @@ entity() hotrod =
 	part.part_mass = 0.575;
 	part.physobj_stiction = 50;
 	part.physobj_friction_ground = '8 8 8';
-	part.physobj_friction_water = '2 2 2';
+	part.physobj_friction_water = '0 0 0'; // RennyC: Removed water physics
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
@@ -598,7 +598,7 @@ entity() hotrod =
 	part.part_mass = 0.375;
 	part.physobj_stiction = 50;
 	part.physobj_friction_ground = '8 8 8';
-	part.physobj_friction_water = '2 2 2';
+	part.physobj_friction_water = '0 0 0'; // RennyC: Removed water physics
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
@@ -616,7 +616,7 @@ entity() hotrod =
 	part.part_mass = 0.375;
 	part.physobj_stiction = 50;
 	part.physobj_friction_ground = '8 8 8';
-	part.physobj_friction_water = '2 2 2';
+	part.physobj_friction_water = '0 0 0'; // RennyC: Removed water physics
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
@@ -634,7 +634,7 @@ entity() hotrod =
 	part.part_mass = 0.6;
 	part.physobj_stiction = 50;
 	part.physobj_friction_ground = '8 8 8';
-	part.physobj_friction_water = '2 2 2';
+	part.physobj_friction_water = '0 0 0'; // RennyC: Removed water physics
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
@@ -652,7 +652,7 @@ entity() hotrod =
 	part.part_mass = 0.375;
 	part.physobj_stiction = 50;
 	part.physobj_friction_ground = '8 8 8';
-	part.physobj_friction_water = '2 2 2';
+	part.physobj_friction_water = '0 0 0'; // RennyC: Removed water physics
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
@@ -670,7 +670,7 @@ entity() hotrod =
 	part.part_mass = 0.375;
 	part.physobj_stiction = 50;
 	part.physobj_friction_ground = '8 8 8';
-	part.physobj_friction_water = '2 2 2';
+	part.physobj_friction_water = '0 0 0'; // RennyC: Removed water physics
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
@@ -688,7 +688,7 @@ entity() hotrod =
 	part.part_mass = 0.52;
 	part.physobj_stiction = 50;
 	part.physobj_friction_ground = '8 8 8';
-	part.physobj_friction_water = '2 2 2';
+	part.physobj_friction_water = '0 0 0'; // RennyC: Removed water physics
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
@@ -706,7 +706,7 @@ entity() hotrod =
 	part.part_mass = 0.52;
 	part.physobj_stiction = 50;
 	part.physobj_friction_ground = '8 8 8';
-	part.physobj_friction_water = '2 2 2';
+	part.physobj_friction_water = '0 0 0'; // RennyC: Removed water physics
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
@@ -724,7 +724,7 @@ entity() hotrod =
 	part.part_mass = 0.575;
 	part.physobj_stiction = 50;
 	part.physobj_friction_ground = '8 8 8';
-	part.physobj_friction_water = '2 2 2';
+	part.physobj_friction_water = '0 0 0'; // RennyC: Removed water physics
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 

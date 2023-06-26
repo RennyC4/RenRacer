@@ -442,6 +442,7 @@ float total_checkpoints;
 var float PART_DIRT;
 var float PART_TURBO;
 var float PART_SPEEDBOOST;
+var float PART_BUBBLE;
 
 // Lap time stats
 .float start_laptime; // ON / OFF
@@ -473,3 +474,4 @@ var float PART_SPEEDBOOST;
 #define STAT_RACESTATUS 36
 #define STAT_TIME 37
 #define STAT_TURBO 38
+#define STAT_SPEEDBOOST 39

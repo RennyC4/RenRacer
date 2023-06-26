@@ -10,7 +10,7 @@ void() speedline_think =
 	speedline.nextthink = time;
 };
 
-void() DrawSpeedLines =
+void(float type) DrawSpeedLines =
 {
 	local vector pos = 0;
 	pos_x = g_width / 100;
@@ -29,6 +29,12 @@ void() DrawSpeedLines =
 	else
 	{
 		entdraw(speedline, pos - '10 10', size, -5);
+
+		if (type)
+			speedline.colormod = '.5 .5 10'; // Speed booster hit
+		else
+			speedline.colormod = '1 1 1';
+
 		speedline.think = speedline_think;
 		speedline.nextthink = time;
 	}

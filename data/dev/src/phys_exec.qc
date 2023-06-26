@@ -237,9 +237,11 @@ void(float fscale, float ftime, float sv_gravity) Phys_Acceleration =
 		part.dimension_hit = part.dimension_solid = 0; // RennyC: Disable player collisions
 		traceline(part.origin, part.origin, FALSE, part);
 		//tracebox(part.origin, part.mins, part.maxs, part.origin, FALSE, part);
-		if (trace_inwater)
-			part.velocity_z = part.velocity_z + sv_gravity*part.physobj_buoyancy*ftime*fscale; // Buoyancy
-		else
+		// RennyC: Disable water physics
+		//if (trace_inwater)
+		//	part.velocity_z = part.velocity_z + sv_gravity*part.physobj_buoyancy*ftime*fscale; // Buoyancy
+		//else
+		//
 			part.velocity_z = part.velocity_z - sv_gravity*ftime*fscale; // Gravity
 		if (part.flags & FL_ONGROUND && part.physobj_flags & PHFLAGS_SPRING_TOUCH) {
 			spring = -part.lmat_up;
@@ -444,6 +446,7 @@ void(float ftime) Phys_Deceleration =
 		//tracebox(part.origin, part.mins, part.maxs, part.origin, TRUE, part);
 		// Water friction
 		//if (trace_inwater)
+		/*
 		if (pointcontents(part.origin) < CONTENT_SOLID)
 		{
 			if (part.physobj_friction_water_x)
@@ -453,8 +456,9 @@ void(float ftime) Phys_Deceleration =
 			if (part.physobj_friction_water_z)
 				part.velocity = part.velocity - part.lmat_up*vlen(part.velocity)*normalize(part.velocity)*part.lmat_up*part.physobj_friction_water_z*ftime;
 		}
+		*/
 		// Air friction
-		else if (!trace_startsolid)
+		if (!trace_startsolid)
 		{
 			if (part.physobj_friction_air_x)
 				part.velocity = part.velocity - part.lmat_forward*vlen(part.velocity)*normalize(part.velocity)*part.lmat_forward*part.physobj_friction_air_x*ftime;

@@ -9,6 +9,7 @@ void() speedboost_touch =
 	if (other.owner.driving.speedboost_finished > time)
 		return;
 
+	sound (self, CHAN_AUTO, "spdboost.wav", 1, ATTN_NORM);
 	other.owner.driving.speed = self.speed;
 	other.owner.driving.speedboost_finished = time + self.speedboost_finished;
 };

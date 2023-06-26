@@ -148,12 +148,12 @@ void() Car_ChassiThink =
 		local float plyralpha = car.driving.alpha;
 		if (plyralpha < 1)
 		{
-			e.effects = EF_ADDITIVE;
+			e.effects |= EF_ADDITIVE;
 			e.alpha = car.driving.alpha;
 		}
 		else
 		{
-			e.effects = 0;
+			e.effects &= ~EF_ADDITIVE;
 			e.alpha = 1;
 		}
         e = e.physobj_next;
@@ -177,7 +177,6 @@ void() Car_ChassiThink =
 		car.driving.realang = v;
 		car.driving.realspeed = r;
 	}
-	//
 };
 
 #if defined(SMOOTH)
@@ -647,13 +646,17 @@ void TryUpdateVehicle(){
 		}
 		else if (forw < -100){
 			Car_Accelerate(-2500, 800);
-		}
+		} 
 
 		// RennyC: Speed Booster
 		if (self.speed > 0 && self.speedboost_finished > time)
 		{
+			self.cardrift_stabilizer = -6; // Harder to tip while speed boosting
 			car_boost(self.speed);
-			pointparticles(PART_SPEEDBOOST, self.origin - v_up * 16 - v_forward * 32, '0 0 0', 1);
+			if (!self.waterlevel)
+				pointparticles(PART_SPEEDBOOST, self.origin - v_up * 16 - v_forward * 32, '0 0 0', 1);
+			else
+				pointparticles(PART_BUBBLE, self.origin - v_up * 16 - v_forward * 32, '0 0 0', 1);
 		}
 
 		float roll = v_right * self.velocity;
@@ -687,7 +690,11 @@ void TryUpdateVehicle(){
 				Car_Accelerate(3000, 950);
 				car_boost(2000);
 				makevectors(self.realang);
-				pointparticles(PART_TURBO, self.origin - v_up * 16 - v_forward * 32, '0 0 0', 1);
+
+				if (!self.waterlevel)
+					pointparticles(PART_TURBO, self.origin - v_up * 16 - v_forward * 32, '0 0 0', 1);
+				else
+					pointparticles(PART_BUBBLE, self.origin - v_up * 16 - v_forward * 32, '0 0 0', 1);
 
 				if (self.turbo_fuel > 0)
 					self.turbo_fuel = self.turbo_fuel - 1;
@@ -835,7 +842,7 @@ void TryUpdateVehicle(){
 	self.velocity = '0 0 0';
 	self.modelindex = modelindex_null;
 	self.frame = 0;
-}
+};
 
 vector() Car_SpringyOrigin =
 {

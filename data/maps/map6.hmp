@@ -1,0 +1,185 @@
+{
+classname "worldspawn"
+message "Beneath the Waves"
+_sky "nosky"
+_fog 0.02
+_maxdrawdist 0 /*overrides fog distance (if greater)*/
+_segmentsize 1024 /*how big each section is. this affects texturing and resolutions*/
+_minxsegment -2048
+_minysegment -2048
+_maxxsegment 2048
+_maxysegment 2048
+_seed "1000" /*for auto-gen plugins*/
+_exterior solid
+_defaultgroundtexture "sand3"
+_defaultgroundheight "0"
+_defaultwatertexture "water"
+_defaultwaterheight "1000"
+_fog "0.025 0 0 0.5"
+}
+{
+classname info_player_start
+origin "0 0 1024" /*EDITME*/
+}
+
+// racerspawn point 1
+{
+classname racer_spawnpoint
+origin "-18 -221 31"
+angles "0 90 0"
+}
+
+// racer spawn point 2
+{
+classname racer_spawnpoint
+origin "211 -276 31"
+angles "0 90 0"
+}
+
+// racer spawn point 3
+{
+classname racer_spawnpoint
+origin "191 -120 31"
+angles "0 90 0"
+}
+
+// racer spawn point 4
+{
+classname racer_spawnpoint
+origin "37 -80 31"
+angles "0 90 0"
+}
+
+
+// start / finish goal
+{
+classname rally_startfinish_flag
+origin "38 981 31"
+angles "0 -90 0"
+spawnflags "1"
+lap "5"
+checkpoint "9" // must match last marker
+music "sound/music/race6.ogg"
+message "!! NEVER FEAR !!\n\n !!! THE FAST IS HERE !!!\n"
+}
+
+// marker 1
+{
+classname rally_marker
+origin "-239 2898 30"
+checkpoint "1"
+}
+
+// marker 2
+{
+classname rally_marker
+origin "-3549 3636 54"
+checkpoint "2"
+}
+
+// marker 3
+{
+classname rally_marker
+origin "-4962 2404 -62"
+checkpoint "3"
+}
+
+// marker 4
+{
+classname rally_marker
+origin "-1645 800 160`"
+checkpoint "4"
+}
+
+// marker 5
+{
+classname rally_marker
+origin "-3651 5401 426"
+checkpoint "5"
+}
+
+// marker 6
+{
+classname rally_marker
+origin "-270 6732 30"
+checkpoint "6"
+}
+
+// marker 7
+{
+classname rally_marker
+origin "-665 4646 34"
+checkpoint "7"
+}
+
+// marker 8
+{
+classname rally_marker
+origin "1562 1230 30"
+checkpoint "8"
+}
+
+// marker 9
+{
+classname rally_marker
+origin "615 -3403 -321"
+checkpoint "9"
+radius "400"
+}
+
+// speed booster 1
+{
+classname speedboost
+origin "-484 3255 45"
+angles "0 155 0"
+speed "3000"
+speedboost_finished "2"
+}
+
+// speed booster 2
+{
+classname speedboost
+origin "-5846 3026 -329"
+angles "-5.1 -81 0"
+speed "3000"
+speedboost_finished "2"
+}
+
+// speed booster 3
+{
+classname speedboost
+origin "-1377 2165 30"
+angles "-0.65 -71 0"
+speed "3000"
+speedboost_finished "2"
+}
+
+//
+// speed boosters (big ramp)
+//
+{
+classname speedboost
+origin "-3657 1591 322"
+angles "-25 108 0"
+speed "6000"
+speedboost_finished "1.25"
+}
+
+{
+classname speedboost
+origin "-3823 1545 338"
+angles "-25 108 0"
+speed "6000"
+speedboost_finished "1.25"
+}
+
+{
+classname speedboost
+origin "-3482 1649 328"
+angles "-25 108 0"
+speed "6000"
+speedboost_finished "1.25"
+}
+//
+//
+//
