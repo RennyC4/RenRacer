@@ -28,7 +28,7 @@ opt_func_vehicle_builtins.qc // RennyC optimized *Judderfest with sv_autoload 1*
 
 misc.qc
 client.qc
-dummys.qc
+combat.qc
 
 misc/headlights.qc
 misc/impulses.qc
@@ -46,6 +46,7 @@ chars/decor/barricade.qc
 chars/decor/flare.qc
 
 funcs.qc
+dummys.qc
 
 //CSQC extension start here.
 #pragma sourcefile "csprogs.src"

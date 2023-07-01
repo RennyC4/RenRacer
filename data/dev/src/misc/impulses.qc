@@ -12,7 +12,7 @@ void() CheckImpulses =
 {
 	if (self.impulse == 1)
 		headlights_toggle();
-	if (self.impulse == 2)
+	if (self.impulse == 2) // WIP: Change car angles
 	{
 		makevectors (self.angles);
 		car_angle(self.angles);
@@ -37,5 +37,8 @@ void() CheckImpulses =
 			way = find(way, classname, "bot_waypoint");
 		}
 	}
+	if (self.impulse == 5)
+		Fire_MachineGun();
+
 	self.impulse = 0;
 };
