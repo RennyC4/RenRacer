@@ -23,6 +23,8 @@ void() CSEv_GrabCSQCValues =
 	clientstat(STAT_TIME, EV_FLOAT, laptime);
 	clientstat(STAT_TURBO, EV_FLOAT, turbo);
 	clientstat(STAT_SPEEDBOOST, EV_FLOAT, speedboost_finished);
+	clientstat(STAT_HEALTH, EV_FLOAT, health);
+	clientstat(STAT_MAXHEALTH, EV_FLOAT, max_health);
 };
 
 void() world_lights =

@@ -39,9 +39,14 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 	renderscene();
 
 	DrawTurbo(); // Draw Turbo Stats
-	DrawSpeed(); // Draw Speed Stats
 	DrawDrift(); // Draw Drift Stats
-	DrawTime (); // Draw Lap Time Stats
+	if (!deathmatch)
+	{
+		DrawTime();  // Draw Lap Time Stats
+		DrawSpeed(); // Draw Speed Stats
+	}
+	if (deathmatch)
+		DrawHealth(); // Draw Health Stats (DM ONLY)
 
 	if (showscores)
 	{

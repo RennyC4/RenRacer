@@ -477,3 +477,5 @@ var float PART_BUBBLE;
 #define STAT_TIME 37
 #define STAT_TURBO 38
 #define STAT_SPEEDBOOST 39
+#define STAT_HEALTH 40
+#define STAT_MAXHEALTH 41

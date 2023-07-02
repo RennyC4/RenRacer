@@ -375,8 +375,6 @@ void() PutClientInServer =
 	//func_vehicle
 	setmodel (self, "progs/null.spr");
 	modelindex_null = self.modelindex;
-	stuffcmd(self, "chase_active 1\n");
-	stuffcmd(self, "crosshair 0\n");
 	//func_vehicle
 	
 	setsize (self, VEC_HULL_MIN, VEC_HULL_MAX);

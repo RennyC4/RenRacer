@@ -10,4 +10,5 @@ csqc/drift.qc
 csqc/time.qc
 csqc/speedline.qc
 csqc/scoreboard.qc
+csqc/health.qc
 csqc/main.qc
