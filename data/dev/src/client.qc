@@ -7,6 +7,7 @@
 //+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
 
 void() CheckImpulses;
+void(float type) CarAttack;
 void() ClientKill = {};
 
 void() ClientConnect =
@@ -252,10 +253,30 @@ void() PlayerPostThink =
 		}
 	}
 
+	if (self.alpha < 1) // Smooth restore player transparency
+		self.alpha = self.alpha + 0.4 * frametime;
+
+	// Smooth restore colormod
+	if (self.colormod_x > 1)
+		self.colormod_x = self.colormod_x - 6 * frametime;
+	else
+		self.colormod_x = 0;
+
+	if (self.colormod_y > 1)
+		self.colormod_y = self.colormod_y - 6 * frametime;
+	else
+		self.colormod_y = 0;
+
+	if (self.colormod_z > 1)
+		self.colormod_z = self.colormod_z - 6 * frametime;
+	else
+		self.colormod_z = 0;
+
+	//
+	
 	//
 	// Get liquid level - RennyC
 	//
-
 	local float contents = 0;
 	local vector point = self.origin;
 
@@ -270,16 +291,15 @@ void() PlayerPostThink =
 		self.effects |= EF_BRIGHTFIELD;
 	else
 		self.effects &= ~(EF_BRIGHTFIELD);
-	
-	//
-	// Restore player transparency
-	//
 
-	if (race_status == RACE_STARTED)
+	if (self.driving)// && deathmatch) // attack buttons
 	{
-		if (self.alpha < 1)
-			self.alpha = self.alpha + 0.4 * frametime;
+		if (self.button3)
+			CarAttack(0);
+		if (self.button4)
+			CarAttack(1);
 	}
+
 	TryUpdateVehicle();
 	CheckImpulses();
 };

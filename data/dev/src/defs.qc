@@ -438,6 +438,8 @@ float human_players; // human players in-game
 .float collide_finished;
 float total_waypoints;
 float total_checkpoints;
+.float mgun_finished;
+.float spcl_finished;
 
 var float PART_DIRT;
 var float PART_TURBO;

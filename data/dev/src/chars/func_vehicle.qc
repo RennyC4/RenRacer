@@ -141,11 +141,12 @@ void() Car_ChassiThink =
 		hitmodel = hitmodel.physobj_next;
 	}
 
-	// Setup translucent effects on visible car parts
+	// Setup translucent + colormod effects on visible car parts
 	local entity e = car.physobj_staticlist;
     while (e)
     {
 		local float plyralpha = car.driving.alpha;
+		local vector plyrcmod = car.driving.colormod;
 		if (plyralpha < 1)
 		{
 			e.effects |= EF_ADDITIVE;
@@ -156,6 +157,9 @@ void() Car_ChassiThink =
 			e.effects &= ~EF_ADDITIVE;
 			e.alpha = 1;
 		}
+		if (e.colormod != plyrcmod)
+			e.colormod = plyrcmod;
+
         e = e.physobj_next;
     }
     //

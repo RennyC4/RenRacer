@@ -1,3 +1,7 @@
+TODO: Work on DM mode
+	- Car can fire guns (basic machinegun / specials), machinegun is done
+	- Button remappings, done
+	- Damage / Kill stuff, not started
 TODO: Check out the breaking function from shpds delivery game
 TODO: Set direct angle on func_vehicle function
 TODO: Move checkpoint particles to CSQC and only have the next markers particle effects ran
