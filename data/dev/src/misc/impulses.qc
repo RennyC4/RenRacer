@@ -10,19 +10,19 @@
 
 void() CheckImpulses =
 {
-	if (self.impulse == 1)
+	if (self.impulse == 100)
 		headlights_toggle();
-	if (self.impulse == 2) // WIP: Change car angles instantly
+	if (self.impulse == 101) // WIP: Change car angles instantly
 	{
 		makevectors (self.angles);
 		car_angle(self.angles);
 	}
-	if (self.impulse == 3)
+	if (self.impulse == 102)
 	{
 		create_waypoint(self.origin, total_waypoints, 0);
 		bprint("Waypoint #: ", ftos(total_waypoints), "\n");
 	}
-	if (self.impulse == 4)
+	if (self.impulse == 103)
 	{
 		local entity way = find(world, classname, "bot_waypoint");
 		while (way)

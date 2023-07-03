@@ -10,6 +10,8 @@ TODO: Tracebox on cars
 	- Is this needed? Probably not; would be nice to have though...
 TODO: Impact sound - Car smash (wall)
 TODO: Breakable brushes (request by xaGe)
+TODO: Add a 'horn' button, becausewhynot
+TODO: Add speed booster as a brush entity as well
 
 ====
 
