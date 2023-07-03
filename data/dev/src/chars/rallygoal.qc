@@ -123,6 +123,12 @@ void() rally_goal_touch =
 // Supports .message which is used for custom race start centerprints
 void() rally_goal =
 {
+	if (deathmatch)
+	{
+		remove(self);
+		return;
+	}
+
 	precache_sound ("lap.wav");
 	precache_sound ("finish.wav");
 

@@ -116,6 +116,11 @@ void() marker_think =
 
 void() rally_marker =
 {
+	if (deathmatch)
+	{
+		remove(self);
+		return;
+	}
 	precache_model ("progs/marker.mdl");
 	precache_sound ("checkpoint.wav");
 

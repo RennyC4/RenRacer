@@ -42,6 +42,9 @@ void(vector org, float which, optional float cnt) create_waypoint =
 
 void() load_waypoints =
 {
+	if (deathmatch)
+		return;
+
 	if (world.model == "maps/map1.bsp")
 	{
 		create_waypoint ('1172.890991 1320.857056 -96.970322', 1, 0);

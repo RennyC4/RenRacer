@@ -320,7 +320,7 @@ void() PlayerPostThink =
 	else
 		self.effects &= ~(EF_BRIGHTFIELD);
 
-	if (self.driving && deathmatch && self.health > 0 && self.invulnerable_finished < time)
+	if (self.driving && deathmatch && self.health > 0 && self.invulnerable_finished < time && race_status == RACE_STARTED)
 	{
 		if (self.button3)
 			CarAttack(0);

@@ -126,6 +126,12 @@ void() rally_goal_proxy_think =
 
 void() rally_startfinish_flag =
 {
+	if (deathmatch)
+	{
+		remove(self);
+		return;
+	}
+
 	precache_model ("progs/finish.mdl");
 	precache_sound ("lap.wav");
 	precache_sound ("finish.wav");
