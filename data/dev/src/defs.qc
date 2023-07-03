@@ -400,7 +400,7 @@ float	modelindex_player;
 float framecount;
 entity lastspawn;
 
-float race_status;
+float race_status; // Other modes also use this
 float RACE_NOTSTARTED = 0;
 float RACE_COUNTDOWN = 1;
 float RACE_STARTED = 2;
@@ -444,6 +444,14 @@ float total_checkpoints;
 .float deathcount; // death counter
 .float invulnerable_finished;
 
+// Weapon crap
+.float weapon;
+float WEP_ROCKET = 0;
+float WEP_HROCKET = 1;
+float WEP_PROCKET = 2;
+
+
+// Particle defs
 var float PART_DIRT;
 var float PART_TURBO;
 var float PART_SPEEDBOOST;

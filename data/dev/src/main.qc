@@ -57,6 +57,7 @@ void() worldspawn =
 	precache_model("progs/null.spr");
 	precache_model("progs/s_debug.spr");
 	precache_model("progs/bullet.mdl");
+	precache_model("progs/rocket.mdl");
 
 	//
 	// func_vehicle - start
@@ -110,6 +111,8 @@ void() worldspawn =
 	precache_sound ("spdboost.wav");
 
 	precache_sound ("combat/mgun.wav");
+	precache_sound ("combat/rocket.wav");
+	precache_sound ("combat/xplode.wav");
 
 	world_lights();
 	BotInit();  // FrikBot

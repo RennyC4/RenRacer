@@ -6,6 +6,10 @@
 //| Weapons and combat functions are done here								   |
 //+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
 
+// ---
+// Damage / Death / Effects
+// ---
+
 void(vector position) CreateExplosion =
 {
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
@@ -13,6 +17,7 @@ void(vector position) CreateExplosion =
 	WriteCoord (MSG_BROADCAST, position_x);
 	WriteCoord (MSG_BROADCAST, position_y);
 	WriteCoord (MSG_BROADCAST, position_z);
+	sound (self, CHAN_BODY, "combat/xplode.wav", 1, ATTN_NORM);
 };
 
 void(entity targ, entity attacker) Death =
@@ -46,10 +51,16 @@ void(entity targ, entity attacker, float damage) DoDamage =
 
 	if (targ.health <= 0)
 	{
+		attacker.frags = attacker.frags + 1; // reward
 		Death(targ, attacker);
 		return;
 	}
 };
+
+
+// ---
+// Machine Gun
+// ---
 
 // func_vehicle is solid_bsp with an owner
 // so check for walls if there is none
@@ -71,7 +82,6 @@ void() MachineGunBullet_Touch =
 		return;
 
 	DoDamage(other.owner.driving, self.owner, 2); // other.owner.driving is the player
-	//DoDamage(other.owner.driving, self.owner, 50); // test
 
 	remove(self);
 };
@@ -123,6 +133,80 @@ void() Fire_MachineGun =
 	bullet.nextthink = time + 1;
 };
 
+// ---
+// Special: Regular Rocket
+// ---
+
+void() Rocket_Touch =
+{
+	if (other.solid == SOLID_BSP && !other.owner) // Hit wall
+	{
+		CreateExplosion(self.origin);
+		remove(self);
+		return;
+	}
+	if (other.owner.driving.classname != "player")
+		return;
+	if (self.owner == other.owner.driving)
+		return;
+
+	// Car jumps on hit
+	local entity targ = other.owner.driving;
+	entity wheels[] = {
+		targ.driving.frontleft,
+		targ.driving.frontright,
+		targ.driving.backleft,
+		targ.driving.backright
+	};
+	for (float i = 0; i < wheels.length; i++)
+	{	
+		traceline(wheels[i].origin, wheels[i].origin - wheels[i].lmat_up * 24, MOVE_NOMONSTERS, wheels[i]);
+		if (trace_fraction < 1)
+			Phys_Force(targ.driving, targ.driving.physobj_mass, '0 0 1' * 250 * 1.0, trace_endpos, wheels[i].lmat_up);
+	}
+
+	DoDamage(other.owner.driving, self.owner, 15);
+	CreateExplosion(self.origin);
+	remove(self);
+};
+
+void() Fire_Rocket =
+{
+	local entity rocket = spawn ();
+
+	makevectors (self.realang);
+
+	rocket.movetype = MOVETYPE_FLYMISSILE;
+	rocket.owner = self;
+	rocket.solid = SOLID_TRIGGER;
+	rocket.classname = "rocket";
+	rocket.netname = "projectile";
+	rocket.effects = EF_FULLBRIGHT;
+	rocket.touch = Rocket_Touch;
+
+	rocket.velocity = aim(self, 2000);
+	rocket.velocity = rocket.velocity * 2000;
+	rocket.velocity_x = rocket.velocity_x + self.driving.velocity_x;
+	rocket.velocity_y = rocket.velocity_y + self.driving.velocity_y;
+
+	rocket.angles = vectoangles(rocket.velocity);
+
+	// Test
+	rocket.dimension_solid = 0;
+	rocket.dimension_hit = 1;
+	//
+
+	setmodel (rocket, "progs/rocket.mdl");
+	setsize (rocket, '0 0 0', '0 0 0');
+
+	setorigin (rocket, self.origin + v_up * 8 + v_forward * (40 + self.realspeed));
+
+	sound (self, CHAN_WEAPON, "combat/rocket.wav", 1, ATTN_NORM);
+
+	rocket.think = SUB_Remove;
+	rocket.nextthink = time + 3;
+};
+
 // Main function to determine what gun the car fires
 void(float type) CarAttack =
 {
@@ -141,8 +225,11 @@ void(float type) CarAttack =
 	{
 		if (self.spcl_finished < time)
 		{
-			bprint ("Fire a special weapon here\n");
-			self.spcl_finished = time + 1;
+			if (self.weapon == WEP_ROCKET)
+			{
+				Fire_Rocket();
+				self.spcl_finished = time + 1;
+			}
 		}
 	}
 };
