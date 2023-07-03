@@ -6,6 +6,51 @@
 //| Weapons and combat functions are done here								   |
 //+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
 
+void(vector position) CreateExplosion =
+{
+	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
+	WriteCoord (MSG_BROADCAST, position_x);
+	WriteCoord (MSG_BROADCAST, position_y);
+	WriteCoord (MSG_BROADCAST, position_z);
+};
+
+void(entity targ, entity attacker) Death =
+{
+	// Car jumps on death
+	entity wheels[] = {
+		targ.driving.frontleft,
+		targ.driving.frontright,
+		targ.driving.backleft,
+		targ.driving.backright
+	};
+	for (float i = 0; i < wheels.length; i++)
+	{	
+		traceline(wheels[i].origin, wheels[i].origin - wheels[i].lmat_up * 24, MOVE_NOMONSTERS, wheels[i]);
+		if (trace_fraction < 1)
+			Phys_Force(targ.driving, targ.driving.physobj_mass, '0 0 1' * 500 * 1.0, trace_endpos, wheels[i].lmat_up);
+	}
+	// Initial big explosion here
+	CreateExplosion(targ.origin + v_up * 32);
+};
+
+void(entity targ, entity attacker, float damage) DoDamage =
+{
+	if (targ.health < 1)
+		return;
+	if (targ.invulnerable_finished > time)
+		return;
+
+	targ.health = targ.health - damage;
+	targ.colormod_x = 2;
+
+	if (targ.health <= 0)
+	{
+		Death(targ, attacker);
+		return;
+	}
+};
+
 // func_vehicle is solid_bsp with an owner
 // so check for walls if there is none
 void() MachineGunBullet_Touch =
@@ -25,10 +70,8 @@ void() MachineGunBullet_Touch =
 	if (self.owner == other.owner.driving)
 		return;
 
-	other.owner.driving.colormod_x = 2; // color target red
-
-	// Damage target, add red colormod
-	// other.owner.driving is the player
+	DoDamage(other.owner.driving, self.owner, 2); // other.owner.driving is the player
+	//DoDamage(other.owner.driving, self.owner, 50); // test
 
 	remove(self);
 };
@@ -81,11 +124,11 @@ void() Fire_MachineGun =
 };
 
 // Main function to determine what gun the car fires
-
-// TODO: Machine gun needs it's own attack finished and so does specials..
-// can fire machine guns while using your special
 void(float type) CarAttack =
 {
+	if (!deathmatch)
+		return;
+
 	if (!type) // regular machine gun
 	{
 		if (self.mgun_finished < time)

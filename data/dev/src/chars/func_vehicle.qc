@@ -619,14 +619,6 @@ void() CarStabilizeCheat =
 void TryUpdateVehicle(){
 	if (!check_camera_state){
 		check_camera_state = TRUE;
-		if (self.driving){
-			stuffcmd(self, "chase_active 1\n");
-			stuffcmd(self, "crosshair 0\n");
-		}
-		else {
-			stuffcmd(self, "chase_active 0\n");
-			stuffcmd(self, "crosshair 1\n");
-		}
 	}
 	if (!self.driving)
 		return;
@@ -641,7 +633,7 @@ void TryUpdateVehicle(){
 	//
 
 	setorigin(self, Car_SpringyOrigin());
-	if (race_status == RACE_STARTED) // RennyC: Allow player to control the car
+	if (race_status == RACE_STARTED && self.health > 0) // RennyC: Allow player to control the car
 	{
 		makevectors(self.v_angle);
 		float forw = v_forward * self.velocity;
@@ -823,10 +815,13 @@ void TryUpdateVehicle(){
 	}
 	else // RennyC: Race not started, lock tires
 	{
-		f_right.physobj_stiction = 99999;
-		f_left.physobj_stiction = 99999;
-		b_right.physobj_stiction = 99999;
-		b_left.physobj_stiction = 99999;
+		if (!deathmatch)
+		{
+			f_right.physobj_stiction = 99999;
+			f_left.physobj_stiction = 99999;
+			b_right.physobj_stiction = 99999;
+			b_left.physobj_stiction = 99999;
+		}
 	}
 	// RennyC
 

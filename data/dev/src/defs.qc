@@ -440,6 +440,9 @@ float total_waypoints;
 float total_checkpoints;
 .float mgun_finished;
 .float spcl_finished;
+.float deathcount_finished;
+.float deathcount; // death counter
+.float invulnerable_finished;
 
 var float PART_DIRT;
 var float PART_TURBO;

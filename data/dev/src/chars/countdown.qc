@@ -8,7 +8,12 @@ void(float type) countdown_announce =
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
 		if (!type)
-			centerprint (targ, "/PRACE STARTS IN\n\n[^1^b", f, "^b^7]\n");
+		{
+			if (!deathmatch)
+				centerprint (targ, "/PRACE STARTS IN\n\n[^1^b", f, "^b^7]\n");
+			else
+				centerprint (targ, "/PRAGE WAR STARTS IN\n\n[^1^b", f, "^b^7]\n");
+		}
 		else
 			centerprint (targ, "^1! GO GO GO !\n");
 	}

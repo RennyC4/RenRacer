@@ -8,6 +8,7 @@
 
 void() CheckImpulses;
 void(float type) CarAttack;
+void(vector position) CreateExplosion;
 void() ClientKill = {};
 
 void() ClientConnect =
@@ -66,7 +67,7 @@ void() PushPlayers =
 
 	for (entity b = world;(b = find(b, classname, "player"));)
 	{
-		if (vlen(b.origin - self.origin ) < 100 && b != self && b.driving && self.realspeed > 9)
+		if (vlen(b.origin - self.origin ) < 100 && b != self && b.driving && self.realspeed > 9 && self.health > 0 && b.health > 0)
 		{
 			entity wheels[] =
 			{
@@ -209,70 +210,97 @@ void() snailtrail_think =
 	frameskip(0.1);
 };
 
+void() RespawnPlayer =
+{
+	self.health = self.max_health;
+	self.colormod = '0 0 0';
+	self.deathcount = 0;
+	car_teleport(self.spawn_loc,FALSE);
+	self.invulnerable_finished = time + 3; // disallow damage / firing
+};
+
 void() PlayerPostThink =
 {
 	if (BotPostFrame()) // FrikBot
 		return;
 
-	//
-	// Player snail trail waypoint
-	//
-
-	if (self.ishuman && race_status == RACE_STARTED && self.driving)
+	if (!deathmatch) // racing
 	{
-		if (!self.trail)
+		if (self.ishuman && race_status == RACE_STARTED && self.driving) // Player snail trail waypoint
 		{
-			local entity trail1 = spawn();
-			trail1.owner = self;
-			self.trail = trail1;
-			trail1.classname = "trail1";
-			setorigin (trail1, self.origin);
-			if (cvar("developer") == 2)
+			if (!self.trail)
 			{
-				setmodel (trail1, "progs/s_debug.spr");
-				trail1.colormod = '1 10 10';
+				local entity trail1 = spawn();
+				trail1.owner = self;
+				self.trail = trail1;
+				trail1.classname = "trail1";
+				setorigin (trail1, self.origin);
+				if (cvar("developer") == 2)
+				{
+					setmodel (trail1, "progs/s_debug.spr");
+					trail1.colormod = '1 10 10';
+				}
+				else
+					setmodel (trail1, "progs/null.spr");
+
+				setsize (trail1, '0 0 0', '0 0 0');
+
+				trail1.think = snailtrail_think;
+				trail1.nextthink = time + 0.1;
 			}
 			else
-				setmodel (trail1, "progs/null.spr");
+			{
+				makevectors(self.v_angle);
+				local float len = vlen(self.origin - self.trail.origin);
 
-			setsize (trail1, '0 0 0', '0 0 0');
-
-			trail1.think = snailtrail_think;
-			trail1.nextthink = time + 0.1;
+				if (infront2(self.trail, 0.3) || len < 250) // Removed visible();
+					self.trail.cnt = FALSE; // Frikbots can't teleport if the snail trail is being looked at
+				else
+					self.trail.cnt = TRUE;
+				//bprint ("Self.Trail.Cnt = ", ftos(self.trail.cnt), "\n");
+			}
 		}
-		else
+	}
+	else // deathmatch
+	{
+		if (self.health > 0)
 		{
-			makevectors(self.v_angle);
-			local float len = vlen(self.origin - self.trail.origin);
-
-			if (infront2(self.trail, 0.3) || len < 250) // Removed visible();
-				self.trail.cnt = FALSE; // Frikbots can't teleport if the snail trail is being looked at
+			// Smooth restore colormod
+			if (self.colormod_x > 1)
+				self.colormod_x = self.colormod_x - 6 * frametime;
 			else
-				self.trail.cnt = TRUE;
-			//bprint ("Self.Trail.Cnt = ", ftos(self.trail.cnt), "\n");
+				self.colormod_x = 0;
+
+			if (self.colormod_y > 1)
+				self.colormod_y = self.colormod_y - 6 * frametime;
+			else
+				self.colormod_y = 0;
+
+			if (self.colormod_z > 1)
+				self.colormod_z = self.colormod_z - 6 * frametime;
+			else
+				self.colormod_z = 0;
+		}
+		else // death animation / thinking
+		{
+			self.colormod = '0.1 0.1 0.1'; // car is cooked/black on death
+			if (self.deathcount == 3 || self.deathcount == 6 || self.deathcount == 9 || self.deathcount == 12)
+				CreateExplosion(self.origin);
+			if (self.deathcount_finished < time)
+			{
+				if (self.deathcount < 30)
+				{
+					self.deathcount = self.deathcount + 1;
+					self.deathcount_finished = time + 0.1;
+				}
+				else
+					RespawnPlayer();
+			}
 		}
 	}
 
 	if (self.alpha < 1) // Smooth restore player transparency
 		self.alpha = self.alpha + 0.4 * frametime;
-
-	// Smooth restore colormod
-	if (self.colormod_x > 1)
-		self.colormod_x = self.colormod_x - 6 * frametime;
-	else
-		self.colormod_x = 0;
-
-	if (self.colormod_y > 1)
-		self.colormod_y = self.colormod_y - 6 * frametime;
-	else
-		self.colormod_y = 0;
-
-	if (self.colormod_z > 1)
-		self.colormod_z = self.colormod_z - 6 * frametime;
-	else
-		self.colormod_z = 0;
-
-	//
 	
 	//
 	// Get liquid level - RennyC
@@ -287,12 +315,12 @@ void() PlayerPostThink =
 	else
 		self.waterlevel = 0;
 
-	if (self.waterlevel > 0)
+	if (self.waterlevel > 0 && self.health > 0 || self.invulnerable_finished > time)
 		self.effects |= EF_BRIGHTFIELD;
 	else
 		self.effects &= ~(EF_BRIGHTFIELD);
 
-	if (self.driving)// && deathmatch) // attack buttons
+	if (self.driving && deathmatch && self.health > 0 && self.invulnerable_finished < time)
 	{
 		if (self.button3)
 			CarAttack(0);
@@ -396,5 +424,10 @@ void() PutClientInServer =
 	self.alpha = 1;
 
 	if (cvar("developer") != 1)
-		centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________\n\n\nPress [^b^1FIRE^7^b] to start the race");
+	{
+		if (!deathmatch)
+			centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________\n\n\nPress [^b^1FIRE^7^b] to start the race");
+		else
+			centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\n\nPress [^b^1FIRE^7^b] to unleash carnage");
+	}
 };
