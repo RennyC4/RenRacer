@@ -165,12 +165,18 @@ void() Rocket_Touch =
 			Phys_Force(targ.driving, targ.driving.physobj_mass, '0 0 1' * 250 * 1.0, trace_endpos, wheels[i].lmat_up);
 	}
 
-	DoDamage(other.owner.driving, self.owner, 15);
+	if (self.classname == "rocket")
+		DoDamage(other.owner.driving, self.owner, 15); // fire
+	if (self.classname == "rocket2")
+		DoDamage(other.owner.driving, self.owner, 9); // homing
+	if (self.classname == "rocket3")
+		DoDamage(other.owner.driving, self.owner, 30); // power
+
 	CreateExplosion(self.origin);
 	remove(self);
 };
 
-void() Fire_Rocket =
+void(float type) Fire_Rocket =
 {
 	local entity rocket = spawn ();
 
@@ -179,16 +185,44 @@ void() Fire_Rocket =
 	rocket.movetype = MOVETYPE_FLYMISSILE;
 	rocket.owner = self;
 	rocket.solid = SOLID_TRIGGER;
-	rocket.classname = "rocket";
+
+	if (!type) // fire
+		rocket.classname = "rocket";
+	else if (type == 1) // homing
+	{
+		rocket.classname = "rocket2";
+		rocket.colormod = '1 1 10';
+	}
+	else // power
+	{
+		rocket.classname = "rocket3";
+		rocket.colormod = '1 10 10';
+	}
+
 	rocket.netname = "projectile";
 	rocket.effects = EF_FULLBRIGHT;
 	rocket.touch = Rocket_Touch;
 
-	rocket.velocity = aim(self, 2000);
-	rocket.velocity = rocket.velocity * 2000;
+	if (!type)
+	{
+		rocket.velocity = aim(self, 1500);
+		rocket.velocity = rocket.velocity * 1500;
+	}
+	else
+	{
+		if (type == 1)
+		{
+			rocket.velocity = aim(self, 1000);
+			rocket.velocity = rocket.velocity * 1000;
+		}
+		else
+		{
+			rocket.velocity = aim(self, 2000);
+			rocket.velocity = rocket.velocity * 2000;
+		}
+	}
 	rocket.velocity_x = rocket.velocity_x + self.driving.velocity_x;
 	rocket.velocity_y = rocket.velocity_y + self.driving.velocity_y;
-
 	rocket.angles = vectoangles(rocket.velocity);
 
 	// Test
@@ -198,13 +232,31 @@ void() Fire_Rocket =
 
 	setmodel (rocket, "progs/rocket.mdl");
 	setsize (rocket, '0 0 0', '0 0 0');
-
 	setorigin (rocket, self.origin + v_up * 8 + v_forward * (40 + self.realspeed));
 
 	sound (self, CHAN_WEAPON, "combat/rocket.wav", 1, ATTN_NORM);
 
 	rocket.think = SUB_Remove;
-	rocket.nextthink = time + 3;
+	rocket.nextthink = time + 5;
+};
+
+void() ChangeWeapon =
+{
+	if (self.impulse == 1)
+	{
+		self.weapon = WEP_ROCKET; // Fire rockets
+		sprint (self, "Fire Rockets selected\n");
+	}
+	if (self.impulse == 2)
+	{
+		self.weapon = WEP_HROCKET; // Homing rockets
+		sprint (self, "Homing Rockets selected\n");
+	}
+	if (self.impulse == 3)
+	{
+		self.weapon = WEP_PROCKET; // Power rockets
+		sprint (self, "Power Rockets selected\n");
+	}
 };
 
 // Main function to determine what gun the car fires
@@ -227,7 +279,17 @@ void(float type) CarAttack =
 		{
 			if (self.weapon == WEP_ROCKET)
 			{
-				Fire_Rocket();
+				Fire_Rocket(0);
+				self.spcl_finished = time + 1;
+			}
+			if (self.weapon == WEP_HROCKET)
+			{
+				Fire_Rocket(1);
+				self.spcl_finished = time + 1;
+			}
+			if (self.weapon == WEP_PROCKET)
+			{
+				Fire_Rocket(2);
 				self.spcl_finished = time + 1;
 			}
 		}

@@ -10,6 +10,8 @@
 
 void() CheckImpulses =
 {
+	if (self.impulse >= 1 && self.impulse <= 3)
+		ChangeWeapon();
 	if (self.impulse == 100)
 		headlights_toggle();
 	if (self.impulse == 101) // WIP: Change car angles instantly
