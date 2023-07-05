@@ -120,6 +120,18 @@ void() rally_goal_touch =
 	}
 };
 
+void() rally_goal_think =
+{
+	if (self.sound_finished < time && self.cnt > 6)
+	{
+		sound (self, CHAN_AUTO, "windyflag.wav", 1, ATTN_NORM);
+		self.sound_finished = time + 25;
+	}
+	if (self.cnt < 10)
+		self.cnt = self.cnt + 1;
+	self.nextthink = self.ltime + 1;
+};
+
 // Supports .message which is used for custom race start centerprints
 void() rally_goal =
 {
@@ -131,7 +143,10 @@ void() rally_goal =
 
 	precache_sound ("lap.wav");
 	precache_sound ("finish.wav");
+	precache_sound ("windyflag.wav");
 
 	InitTrigger();
 	self.touch = rally_goal_touch;
+	self.think = rally_goal_think;
+	self.nextthink = self.ltime + 1;
 };

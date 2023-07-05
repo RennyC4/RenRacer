@@ -415,6 +415,7 @@ float countdown_count;
 .float checkpoint;
 .float hitobject_finished;
 .float animation_finished;
+.float sound_finished;
 .float headlights;
 .float engine_sound_time;
 .float realspeed; // send real speed from func_vehicle to client entity

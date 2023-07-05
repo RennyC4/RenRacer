@@ -121,6 +121,15 @@ void() rally_goal_proxy_think =
 			}
 		}
 	}
+
+	if (self.sound_finished < time && self.cnt > 6)
+	{
+		sound (self, CHAN_AUTO, "windyflag.wav", 1, ATTN_NORM);
+		self.sound_finished = time + 25;
+	}
+	if (self.cnt < 10)
+		self.cnt = self.cnt + 1;
+
 	frameskip(0.01);
 };
 
@@ -135,6 +144,7 @@ void() rally_startfinish_flag =
 	precache_model ("progs/finish.mdl");
 	precache_sound ("lap.wav");
 	precache_sound ("finish.wav");
+	precache_sound ("windyflag.wav");
 
 	setmodel(self, "progs/finish.mdl");
 	setsize(self, '0 0 0', '0 0 0');
@@ -166,7 +176,7 @@ void() rally_startfinish_flag =
 			goal.lap = 2;
 		else
 			goal.lap = self.lap;
-		
+
 		if (self.music)
 			goal.music = self.music;
 		if (self.message)
