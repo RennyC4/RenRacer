@@ -80,7 +80,7 @@ float(entity targ, float howmuch) infront =
 
 /*
 =============
-infront (view angle)
+infront2 (view angle)
 
 returns 1 if the entity is in front (in sight) of self
 =============
@@ -88,6 +88,24 @@ returns 1 if the entity is in front (in sight) of self
 float(entity targ, float howmuch) infront2 =
 {
 	makevectors (self.v_angle);
+	local vector vec = normalize (targ.origin - self.origin);
+	local float dot = vec * v_forward;
+
+	if (dot > howmuch)
+		return TRUE;
+	return FALSE;
+};
+
+/*
+=============
+infront3 (angles)
+
+returns 1 if the entity is in front (in sight) of self
+=============
+*/
+float(entity targ, float howmuch) infront3 =
+{
+	makevectors (self.angles);
 	local vector vec = normalize (targ.origin - self.origin);
 	local float dot = vec * v_forward;
 

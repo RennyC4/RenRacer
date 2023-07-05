@@ -22,7 +22,7 @@ void(vector position) CreateExplosion =
 
 void(entity targ, entity attacker) Death =
 {
-	// Car jumps on death
+	// Car jumps big on death
 	entity wheels[] = {
 		targ.driving.frontleft,
 		targ.driving.frontright,
@@ -57,6 +57,15 @@ void(entity targ, entity attacker, float damage) DoDamage =
 	}
 };
 
+// Used for aquiring targets (missiles and other projectiles)
+void() GetTarget =
+{
+	for (entity targ = world;(targ = find(targ, classname, "player"));)
+	{
+		if (visible(targ) && infront3(targ, 0.75) && !self.enemy && targ.health > 0 && targ != self.owner)
+			self.enemy = targ;
+	}
+};
 
 // ---
 // Machine Gun
@@ -130,12 +139,63 @@ void() Fire_MachineGun =
 	sound (self, CHAN_WEAPON, "combat/mgun.wav", 1, ATTN_NORM);
 
 	bullet.think = SUB_Remove;
-	bullet.nextthink = time + 1;
+	bullet.nextthink = time + 1.5;
 };
 
 // ---
-// Special: Regular Rocket
+// Special: Rockets (Fire / Homing / Power)
 // ---
+
+void() Rocket_Think =
+{
+	if (self.removeme_finished < time)
+	{
+		remove(self);
+		return;
+	}
+
+	if (!self.enemy)
+		if (self.classname != "rocket3")
+			GetTarget();
+
+	if (self.classname == "rocket")
+		pointparticles(PART_ROCKET1, self.origin, '0 0 0', 1);
+	if (self.classname == "rocket2")
+		pointparticles(PART_ROCKET2, self.origin, '0 0 0', 1);
+	if (self.classname == "rocket3")
+		pointparticles(PART_ROCKET3, self.origin, '0 0 0', 1);
+
+	if (self.enemy) // Home in on enemy
+	{
+		float homing = 0;
+		if (self.classname == "rocket")
+			homing = 10;
+		if (self.classname == "rocket2")
+			homing = 25;
+		if (self.classname == "rocket3")
+			homing = 0;
+
+		local vector vele, vels, ph;
+		vele = normalize(self.enemy.origin - self.origin);
+		vels = normalize(self.velocity);
+		ph = vele + (vels * 4);
+
+		if (self.classname == "rocket")
+			ph = ph * (1/33); // increase seceond number for less homing capability
+		if (self.classname == "rocket2")
+			ph = ph * (1/15);
+
+		self.velocity = normalize(vels + ph);
+		if (self.classname == "rocket")
+			self.velocity = self.velocity * 1500;
+		if (self.classname == "rocket2")
+			self.velocity = self.velocity * 1000;
+
+		self.angles = vectoangles(self.velocity);
+	}
+
+	frameskip(0.01);
+};
 
 void() Rocket_Touch =
 {
@@ -191,34 +251,34 @@ void(float type) Fire_Rocket =
 	else if (type == 1) // homing
 	{
 		rocket.classname = "rocket2";
-		rocket.colormod = '1 1 10';
+		rocket.colormod = '10 1 10';
 	}
 	else // power
 	{
 		rocket.classname = "rocket3";
-		rocket.colormod = '1 10 10';
+		rocket.colormod = '1 1 10';
 	}
 
 	rocket.netname = "projectile";
-	rocket.effects = EF_FULLBRIGHT;
+	rocket.effects = EF_FULLBRIGHT | EF_DIMLIGHT;
 	rocket.touch = Rocket_Touch;
 
 	if (!type)
 	{
 		rocket.velocity = aim(self, 1500);
-		rocket.velocity = rocket.velocity * 1500;
+		rocket.velocity = rocket.velocity * 1500; // fire
 	}
 	else
 	{
 		if (type == 1)
 		{
 			rocket.velocity = aim(self, 1000);
-			rocket.velocity = rocket.velocity * 1000;
+			rocket.velocity = rocket.velocity * 1000; // homing
 		}
 		else
 		{
 			rocket.velocity = aim(self, 2000);
-			rocket.velocity = rocket.velocity * 2000;
+			rocket.velocity = rocket.velocity * 2000; // power
 		}
 	}
 	rocket.velocity_x = rocket.velocity_x + self.driving.velocity_x;
@@ -236,25 +296,26 @@ void(float type) Fire_Rocket =
 
 	sound (self, CHAN_WEAPON, "combat/rocket.wav", 1, ATTN_NORM);
 
-	rocket.think = SUB_Remove;
-	rocket.nextthink = time + 5;
+	rocket.removeme_finished = time + 3;
+	rocket.think = Rocket_Think;
+	rocket.nextthink = time;
 };
 
 void() ChangeWeapon =
 {
 	if (self.impulse == 1)
 	{
-		self.weapon = WEP_ROCKET; // Fire rockets
+		self.weapon = WEP_ROCKET;
 		sprint (self, "Fire Rockets selected\n");
 	}
 	if (self.impulse == 2)
 	{
-		self.weapon = WEP_HROCKET; // Homing rockets
+		self.weapon = WEP_HROCKET;
 		sprint (self, "Homing Rockets selected\n");
 	}
 	if (self.impulse == 3)
 	{
-		self.weapon = WEP_PROCKET; // Power rockets
+		self.weapon = WEP_PROCKET;
 		sprint (self, "Power Rockets selected\n");
 	}
 };

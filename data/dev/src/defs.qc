@@ -443,6 +443,7 @@ float total_checkpoints;
 .float deathcount_finished;
 .float deathcount; // death counter
 .float invulnerable_finished;
+.float removeme_finished;
 
 // Weapon crap
 .float weapon;
@@ -455,6 +456,9 @@ var float PART_DIRT;
 var float PART_TURBO;
 var float PART_SPEEDBOOST;
 var float PART_BUBBLE;
+var float PART_ROCKET1;
+var float PART_ROCKET2;
+var float PART_ROCKET3;
 
 // Lap time stats
 .float start_laptime; // ON / OFF

@@ -53,6 +53,9 @@ void() worldspawn =
 	PART_TURBO = particleeffectnum("turbo");
 	PART_SPEEDBOOST = particleeffectnum("speedboost");
 	PART_BUBBLE = particleeffectnum("bubble");
+	PART_ROCKET1 = particleeffectnum("rocket1");
+	PART_ROCKET2 = particleeffectnum("rocket2");
+	PART_ROCKET3 = particleeffectnum("rocket3");
 
 	precache_model("progs/null.spr");
 	precache_model("progs/s_debug.spr");
