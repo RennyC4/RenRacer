@@ -144,7 +144,7 @@ void() PlayerPreThink =
 	if (!self.driving)
 	{
 		Car_CheckAttach(); // Shove the player in the car
-		if (framecount > 75 && self.button0 && race_status == RACE_NOTSTARTED)
+		if (framecount > 75 && (self.button0 || self.button3 || self.button4) && race_status == RACE_NOTSTARTED)
 		{
 			spawn_car_countdown(); // Start countdown
 			race_status = RACE_COUNTDOWN;

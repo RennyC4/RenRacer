@@ -186,12 +186,12 @@ vector(vector b, vector a, float r) rotateVectorAround =
 	
 	return b*cos + cross*sin + a*dot*(1-cos);
 }
-/*
+
 float() crandom =
 {
 	return 2*(random() - 0.5);
 }
-*/
+
 vector(vector v) vabs =
 {
 	return Vector(fabs(v_x),fabs(v_y),fabs(v_z));

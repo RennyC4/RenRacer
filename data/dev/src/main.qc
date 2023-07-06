@@ -56,11 +56,13 @@ void() worldspawn =
 	PART_ROCKET1 = particleeffectnum("rocket1");
 	PART_ROCKET2 = particleeffectnum("rocket2");
 	PART_ROCKET3 = particleeffectnum("rocket3");
+	PART_NAPALM = particleeffectnum("napalm");
 
 	precache_model("progs/null.spr");
 	precache_model("progs/s_debug.spr");
 	precache_model("progs/bullet.mdl");
 	precache_model("progs/rocket.mdl");
+	precache_model("progs/napalm.mdl");
 
 	//
 	// func_vehicle - start

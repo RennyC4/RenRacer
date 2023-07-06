@@ -446,11 +446,12 @@ float total_checkpoints;
 .float invulnerable_finished;
 .float removeme_finished;
 
-// Weapon crap
+// Weapons
 .float weapon;
 float WEP_ROCKET = 0;
 float WEP_HROCKET = 1;
 float WEP_PROCKET = 2;
+float WEP_NAPALM = 4;
 
 // Particle defs
 var float PART_DIRT;
@@ -460,6 +461,7 @@ var float PART_BUBBLE;
 var float PART_ROCKET1;
 var float PART_ROCKET2;
 var float PART_ROCKET3;
+var float PART_NAPALM;
 
 // Lap time stats
 .float start_laptime; // ON / OFF

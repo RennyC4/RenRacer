@@ -10,7 +10,7 @@
 
 void() CheckImpulses =
 {
-	if (self.impulse >= 1 && self.impulse <= 3)
+	if (self.impulse >= 1 && self.impulse <= 4)
 		ChangeWeapon();
 	if (self.impulse == 100)
 		headlights_toggle();

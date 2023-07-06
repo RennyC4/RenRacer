@@ -301,6 +301,91 @@ void(float type) Fire_Rocket =
 	rocket.nextthink = time;
 };
 
+// ---
+// Special: Napalm
+// ---
+
+void() NapalmTouch_Think =
+{
+	if (self.scale < 8)
+		self.scale = self.scale + 0.1;
+	if (self.alpha > 0.01)
+		self.alpha = self.alpha - 0.01;
+	else
+	{
+		remove(self);
+		return;
+	}
+	frameskip(0.01);
+};
+
+void() Napalm_Touch =
+{
+	self.velocity = '0 0 0';
+	self.movetype = MOVETYPE_NONE;
+	CreateExplosion(self.origin);
+	self.think = NapalmTouch_Think;
+	self.nextthink = time;
+};
+
+void() Napalm_Think =
+{
+	if (!self.enemy)
+		GetTarget();
+
+	pointparticles(PART_NAPALM, self.origin, '0 0 0', 1);
+
+	if (self.enemy && self.velocity_z <= 0) // Home in on enemy
+	{
+		float homing = 20;
+
+		local vector vele, vels, ph;
+		vele = normalize(self.enemy.origin - self.origin);
+		vels = normalize(self.velocity);
+		ph = vele + (vels * 4);
+		ph = ph * (1/33); // increase seceond number for less homing capability
+
+		self.velocity = normalize(vels + ph);
+		self.velocity = self.velocity * 350;
+	}
+
+	frameskip(0.01);
+};
+
+void() Fire_Napalm =
+{
+	local entity napalm = spawn ();
+	napalm.owner = self;
+	napalm.solid = SOLID_SLIDEBOX;
+	napalm.movetype = MOVETYPE_TOSS;
+	napalm.classname = "napalm";
+		
+	makevectors (self.realang);
+
+	napalm.velocity = v_forward * 350;
+	napalm.velocity = aim(self, 350);
+	napalm.velocity = napalm.velocity * 350;
+	napalm.velocity_z = 700;
+	napalm.effects = EF_FULLBRIGHT | EF_DIMLIGHT | EF_ADDITIVE;
+	napalm.alpha = 0.9;
+	napalm.avelocity = '-500 200 0';
+
+	napalm.velocity_x = napalm.velocity_x + self.driving.velocity_x;
+	napalm.velocity_y = napalm.velocity_y + self.driving.velocity_y;
+
+	napalm.angles = vectoangles(napalm.velocity);
+	
+	setmodel (napalm, "progs/napalm.mdl");
+	setsize (napalm, '0 0 0', '0 0 0');		
+	setorigin (napalm, self.origin + v_up * 32);
+	
+	napalm.scale = 2;
+	napalm.touch = Napalm_Touch;
+	napalm.think = Napalm_Think;
+	napalm.nextthink = time;
+};
+
+// Change weapons
 void() ChangeWeapon =
 {
 	if (self.impulse == 1)
@@ -317,6 +402,11 @@ void() ChangeWeapon =
 	{
 		self.weapon = WEP_PROCKET;
 		sprint (self, "Power Rockets selected\n");
+	}
+	if (self.impulse == 4)
+	{
+		self.weapon = WEP_NAPALM;
+		sprint (self, "Napalm selected\n");
 	}
 };
 
@@ -352,6 +442,11 @@ void(float type) CarAttack =
 			{
 				Fire_Rocket(2);
 				self.spcl_finished = time + 1;
+			}
+			if (self.weapon == WEP_NAPALM)
+			{
+				Fire_Napalm();
+				self.spcl_finished = time + 3;
 			}
 		}
 	}
