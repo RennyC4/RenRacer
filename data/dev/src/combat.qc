@@ -98,7 +98,7 @@ void() MachineGunBullet_Touch =
 .float mgun;
 void() Fire_MachineGun =
 {
-	local entity bullet = spawn ();
+	local entity bullet = spawn();
 
 	makevectors (self.realang);
 
@@ -125,19 +125,64 @@ void() Fire_MachineGun =
 	setmodel (bullet, "progs/bullet.mdl");
 	setsize (bullet, '0 0 0', '0 0 0');
 
+	// Muzzleflash - flat
+	local entity mflash1 = spawn();
+	mflash1.movetype = MOVETYPE_NONE;
+	mflash1.owner = self;
+	mflash1.solid = SOLID_NOT;
+	mflash1.classname = "mflash";
+	mflash1.effects = EF_FULLBRIGHT;
+	mflash1.drawonlytoclient = self; // do not network muzzle flashes
+	mflash1.scale = 0.25;
+	mflash1.angles_y = self.realang_y + 90;
+	mflash1.angles_x = 90;
+	setmodel (mflash1, "progs/mflash.spr");
+	setsize (mflash1, '0 0 0', '0 0 0');
+
+	// Muzzleflash - side
+	local entity mflash2 = spawn();
+	mflash2.movetype = MOVETYPE_NONE;
+	mflash2.owner = self;
+	mflash2.solid = SOLID_NOT;
+	mflash2.classname = "mflash";
+	mflash2.effects = EF_FULLBRIGHT;
+	mflash2.drawonlytoclient = self; // do not network muzzle flashes
+	mflash2.scale = 0.25;
+
+	if (self.mgun)
+	{
+		mflash2.angles_y = self.realang_y - 90;
+		setmodel (mflash2, "progs/mflash2.spr");
+	}
+	else
+	{
+		mflash2.angles_y = self.realang_y + 90;
+		setmodel (mflash2, "progs/mflash.spr");
+	}
+
+	setsize (mflash2, '0 0 0', '0 0 0');
+
 	if (!self.mgun)
 	{
+		setorigin (mflash1, self.origin + v_up * 8 + v_forward * 14 + v_right * 24); // flat
+		setorigin (mflash2, self.origin + v_up * 8 + v_forward * 14 + v_right * 24); // side
 		setorigin (bullet, self.origin + v_up * 8 + v_forward * 14 + v_right * 24);
 		self.mgun = TRUE;
 	}
 	else
 	{
+		setorigin (mflash1, self.origin + v_up * 8 + v_forward * 14 - v_right * 24); // flat
+		setorigin (mflash2, self.origin + v_up * 8 + v_forward * 14 - v_right * 24); // side
 		setorigin (bullet, self.origin + v_up * 8 + v_forward * 14 - v_right * 24);
 		self.mgun = FALSE;
 	}
 
 	sound (self, CHAN_WEAPON, "combat/mgun.wav", 1, ATTN_NORM);
 
+	mflash1.think = SUB_Remove;
+	mflash1.nextthink = time + 0.1;
+	mflash2.think = SUB_Remove;
+	mflash2.nextthink = time + 0.1;
 	bullet.think = SUB_Remove;
 	bullet.nextthink = time + 1.5;
 };
@@ -226,11 +271,11 @@ void() Rocket_Touch =
 	}
 
 	if (self.classname == "rocket")
-		DoDamage(other.owner.driving, self.owner, 15); // fire
+		DoDamage(other.owner.driving, self.owner, 7); // fire
 	if (self.classname == "rocket2")
-		DoDamage(other.owner.driving, self.owner, 9); // homing
+		DoDamage(other.owner.driving, self.owner, 10); // homing
 	if (self.classname == "rocket3")
-		DoDamage(other.owner.driving, self.owner, 30); // power
+		DoDamage(other.owner.driving, self.owner, 15); // power
 
 	CreateExplosion(self.origin);
 	remove(self);
@@ -324,6 +369,8 @@ void() Napalm_Touch =
 	self.velocity = '0 0 0';
 	self.movetype = MOVETYPE_NONE;
 	CreateExplosion(self.origin);
+	// CreateFire();
+	// Does 10 damage on player hit + fire damage is 4-6 dmg / sec, flames stay for 5 seconds
 	self.think = NapalmTouch_Think;
 	self.nextthink = time;
 };
@@ -388,6 +435,9 @@ void() Fire_Napalm =
 // Change weapons
 void() ChangeWeapon =
 {
+	if (!deathmatch)
+		return;
+
 	if (self.impulse == 1)
 	{
 		self.weapon = WEP_ROCKET;
