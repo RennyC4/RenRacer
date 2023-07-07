@@ -14,6 +14,7 @@ pr_dumpplatform
 #pragma warning disable F301 /*non-utf-8 strings. Think of the foreigners! Also think of text editors that insist on screwing up your char encodings.*/
 #pragma warning disable F302 /*uninitialised locals. They usually default to 0 in qc (except in recursive functions), but its still probably a bug*/
 #pragma warning disable F306 /* Disable func_vehicle's local "sv_gravity" hides global with same name and type error*/
+#pragma warning disable F326 /* Disable warning on drawonlytoclient being depreciated, not a big deal*/
 #pragma target fte // RenRacer is FTE only and proud
 #if !defined(CSQC) && !defined(NQSSQC) && !defined(QWSSQC)&& !defined(MENU)
 	#ifdef QUAKEWORLD

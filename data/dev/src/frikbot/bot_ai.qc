@@ -103,9 +103,11 @@ infront3 (angles)
 returns 1 if the entity is in front (in sight) of self
 =============
 */
+void(vector ang) makevectors_mdl;
 float(entity targ, float howmuch) infront3 =
 {
-	makevectors (self.angles);
+	makevectors_mdl (self.angles);
+	//makevectors (self.angles);
 	local vector vec = normalize (targ.origin - self.origin);
 	local float dot = vec * v_forward;
 

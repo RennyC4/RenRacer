@@ -12,6 +12,13 @@ void(vector org, float which, optional float speed) create_waypoint;
 
 void() main = {};
 
+// correct pitch fix without breaking stuff, thanks spike
+void(vector ang) makevectors_mdl =
+{
+	ang_x *= autocvar(r_meshpitch, -1);
+	makevectors(ang);
+};
+
 // CSQC value requests
 void() CSEv_GrabCSQCValues =
 {
@@ -63,6 +70,8 @@ void() worldspawn =
 	precache_model("progs/bullet.mdl");
 	precache_model("progs/rocket.mdl");
 	precache_model("progs/napalm.mdl");
+	precache_model("progs/mflash.spr");
+	precache_model("progs/mflash2.spr");
 
 	//
 	// func_vehicle - start
@@ -118,6 +127,13 @@ void() worldspawn =
 	precache_sound ("combat/mgun.wav");
 	precache_sound ("combat/rocket.wav");
 	precache_sound ("combat/xplode.wav");
+	precache_sound ("combat/napalm.wav");
+	precache_sound ("combat/ric1.wav");
+	precache_sound ("combat/ric2.wav");
+	precache_sound ("combat/ric3.wav");
+	precache_sound ("combat/mgunh1.wav");
+	precache_sound ("combat/mgunh2.wav");
+	precache_sound ("combat/mgunh3.wav");
 
 	world_lights();
 	BotInit();  // FrikBot

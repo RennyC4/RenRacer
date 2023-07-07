@@ -57,6 +57,19 @@ void(entity targ, entity attacker, float damage) DoDamage =
 	}
 };
 
+void(entity attacker, float radius, float damage, float setfire) DoRadiusDamage =
+{
+	for (entity targ = world;(targ = find(targ, classname, "player"));)
+	{
+		if (vlen(targ.origin - self.origin) <= radius)
+		{
+			DoDamage(targ, attacker, damage);
+			if (setfire)
+				targ.onfire_finished = time + 5;
+		}
+	}
+};
+
 // Used for aquiring targets (missiles and other projectiles)
 void() GetTarget =
 {
@@ -77,6 +90,13 @@ void() MachineGunBullet_Touch =
 {
 	if (other.solid == SOLID_BSP && !other.owner) // Hit wall
 	{
+		float tt = ceil(random() * 3);
+		if (tt == 1)
+			sound(self, CHAN_BODY, "combat/ric1.wav", 1, ATTN_NORM);
+		else if (tt == 2)
+			sound(self, CHAN_BODY, "combat/ric2.wav", 1, ATTN_NORM);
+		else
+			sound(self, CHAN_BODY, "combat/ric3.wav", 1, ATTN_NORM);
 		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 		WriteByte (MSG_BROADCAST, TE_GUNSHOT);
 		WriteCoord (MSG_BROADCAST, self.origin_x);
@@ -89,6 +109,14 @@ void() MachineGunBullet_Touch =
 		return;
 	if (self.owner == other.owner.driving)
 		return;
+
+	tt = ceil(random() * 3);
+	if (tt == 1)
+		sound(self, CHAN_BODY, "combat/mgunh1.wav", 1, ATTN_NORM);
+	else if (tt == 2)
+		sound(self, CHAN_BODY, "combat/mgunh2.wav", 1, ATTN_NORM);
+	else
+		sound(self, CHAN_BODY, "combat/mgunh3.wav", 1, ATTN_NORM);
 
 	DoDamage(other.owner.driving, self.owner, 2); // other.owner.driving is the player
 
@@ -164,16 +192,16 @@ void() Fire_MachineGun =
 
 	if (!self.mgun)
 	{
-		setorigin (mflash1, self.origin + v_up * 8 + v_forward * 14 + v_right * 24); // flat
-		setorigin (mflash2, self.origin + v_up * 8 + v_forward * 14 + v_right * 24); // side
-		setorigin (bullet, self.origin + v_up * 8 + v_forward * 14 + v_right * 24);
+		setorigin (mflash1, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) + v_right * 24); // flat
+		setorigin (mflash2, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) + v_right * 24); // side
+		setorigin (bullet, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) + v_right * 24);
 		self.mgun = TRUE;
 	}
 	else
 	{
-		setorigin (mflash1, self.origin + v_up * 8 + v_forward * 14 - v_right * 24); // flat
-		setorigin (mflash2, self.origin + v_up * 8 + v_forward * 14 - v_right * 24); // side
-		setorigin (bullet, self.origin + v_up * 8 + v_forward * 14 - v_right * 24);
+		setorigin (mflash1, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) - v_right * 24); // flat
+		setorigin (mflash2, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) - v_right * 24); // side
+		setorigin (bullet, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) - v_right * 24);
 		self.mgun = FALSE;
 	}
 
@@ -212,14 +240,6 @@ void() Rocket_Think =
 
 	if (self.enemy) // Home in on enemy
 	{
-		float homing = 0;
-		if (self.classname == "rocket")
-			homing = 10;
-		if (self.classname == "rocket2")
-			homing = 25;
-		if (self.classname == "rocket3")
-			homing = 0;
-
 		local vector vele, vels, ph;
 		vele = normalize(self.enemy.origin - self.origin);
 		vels = normalize(self.velocity);
@@ -352,7 +372,7 @@ void(float type) Fire_Rocket =
 
 void() NapalmTouch_Think =
 {
-	if (self.scale < 8)
+	if (self.scale < 12)
 		self.scale = self.scale + 0.1;
 	if (self.alpha > 0.01)
 		self.alpha = self.alpha - 0.01;
@@ -361,6 +381,20 @@ void() NapalmTouch_Think =
 		remove(self);
 		return;
 	}
+	self.movetype = MOVETYPE_NOCLIP;
+	if (!self.cnt2)
+	{
+		if (random() < 0.5)
+			self.cnt2 = 1;
+		else
+			self.cnt2 = 2;
+	}
+	if (self.cnt2 == 1)
+		self.avelocity = '0 1000 0';
+	else
+		self.avelocity = '0 -1000 0';
+	
+	self.velocity = '0 0 0';
 	frameskip(0.01);
 };
 
@@ -369,28 +403,33 @@ void() Napalm_Touch =
 	self.velocity = '0 0 0';
 	self.movetype = MOVETYPE_NONE;
 	CreateExplosion(self.origin);
+	DoRadiusDamage(self.owner, 175, 10, TRUE);
+
 	// CreateFire();
 	// Does 10 damage on player hit + fire damage is 4-6 dmg / sec, flames stay for 5 seconds
+
 	self.think = NapalmTouch_Think;
 	self.nextthink = time;
 };
 
 void() Napalm_Think =
 {
-	if (!self.enemy)
-		GetTarget();
+	if (!self.cnt) // run once on projectile launch
+	{
+		if (!self.enemy)
+			GetTarget();
+		self.cnt = TRUE;
+	}
 
 	pointparticles(PART_NAPALM, self.origin, '0 0 0', 1);
 
 	if (self.enemy && self.velocity_z <= 0) // Home in on enemy
 	{
-		float homing = 20;
-
 		local vector vele, vels, ph;
 		vele = normalize(self.enemy.origin - self.origin);
 		vels = normalize(self.velocity);
 		ph = vele + (vels * 4);
-		ph = ph * (1/33); // increase seceond number for less homing capability
+		ph = ph * (1/50); // increase seceond number for less homing capability
 
 		self.velocity = normalize(vels + ph);
 		self.velocity = self.velocity * 350;
@@ -420,13 +459,13 @@ void() Fire_Napalm =
 	napalm.velocity_x = napalm.velocity_x + self.driving.velocity_x;
 	napalm.velocity_y = napalm.velocity_y + self.driving.velocity_y;
 
-	napalm.angles = vectoangles(napalm.velocity);
-	
 	setmodel (napalm, "progs/napalm.mdl");
 	setsize (napalm, '0 0 0', '0 0 0');		
 	setorigin (napalm, self.origin + v_up * 32);
-	
-	napalm.scale = 2;
+
+	sound (self, CHAN_VOICE, "combat/napalm.wav", 1, ATTN_NORM); // CHAN_WEAPON is for specials, mgun spams
+
+	napalm.scale = 3;
 	napalm.touch = Napalm_Touch;
 	napalm.think = Napalm_Think;
 	napalm.nextthink = time;

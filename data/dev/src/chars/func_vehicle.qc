@@ -176,6 +176,7 @@ void() Car_ChassiThink =
 	// RennyC - Send real (car) speed / angles to player
 	local float r = vlen(car.velocity) * 0.1;
 	local vector v = car.angles;
+	
 	if (car.driving.classname == "player")
 	{
 		car.driving.realang = v;
@@ -692,6 +693,8 @@ void TryUpdateVehicle(){
 				else
 					pointparticles(PART_BUBBLE, self.origin - v_up * 16 - v_forward * 32, '0 0 0', 1);
 
+				if (self.onfire_finished > time) // Remove being on fire faster!
+					self.onfire_finished = self.onfire_finished - 0.1;				
 				if (self.turbo_fuel > 0)
 					self.turbo_fuel = self.turbo_fuel - 1;
 				else

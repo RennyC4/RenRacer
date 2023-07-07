@@ -411,6 +411,7 @@ float countdown_count;
 
 .string music;
 .float cnt; // misc counter
+.float cnt2; // misc counter
 .float lap;
 .float checkpoint;
 .float hitobject_finished;
@@ -445,6 +446,8 @@ float total_checkpoints;
 .float deathcount; // death counter
 .float invulnerable_finished;
 .float removeme_finished;
+.float onfire_finished; // targets on fire
+.float onfire_tic; // damage dealer
 
 // Weapons
 .float weapon;

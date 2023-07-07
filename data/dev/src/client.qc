@@ -9,6 +9,7 @@
 void() CheckImpulses;
 void(float type) CarAttack;
 void(vector position) CreateExplosion;
+void(entity targ, entity attacker, float damage) DoDamage;
 void() ClientKill = {};
 
 void() ClientConnect =
@@ -215,8 +216,9 @@ void() RespawnPlayer =
 	self.health = self.max_health;
 	self.colormod = '0 0 0';
 	self.deathcount = 0;
+	self.onfire_finished = time;
 	car_teleport(self.spawn_loc,FALSE);
-	self.invulnerable_finished = time + 3; // disallow damage / firing
+	self.invulnerable_finished = time + 5; // disallow damage / firing
 };
 
 void() PlayerPostThink =
@@ -327,7 +329,19 @@ void() PlayerPostThink =
 		if (self.button4)
 			CarAttack(1);
 	}
-
+	if (self.onfire_finished > time)
+	{
+		centerprint (self, "You're on fire!\n");
+		if (self.health > 0)
+		{
+			if (self.onfire_tic < time)
+			{
+				float firedmg = ceil(random()*3 + 3);
+				DoDamage(self, self, firedmg);
+				self.onfire_tic = time + 1;
+			}
+		}
+	}
 	TryUpdateVehicle();
 	CheckImpulses();
 };
