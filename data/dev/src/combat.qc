@@ -46,8 +46,11 @@ void(entity targ, entity attacker, float damage) DoDamage =
 	if (targ.invulnerable_finished > time)
 		return;
 
-	targ.health = targ.health - damage;
-	targ.colormod_x = 2;
+	if (damage > 0)
+	{
+		targ.health = targ.health - damage;
+		targ.colormod_x = 2;
+	}
 
 	if (targ.health <= 0)
 	{
@@ -370,6 +373,57 @@ void(float type) Fire_Rocket =
 // Special: Napalm
 // ---
 
+void() napalmfire_think =
+{
+	if (self.onfire_finished > time)
+		DoRadiusDamage(self.owner, 150, 0, TRUE); // Set whoever near me on fire
+	else
+	{
+		if (self.movetype != MOVETYPE_TOSS) // Gravity brings the napalm fire back down
+			self.movetype = MOVETYPE_TOSS;
+		if (self.scale > 0)
+			self.scale = self.scale - 0.1;
+		else
+		{
+			remove(self);
+			return;
+		}
+	}
+	if (self.animation_finished < time)
+	{
+		if (self.frame < 9)
+			self.frame = self.frame + 1;
+		else
+			self.frame = 0;
+		self.animation_finished = time + 0.05;
+	}
+	if (self.sound_finished < time)
+	{
+		sound (self, CHAN_AUTO, "combat/fire.wav", 1, ATTN_NORM);
+		self.sound_finished = time + 1;
+	}
+	frameskip(0.01);
+};
+
+void() CreateNapalmFire =
+{
+	local entity nf = spawn();
+	nf.owner = self.owner;
+	nf.classname = "napalmfire";
+	nf.scale = 6;
+	nf.effects = EF_ADDITIVE | EF_FULLBRIGHT;
+	nf.alpha = 0.75;
+	nf.movetype = MOVETYPE_NONE;
+	nf.solid = SOLID_NOT;
+	nf.frame = random()*8;
+	setorigin (nf, self.origin + v_up * 64);
+	setmodel (nf, "progs/fire.spr");
+	setsize (nf, '0 0 0', '0 0 0');
+	nf.onfire_finished = time + 5;
+	nf.think = napalmfire_think;
+	nf.nextthink = time;
+};
+
 void() NapalmTouch_Think =
 {
 	if (self.scale < 12)
@@ -403,11 +457,9 @@ void() Napalm_Touch =
 	self.velocity = '0 0 0';
 	self.movetype = MOVETYPE_NONE;
 	CreateExplosion(self.origin);
-	DoRadiusDamage(self.owner, 175, 10, TRUE);
-
-	// CreateFire();
-	// Does 10 damage on player hit + fire damage is 4-6 dmg / sec, flames stay for 5 seconds
-
+	DoDamage(other, self.owner, 10);
+	CreateNapalmFire();
+	// Does 10 damage on direct player hit + fire damage is 4-6 dmg / sec, flames stay for 5 seconds
 	self.think = NapalmTouch_Think;
 	self.nextthink = time;
 };
@@ -460,7 +512,7 @@ void() Fire_Napalm =
 	napalm.velocity_y = napalm.velocity_y + self.driving.velocity_y;
 
 	setmodel (napalm, "progs/napalm.mdl");
-	setsize (napalm, '0 0 0', '0 0 0');		
+	setsize (napalm, '0 0 0', '0 0 0');
 	setorigin (napalm, self.origin + v_up * 32);
 
 	sound (self, CHAN_VOICE, "combat/napalm.wav", 1, ATTN_NORM); // CHAN_WEAPON is for specials, mgun spams

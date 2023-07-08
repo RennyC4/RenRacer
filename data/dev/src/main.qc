@@ -72,6 +72,7 @@ void() worldspawn =
 	precache_model("progs/napalm.mdl");
 	precache_model("progs/mflash.spr");
 	precache_model("progs/mflash2.spr");
+	precache_model("progs/fire.spr");
 
 	//
 	// func_vehicle - start
@@ -125,6 +126,7 @@ void() worldspawn =
 	precache_sound ("spdboost.wav");
 
 	precache_sound ("combat/mgun.wav");
+	precache_sound ("combat/fire.wav");
 	precache_sound ("combat/rocket.wav");
 	precache_sound ("combat/xplode.wav");
 	precache_sound ("combat/napalm.wav");
@@ -134,6 +136,10 @@ void() worldspawn =
 	precache_sound ("combat/mgunh1.wav");
 	precache_sound ("combat/mgunh2.wav");
 	precache_sound ("combat/mgunh3.wav");
+	precache_sound ("combat/death1.wav");
+	precache_sound ("combat/death2.wav");
+	precache_sound ("combat/death3.wav");
+	precache_sound ("combat/death4.wav");
 
 	world_lights();
 	BotInit();  // FrikBot

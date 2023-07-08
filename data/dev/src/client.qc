@@ -22,6 +22,8 @@ void() ClientDisconnect =
 {
 	bprint (self.netname, " has retired!\n");
 	ClientDisconnected(); // FrikBot
+	if (self.fire)
+		remove(self.fire);
 	remove_car(self.driving);
 	remove(self);
 };
@@ -217,8 +219,32 @@ void() RespawnPlayer =
 	self.colormod = '0 0 0';
 	self.deathcount = 0;
 	self.onfire_finished = time;
+	if (self.fire)
+	{
+		remove(self.fire);
+		self.fire = world;
+	}
 	car_teleport(self.spawn_loc,FALSE);
 	self.invulnerable_finished = time + 5; // disallow damage / firing
+};
+
+void() fire_think =
+{
+	if (self.animation_finished < time)
+	{
+		if (self.frame < 9)
+			self.frame = self.frame + 1;
+		else
+			self.frame = 0;
+		self.animation_finished = time + 0.05;
+	}
+	if (self.sound_finished < time)
+	{
+		sound (self, CHAN_AUTO, "combat/fire.wav", 0.5, ATTN_NORM);
+		self.sound_finished = time + 1;
+	}
+	setorigin(self, self.owner.origin + v_up * 52);
+	frameskip(0.01);
 };
 
 void() PlayerPostThink =
@@ -285,6 +311,18 @@ void() PlayerPostThink =
 		}
 		else // death animation / thinking
 		{
+			if (self.deathcount == 0)
+			{
+				float tt = ceil(random() * 3);
+				if (tt == 1)
+					sound(self, CHAN_AUTO, "combat/death1.wav", 1, ATTN_NORM);
+				else if (tt == 2)
+					sound(self, CHAN_AUTO, "combat/death2.wav", 1, ATTN_NORM);
+				else if (tt == 3)
+					sound(self, CHAN_AUTO, "combat/death3.wav", 1, ATTN_NORM);
+				else
+					sound(self, CHAN_AUTO, "combat/death4.wav", 1, ATTN_NORM);
+			}
 			self.colormod = '0.1 0.1 0.1'; // car is cooked/black on death
 			if (self.deathcount == 3 || self.deathcount == 6 || self.deathcount == 9 || self.deathcount == 12)
 				CreateExplosion(self.origin);
@@ -296,7 +334,10 @@ void() PlayerPostThink =
 					self.deathcount_finished = time + 0.1;
 				}
 				else
-					RespawnPlayer();
+				{
+					if (self.button0 || self.button3 || self.button4 || !self.ishuman)
+						RespawnPlayer();
+				}
 			}
 		}
 	}
@@ -340,6 +381,32 @@ void() PlayerPostThink =
 				DoDamage(self, self, firedmg);
 				self.onfire_tic = time + 1;
 			}
+		}
+		if (!self.fire)
+		{
+			local entity fire1 = spawn();
+			fire1.owner = self;
+			self.fire = fire1;
+			fire1.classname = "fire1";
+			fire1.scale = 3;
+			fire1.effects = EF_ADDITIVE | EF_FULLBRIGHT;
+			fire1.alpha = 0.5;
+			fire1.movetype = MOVETYPE_NOCLIP;
+			fire1.solid = SOLID_NOT;
+			fire1.frame = random()*8;
+			setorigin (fire1, self.origin + v_up * 52);
+			setmodel (fire1, "progs/fire.spr");
+			setsize (fire1, '0 0 0', '0 0 0');
+			fire1.think = fire_think;
+			fire1.nextthink = time;
+		}
+	}
+	else
+	{
+		if (self.fire)
+		{
+			remove(self.fire);
+			self.fire = world;
 		}
 	}
 	TryUpdateVehicle();

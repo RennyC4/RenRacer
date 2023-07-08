@@ -643,7 +643,7 @@ void TryUpdateVehicle(){
 		}
 		else if (forw < -100){
 			Car_Accelerate(-2500, 800);
-		} 
+		}
 
 		// RennyC: Speed Booster
 		if (self.speed > 0 && self.speedboost_finished > time)

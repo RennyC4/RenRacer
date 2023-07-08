@@ -485,6 +485,7 @@ var float PART_NAPALM;
 .vector dest2;
 
 .entity trail; // Snail trail entity to help bots become unstuck
+.entity fire; // Fire on objects
 
 //
 //CSQC 
