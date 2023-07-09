@@ -11,4 +11,5 @@ csqc/time.qc
 csqc/speedline.qc
 csqc/scoreboard.qc
 csqc/health.qc
+csqc/hud_dm.qc
 csqc/main.qc

@@ -456,6 +456,9 @@ float WEP_HROCKET = 1;
 float WEP_PROCKET = 2;
 float WEP_NAPALM = 4;
 
+// Ammo
+.float ammo_firerocket, ammo_homingrocket, ammo_powerrocket, ammo_napalm;
+
 // Particle defs
 var float PART_DIRT;
 var float PART_TURBO;
@@ -465,6 +468,7 @@ var float PART_ROCKET1;
 var float PART_ROCKET2;
 var float PART_ROCKET3;
 var float PART_NAPALM;
+var float PART_MGUNSMOKE;
 
 // Lap time stats
 .float start_laptime; // ON / OFF
@@ -500,3 +504,7 @@ var float PART_NAPALM;
 #define STAT_SPEEDBOOST 39
 #define STAT_HEALTH 40
 #define STAT_MAXHEALTH 41
+#define STAT_AMMO_FIREROCKET 42
+#define STAT_AMMO_HOMINGROCKET 43
+#define STAT_AMMO_POWERROCKET 44
+#define STAT_AMMO_NAPALM 45

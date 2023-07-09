@@ -219,17 +219,17 @@ void() RespawnPlayer =
 	self.colormod = '0 0 0';
 	self.deathcount = 0;
 	self.onfire_finished = time;
-	if (self.fire)
-	{
-		remove(self.fire);
-		self.fire = world;
-	}
 	car_teleport(self.spawn_loc,FALSE);
 	self.invulnerable_finished = time + 5; // disallow damage / firing
 };
 
 void() fire_think =
 {
+	if (self.owner.invulnerable_finished > time || self.owner.onfire_finished < time)
+	{
+		remove(self);
+		return;
+	}
 	if (self.animation_finished < time)
 	{
 		if (self.frame < 9)

@@ -163,7 +163,31 @@
 }
 // entity 5
 {
-"classname" "speedboost"
-"origin" "56 -280 24"
+"classname" "item_health"
+"origin" "48 -312 40"
+"angle" "90"
+}
+// entity 6
+{
+"classname" "item_firerocket"
+"origin" "-16 -304 32"
+"angle" "90"
+}
+// entity 7
+{
+"classname" "item_homingrocket"
+"origin" "-80 -304 32"
+"angle" "90"
+}
+// entity 8
+{
+"classname" "item_powerrocket"
+"origin" "-144 -304 32"
+"angle" "90"
+}
+// entity 9
+{
+"classname" "item_napalm"
+"origin" "-208 -304 32"
 "angle" "90"
 }

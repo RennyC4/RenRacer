@@ -105,6 +105,7 @@ void() MachineGunBullet_Touch =
 		WriteCoord (MSG_BROADCAST, self.origin_x);
 		WriteCoord (MSG_BROADCAST, self.origin_y);
 		WriteCoord (MSG_BROADCAST, self.origin_z);
+		pointparticles(PART_MGUNSMOKE, self.origin, '0 0 0', 1);
 		remove(self);
 		return;
 	}
@@ -122,6 +123,7 @@ void() MachineGunBullet_Touch =
 		sound(self, CHAN_BODY, "combat/mgunh3.wav", 1, ATTN_NORM);
 
 	DoDamage(other.owner.driving, self.owner, 2); // other.owner.driving is the player
+	pointparticles(PART_MGUNSMOKE, self.origin, '0 0 0', 1);
 
 	remove(self);
 };
@@ -571,22 +573,50 @@ void(float type) CarAttack =
 		{
 			if (self.weapon == WEP_ROCKET)
 			{
-				Fire_Rocket(0);
+				if (self.ammo_firerocket > 0)
+				{
+					Fire_Rocket(0);
+					self.ammo_firerocket = self.ammo_firerocket - 1;
+				}
+				else
+					sprint(self, "Fire Rocket bay empty!\n");
+					// TODO: Insert empty chamber sound
 				self.spcl_finished = time + 1;
 			}
 			if (self.weapon == WEP_HROCKET)
 			{
-				Fire_Rocket(1);
+				if (self.ammo_homingrocket > 0)
+				{
+					Fire_Rocket(1);
+					self.ammo_homingrocket = self.ammo_homingrocket - 1;
+				}
+				else
+					sprint(self, "Homing Rocket bay empty!\n");
+					// TODO: Insert empty chamber sound
 				self.spcl_finished = time + 1;
 			}
 			if (self.weapon == WEP_PROCKET)
 			{
-				Fire_Rocket(2);
+				if (self.ammo_powerrocket > 0)
+				{
+					Fire_Rocket(2);
+					self.ammo_powerrocket = self.ammo_powerrocket - 1;
+				}
+				else
+					sprint(self, "Power Rocket bay empty!\n");
+					// TODO: Insert empty chamber sound
 				self.spcl_finished = time + 1;
 			}
 			if (self.weapon == WEP_NAPALM)
 			{
-				Fire_Napalm();
+				if (self.ammo_napalm > 0)
+				{
+					Fire_Napalm();
+					self.ammo_napalm = self.ammo_napalm - 1;
+				}
+				else
+					sprint(self, "Napalm fuel empty!\n");
+					// TODO: Insert empty chamber sound
 				self.spcl_finished = time + 3;
 			}
 		}

@@ -73,7 +73,7 @@ void() monster_fish             = {remove(self);};
 void() monster_shalrath         = {remove(self);};
 void() monster_oldone           = {remove(self);};
 
-void() item_health              = {remove(self);};
+//void() item_health              = {remove(self);};
 void() item_megahealth_rot      = {remove(self);};
 void() item_armor1              = {remove(self);};
 void() item_armor2              = {remove(self);};

@@ -45,8 +45,11 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 		DrawTime();  // Draw Lap Time Stats
 		DrawSpeed(); // Draw Speed Stats
 	}
-	if (deathmatch)
-		DrawHealth(); // Draw Health Stats (DM ONLY)
+	else
+	{
+		DrawHealth(); // Draw Health Stats
+		HUD_Deathmatch(); // Draw ammo, etc
+	}
 
 	if (showscores)
 	{

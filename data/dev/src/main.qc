@@ -32,6 +32,10 @@ void() CSEv_GrabCSQCValues =
 	clientstat(STAT_SPEEDBOOST, EV_FLOAT, speedboost_finished);
 	clientstat(STAT_HEALTH, EV_FLOAT, health);
 	clientstat(STAT_MAXHEALTH, EV_FLOAT, max_health);
+	clientstat(STAT_AMMO_FIREROCKET, EV_FLOAT, ammo_firerocket);
+	clientstat(STAT_AMMO_HOMINGROCKET, EV_FLOAT, ammo_homingrocket);
+	clientstat(STAT_AMMO_POWERROCKET, EV_FLOAT, ammo_powerrocket);
+	clientstat(STAT_AMMO_NAPALM, EV_FLOAT, ammo_napalm);
 };
 
 void() world_lights =
@@ -64,6 +68,7 @@ void() worldspawn =
 	PART_ROCKET2 = particleeffectnum("rocket2");
 	PART_ROCKET3 = particleeffectnum("rocket3");
 	PART_NAPALM = particleeffectnum("napalm");
+	PART_MGUNSMOKE = particleeffectnum("mgunsmoke");
 
 	precache_model("progs/null.spr");
 	precache_model("progs/s_debug.spr");
@@ -130,6 +135,7 @@ void() worldspawn =
 	precache_sound ("combat/rocket.wav");
 	precache_sound ("combat/xplode.wav");
 	precache_sound ("combat/napalm.wav");
+	precache_sound ("combat/item.wav");
 	precache_sound ("combat/ric1.wav");
 	precache_sound ("combat/ric2.wav");
 	precache_sound ("combat/ric3.wav");
