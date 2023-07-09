@@ -140,7 +140,7 @@ void() Fire_MachineGun =
 	bullet.solid = SOLID_TRIGGER;
 	bullet.classname = "bullet";
 	bullet.netname = "projectile";
-	bullet.effects = EF_FULLBRIGHT;
+	bullet.effects = EF_FULLBRIGHT | EF_MUZZLEFLASH;
 	bullet.touch = MachineGunBullet_Touch;
 
 	bullet.velocity = aim(self, 1000);

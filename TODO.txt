@@ -1,7 +1,9 @@
-TODO: Work on DM mode
-	- Car can fire guns (basic machinegun / specials), machinegun is done
-	- Button remappings, done
-	- Damage / Kill stuff, Done-ish
+TODO: More DM stuff
+	- Cars should be on fire on death automatically (easy)
+	- A proper map to fight on
+	- Bot AI
+	- Add remote bombs, richochet, freeze blast
+	- Combo moves+energy meter? (NO SHIELD!)
 TODO: Check out the breaking function from shpds delivery game
 TODO: Set direct angle on func_vehicle function
 TODO: Move checkpoint particles to CSQC and only have the next markers particle effects ran
@@ -15,6 +17,10 @@ TODO: Add speed booster as a brush entity as well
 
 ====
 
+Done: Work on DM mode
+	- Car can fire guns (basic machinegun / specials), machinegun is done
+	- Button remappings, done
+	- Damage / Kill stuff, Done-ish
 Done: Speed Booster 'speed rays', they're more blue
 Done: Cap pitch on engine sound
 Done: Clip brush Map5 sky just to see how it interacts with the game camera
