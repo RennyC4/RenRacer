@@ -45,7 +45,7 @@ void() item_health_touch =
 	if (toucher.health > toucher.max_health)
 		toucher.health = toucher.max_health;
 
-	bprint ("Health recharged!\n");
+	sprint(toucher, "Health recharged!\n");
 	sound(self, CHAN_AUTO, "combat/item.wav", 1, ATTN_NORM);
 
 	// Remove item and setup for respawn
@@ -93,7 +93,7 @@ void() item_firerocket_touch =
 	if (toucher.ammo_firerocket > 9)
 		toucher.ammo_firerocket = 9;
 
-	bprint ("Fire Rockets loaded!\n");
+	sprint(toucher, "Fire Rockets loaded!\n");
 	sound(self, CHAN_AUTO, "combat/item.wav", 1, ATTN_NORM);
 
 	// Remove item and setup for respawn
@@ -141,7 +141,7 @@ void() item_homingrocket_touch =
 	if (toucher.ammo_homingrocket > 6)
 		toucher.ammo_homingrocket = 6;
 
-	bprint ("Homing Rockets loaded!\n");
+	sprint(toucher, "Homing Rockets loaded!\n");
 	sound(self, CHAN_AUTO, "combat/item.wav", 1, ATTN_NORM);
 
 	// Remove item and setup for respawn
@@ -189,7 +189,7 @@ void() item_powerrocket_touch =
 	if (toucher.ammo_powerrocket > 3)
 		toucher.ammo_powerrocket = 3;
 
-	bprint ("Power Rockets loaded!\n");
+	sprint(toucher, "Power Rockets loaded!\n");
 	sound(self, CHAN_AUTO, "combat/item.wav", 1, ATTN_NORM);
 
 	// Remove item and setup for respawn
@@ -237,7 +237,7 @@ void() item_napalm_touch =
 	if (toucher.ammo_napalm > 5)
 		toucher.ammo_napalm = 5;
 
-	bprint ("Napalm fuel loaded!\n");
+	sprint(toucher, "Napalm fuel loaded!\n");
 	sound(self, CHAN_AUTO, "combat/item.wav", 1, ATTN_NORM);
 
 	// Remove item and setup for respawn
