@@ -38,6 +38,9 @@ void() item_health_touch =
 {
 	entity toucher = other.owner.driving;
 
+	if (toucher.health <= 0)
+		return;
+
 	toucher.health = toucher.health + 25;
 	if (toucher.health > toucher.max_health)
 		toucher.health = toucher.max_health;
@@ -81,7 +84,8 @@ void() item_health =
 void() item_firerocket_touch =
 {
 	entity toucher = other.owner.driving;
-
+	if (toucher.health <= 0)
+		return;
 	if (toucher.ammo_firerocket > 9)
 		return;
 
@@ -128,7 +132,8 @@ void() item_firerocket =
 void() item_homingrocket_touch =
 {
 	entity toucher = other.owner.driving;
-
+	if (toucher.health <= 0)
+		return;
 	if (toucher.ammo_homingrocket > 9)
 		return;
 
@@ -175,7 +180,8 @@ void() item_homingrocket =
 void() item_powerrocket_touch =
 {
 	entity toucher = other.owner.driving;
-
+	if (toucher.health <= 0)
+		return;
 	if (toucher.ammo_powerrocket > 3)
 		return;
 
@@ -222,7 +228,8 @@ void() item_powerrocket =
 void() item_napalm_touch =
 {
 	entity toucher = other.owner.driving;
-
+	if (toucher.health <= 0)
+		return;
 	if (toucher.ammo_napalm > 5)
 		return;
 

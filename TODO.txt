@@ -1,6 +1,6 @@
 TODO: More DM stuff
-	- Cars should be on fire on death automatically (easy)
-	- A proper map to fight on
+	- Cars should be on fire on death automatically (easy / done)
+	- A proper map to fight on (Done)
 	- Bot AI
 	- Add remote bombs, richochet, freeze blast
 	- Combo moves+energy meter? (NO SHIELD!)

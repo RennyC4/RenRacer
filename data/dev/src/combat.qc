@@ -9,7 +9,11 @@
 void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 {
 	if (attacker == targ)
+	{
+		targ.frags = targ.frags - 1; // lose a frag
 		bprint(targ.netname, " stupidly commited vehicular suicide\n");
+		return;
+	}
 
 	if (attackerclassname == "bullet") // machine gun
 	{
