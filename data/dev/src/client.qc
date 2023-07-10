@@ -9,7 +9,8 @@
 void() CheckImpulses;
 void(float type) CarAttack;
 void(vector position) CreateExplosion;
-void(entity targ, entity attacker, float damage) DoDamage;
+void(entity targ, entity attacker, float damage, string attackerclassname) DoDamage;
+
 void() ClientKill = {};
 
 void() ClientConnect =
@@ -111,6 +112,12 @@ void() PushPlayers =
 				sound (self, CHAN_AUTO, "hit3.wav", 1, ATTN_NORM);
 			else
 				sound (self, CHAN_AUTO, "hit4.wav", 1, ATTN_NORM);
+			
+			if (b.onfire_finished > time) // catch fire on touch
+			{
+				self.onfire_finished = time + b.onfire_finished;
+				self.igniter = b.igniter;
+			}
 		}
 	}
 };
@@ -209,7 +216,6 @@ void() snailtrail_think =
 		self.angles = self.owner.angles;
 		setorigin(self, self.owner.origin);
 	}
-
 	frameskip(0.1);
 };
 
@@ -218,6 +224,7 @@ void() RespawnPlayer =
 	self.health = self.max_health;
 	self.colormod = '0 0 0';
 	self.deathcount = 0;
+	self.igniter = world;
 	self.onfire_finished = time;
 	car_teleport(self.spawn_loc,FALSE);
 	self.invulnerable_finished = time + 5; // disallow damage / firing
@@ -325,12 +332,16 @@ void() PlayerPostThink =
 			}
 			self.colormod = '0.1 0.1 0.1'; // car is cooked/black on death
 			if (self.deathcount == 3 || self.deathcount == 6 || self.deathcount == 9 || self.deathcount == 12)
+			{
 				CreateExplosion(self.origin);
+				self.onfire_finished = time + 9999; // cars on fire
+			}
 			if (self.deathcount_finished < time)
 			{
 				if (self.deathcount < 30)
 				{
-					self.deathcount = self.deathcount + 1;
+					if (race_status == RACE_STARTED) // Don't count until match actually starts
+						self.deathcount = self.deathcount + 1;
 					self.deathcount_finished = time + 0.1;
 				}
 				else
@@ -372,33 +383,36 @@ void() PlayerPostThink =
 	}
 	if (self.onfire_finished > time)
 	{
-		centerprint (self, "You're on fire!\n");
 		if (self.health > 0)
 		{
+			centerprint (self, "You're on fire!\n");
 			if (self.onfire_tic < time)
 			{
 				float firedmg = ceil(random()*3 + 3);
-				DoDamage(self, self, firedmg);
+				DoDamage(self, self.igniter, firedmg, "napalmfire");
 				self.onfire_tic = time + 1;
 			}
 		}
 		if (!self.fire)
 		{
-			local entity fire1 = spawn();
+			entity fire1 = spawn();
 			fire1.owner = self;
 			self.fire = fire1;
 			fire1.classname = "fire1";
 			fire1.scale = 3;
 			fire1.effects = EF_ADDITIVE | EF_FULLBRIGHT;
 			fire1.alpha = 0.5;
+			fire1.colormod = '2 2 2'; // brighter
 			fire1.movetype = MOVETYPE_NOCLIP;
-			fire1.solid = SOLID_NOT;
+			fire1.solid = SOLID_SLIDEBOX; // spawn_color_glow hack
+			fire1.dimension_hit = fire1.dimension_solid = 0;
 			fire1.frame = random()*8;
 			setorigin (fire1, self.origin + v_up * 52);
 			setmodel (fire1, "progs/fire.spr");
 			setsize (fire1, '0 0 0', '0 0 0');
 			fire1.think = fire_think;
 			fire1.nextthink = time;
+			spawn_color_glow(3, 1.25, 1, 100, fire1); // dynamic light
 		}
 	}
 	else

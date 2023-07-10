@@ -6,6 +6,38 @@
 //| Weapons and combat functions are done here								   |
 //+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
 
+void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
+{
+	if (attacker == targ)
+		bprint(targ.netname, " stupidly commited vehicular suicide\n");
+
+	if (attackerclassname == "bullet") // machine gun
+	{
+		bprint(attacker.netname, " coldly gunned down ");
+		bprint(targ.netname, "\n");
+	}
+	if (attackerclassname == "rocket") // fire rocket
+	{
+		bprint(targ.netname, " swallowed ");
+		bprint(attacker.netname, "'s rocket\n");
+	}
+	if (attackerclassname == "rocket2") // homing rocket
+	{
+		bprint(attacker.netname, "'s rocket really loves ");
+		bprint(targ.netname, "\n");
+	}
+	if (attackerclassname == "rocket3") // power rocket
+	{
+		bprint(attacker.netname, " showed ");
+		bprint(targ.netname, " true power!\n");
+	}
+	if (attackerclassname == "napalm" || attackerclassname == "napalmfire")
+	{
+		bprint(attacker.netname, " made ");
+		bprint(targ.netname, " feel all warm and cozy\n");
+	}
+};
+
 // ---
 // Damage / Death / Effects
 // ---
@@ -30,7 +62,7 @@ void(entity targ, entity attacker) Death =
 		targ.driving.backright
 	};
 	for (float i = 0; i < wheels.length; i++)
-	{	
+	{
 		traceline(wheels[i].origin, wheels[i].origin - wheels[i].lmat_up * 24, MOVE_NOMONSTERS, wheels[i]);
 		if (trace_fraction < 1)
 			Phys_Force(targ.driving, targ.driving.physobj_mass, '0 0 1' * 500 * 1.0, trace_endpos, wheels[i].lmat_up);
@@ -39,7 +71,7 @@ void(entity targ, entity attacker) Death =
 	CreateExplosion(targ.origin + v_up * 32);
 };
 
-void(entity targ, entity attacker, float damage) DoDamage =
+void(entity targ, entity attacker, float damage, string attackerclassname) DoDamage =
 {
 	if (targ.health < 1)
 		return;
@@ -56,19 +88,23 @@ void(entity targ, entity attacker, float damage) DoDamage =
 	{
 		attacker.frags = attacker.frags + 1; // reward
 		Death(targ, attacker);
+		PrintDeathMessage(targ, attacker, attackerclassname);
 		return;
 	}
 };
 
-void(entity attacker, float radius, float damage, float setfire) DoRadiusDamage =
+void(entity attacker, float radius, float damage, float setfire, string attackerclassname) DoRadiusDamage =
 {
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
 		if (vlen(targ.origin - self.origin) <= radius)
 		{
-			DoDamage(targ, attacker, damage);
+			DoDamage(targ, attacker, damage, self.classname);
 			if (setfire)
+			{
 				targ.onfire_finished = time + 5;
+				targ.igniter = attacker;
+			}
 		}
 	}
 };
@@ -76,10 +112,25 @@ void(entity attacker, float radius, float damage, float setfire) DoRadiusDamage 
 // Used for aquiring targets (missiles and other projectiles)
 void() GetTarget =
 {
+	float bestd = 9999999;
+	entity bestv = world;
+
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
-		if (visible(targ) && infront3(targ, 0.75) && !self.enemy && targ.health > 0 && targ != self.owner)
-			self.enemy = targ;
+		vector heading = targ.origin - self.origin;
+		float d = heading * heading;
+
+		if (d < bestd)
+		{
+			bestd = d;
+			bestv = targ;
+		}
+
+		if (bestv)
+		{
+			if (visible(targ) && infront3(targ, 0.75) && !self.enemy && targ.health > 0 && targ != self.owner)
+				self.enemy = targ;
+		}
 	}
 };
 
@@ -122,7 +173,7 @@ void() MachineGunBullet_Touch =
 	else
 		sound(self, CHAN_BODY, "combat/mgunh3.wav", 1, ATTN_NORM);
 
-	DoDamage(other.owner.driving, self.owner, 2); // other.owner.driving is the player
+	DoDamage(other.owner.driving, self.owner, 2, self.classname); // other.owner.driving is the player
 	pointparticles(PART_MGUNSMOKE, self.origin, '0 0 0', 1);
 
 	remove(self);
@@ -296,11 +347,11 @@ void() Rocket_Touch =
 	}
 
 	if (self.classname == "rocket")
-		DoDamage(other.owner.driving, self.owner, 7); // fire
+		DoDamage(other.owner.driving, self.owner, 7, self.classname); // fire
 	if (self.classname == "rocket2")
-		DoDamage(other.owner.driving, self.owner, 10); // homing
+		DoDamage(other.owner.driving, self.owner, 10, self.classname); // homing
 	if (self.classname == "rocket3")
-		DoDamage(other.owner.driving, self.owner, 15); // power
+		DoDamage(other.owner.driving, self.owner, 15, self.classname); // power
 
 	CreateExplosion(self.origin);
 	remove(self);
@@ -378,7 +429,7 @@ void(float type) Fire_Rocket =
 void() napalmfire_think =
 {
 	if (self.onfire_finished > time)
-		DoRadiusDamage(self.owner, 150, 0, TRUE); // Set whoever near me on fire
+		DoRadiusDamage(self.owner, 150, 0, TRUE, self.classname); // Set whoever near me on fire
 	else
 	{
 		if (self.movetype != MOVETYPE_TOSS) // Gravity brings the napalm fire back down
@@ -416,14 +467,16 @@ void() CreateNapalmFire =
 	nf.effects = EF_ADDITIVE | EF_FULLBRIGHT;
 	nf.alpha = 0.75;
 	nf.movetype = MOVETYPE_NONE;
-	nf.solid = SOLID_NOT;
+	nf.solid = SOLID_SLIDEBOX;
 	nf.frame = random()*8;
+	nf.dimension_hit = nf.dimension_solid = 0;
 	setorigin (nf, self.origin + v_up * 64);
 	setmodel (nf, "progs/fire.spr");
 	setsize (nf, '0 0 0', '0 0 0');
 	nf.onfire_finished = time + 5;
 	nf.think = napalmfire_think;
 	nf.nextthink = time;
+	spawn_color_glow(3, 1.25, 1, 150, nf); // dynamic light
 };
 
 void() NapalmTouch_Think =
@@ -454,14 +507,13 @@ void() NapalmTouch_Think =
 	frameskip(0.01);
 };
 
-void() Napalm_Touch =
+void() Napalm_Touch = // Does 10 damage on direct player hit + fire damage is 4-6 dmg / sec, flames stay for 5 seconds
 {
 	self.velocity = '0 0 0';
 	self.movetype = MOVETYPE_NONE;
 	CreateExplosion(self.origin);
-	DoDamage(other, self.owner, 10);
+	DoRadiusDamage(self.owner, 50, 10, TRUE, self.classname);
 	CreateNapalmFire();
-	// Does 10 damage on direct player hit + fire damage is 4-6 dmg / sec, flames stay for 5 seconds
 	self.think = NapalmTouch_Think;
 	self.nextthink = time;
 };

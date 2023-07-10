@@ -448,6 +448,7 @@ float total_checkpoints;
 .float removeme_finished;
 .float onfire_finished; // targets on fire
 .float onfire_tic; // damage dealer
+.entity igniter; // who set who on fire
 
 // Weapons
 .float weapon;

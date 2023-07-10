@@ -7,8 +7,24 @@
 //+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
 
 .string mdl;
+
+void() SetupItemDynamicLight =
+{
+	if (self.classname == "item_health")
+		spawn_color_glow(1, 1, 1, 100, self);
+	if (self.classname == "item_frckt")
+		spawn_color_glow(1.67, 1.33, 0, 100, self);
+	if (self.classname == "item_hrckt")
+		spawn_color_glow(1.5, 1, 1.5, 100, self);
+	if (self.classname == "item_prckt")
+		spawn_color_glow(1, 1, 2, 100, self);
+	if (self.classname == "item_napalm")
+		spawn_color_glow(2, .75, .75, 100, self);
+};
+
 void() SUB_Respawn =
 {
+	SetupItemDynamicLight(); // reinit dlights
 	setmodel(self, self.mdl);
 	self.solid = SOLID_TRIGGER;
 	setorigin (self, self.origin);
@@ -21,9 +37,6 @@ void() SUB_Respawn =
 void() item_health_touch =
 {
 	entity toucher = other.owner.driving;
-
-	if (toucher.health >= toucher.max_health)
-		return;
 
 	toucher.health = toucher.health + 25;
 	if (toucher.health > toucher.max_health)
@@ -58,6 +71,7 @@ void() item_health =
 	setmodel (self, "progs/item_health.spr");
 	self.mdl = self.model; // can be restored on respawn
 	setsize (self, '0 0 0', '0 0 0');
+	SetupItemDynamicLight(); // init dlights
 };
 
 //
@@ -104,6 +118,7 @@ void() item_firerocket =
 	setmodel (self, "progs/item_frckt.spr");
 	self.mdl = self.model; // can be restored on respawn
 	setsize (self, '0 0 0', '0 0 0');
+	SetupItemDynamicLight(); // init dlights
 };
 
 //
@@ -150,6 +165,7 @@ void() item_homingrocket =
 	setmodel (self, "progs/item_hrckt.spr");
 	self.mdl = self.model; // can be restored on respawn
 	setsize (self, '0 0 0', '0 0 0');
+	SetupItemDynamicLight(); // init dlights
 };
 
 //
@@ -196,6 +212,7 @@ void() item_powerrocket =
 	setmodel (self, "progs/item_prckt.spr");
 	self.mdl = self.model; // can be restored on respawn
 	setsize (self, '0 0 0', '0 0 0');
+	SetupItemDynamicLight(); // init dlights
 };
 
 //
@@ -234,7 +251,7 @@ void() item_napalm =
 
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_TRIGGER;
-	self.classname = "item_prckt";
+	self.classname = "item_napalm";
 	self.flags = FL_ITEM;
 	self.effects = EF_FULLBRIGHT;
 	self.touch = item_napalm_touch;
@@ -242,4 +259,5 @@ void() item_napalm =
 	setmodel (self, "progs/item_napalm.spr");
 	self.mdl = self.model; // can be restored on respawn
 	setsize (self, '0 0 0', '0 0 0');
+	SetupItemDynamicLight(); // init dlights
 };

@@ -39,6 +39,53 @@ void() InitTrigger =
 	self.model = "";
 };
 
+//
+// Spawns a dynamic light for colored light glowing
+//
+
+void() spawn_color_glow_think =
+{
+	// HACK: SOLID_NOT is the only method I've found to actually remove
+	// the dynamic light entity properly, otherwise it starts to randomly
+	// assign itself to other entities.
+
+	if (self.owner.solid == SOLID_NOT)
+	{
+		dprint ("spawn_color_glow removed properly\n");
+		self.pflags = 0;
+		self.light_lev = 0;
+		self.color = [0,0,0];
+		remove(self);
+		return;
+	}
+	makevectors_mdl(self.owner.angles);
+	setorigin (self, self.owner.origin + v_up * 10); // move slightly above ground
+	frameskip(0.01);
+};
+
+void(float r, float g, float b, float light, entity spawner) spawn_color_glow =
+{
+	local entity glowy;
+	
+	glowy = spawn();
+
+	glowy.movetype = MOVETYPE_NOCLIP;
+	setorigin (glowy, spawner.origin + v_up*10);
+	setmodel (glowy, "progs/null.spr");
+	setsize (glowy, '0 0 0', '0 0 0');
+	glowy.solid = SOLID_NOT;
+	glowy.classname = "glowy";
+	glowy.owner = spawner;
+	
+	// Give off RT Light
+	glowy.pflags = PFLAGS_FULLDYNAMIC;
+	glowy.light_lev = light;
+	glowy.color = [r, g, b];
+	
+	glowy.think = spawn_color_glow_think;
+	glowy.nextthink = time + 0.1;
+};
+
 /*
 * misc_model.qc
 *
