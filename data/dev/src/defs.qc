@@ -452,6 +452,8 @@ float total_checkpoints;
 .entity igniter; // who set who on fire
 .float deadflag; // if TRUE, player is dead
 .float observer;
+.float forcejump;
+.float forcejump_strength;
 float	intermission_running;
 float	intermission_exittime;
 string nextmap;

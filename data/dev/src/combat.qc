@@ -380,29 +380,22 @@ void() Rocket_Touch =
 	if (self.owner == other.owner.driving)
 		return;
 
-/* TESTME: May be breaking stuff
-	// Car jumps on hit
-	local entity targ = other.owner.driving;
-	entity wheels[] = {
-		targ.driving.frontleft,
-		targ.driving.frontright,
-		targ.driving.backleft,
-		targ.driving.backright
-	};
-	for (float i = 0; i < wheels.length; i++)
-	{	
-		traceline(wheels[i].origin, wheels[i].origin - wheels[i].lmat_up * 24, MOVE_NOMONSTERS, wheels[i]);
-		if (trace_fraction < 1)
-			Phys_Force(targ.driving, targ.driving.physobj_mass, '0 0 1' * 250 * 1.0, trace_endpos, wheels[i].lmat_up);
-	}
-*/
-
 	if (self.classname == "rocket")
+	{
 		DoDamage(other.owner.driving, self.owner, 7, self.classname); // fire
+		other.owner.driving.forcejump_strength = 250;
+	}
 	if (self.classname == "rocket2")
+	{
 		DoDamage(other.owner.driving, self.owner, 10, self.classname); // homing
+		other.owner.driving.forcejump_strength = 350;
+	}
 	if (self.classname == "rocket3")
+	{
 		DoDamage(other.owner.driving, self.owner, 15, self.classname); // power
+		other.owner.driving.forcejump_strength = 450;
+	}
+	other.owner.driving.forcejump = TRUE;
 
 	CreateExplosion(self.origin);
 	Create2DExplosion(self.origin, 2);

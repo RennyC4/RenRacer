@@ -131,6 +131,23 @@ void() PushPlayers =
 	}
 };
 
+// Instances that can force the car to jump (example: being hit by a rocket)
+void() ForceJump =
+{
+	entity wheels[] = {
+		self.driving.frontleft,
+		self.driving.frontright,
+		self.driving.backleft,
+		self.driving.backright
+	};
+	for (float i = 0; i < wheels.length; i++)
+	{	
+		traceline(wheels[i].origin, wheels[i].origin - wheels[i].lmat_up * 24, MOVE_NOMONSTERS, wheels[i]);
+		if (trace_fraction < 1)
+			Phys_Force(self.driving, self.driving.physobj_mass, '0 0 1' * self.forcejump_strength * 1.0, trace_endpos, wheels[i].lmat_up);
+	}
+};
+
 void() spawn_car_countdown;
 .float turbo_fuel_finished;
 void() PlayerPreThink = 
@@ -178,6 +195,12 @@ void() PlayerPreThink =
 	{
 		if (race_status == RACE_STARTED && !intermission_running)
 			PushPlayers();
+		if (self.forcejump)
+		{
+			ForceJump();
+			self.forcejump_strength = 0;
+			self.forcejump = FALSE;
+		}
 
 		if (self.clearcprint_finished < time)
 		{
