@@ -825,7 +825,7 @@ void TryUpdateVehicle(){
 			b_right.physobj_stiction = 99999;
 			b_left.physobj_stiction = 99999;
 		}
-		else if (race_status < RACE_STARTED) // Lock DM players tires before count-down but never after
+		else if (race_status < RACE_STARTED) // Lock DM players tires before count-down
 		{
 			f_right.physobj_stiction = 99999;
 			f_left.physobj_stiction = 99999;

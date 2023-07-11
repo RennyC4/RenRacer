@@ -450,6 +450,9 @@ float total_checkpoints;
 .float onfire_finished; // targets on fire
 .float onfire_tic; // damage dealer
 .entity igniter; // who set who on fire
+float	intermission_running;
+float	intermission_exittime;
+string nextmap;
 
 // Weapons
 .float weapon;
@@ -511,4 +514,4 @@ var float PART_MGUNSMOKE;
 #define STAT_AMMO_POWERROCKET 44
 #define STAT_AMMO_NAPALM 45
 
-#define STAT_INTERMISSION 99
+#define STAT_INTERMISSION 50

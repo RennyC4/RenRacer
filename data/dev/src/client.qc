@@ -171,7 +171,7 @@ void() PlayerPreThink =
 	}
 	else
 	{
-		if (race_status == RACE_STARTED)
+		if (race_status == RACE_STARTED && !intermission_running)
 			PushPlayers();
 
 		if (self.clearcprint_finished < time)

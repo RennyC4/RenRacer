@@ -9,9 +9,6 @@
 //
 // Intermission / Next map
 //
-float	intermission_running;
-float	intermission_exittime;
-string nextmap;
 void() info_intermission = {self.classname = "info_intermission";};
 
 void() GotoNextMap =

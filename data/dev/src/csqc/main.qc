@@ -17,11 +17,11 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 	virtsize_z = 0;
 
 	framecount = framecount + 1;
-
-	clearscene(); //wipe entity lists, reset view properties to their defaults
-	setproperty(VF_DRAWENGINESBAR, 0); // Turn off status bar
-
 	float intermiss = getstatf(STAT_INTERMISSION);
+	local float rs = getstatf(STAT_RACESTATUS); // Game status
+
+	clearscene(); // wipe entity lists, reset view properties to their defaults
+	setproperty(VF_DRAWENGINESBAR, 0); // turn off status bar
 
 	if (cvar("developer") != 1)
 	{
@@ -55,6 +55,28 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 			DrawHealth(); // Draw Health Stats
 			HUD_Deathmatch(); // Draw ammo, etc
 		}
+
+		// Engine sounds (taken from build a delivery, optimized (thanks spike))
+		local float speed = getstatf(STAT_SPEED);
+		local float incar = getstatf(STAT_DRIVING);
+		if (incar)
+		{
+			float vol = min(1, 0.25 + (speed / 4));
+			float pitchadd = min(1000, speed);
+			float pitch = 120 + pitchadd;
+			if (pitch > 300) // cap pitch since it's tied to velocity
+				pitch = 300;
+			soundupdate(engine_sound, CHAN_BODY, "engine/engine.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
+		}
+		//
+	}
+	else
+	{
+		if (engine_sound)
+		{
+			soundupdate(engine_sound, CHAN_BODY, __NULL__ , -1, 0, 0, 0, 0);
+			engine_sound = world;
+		}
 	}
 
 	if (showscores || intermiss)
@@ -63,22 +85,7 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 		Hud_Scoreboard('0 0 0', virtsize);
 	}
 
-	// Race Status
-	local float rs = getstatf(STAT_RACESTATUS);
 
-	// Engine sounds (taken from build a delivery, optimized (thanks spike))
-	local float speed = getstatf(STAT_SPEED);
-	local float incar = getstatf(STAT_DRIVING);
-	if (incar)
-	{
-		float vol = min(1, 0.25 + (speed / 4));
-		float pitchadd = min(1000, speed);
-		float pitch = 120 + pitchadd;
-		if (pitch > 300) // cap pitch since it's tied to velocity
-			pitch = 300;
-		soundupdate(engine_sound, CHAN_BODY, "engine/engine.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
-	}
-	//
 	
 	// Turbo Press Status
 	local float speedl = getstatf(STAT_TURBO);

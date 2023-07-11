@@ -90,6 +90,17 @@ void() countdown_think = // Race start countdown
 			sound (self, CHAN_AUTO, "gogo.wav", 1, ATTN_NONE);
 			countdown_announce(1);
 			race_status = RACE_STARTED;
+			if (deathmatch) // Start deathmatch music on round start
+			{
+				if (world.model == "maps/dm1.bsp")
+					self.music = "sound/music/dm1.ogg";
+				
+				for (entity targ = world;(targ = find(targ, classname, "player"));)
+				{
+					if (checkextension("DP_QC_SPRINTF"))
+						stuffcmd (targ, sprintf("music %s\n", self.music));
+				}
+			}
 		}
 		countdown_count = countdown_count - 1;
 		countdown_finished = time + 1;
