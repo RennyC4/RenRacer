@@ -43,36 +43,39 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 
 	if (!intermiss)
 	{
-		DrawTurbo(); // Draw Turbo Stats
-		DrawDrift(); // Draw Drift Stats
-		if (!deathmatch)
+		if (rs >= RACE_COUNTDOWN)
 		{
-			DrawTime();  // Draw Lap Time Stats
-			DrawSpeed(); // Draw Speed Stats
-		}
-		else
-		{
-			DrawHealth(); // Draw Health Stats
-			HUD_Deathmatch(); // Draw ammo, etc
-		}
+			DrawTurbo(); // Draw Turbo Stats
+			DrawDrift(); // Draw Drift Stats
+			if (!deathmatch)
+			{
+				DrawTime();  // Draw Lap Time Stats
+				DrawSpeed(); // Draw Speed Stats
+			}
+			else
+			{
+				DrawHealth(); // Draw Health Stats
+				HUD_Deathmatch(); // Draw ammo, etc
+			}
 
-		// Engine sounds (taken from build a delivery, optimized (thanks spike))
-		local float speed = getstatf(STAT_SPEED);
-		local float incar = getstatf(STAT_DRIVING);
-		if (incar)
-		{
-			float vol = min(1, 0.25 + (speed / 4));
-			float pitchadd = min(1000, speed);
-			float pitch = 120 + pitchadd;
-			if (pitch > 300) // cap pitch since it's tied to velocity
-				pitch = 300;
-			soundupdate(engine_sound, CHAN_BODY, "engine/engine.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
+			// Engine sounds (taken from build a delivery, optimized (thanks spike))
+			local float speed = getstatf(STAT_SPEED);
+			local float incar = getstatf(STAT_DRIVING);
+			if (incar)
+			{
+				float vol = min(1, 0.25 + (speed / 4));
+				float pitchadd = min(1000, speed);
+				float pitch = 120 + pitchadd;
+				if (pitch > 300) // cap pitch since it's tied to velocity
+					pitch = 300;
+				soundupdate(engine_sound, CHAN_BODY, "engine/engine.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
+			}
+			//
 		}
-		//
 	}
 	else
 	{
-		if (engine_sound)
+		if (engine_sound) // kill engine sound on intermission
 		{
 			soundupdate(engine_sound, CHAN_BODY, __NULL__ , -1, 0, 0, 0, 0);
 			engine_sound = world;
@@ -85,8 +88,6 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 		Hud_Scoreboard('0 0 0', virtsize);
 	}
 
-
-	
 	// Turbo Press Status
 	local float speedl = getstatf(STAT_TURBO);
 	local float turbof = getstatf(STAT_TURBOFUEL);
@@ -100,8 +101,10 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 
 	if (framecount == 10)
 		localcmd("exec haze.cfg\n");
+
 };
 
+/*
 float(float evtype, float scanx, float chary, float devid) CSQC_InputEvent =
 {
 	switch (evtype)
@@ -118,8 +121,21 @@ float(float evtype, float scanx, float chary, float devid) CSQC_InputEvent =
 	}
 	return FALSE;
 };
+*/
 
 noref void(float apiver, string enginename, float enginever) CSQC_Init = {};
+
+float(string strCommand) CSQC_ConsoleCommand =
+{
+	local float rs = getstatf(STAT_RACESTATUS); // Game status
+
+	if (strCommand == "+showscores" && rs == RACE_STARTED)
+		showscores = TRUE;
+	else
+		showscores = FALSE;
+
+    return FALSE;
+}
 
 //
 // First loaded, run once
@@ -149,4 +165,5 @@ void() CSQC_WorldLoaded  =
 
 	// Ask SSQC for values to send
 	sendevent("GrabCSQCValues", "");
+	registercommand("+showscores", "Show scoreboard");
 };

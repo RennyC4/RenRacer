@@ -589,6 +589,8 @@ void() ChangeWeapon =
 {
 	if (!deathmatch)
 		return;
+	if (race_status != RACE_STARTED)
+		return;
 
 	if (self.impulse == 1)
 	{

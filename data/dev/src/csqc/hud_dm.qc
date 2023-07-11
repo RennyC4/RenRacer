@@ -1,5 +1,12 @@
+float WEP_ROCKET = 0;
+float WEP_HROCKET = 1;
+float WEP_PROCKET = 2;
+float WEP_NAPALM = 4;
+
 void() HUD_Deathmatch =
 {
+	local float wep = getstatf(STAT_WEAPON);
+
 	//
 	// Fire rocket information on HUD
 	//
@@ -13,6 +20,13 @@ void() HUD_Deathmatch =
 
 	drawstring (pos - '-14 9', printammo, '8 8', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
 	drawstring (pos - '-13 10', printammo, '8 8', '1 1 1', 1, DRAWFLAG_NORMAL);
+
+	// Draw weapon select #
+	drawstring (pos - '-2 -6', "1", '6 6', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
+	drawstring (pos - '-1 -5', "^11", '6 6', '1 1 1', 1, DRAWFLAG_NORMAL);
+
+	if (wep == WEP_ROCKET)
+		drawfill(pos, '33 20 0', '1 0 0', 0.3, DRAWFLAG_NORMAL);
 
 	//
 	// Homing rocket information on HUD
@@ -28,6 +42,13 @@ void() HUD_Deathmatch =
 	drawstring (pos - '-14 9', printammo, '8 8', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
 	drawstring (pos - '-13 10', printammo, '8 8', '1 1 1', 1, DRAWFLAG_NORMAL);
 
+	// Draw weapon select #
+	drawstring (pos - '-2 -6', "2", '6 6', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
+	drawstring (pos - '-1 -5', "^12", '6 6', '1 1 1', 1, DRAWFLAG_NORMAL);
+	
+	if (wep == WEP_HROCKET)
+		drawfill(pos, '33 20 0', '1 0 0', 0.3, DRAWFLAG_NORMAL);
+
 	//
 	// Power rocket information on HUD
 	//
@@ -42,6 +63,13 @@ void() HUD_Deathmatch =
 	drawstring (pos - '-14 9', printammo, '8 8', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
 	drawstring (pos - '-13 10', printammo, '8 8', '1 1 1', 1, DRAWFLAG_NORMAL);
 
+	// Draw weapon select #
+	drawstring (pos - '-2 -6', "1", '6 6', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
+	drawstring (pos - '-1 -5', "^13", '6 6', '1 1 1', 1, DRAWFLAG_NORMAL);
+	
+	if (wep == WEP_PROCKET)
+		drawfill(pos, '33 20 0', '1 0 0', 0.3, DRAWFLAG_NORMAL);
+
 	//
 	// Napalm information on HUD
 	//
@@ -55,4 +83,11 @@ void() HUD_Deathmatch =
 
 	drawstring (pos - '-14 9', printammo, '8 8', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
 	drawstring (pos - '-13 10', printammo, '8 8', '1 1 1', 1, DRAWFLAG_NORMAL);
+
+	// Draw weapon select #
+	drawstring (pos - '-2 -6', "1", '6 6', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
+	drawstring (pos - '-1 -5', "^14", '6 6', '1 1 1', 1, DRAWFLAG_NORMAL);
+
+	if (wep == WEP_NAPALM)
+		drawfill(pos, '33 20 0', '1 0 0', 0.3, DRAWFLAG_NORMAL);
 };

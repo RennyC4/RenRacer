@@ -6,6 +6,7 @@ defs.qc
 //frikbot x
 frikbot/bot.qc
 frikbot/bot_ai.qc
+frikbot/bot_ai_race.qc
 frikbot/bot_misc.qc
 frikbot/bot_phys.qc
 //frikbot x
