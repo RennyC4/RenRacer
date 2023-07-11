@@ -16,7 +16,7 @@ void() ClientKill = {};
 void() ClientConnect =
 {
 	if (intermission_running) // a client connecting during an intermission can cause problems
-		GotoNextMap ();
+		GotoNextMap();
 	ClientInRankings(); // FrikBot
 	if (!deathmatch)
 		bprint (self.netname, " joined the race!\n");
@@ -28,15 +28,17 @@ void() ClientDisconnect =
 {
 	if (gameover)
 		return;
+
 	if (!deathmatch)
 		bprint (self.netname, " has retired!\n");
 	else
-		bprint (self.netname, " has chickened out with ", ftos(self.frags), "!\n");
-	ClientDisconnected(); // FrikBot
+		bprint (self.netname, " has chickened out with ", ftos(self.frags), " frags!\n");
+
 	if (self.fire)
 		remove(self.fire);
 	remove_car(self.driving);
-	remove(self);
+
+	ClientDisconnected(); // FrikBot
 };
 
 // This is ugly
@@ -121,7 +123,7 @@ void() PushPlayers =
 			
 			if (b.onfire_finished > time) // catch fire on touch
 			{
-				self.onfire_finished = time + b.onfire_finished;
+				self.onfire_finished = time + 2.5;
 				self.igniter = b.igniter;
 			}
 		}
@@ -158,6 +160,8 @@ void() PlayerPreThink =
 	if (framecount == 10)
 		Setup_level_effects();
 
+	if (self.observer)
+		return;
 	// Force player in car, give greetings message
 	if (!self.driving)
 	{
@@ -236,6 +240,8 @@ void() RespawnPlayer =
 	self.onfire_finished = time;
 	car_teleport(self.spawn_loc,FALSE);
 	self.invulnerable_finished = time + 5; // disallow damage / firing
+	centerprint(self, "");
+	self.clearcprint_finished = time + 0.1;
 };
 
 void() fire_think =
@@ -266,10 +272,18 @@ void() PlayerPostThink =
 {
 	if (BotPostFrame()) // FrikBot
 		return;
-
+	
 	if (intermission_running)
 	{
+		self.onfire_finished = time;
+		centerprint(self, "");
 		IntermissionThink ();
+		return;
+	}
+	if (self.observer)
+	{
+		if (self.movetype != MOVETYPE_NOCLIP)
+			self.movetype = MOVETYPE_NOCLIP;
 		return;
 	}
 
@@ -332,36 +346,39 @@ void() PlayerPostThink =
 		}
 		else // death animation / thinking
 		{
-			if (self.deathcount == 0)
+			if (self.deadflag)
 			{
-				float tt = ceil(random() * 3);
-				if (tt == 1)
-					sound(self, CHAN_AUTO, "combat/death1.wav", 1, ATTN_NORM);
-				else if (tt == 2)
-					sound(self, CHAN_AUTO, "combat/death2.wav", 1, ATTN_NORM);
-				else if (tt == 3)
-					sound(self, CHAN_AUTO, "combat/death3.wav", 1, ATTN_NORM);
-				else
-					sound(self, CHAN_AUTO, "combat/death4.wav", 1, ATTN_NORM);
-			}
-			self.colormod = '0.1 0.1 0.1'; // car is cooked/black on death
-			if (self.deathcount == 3 || self.deathcount == 6 || self.deathcount == 9 || self.deathcount == 12)
-			{
-				CreateExplosion(self.origin);
-				self.onfire_finished = time + 9999; // cars on fire
-			}
-			if (self.deathcount_finished < time)
-			{
-				if (self.deathcount < 30)
+				if (self.deathcount == 1)
 				{
-					if (race_status == RACE_STARTED) // Don't count until match actually starts
-						self.deathcount = self.deathcount + 1;
-					self.deathcount_finished = time + 0.1;
+					float tt = ceil(random() * 3);
+					if (tt == 1)
+						sound(self, CHAN_AUTO, "combat/death1.wav", 1, ATTN_NORM);
+					else if (tt == 2)
+						sound(self, CHAN_AUTO, "combat/death2.wav", 1, ATTN_NORM);
+					else if (tt == 3)
+						sound(self, CHAN_AUTO, "combat/death3.wav", 1, ATTN_NORM);
+					else
+						sound(self, CHAN_AUTO, "combat/death4.wav", 1, ATTN_NORM);
 				}
-				else
+				self.colormod = '0.1 0.1 0.1'; // car is cooked/black on death
+				if (self.deathcount == 3 || self.deathcount == 6 || self.deathcount == 9 || self.deathcount == 12)
 				{
-					if (self.button0 || self.button3 || self.button4 || !self.ishuman)
-						RespawnPlayer();
+					CreateExplosion(self.origin);
+					self.onfire_finished = time + 9999; // cars on fire
+				}
+				if (self.deathcount_finished < time)
+				{
+					if (self.deathcount < 30)
+					{
+						self.deathcount = self.deathcount + 1;
+						self.deathcount_finished = time + 0.1;
+					}
+					else
+					{
+						centerprint(self, "/P^1^b!!! YOU'RE DEAD !!!^7^b\n\n\nPress Fire to Respawn\n");
+						if (self.button0 || self.button3 || self.button4 || !self.ishuman)
+							RespawnPlayer();
+					}
 				}
 			}
 		}
@@ -490,6 +507,7 @@ entity() SelectSpawnSpot =
 //----
 // Spawning the Player
 //----
+.float spawncar;
 void() PutClientInServer =
 {
 	local entity spawn_spot = SelectSpawnSpot();
@@ -531,12 +549,18 @@ void() PutClientInServer =
 	self.spawn_loc = self.origin + v_up * 64; // Stash it
 	self.spawn_loc_angles = self.angles; // Stash it
 	self.alpha = 1;
+	self.deathcount_finished = time + 1;
 
 	if (cvar("developer") != 1)
 	{
-		if (!deathmatch)
-			centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________\n\n\nPress [^b^1FIRE^7^b] to start the race");
-		else
-			centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\n\nPress [^b^1FIRE^7^b] to unleash carnage");
+		if (race_status == RACE_NOTSTARTED)
+		{
+			if (!deathmatch)
+				centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________\n\n\nPress [^b^1FIRE^7^b] to start the race");
+			else
+				centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\n\nPress [^b^1FIRE^7^b] to unleash carnage");
+		}
+		else if (self.ishuman) // Game in progress, force observer
+			self.observer = TRUE;
 	}
 };

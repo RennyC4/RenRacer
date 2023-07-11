@@ -84,6 +84,8 @@ void(entity targ, entity attacker, float damage, string attackerclassname) DoDam
 		return;
 	if (targ.invulnerable_finished > time)
 		return;
+	if (targ == world)
+		return;
 
 	if (damage > 0)
 	{
@@ -93,10 +95,11 @@ void(entity targ, entity attacker, float damage, string attackerclassname) DoDam
 
 	if (targ.health <= 0)
 	{
-		attacker.frags = attacker.frags + 1; // reward
+		if (attacker)
+			attacker.frags = attacker.frags + 1; // reward
 		Death(targ, attacker);
 		PrintDeathMessage(targ, attacker, attackerclassname);
-		return;
+		targ.deadflag = TRUE;
 	}
 };
 
@@ -338,6 +341,7 @@ void() Rocket_Touch =
 	if (self.owner == other.owner.driving)
 		return;
 
+/* TESTME: May be breaking stuff
 	// Car jumps on hit
 	local entity targ = other.owner.driving;
 	entity wheels[] = {
@@ -352,6 +356,7 @@ void() Rocket_Touch =
 		if (trace_fraction < 1)
 			Phys_Force(targ.driving, targ.driving.physobj_mass, '0 0 1' * 250 * 1.0, trace_endpos, wheels[i].lmat_up);
 	}
+*/
 
 	if (self.classname == "rocket")
 		DoDamage(other.owner.driving, self.owner, 7, self.classname); // fire

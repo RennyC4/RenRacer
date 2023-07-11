@@ -19,7 +19,6 @@ void(float type) countdown_announce =
 	}
 };
 
-.float spawncar;
 void() countdown_think = // Race start countdown
 {
 	local entity oself;

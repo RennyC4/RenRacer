@@ -1,7 +1,7 @@
 TODO: More DM stuff
 	- Cars should be on fire on death automatically (easy / done)
 	- A proper map to fight on (Done)
-	- Bot AI (starting)
+	- Bot AI (starting / started)
 	- Intermission with win condition / fraglimit (Done)
 	- Add remote bombs, richochet, freeze blast
 	- Combo moves+energy meter? (NO SHIELD!)

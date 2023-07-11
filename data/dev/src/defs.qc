@@ -450,6 +450,8 @@ float total_checkpoints;
 .float onfire_finished; // targets on fire
 .float onfire_tic; // damage dealer
 .entity igniter; // who set who on fire
+.float deadflag; // if TRUE, player is dead
+.float observer;
 float	intermission_running;
 float	intermission_exittime;
 string nextmap;

@@ -199,7 +199,7 @@ float	sv_friction, sv_gravity;
 float	sv_accelerate, sv_maxspeed, sv_stopspeed;
 entity	b_temp1, b_temp2;
 entity 	player_head, phys_head;
-float	saved_bots, saved_skills1, saved_skills2, current_bots;
+float	saved_skills1, saved_skills2, current_bots;
 
 // -------ProtoTypes------
 // external
@@ -792,33 +792,9 @@ void(float clientno) BotInvalidClientNo =
 			bot.b_clientno = -1;
 			BotDisconnect(bot);
 			active_clients = active_clients | ClientBitFlag(self.b_clientno);
-			BotConnect(0, bot.b_num, bot.b_skill); 
+			//BotConnect(0, bot.b_num, bot.b_skill); 
 			return;
 		}
-	}
-};
-
-void() bot_return =
-{
-	if (time > 2)
-	{
-		if (saved_bots & 1) BotConnect(0, 1, saved_skills1 & 3);
-		if (saved_bots & 2) BotConnect(0, 2, (saved_skills1 & 12) / 4);
-		if (saved_bots & 4) BotConnect(0, 3, (saved_skills1 & 48) / 16);
-		if (saved_bots & 8) BotConnect(0, 4, (saved_skills1 & 192) / 64);
-		if (saved_bots & 16) BotConnect(0, 5, (saved_skills1 & 768) / 256);
-		if (saved_bots & 32) BotConnect(0, 6, (saved_skills1 & 3072) / 1024);
-		if (saved_bots & 64) BotConnect(0, 7, (saved_skills1 & 12288) / 4096);
-		if (saved_bots & 128) BotConnect(0, 8, (saved_skills1 & 49152) / 16384);
-		if (saved_bots & 256) BotConnect(0, 9, saved_skills2 & 3);
-		if (saved_bots & 512) BotConnect(0, 10, (saved_skills2 & 12) / 4);
-		if (saved_bots & 1024) BotConnect(0, 11, (saved_skills2& 48) / 16);
-		if (saved_bots & 2048) BotConnect(0, 12, (saved_skills2 & 192) / 64);
-		if (saved_bots & 4096) BotConnect(0, 13, (saved_skills2 & 768) / 256);
-		if (saved_bots & 8192) BotConnect(0, 14, (saved_skills2 & 3072) / 1024);
-		if (saved_bots & 16384) BotConnect(0, 15, (saved_skills2 & 12288) / 4096);
-		if (saved_bots & 32768) BotConnect(0, 16, (saved_skills2 & 49152) / 16384);
-		saved_bots = 0;
 	}
 };
 
@@ -850,9 +826,6 @@ void() BotFrame =
 		self = nextent(self);
 		num = num + 1;
 	}
-
-	if (saved_bots)
-		bot_return();
 };
 
 /*
