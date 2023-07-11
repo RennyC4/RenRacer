@@ -36,6 +36,7 @@ void() CSEv_GrabCSQCValues =
 	clientstat(STAT_AMMO_HOMINGROCKET, EV_FLOAT, ammo_homingrocket);
 	clientstat(STAT_AMMO_POWERROCKET, EV_FLOAT, ammo_powerrocket);
 	clientstat(STAT_AMMO_NAPALM, EV_FLOAT, ammo_napalm);
+	globalstat(STAT_INTERMISSION, EV_FLOAT, "intermission_running");
 };
 
 void() world_lights =

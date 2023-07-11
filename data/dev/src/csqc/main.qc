@@ -21,9 +21,12 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 	clearscene(); //wipe entity lists, reset view properties to their defaults
 	setproperty(VF_DRAWENGINESBAR, 0); // Turn off status bar
 
+	float intermiss = getstatf(STAT_INTERMISSION);
+
 	if (cvar("developer") != 1)
 	{
-		GameCamera(); // Games camera
+		if (!intermiss)
+			GameCamera(); // Games camera
 		setproperty(VF_DRAWCROSSHAIR, 0); // Turn off crosshair
 	}
 
@@ -38,20 +41,23 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 
 	renderscene();
 
-	DrawTurbo(); // Draw Turbo Stats
-	DrawDrift(); // Draw Drift Stats
-	if (!deathmatch)
+	if (!intermiss)
 	{
-		DrawTime();  // Draw Lap Time Stats
-		DrawSpeed(); // Draw Speed Stats
-	}
-	else
-	{
-		DrawHealth(); // Draw Health Stats
-		HUD_Deathmatch(); // Draw ammo, etc
+		DrawTurbo(); // Draw Turbo Stats
+		DrawDrift(); // Draw Drift Stats
+		if (!deathmatch)
+		{
+			DrawTime();  // Draw Lap Time Stats
+			DrawSpeed(); // Draw Speed Stats
+		}
+		else
+		{
+			DrawHealth(); // Draw Health Stats
+			HUD_Deathmatch(); // Draw ammo, etc
+		}
 	}
 
-	if (showscores)
+	if (showscores || intermiss)
 	{
 		Hud_UpdateScores();
 		Hud_Scoreboard('0 0 0', virtsize);

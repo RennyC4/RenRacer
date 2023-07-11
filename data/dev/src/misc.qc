@@ -6,6 +6,104 @@
 //| Misc code handled here, nowhere else to put it.                            |
 //+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
 
+//
+// Intermission / Next map
+//
+float	intermission_running;
+float	intermission_exittime;
+string nextmap;
+void() info_intermission = {self.classname = "info_intermission";};
+
+void() GotoNextMap =
+{
+	if (cvar("samelevel"))
+		changelevel (mapname);
+	else
+		changelevel (nextmap);
+};
+
+void() execute_changelevel =
+{
+	intermission_running = TRUE;
+	intermission_exittime = time + 5;
+
+	entity pos = find(world, classname, "info_intermission");
+
+	other = find (world, classname, "player");
+	while (other)
+	{
+		other.angles = other.v_angle = pos.mangle;
+		other.fixangle = TRUE;
+		other.view_ofs = '0 0 0';
+		other.takedamage = DAMAGE_NO;
+		other.solid = SOLID_NOT;
+		other.movetype = MOVETYPE_NONE;
+		other.modelindex = 0;
+		setorigin (other, pos.origin);
+		other = find (other, classname, "player");
+	}
+	WriteByte (MSG_ALL, SVC_INTERMISSION);
+};
+
+void() IntermissionThink = // called from PostThink
+{
+	if (time < intermission_exittime)
+		return;
+
+	if (!self.button0 && !self.button1 && !self.button2 && !self.button3 && !self.button4)
+		return;
+	
+	GotoNextMap ();
+};
+
+void() NextLevel =
+{
+	entity o = find(world, classname, "trigger_changelevel");
+	if (!o)
+	{
+		mapname = "dm1";
+		o = spawn();
+		o.map = mapname;
+	}
+
+	nextmap = o.map;
+	if (o.nextthink < time)
+	{
+		o.think = execute_changelevel;
+		o.nextthink = time + 0.1;
+	}
+	gameover = TRUE;
+};
+
+void() CheckGameRules =
+{
+	if (gameover)
+		return;
+
+	float timelimit = cvar("timelimit") * 60;
+	float fraglimit = cvar("fraglimit");
+	
+	if (timelimit && time >= timelimit)
+	{
+		if (self.driving)
+			Car_AttachToVehicle(self, self.driving); // Remove player from car
+		NextLevel();
+		return;
+	}
+	
+	if (fraglimit && self.frags >= fraglimit)
+	{
+		if (self.driving)
+			Car_AttachToVehicle(self, self.driving); // Remove player from car
+		NextLevel();
+		return;
+	}
+};
+
+//
+//
+//
+
 void() SetMovedir =
 {
 	if (self.angles == '0 -1 0')
@@ -20,11 +118,9 @@ void() SetMovedir =
 	self.angles = '0 0 0';
 };
 
-/*
-================
-InitTrigger
-================
-*/
+//================
+//InitTrigger
+//================
 void() InitTrigger =
 {
 	// trigger angles are used for one-way touches.  An angle of 0 is assumed

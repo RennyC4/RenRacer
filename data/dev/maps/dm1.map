@@ -1022,7 +1022,7 @@
 // entity 5
 {
 "classname" "item_health"
-"origin" "-640 576 48"
+"origin" "-640 576 56"
 "angle" "90"
 }
 // entity 6
@@ -1066,4 +1066,10 @@
 "classname" "item_napalm"
 "origin" "-184 130 40"
 "angle" "90"
+}
+// entity 13
+{
+"classname" "info_intermission"
+"origin" "-1592 128 440"
+"mangle" "30 0 0"
 }

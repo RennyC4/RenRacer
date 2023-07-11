@@ -15,13 +15,23 @@ void() ClientKill = {};
 
 void() ClientConnect =
 {
+	if (intermission_running) // a client connecting during an intermission can cause problems
+		GotoNextMap ();
 	ClientInRankings(); // FrikBot
-	bprint (self.netname, " joined the race!\n");
+	if (!deathmatch)
+		bprint (self.netname, " joined the race!\n");
+	else
+		bprint (self.netname, " has come to hunt!\n");
 };
 
 void() ClientDisconnect =
 {
-	bprint (self.netname, " has retired!\n");
+	if (gameover)
+		return;
+	if (!deathmatch)
+		bprint (self.netname, " has retired!\n");
+	else
+		bprint (self.netname, " has chickened out with ", ftos(self.frags), "!\n");
 	ClientDisconnected(); // FrikBot
 	if (self.fire)
 		remove(self.fire);
@@ -54,10 +64,6 @@ void() Setup_level_effects =
 		}
 		else
 			stuffcmd (self, "sv_gravity 1200\n");
-		if (world.model == "maps/map6.hmp") // Temproary FIXME/TODO: Remove this
-		{
-			self.effects = EF_BRIGHTFIELD;
-		}
 	}
 };
 
@@ -146,6 +152,8 @@ void() PlayerPreThink =
 
 		return;
 	}
+
+	CheckGameRules(); // misc.qc
 
 	if (framecount == 10)
 		Setup_level_effects();
@@ -258,6 +266,12 @@ void() PlayerPostThink =
 {
 	if (BotPostFrame()) // FrikBot
 		return;
+
+	if (intermission_running)
+	{
+		IntermissionThink ();
+		return;
+	}
 
 	if (!deathmatch) // racing
 	{

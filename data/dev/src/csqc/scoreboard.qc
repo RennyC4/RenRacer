@@ -208,7 +208,10 @@ void(vector virtmin, vector virtsize) Hud_Scoreboard =
 
 	players++;
 	players++;
-	drawstring(pos+[5,10*players], strconv(0,2,2, "Laps"), [6,6], [1,1,1], 1, 0);
+	if (!deathmatch)
+		drawstring(pos+[5,10*players], strconv(0,2,2, "Laps"), [6,6], [1,1,1], 1, 0);
+	else
+		drawstring(pos+[5,10*players], strconv(0,2,2, "Frags"), [6,6], [1,1,1], 1, 0);
 	drawstring(pos+[64,0]+[0,10*players], strconv(0,2,2, "Name"), [6,6], [1,1,1], 1, 0);
 	//drawstring(pos+[158,0]+[0,10*players], strconv(0,2,2, "Deaths"), [6,6], [1,1,1], 1, 0);
 	players++;

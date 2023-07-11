@@ -410,6 +410,7 @@ float countdown_finished;
 float countdown_count;
 
 .string music;
+float gameover; // match is over (dm)
 .float cnt; // misc counter
 .float cnt2; // misc counter
 .float lap;
@@ -509,3 +510,5 @@ var float PART_MGUNSMOKE;
 #define STAT_AMMO_HOMINGROCKET 43
 #define STAT_AMMO_POWERROCKET 44
 #define STAT_AMMO_NAPALM 45
+
+#define STAT_INTERMISSION 99

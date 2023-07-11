@@ -48,6 +48,9 @@ void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 
 void(vector position) CreateExplosion =
 {
+	if (intermission_running) // don't cause explosions at camera origin
+		return;
+
 	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte (MSG_BROADCAST, TE_EXPLOSION);
 	WriteCoord (MSG_BROADCAST, position_x);
