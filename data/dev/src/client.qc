@@ -489,44 +489,73 @@ void() PlayerPostThink =
 //----
 
 void() racer_spawnpoint = {};
+void() dm_spawnpoint = {};
 entity() SelectSpawnSpot =
 {
 	local	entity spot = lastspawn;
 	local	entity thing;
 	local	float  pcount;
-			
-	while (1)
+
+	if (!deathmatch)
 	{
-		spot = find(spot, classname, "racer_spawnpoint");
-		if (spot)
+		while (1)
 		{
-			if (spot == lastspawn)
-				return lastspawn;
-
-			pcount = 0;
-
-			thing = findradius(spot.origin, 32);
-			while(thing)
+			spot = find(spot, classname, "racer_spawnpoint");
+			if (spot)
 			{
-				if (thing.classname == "player")
-					pcount = pcount + 1;
-				thing = thing.chain;
+				if (spot == lastspawn)
+					return lastspawn;
+				pcount = 0;
+				thing = findradius(spot.origin, 64);
+				while(thing)
+				{
+					if (thing.classname == "player")
+						pcount = pcount + 1;
+					thing = thing.chain;
+				}
+				if (!pcount)
+				{
+					lastspawn = spot;
+					return spot;
+				}
 			}
-			if (!pcount)
+			else
 			{
-				lastspawn = spot;
+				spot = find(spot, classname, "info_player_start");
 				return spot;
 			}
 		}
-		else
+	}
+	else
+	{
+		spot = lastspawn;
+		while (1)
 		{
-			spot = find(spot, classname, "info_player_start");
-			return spot;
+			spot = find(spot, classname, "dm_spawnpoint");
+			if (spot != world)
+			{
+				if (spot == lastspawn)
+					return lastspawn;
+				pcount = 0;
+				thing = findradius(spot.origin, 64);
+				while(thing)
+				{
+					if (thing.classname == "player")
+						pcount = pcount + 1;
+					thing = thing.chain;
+				}
+				if (pcount == 0)
+				{
+					lastspawn = spot;
+					return spot;
+				}
+			}
 		}
 	}
+
 	if (!spot)
-		error ("Cannot find entity racer_spawnpoint / info_player_start in map");
-	
+		error ("Cannot find spawnpoint on map");
+
 	return spot;
 };
 

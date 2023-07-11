@@ -622,7 +622,10 @@ void() Fire_Napalm =
 	napalm.nextthink = time;
 };
 
-// Change weapons
+//
+// Change weapon functions
+//
+
 void() ChangeWeapon =
 {
 	if (!deathmatch)
@@ -652,7 +655,76 @@ void() ChangeWeapon =
 	}
 };
 
+void() CycleWeaponForward =
+{
+	if (!deathmatch)
+		return;
+	if (race_status != RACE_STARTED)
+		return;
+
+	if (self.weapon == WEP_ROCKET)
+	{
+		self.weapon = WEP_HROCKET;
+		sprint (self, "Homing Rockets selected\n");
+		return;
+	}
+	if (self.weapon == WEP_HROCKET)
+	{
+		self.weapon = WEP_PROCKET;
+		sprint (self, "Power Rockets selected\n");
+		return;
+	}
+	if (self.weapon == WEP_PROCKET)
+	{
+		self.weapon = WEP_NAPALM;
+		sprint (self, "Napalm selected\n");
+		return;
+	}
+	if (self.weapon == WEP_NAPALM)
+	{
+		self.weapon = WEP_ROCKET;
+		sprint (self, "Fire Rockets selected\n");
+		return;
+	}
+};
+
+void() CycleWeaponBackward =
+{
+	if (!deathmatch)
+		return;
+	if (race_status != RACE_STARTED)
+		return;
+
+	if (self.weapon == WEP_ROCKET)
+	{
+		self.weapon = WEP_NAPALM;
+		sprint (self, "Napalm selected\n");
+		return;
+	}
+	if (self.weapon == WEP_NAPALM)
+	{
+		self.weapon = WEP_PROCKET;
+		sprint (self, "Power Rockets selected\n");
+		return;
+	}
+	if (self.weapon == WEP_PROCKET)
+	{
+		self.weapon = WEP_HROCKET;
+		sprint (self, "Homing Rockets selected\n");
+		return;
+	}
+	if (self.weapon == WEP_HROCKET)
+	{
+		self.weapon = WEP_ROCKET;
+		sprint (self, "Fire Rockets selected\n");
+		return;
+	}
+};
+
+//
 // Main function to determine what gun the car fires
+//
+
 void(float type) CarAttack =
 {
 	if (!deathmatch)

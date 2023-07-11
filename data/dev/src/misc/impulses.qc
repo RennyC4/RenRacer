@@ -14,6 +14,12 @@ void() CheckImpulses =
 		ChangeWeapon();
 	if (self.impulse == 100)
 		headlights_toggle();
+	if (self.impulse == 10)
+		CycleWeaponForward();
+	if (self.impulse == 11)
+		CycleWeaponBackward();
+
+	// Functions not related to gameplay
 	if (self.impulse == 101) // WIP: Change car angles instantly
 	{
 		makevectors (self.angles);

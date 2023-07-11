@@ -5,8 +5,15 @@
 "mapversion" "220"
 "classname" "worldspawn"
 "wad" "C:/Games/RenRacer/data/dev/wads/tm1.wad"
-"light" "60"
-"message" "DM Test Map"
+"message" "District 69"
+"_bounce" "1"
+"_dirt" "1"
+"_sun_mangle" "-60 -45 0"
+"_sunlight" "60"
+"_sunlight_dirt" "1"
+"_sunlight_penumbra" "4"
+"_sunlight2" "15"
+"_sunlight2_dirt" "1"
 // brush 0
 {
 ( -1264 864 656 ) ( -1264 320 656 ) ( -1264 320 -16 ) building13 [ 0 1.0000000000000002 0 -8 ] [ 0 0 -1.0000000000000002 -4 ] 0 4 4
@@ -998,24 +1005,24 @@
 }
 // entity 1
 {
-"classname" "racer_spawnpoint"
+"classname" "dm_spawnpoint"
 "origin" "-1456 -824 64"
 }
 // entity 2
 {
-"classname" "racer_spawnpoint"
+"classname" "dm_spawnpoint"
 "origin" "192 1056 64"
 "angle" "180"
 }
 // entity 3
 {
-"classname" "racer_spawnpoint"
+"classname" "dm_spawnpoint"
 "origin" "-1456 1056 64"
 "angle" "270"
 }
 // entity 4
 {
-"classname" "racer_spawnpoint"
+"classname" "dm_spawnpoint"
 "origin" "192 -824 64"
 "angle" "90"
 }
@@ -1072,4 +1079,9 @@
 "classname" "info_intermission"
 "origin" "-1592 128 440"
 "mangle" "30 0 0"
+}
+// entity 14
+{
+"classname" "info_player_start"
+"origin" "-528 128 72"
 }
