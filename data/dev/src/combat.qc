@@ -59,6 +59,44 @@ void(vector position) CreateExplosion =
 	sound (self, CHAN_BODY, "combat/xplode.wav", 1, ATTN_NORM);
 };
 
+void() Create2DExplosion_think =
+{
+	if (self.animation_finished < time)
+	{
+		if (self.frame < 14)
+			self.frame = self.frame + 1;
+		else
+		{
+			self.solid = SOLID_NOT;
+			remove(self);
+			return;
+		}
+		self.animation_finished = time + 0.1;
+	}
+	frameskip(0.01);
+};
+
+void(vector position, float size) Create2DExplosion =
+{
+	local entity xplode = spawn();
+	xplode.owner = self.owner;
+	xplode.classname = "xplode1";
+	xplode.scale = size;
+	xplode.effects = EF_ADDITIVE | EF_FULLBRIGHT;
+	xplode.alpha = 0.75;
+	xplode.movetype = MOVETYPE_NONE;
+	xplode.solid = SOLID_SLIDEBOX;
+	xplode.dimension_hit = xplode.dimension_solid = 0;
+	xplode.colormod = '1.5 1 1';
+	setorigin (xplode, self.origin);
+	setmodel (xplode, "progs/xplode1.spr");
+	setsize (xplode, '0 0 0', '0 0 0');
+
+	xplode.think = Create2DExplosion_think;
+	xplode.nextthink = time;
+	spawn_color_glow(3, 1.25, 1, 75, xplode); // dynamic light
+};
+
 void(entity targ, entity attacker) Death =
 {
 	// Car jumps big on death
@@ -333,6 +371,7 @@ void() Rocket_Touch =
 	if (other.solid == SOLID_BSP && !other.owner) // Hit wall
 	{
 		CreateExplosion(self.origin);
+		Create2DExplosion(self.origin, 2);
 		remove(self);
 		return;
 	}
@@ -366,6 +405,7 @@ void() Rocket_Touch =
 		DoDamage(other.owner.driving, self.owner, 15, self.classname); // power
 
 	CreateExplosion(self.origin);
+	Create2DExplosion(self.origin, 2);
 	remove(self);
 };
 

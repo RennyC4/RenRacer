@@ -39,7 +39,7 @@ void() execute_changelevel =
 		setorigin (other, pos.origin);
 		other = find (other, classname, "player");
 	}
-	WriteByte (MSG_ALL, SVC_INTERMISSION);
+	//WriteByte (MSG_ALL, SVC_INTERMISSION);
 };
 
 void() IntermissionThink = // called from PostThink

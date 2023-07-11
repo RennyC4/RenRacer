@@ -1,10 +1,13 @@
 TODO: More DM stuff
 	- Cars should be on fire on death automatically (easy / done)
-	- A proper map to fight on (Done)
+	- A proper map to fight on (done)
 	- Bot AI (starting / started)
-	- Intermission with win condition / fraglimit (Done)
+	- Intermission with win condition / fraglimit (done)
 	- Add remote bombs, richochet, freeze blast
-	- Combo moves+energy meter? (NO SHIELD!)
+	- Combo moves + energy meter? (NO SHIELD!)
+	- Figure out a safe way to have rockets push players
+	- Remove screen tilt on death
+	
 TODO: Check out the breaking function from shpds delivery game
 TODO: Set direct angle on func_vehicle function
 TODO: Move checkpoint particles to CSQC and only have the next markers particle effects ran

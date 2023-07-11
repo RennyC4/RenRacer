@@ -80,6 +80,7 @@ void() worldspawn =
 	precache_model("progs/mflash.spr");
 	precache_model("progs/mflash2.spr");
 	precache_model("progs/fire.spr");
+	precache_model("progs/xplode1.spr");
 
 	//
 	// func_vehicle - start

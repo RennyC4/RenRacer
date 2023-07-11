@@ -9,6 +9,7 @@
 void() CheckImpulses;
 void(float type) CarAttack;
 void(vector position) CreateExplosion;
+void(vector position, float scale) Create2DExplosion;
 void(entity targ, entity attacker, float damage, string attackerclassname) DoDamage;
 
 void() ClientKill = {};
@@ -361,6 +362,8 @@ void() PlayerPostThink =
 						sound(self, CHAN_AUTO, "combat/death4.wav", 1, ATTN_NORM);
 				}
 				self.colormod = '0.1 0.1 0.1'; // car is cooked/black on death
+				if (self.deathcount == 1)
+					Create2DExplosion(self.origin + v_up * 64, 10);
 				if (self.deathcount == 3 || self.deathcount == 6 || self.deathcount == 9 || self.deathcount == 12)
 				{
 					CreateExplosion(self.origin);
