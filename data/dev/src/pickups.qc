@@ -68,6 +68,7 @@ void() item_health =
 	self.solid = SOLID_TRIGGER;
 	self.classname = "item_health";
 	self.flags = FL_ITEM;
+	self.netname = "item";
 	self.effects = EF_FULLBRIGHT;
 	self.touch = item_health_touch;
 
@@ -116,6 +117,7 @@ void() item_firerocket =
 	self.solid = SOLID_TRIGGER;
 	self.classname = "item_frckt";
 	self.flags = FL_ITEM;
+	self.netname = "item";
 	self.effects = EF_FULLBRIGHT;
 	self.touch = item_firerocket_touch;
 
@@ -164,6 +166,7 @@ void() item_homingrocket =
 	self.solid = SOLID_TRIGGER;
 	self.classname = "item_hrckt";
 	self.flags = FL_ITEM;
+	self.netname = "item";
 	self.effects = EF_FULLBRIGHT;
 	self.touch = item_homingrocket_touch;
 
@@ -212,6 +215,7 @@ void() item_powerrocket =
 	self.solid = SOLID_TRIGGER;
 	self.classname = "item_prckt";
 	self.flags = FL_ITEM;
+	self.netname = "item";
 	self.effects = EF_FULLBRIGHT;
 	self.touch = item_powerrocket_touch;
 
@@ -260,6 +264,7 @@ void() item_napalm =
 	self.solid = SOLID_TRIGGER;
 	self.classname = "item_napalm";
 	self.flags = FL_ITEM;
+	self.netname = "item";
 	self.effects = EF_FULLBRIGHT;
 	self.touch = item_napalm_touch;
 

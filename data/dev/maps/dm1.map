@@ -999,24 +999,24 @@
 // entity 1
 {
 "classname" "racer_spawnpoint"
-"origin" "-1456 -824 48"
+"origin" "-1456 -824 64"
 }
 // entity 2
 {
 "classname" "racer_spawnpoint"
-"origin" "192 1056 40"
+"origin" "192 1056 64"
 "angle" "180"
 }
 // entity 3
 {
 "classname" "racer_spawnpoint"
-"origin" "-1456 1056 40"
+"origin" "-1456 1056 64"
 "angle" "270"
 }
 // entity 4
 {
 "classname" "racer_spawnpoint"
-"origin" "192 -824 48"
+"origin" "192 -824 64"
 "angle" "90"
 }
 // entity 5

@@ -286,6 +286,7 @@ frame, the ai_time limits it's actual updating
 */
 
 void() bot_ai_race;
+void() bot_ai_fight;
 void() BotAI =
 {
 	// stagger the bots AI out so they all don't think at the same time, causing game 'spikes'
@@ -328,6 +329,8 @@ void() BotAI =
 
 	if (!deathmatch)
 		bot_ai_race();
+	else
+		bot_ai_fight();
 };
 
 //
