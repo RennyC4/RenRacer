@@ -427,7 +427,11 @@ void() PlayerPostThink =
 		self.waterlevel = 0;
 
 	if (self.waterlevel > 0 && self.health > 0 || self.invulnerable_finished > time)
+	{
+		if (self.onfire_finished > time)
+			self.onfire_finished = time; // water removes napalm/fire
 		self.effects |= EF_BRIGHTFIELD;
+	}
 	else
 		self.effects &= ~(EF_BRIGHTFIELD);
 
