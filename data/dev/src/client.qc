@@ -7,7 +7,7 @@
 //+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
 
 void() CheckImpulses;
-void(float type) CarAttack;
+void(float type, float rear) CarAttack;
 void(vector position) CreateExplosion;
 void(vector position, float scale) Create2DExplosion;
 void(entity targ, entity attacker, float damage, string attackerclassname) DoDamage;
@@ -440,9 +440,9 @@ void() PlayerPostThink =
 	if (self.driving && deathmatch && self.health > 0 && self.invulnerable_finished < time && race_status == RACE_STARTED)
 	{
 		if (self.button3)
-			CarAttack(0);
+			CarAttack(0, FALSE);
 		if (self.button4)
-			CarAttack(1);
+			CarAttack(1, FALSE);
 	}
 	if (self.onfire_finished > time)
 	{

@@ -410,11 +410,18 @@ void() Rocket_Touch =
 	remove(self);
 };
 
-void(float type) Fire_Rocket =
+void(float type, float rear) Fire_Rocket =
 {
 	local entity rocket = spawn ();
 
 	makevectors (self.realang);
+	
+	if (rear)
+	{
+		vector v = self.realang;
+		v_y = v_y + 180;
+		makevectors(v);
+	}
 
 	rocket.movetype = MOVETYPE_FLYMISSILE;
 	rocket.owner = self;
@@ -597,7 +604,7 @@ void() Napalm_Think =
 	frameskip(0.01);
 };
 
-void() Fire_Napalm =
+void(float rear) Fire_Napalm =
 {
 	local entity napalm = spawn ();
 	napalm.owner = self;
@@ -606,6 +613,13 @@ void() Fire_Napalm =
 	napalm.classname = "napalm";
 		
 	makevectors (self.realang);
+
+	if (rear)
+	{
+		vector v = self.realang;
+		v_y = v_y + 180;
+		makevectors(v);
+	}
 
 	napalm.velocity = v_forward * 350;
 	napalm.velocity = aim(self, 350);
@@ -635,6 +649,8 @@ void() Fire_Napalm =
 // Command Specials
 //
 
+.float cmdspecial_rear_step;
+.float cmdspecial_rear_step_finished;
 //TODO: Refillable energy meter
 void() CommandSpecials =
 {
@@ -643,7 +659,9 @@ void() CommandSpecials =
 	if (self.commandspcl_finished > time)
 		return;
 
-	// Down, Down, Up
+	float cmdspecial_step;
+
+	// Jump: Down, Down, Up
 	if (self.moveprog1 > 0 && self.moveprog2 > 1)
 	{
 		self.forcejump_strength = 1000;
@@ -654,6 +672,33 @@ void() CommandSpecials =
 		self.commandspcl_finished = time + 1;
 	}
 
+	// Rear Attack: Left, Right, Down
+	if (self.moveprog3 == 1) // User pressed left
+	{
+		self.cmdspecial_rear_step = 1;
+		self.cmdspecial_rear_step_finished = time + 0.2;
+	}
+	if (self.cmdspecial_rear_step == 1 && self.moveprog4 == 1) // User pressed right
+	{
+		self.cmdspecial_rear_step = 2;
+		self.cmdspecial_rear_step_finished = time + 0.2;
+	}
+	if (self.cmdspecial_rear_step == 2 && self.moveprog2 == 1) // Hit last step, user hit down
+	{
+		sprint (self, "^2Command: ");
+		bprint ("^7Rear Attack\n");
+		CarAttack(1, TRUE);
+		self.cmdspecial_rear_step = 0;
+		self.commandspcl_finished = time + 1;
+	}
+	if (self.cmdspecial_rear_step > 0)
+	{
+		if (self.cmdspecial_rear_step_finished < time)
+			self.cmdspecial_rear_step = 0;
+	}
+	//
+
+	bprint (ftos(self.cmdspecial_rear_step), "\n");
 };
 
 //
@@ -759,7 +804,7 @@ void() CycleWeaponBackward =
 // Main function to determine what gun the car fires
 //
 
-void(float type) CarAttack =
+void(float type, float rear) CarAttack =
 {
 	if (!deathmatch)
 		return;
@@ -780,7 +825,10 @@ void(float type) CarAttack =
 			{
 				if (self.ammo_firerocket > 0)
 				{
-					Fire_Rocket(0);
+					if (!rear)
+						Fire_Rocket(0, FALSE);
+					else
+						Fire_Rocket(0, TRUE);
 					self.ammo_firerocket = self.ammo_firerocket - 1;
 				}
 				else
@@ -792,7 +840,10 @@ void(float type) CarAttack =
 			{
 				if (self.ammo_homingrocket > 0)
 				{
-					Fire_Rocket(1);
+					if (!rear)
+						Fire_Rocket(1, FALSE);
+					else
+						Fire_Rocket(1, TRUE);
 					self.ammo_homingrocket = self.ammo_homingrocket - 1;
 				}
 				else
@@ -804,7 +855,10 @@ void(float type) CarAttack =
 			{
 				if (self.ammo_powerrocket > 0)
 				{
-					Fire_Rocket(2);
+					if (!rear)
+						Fire_Rocket(2, FALSE);
+					else
+						Fire_Rocket(2, TRUE);					
 					self.ammo_powerrocket = self.ammo_powerrocket - 1;
 				}
 				else
@@ -816,12 +870,16 @@ void(float type) CarAttack =
 			{
 				if (self.waterlevel > 0)
 				{
+					self.spcl_finished = time + 0.5;
 					sprint(self, "Can't fire Napalm in water!\n");
 					return;
 				}
 				if (self.ammo_napalm > 0)
 				{
-					Fire_Napalm();
+					if (!rear)
+						Fire_Napalm(FALSE);
+					else
+						Fire_Napalm(TRUE);
 					self.ammo_napalm = self.ammo_napalm - 1;
 				}
 				else
