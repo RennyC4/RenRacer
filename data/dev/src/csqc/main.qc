@@ -34,7 +34,7 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 	{
 		sky.origin = campos - '0 0 0';
 		sky.angles = '0 0 0';
-		if (world.model != "maps/dm1.bsp")
+		if (substring(world.model, -3, 3) == "hmp") // thanks reki
 			addentity(sky);
 	}
 

@@ -134,6 +134,7 @@ void() PushPlayers =
 // Instances that can force the car to jump (example: being hit by a rocket)
 void() ForceJump =
 {
+	return; // broken still...
 	entity wheels[] = {
 		self.driving.frontleft,
 		self.driving.frontright,
