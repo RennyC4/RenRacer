@@ -2785,13 +2785,13 @@
 // entity 20
 {
 "classname" "dm_spawnpoint"
-"origin" "1280 -1464 64"
+"origin" "1280 -1464 72"
 "angle" "135"
 }
 // entity 21
 {
 "classname" "dm_spawnpoint"
-"origin" "-1216 1480 24"
+"origin" "-1216 1480 72"
 "angle" "315"
 }
 // entity 22
