@@ -191,3 +191,13 @@
 "origin" "-208 -304 32"
 "angle" "90"
 }
+// entity 10
+{
+"classname" "info_player_start"
+"origin" "-104 56 96"
+}
+// entity 11
+{
+"classname" "dm_spawnpoint"
+"origin" "-296 72 88"
+}
