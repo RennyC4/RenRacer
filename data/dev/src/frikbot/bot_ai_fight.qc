@@ -3,7 +3,8 @@
 
 entity() BotGetClosestPlayer =
 {
-	float bestd = 9999999;
+//	float bestd = 9999999;
+	float bestd = 9999999999999;
 	entity bestv = world;
 
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
@@ -25,7 +26,8 @@ entity() BotGetClosestPlayer =
 
 entity() Bot_FindClosestItem =
 {
-	float bestd = 9999999;
+//	float bestd = 9999999;
+	float bestd = 9999999999999;
 	entity bestv = world;
 
 	for (entity thing = world;(thing = find(thing, netname, "item"));)

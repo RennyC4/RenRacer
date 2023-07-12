@@ -34,7 +34,8 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 	{
 		sky.origin = campos - '0 0 0';
 		sky.angles = '0 0 0';
-		addentity(sky);
+		if (world.model != "maps/dm1.bsp")
+			addentity(sky);
 	}
 
 	addentities((intermission?0:MASK_VIEWMODEL)|MASK_ENGINE);
@@ -149,7 +150,7 @@ void() CSQC_WorldLoaded  =
 	engine_sound = spawn();
 	if (world.model != "maps/map4.hmp")
 	{
-		// Spawn sky
+		// Spawn sky for height maps
 		sky = spawn();
 		sky.scale = 6;
 
