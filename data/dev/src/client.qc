@@ -11,6 +11,7 @@ void(float type) CarAttack;
 void(vector position) CreateExplosion;
 void(vector position, float scale) Create2DExplosion;
 void(entity targ, entity attacker, float damage, string attackerclassname) DoDamage;
+void() CommandSpecials;
 
 void() ClientKill = {};
 
@@ -132,9 +133,9 @@ void() PushPlayers =
 };
 
 // Instances that can force the car to jump (example: being hit by a rocket)
+// FIXME: Rockets can cause the player to blip out of existence (NaN error)
 void() ForceJump =
 {
-	return; // broken still...
 	entity wheels[] = {
 		self.driving.frontleft,
 		self.driving.frontright,
@@ -194,15 +195,6 @@ void() PlayerPreThink =
 	}
 	else
 	{
-		if (race_status == RACE_STARTED && !intermission_running)
-			PushPlayers();
-		if (self.forcejump)
-		{
-			ForceJump();
-			self.forcejump_strength = 0;
-			self.forcejump = FALSE;
-		}
-
 		if (self.clearcprint_finished < time)
 		{
 			if (!self.clearcprint)
@@ -310,6 +302,15 @@ void() PlayerPostThink =
 		if (self.movetype != MOVETYPE_NOCLIP)
 			self.movetype = MOVETYPE_NOCLIP;
 		return;
+	}
+
+	if (race_status == RACE_STARTED && !intermission_running)
+		PushPlayers();
+	if (self.forcejump)
+	{
+		ForceJump();
+		self.forcejump_strength = 0;
+		self.forcejump = FALSE;
 	}
 
 	if (!deathmatch) // racing
@@ -485,7 +486,88 @@ void() PlayerPostThink =
 			self.fire = world;
 		}
 	}
+
 	TryUpdateVehicle();
+
+	//
+	// SPECIAL MOVE MOTIONS: Record keys if pressed, set timer till key is cleared
+	//
+
+	if (self.keyflags & KEY_UP)
+	{
+		if (self.FL_MP1PRESSED == FALSE)
+		{
+			self.moveprog1 = self.moveprog1 + 1; // increase counter
+			self.moveprog1_finished = time + 0.2; // time till cleared
+		}
+		self.FL_MP1PRESSED = TRUE;
+	}
+	else if (!(self.keyflags & KEY_UP))
+		self.FL_MP1PRESSED = FALSE;
+
+	if (self.keyflags & KEY_DOWN)
+	{
+		if (self.FL_MP2PRESSED == FALSE)
+		{
+			self.moveprog2 = self.moveprog2 + 1; // increase counter
+			self.moveprog2_finished = time + 0.2; // time till cleared
+		}
+		self.FL_MP2PRESSED = TRUE;
+	}
+	else if (!(self.keyflags & KEY_DOWN))
+		self.FL_MP2PRESSED = FALSE;
+
+	if (self.keyflags & KEY_LEFT)
+	{
+		if (self.FL_MP3PRESSED == FALSE)
+		{
+			self.moveprog3 = self.moveprog3 + 1; // increase counter
+			self.moveprog3_finished = time + 0.2; // time till cleared
+		}
+		self.FL_MP3PRESSED = TRUE;
+	}
+	else if (!(self.keyflags & KEY_LEFT))
+		self.FL_MP3PRESSED = FALSE;
+
+	if (self.keyflags & KEY_RIGHT)
+	{
+		if (self.FL_MP4PRESSED == FALSE)
+		{
+			self.moveprog4 = self.moveprog4 + 1; // increase counter
+			self.moveprog4_finished = time + 0.2; // time till cleared
+		}
+		self.FL_MP4PRESSED = TRUE;
+	}
+	else if (!(self.keyflags & KEY_RIGHT))
+		self.FL_MP4PRESSED = FALSE;
+
+	if (self.moveprog1_finished < time)
+		self.moveprog1 = 0;
+	if (self.moveprog2_finished < time)
+		self.moveprog2 = 0;
+	if (self.moveprog3_finished < time)
+		self.moveprog3 = 0;
+	if (self.moveprog4_finished < time)
+		self.moveprog4 = 0;
+
+	// Debugging
+	/*
+	string s = ftos(self.moveprog1);
+	bprint ("MP Up: ", s);
+	s = ftos(self.moveprog2);
+	bprint (" MP Down: ", s);
+	s = ftos(self.moveprog3);
+	bprint (" MP Left: ", s);
+	s = ftos(self.moveprog4);
+	bprint (" MP Right: ", s, "\n");
+	*/
+	
+	CommandSpecials();
+
+	//
+	// SPECIAL MOVE MOTIONS: Reset keys if timer is dropped
+	//
+
 	CheckImpulses();
 };
 

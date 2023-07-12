@@ -149,6 +149,7 @@ void() worldspawn =
 	precache_sound ("combat/death2.wav");
 	precache_sound ("combat/death3.wav");
 	precache_sound ("combat/death4.wav");
+	precache_sound ("combat/jump.wav");
 
 	world_lights();
 	BotInit();  // FrikBot

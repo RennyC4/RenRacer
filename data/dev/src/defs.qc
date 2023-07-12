@@ -443,6 +443,7 @@ float total_waypoints;
 float total_checkpoints;
 .float mgun_finished;
 .float spcl_finished;
+.float commandspcl_finished;
 .float deathcount_finished;
 .float deathcount; // death counter
 .float invulnerable_finished;
@@ -454,9 +455,29 @@ float total_checkpoints;
 .float observer;
 .float forcejump;
 .float forcejump_strength;
-float	intermission_running;
-float	intermission_exittime;
+float intermission_running;
+float intermission_exittime;
 string nextmap;
+
+// Key flags
+.float keyflags;
+float KEY_UP = 1;
+float KEY_DOWN = 2;
+float KEY_LEFT = 4;
+float KEY_RIGHT = 8;
+
+.float moveprog1_finished; // Timer to remove moveprog
+.float moveprog2_finished; // Timer to remove moveprog
+.float moveprog3_finished; // Timer to remove moveprog
+.float moveprog4_finished; // Timer to remove moveprog
+.float moveprog1; // Holds a value for each key pressed, used for special moves
+.float moveprog2; // Holds a value for each key pressed, used for special moves
+.float moveprog3; // Holds a value for each key pressed, used for special moves
+.float moveprog4; // Holds a value for each key pressed, used for special moves
+.float FL_MP1PRESSED; // Up press check
+.float FL_MP2PRESSED; // Down press check
+.float FL_MP3PRESSED; // Left press check
+.float FL_MP4PRESSED; // Right press check
 
 // Weapons
 .float weapon;

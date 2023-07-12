@@ -93,10 +93,13 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 	local float speedl = getstatf(STAT_TURBO);
 	local float turbof = getstatf(STAT_TURBOFUEL);
 	local float speedb = getstatf(STAT_SPEEDBOOST);
-	if (speedl && turbof > 0 && rs != RACE_FINISHED)
-		DrawSpeedLines(FALSE); // Draw speed lines on turbo
-	if (speedb > time)
-		DrawSpeedLines(TRUE); // Draw blue speed lines on speed boost
+	if (!intermiss)
+	{
+		if (speedl && turbof > 0 && rs != RACE_FINISHED)
+			DrawSpeedLines(FALSE); // Draw speed lines on turbo
+		if (speedb > time)
+			DrawSpeedLines(TRUE); // Draw blue speed lines on speed boost
+	}
 	
 	//
 

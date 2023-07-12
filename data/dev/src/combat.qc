@@ -309,7 +309,7 @@ void() Fire_MachineGun =
 		self.mgun = FALSE;
 	}
 
-	sound (self, CHAN_WEAPON, "combat/mgun.wav", 1, ATTN_NORM);
+	sound (self, CHAN_AUTO, "combat/mgun.wav", 1, ATTN_NORM);
 
 	mflash1.think = SUB_Remove;
 	mflash1.nextthink = time + 0.1;
@@ -382,20 +382,28 @@ void() Rocket_Touch =
 
 	if (self.classname == "rocket")
 	{
-		DoDamage(other.owner.driving, self.owner, 7, self.classname); // fire
 		other.owner.driving.forcejump_strength = 250;
+		if (other.owner.driving.health > 7) // Possible fix for NaN on jump physics being called twice when target killed
+			other.owner.driving.forcejump = TRUE;
+
+		DoDamage(other.owner.driving, self.owner, 7, self.classname); // fire
 	}
 	if (self.classname == "rocket2")
 	{
-		DoDamage(other.owner.driving, self.owner, 10, self.classname); // homing
 		other.owner.driving.forcejump_strength = 350;
+		if (other.owner.driving.health > 10) // Possible fix for NaN on jump physics being called twice when target killed
+			other.owner.driving.forcejump = TRUE;
+
+		DoDamage(other.owner.driving, self.owner, 10, self.classname); // homing
 	}
 	if (self.classname == "rocket3")
 	{
-		DoDamage(other.owner.driving, self.owner, 15, self.classname); // power
 		other.owner.driving.forcejump_strength = 450;
+		if (other.owner.driving.health > 15) // Possible fix for NaN on jump physics being called twice when target killed
+			other.owner.driving.forcejump = TRUE;
+
+		DoDamage(other.owner.driving, self.owner, 15, self.classname); // power
 	}
-	other.owner.driving.forcejump = TRUE;
 
 	CreateExplosion(self.origin);
 	Create2DExplosion(self.origin, 2);
@@ -606,9 +614,10 @@ void() Fire_Napalm =
 	napalm.effects = EF_FULLBRIGHT | EF_DIMLIGHT | EF_ADDITIVE;
 	napalm.alpha = 0.9;
 	napalm.avelocity = '-500 200 0';
+	napalm.hitcontentsmaski = CONTENTBIT_SOLID|0x00000002i|CONTENTBIT_BODY|CONTENTBIT_PLAYERCLIP|CONTENTBIT_WATER| CONTENTBIT_SLIME|CONTENTBIT_LAVA;
 
-	napalm.velocity_x = napalm.velocity_x + self.driving.velocity_x;
-	napalm.velocity_y = napalm.velocity_y + self.driving.velocity_y;
+	napalm.velocity_x = napalm.velocity_x + self.driving.velocity_x / 2;
+	napalm.velocity_y = napalm.velocity_y + self.driving.velocity_y / 2;
 
 	setmodel (napalm, "progs/napalm.mdl");
 	setsize (napalm, '0 0 0', '0 0 0');
@@ -620,6 +629,31 @@ void() Fire_Napalm =
 	napalm.touch = Napalm_Touch;
 	napalm.think = Napalm_Think;
 	napalm.nextthink = time;
+};
+
+//
+// Command Specials
+//
+
+//TODO: Refillable energy meter
+void() CommandSpecials =
+{
+	if (!deathmatch)
+		return;
+	if (self.commandspcl_finished > time)
+		return;
+
+	// Down, Down, Up
+	if (self.moveprog1 > 0 && self.moveprog2 > 1)
+	{
+		self.forcejump_strength = 1000;
+		ForceJump();
+		sound (self, CHAN_BODY, "combat/jump.wav", 1, ATTN_NORM);
+		sprint (self, "^2Command: ");
+		bprint ("^7Jump\n");
+		self.commandspcl_finished = time + 1;
+	}
+
 };
 
 //
@@ -780,6 +814,11 @@ void(float type) CarAttack =
 			}
 			if (self.weapon == WEP_NAPALM)
 			{
+				if (self.waterlevel > 0)
+				{
+					sprint(self, "Can't fire Napalm in water!\n");
+					return;
+				}
 				if (self.ammo_napalm > 0)
 				{
 					Fire_Napalm();
@@ -788,7 +827,7 @@ void(float type) CarAttack =
 				else
 					sprint(self, "Napalm fuel empty!\n");
 					// TODO: Insert empty chamber sound
-				self.spcl_finished = time + 3;
+				self.spcl_finished = time + 2;
 			}
 		}
 	}

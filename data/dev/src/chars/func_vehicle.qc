@@ -639,10 +639,19 @@ void TryUpdateVehicle(){
 		makevectors(self.v_angle);
 		float forw = v_forward * self.velocity;
 		if (forw > 100){
+			self.keyflags = self.keyflags | KEY_UP; // RennyC
 			Car_Accelerate(3000, 950);
 		}
 		else if (forw < -100){
+			self.keyflags = self.keyflags | KEY_DOWN; // RennyC
 			Car_Accelerate(-2500, 800);
+		}
+		else
+		{
+			if (self.keyflags & KEY_UP)
+				self.keyflags = self.keyflags - KEY_UP;
+			if (self.keyflags & KEY_DOWN)
+				self.keyflags = self.keyflags - KEY_DOWN;
 		}
 
 		// RennyC: Speed Booster
@@ -658,11 +667,21 @@ void TryUpdateVehicle(){
 
 		float roll = v_right * self.velocity;
 		if (roll > 100){
+			self.keyflags = self.keyflags | KEY_RIGHT; // RennyC
 			Car_Roll(-4000, 350);
 		}
 		else if (roll < -100){
+			self.keyflags = self.keyflags | KEY_LEFT; // RennyC
 			Car_Roll(4000, 350);
 		}
+		else
+		{
+			if (self.keyflags & KEY_RIGHT)
+				self.keyflags = self.keyflags - KEY_RIGHT;
+			if (self.keyflags & KEY_LEFT)
+				self.keyflags = self.keyflags - KEY_LEFT;
+		}
+
 		// RennyC
 		// Taken from Build-A-Delivery by shpuld
 		if (!self.drift)
