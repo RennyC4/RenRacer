@@ -40,6 +40,11 @@ void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 		bprint(attacker.netname, " made ");
 		bprint(targ.netname, " feel all warm and cozy\n");
 	}
+	if (attackerclassname == "landmine")
+	{
+		bprint(attacker.netname, "'s landmine tripped ");
+		bprint(targ.netname, " into the afterlife\n");
+	}	
 };
 
 // ---
@@ -88,7 +93,7 @@ void(vector position, float size) Create2DExplosion =
 	xplode.solid = SOLID_SLIDEBOX;
 	xplode.dimension_hit = xplode.dimension_solid = 0;
 	xplode.colormod = '1.5 1 1';
-	setorigin (xplode, self.origin);
+	setorigin (xplode, position);
 	setmodel (xplode, "progs/xplode1.spr");
 	setsize (xplode, '0 0 0', '0 0 0');
 
@@ -382,27 +387,29 @@ void() Rocket_Touch =
 
 	if (self.classname == "rocket")
 	{
+		DoDamage(other.owner.driving, self.owner, 7, self.classname); // fire
+
 		other.owner.driving.forcejump_strength = 250;
 		if (other.owner.driving.health > 7) // Possible fix for NaN on jump physics being called twice when target killed
 			other.owner.driving.forcejump = TRUE;
 
-		DoDamage(other.owner.driving, self.owner, 7, self.classname); // fire
 	}
 	if (self.classname == "rocket2")
 	{
+		DoDamage(other.owner.driving, self.owner, 10, self.classname); // homing
+
 		other.owner.driving.forcejump_strength = 350;
 		if (other.owner.driving.health > 10) // Possible fix for NaN on jump physics being called twice when target killed
 			other.owner.driving.forcejump = TRUE;
 
-		DoDamage(other.owner.driving, self.owner, 10, self.classname); // homing
 	}
 	if (self.classname == "rocket3")
 	{
+		DoDamage(other.owner.driving, self.owner, 15, self.classname); // power
+
 		other.owner.driving.forcejump_strength = 450;
 		if (other.owner.driving.health > 15) // Possible fix for NaN on jump physics being called twice when target killed
 			other.owner.driving.forcejump = TRUE;
-
-		DoDamage(other.owner.driving, self.owner, 15, self.classname); // power
 	}
 
 	CreateExplosion(self.origin);
@@ -646,11 +653,64 @@ void(float rear) Fire_Napalm =
 };
 
 //
+// Landmine
+//
+
+void() Landmine_Touch =
+{
+	if (other == self.owner.driving)
+		return;
+	if (self.hitobject_finished > time)
+		return;
+
+	CreateExplosion(self.origin);
+	Create2DExplosion(self.origin + v_up * 24, 3);
+	DoDamage(other.owner.driving, self.owner, 15, self.classname);
+
+	other.owner.driving.forcejump_strength = 450;
+	if (other.owner.driving.health > 15) // Possible fix for NaN on jump physics being called twice when target killed
+		other.owner.driving.forcejump = TRUE;
+
+	remove(self);
+};
+
+void() Landmine_Think =
+{
+	droptofloor();
+	setorigin(self, self.origin + v_up * 16);
+
+	self.think = SUB_Remove;
+	self.nextthink = time + 30;
+};
+
+void() Fire_Landmine =
+{
+	local entity landmine = spawn ();
+	landmine.owner = self;
+	landmine.solid = SOLID_TRIGGER;
+	landmine.movetype = MOVETYPE_NONE;
+	landmine.classname = "landmine";
+
+	setmodel (landmine, "progs/landmine.spr");
+	setsize (landmine, '0 0 0', '0 0 0');
+	setorigin (landmine, self.origin);
+
+	sound (self, CHAN_AUTO, "combat/landmine.wav", 1, ATTN_NORM); // CHAN_WEAPON is for specials, mgun spams
+
+	landmine.hitobject_finished = time + 1; // How long till it's active
+	landmine.touch = Landmine_Touch;
+	landmine.think = Landmine_Think;
+	landmine.nextthink = time;
+};
+
+//
 // Command Specials
 //
 
 .float cmdspecial_rear_step;
 .float cmdspecial_rear_step_finished;
+.float cmdspecial_landmine_step;
+.float cmdspecial_landmine_step_finished;
 void() CommandSpecials =
 {
 	if (!deathmatch)
@@ -682,7 +742,7 @@ void() CommandSpecials =
 		self.cmdspecial_rear_step = 2;
 		self.cmdspecial_rear_step_finished = time + 0.2;
 	}
-	if (self.cmdspecial_rear_step == 2 && self.moveprog2 == 1 && self.energy >= 25) // Hit last step, user hit down
+	if (self.cmdspecial_rear_step == 2 && self.moveprog2 == 1 && self.energy >= 30) // Hit last step, user hit down
 	{
 		self.energy = self.energy - 30;
 		sprint (self, "^2Command: ");
@@ -695,6 +755,33 @@ void() CommandSpecials =
 	{
 		if (self.cmdspecial_rear_step_finished < time)
 			self.cmdspecial_rear_step = 0;
+	}
+	//
+	
+	// Landmine: Right, Left, Down
+	if (self.moveprog4 == 1) // User pressed left
+	{
+		self.cmdspecial_landmine_step = 1;
+		self.cmdspecial_landmine_step_finished = time + 0.2;
+	}
+	if (self.cmdspecial_landmine_step == 1 && self.moveprog3 == 1) // User pressed right
+	{
+		self.cmdspecial_landmine_step = 2;
+		self.cmdspecial_landmine_step_finished = time + 0.2;
+	}
+	if (self.cmdspecial_landmine_step == 2 && self.moveprog2 == 1 && self.energy >= 33) // Hit last step, user hit down
+	{
+		self.energy = self.energy - 33;
+		sprint (self, "^2Command: ");
+		bprint ("^7Landmine\n");
+		Fire_Landmine();
+		self.cmdspecial_landmine_step = 0;
+		self.commandspcl_finished = time + 1;
+	}
+	if (self.cmdspecial_landmine_step > 0)
+	{
+		if (self.cmdspecial_landmine_step_finished < time)
+			self.cmdspecial_landmine_step = 0;
 	}
 	//
 };

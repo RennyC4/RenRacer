@@ -225,7 +225,7 @@ void() PlayerPreThink =
 			if (self.energy_finished < time)
 			{
 				self.energy = self.energy + 1;
-				self.energy_finished = time + 0.1;
+				self.energy_finished = time + 0.2;
 			}
 		}
 		else
@@ -268,6 +268,7 @@ void() RespawnPlayer =
 	self.deathcount = 0;
 	self.igniter = world;
 	self.onfire_finished = time;
+	self.energy = 100;
 	car_teleport(self.spawn_loc,FALSE);
 	self.invulnerable_finished = time + 5; // disallow damage / firing
 	centerprint(self, "");
@@ -387,39 +388,35 @@ void() PlayerPostThink =
 		{
 			if (self.deadflag)
 			{
-				if (self.deathcount == 1)
-				{
-					float tt = ceil(random() * 3);
-					if (tt == 1)
-						sound(self, CHAN_AUTO, "combat/death1.wav", 1, ATTN_NORM);
-					else if (tt == 2)
-						sound(self, CHAN_AUTO, "combat/death2.wav", 1, ATTN_NORM);
-					else if (tt == 3)
-						sound(self, CHAN_AUTO, "combat/death3.wav", 1, ATTN_NORM);
-					else
-						sound(self, CHAN_AUTO, "combat/death4.wav", 1, ATTN_NORM);
-				}
-				self.colormod = '0.1 0.1 0.1'; // car is cooked/black on death
-				if (self.deathcount == 1)
-					Create2DExplosion(self.origin + v_up * 64, 10);
-				if (self.deathcount == 3 || self.deathcount == 6 || self.deathcount == 9 || self.deathcount == 12)
-				{
-					CreateExplosion(self.origin);
-					self.onfire_finished = time + 9999; // cars on fire
-				}
 				if (self.deathcount_finished < time)
 				{
-					if (self.deathcount < 30)
+					if (self.deathcount == 0)
 					{
-						self.deathcount = self.deathcount + 1;
-						self.deathcount_finished = time + 0.1;
+						float tt = ceil(random() * 3);
+						if (tt == 1)
+							sound(self, CHAN_AUTO, "combat/death1.wav", 1, ATTN_NORM);
+						else if (tt == 2)
+							sound(self, CHAN_AUTO, "combat/death2.wav", 1, ATTN_NORM);
+						else if (tt == 3)
+							sound(self, CHAN_AUTO, "combat/death3.wav", 1, ATTN_NORM);
+						else
+							sound(self, CHAN_AUTO, "combat/death4.wav", 1, ATTN_NORM);
+
+						Create2DExplosion(self.origin + v_up * 64, 10);
+						self.colormod = '0.1 0.1 0.1'; // car is cooked/black on death
+						self.onfire_finished = time + 9999; // cars on fire
 					}
+					if (self.deathcount == 3 || self.deathcount == 6 || self.deathcount == 9 || self.deathcount == 12)
+						CreateExplosion(self.origin);
+					if (self.deathcount < 30)
+						self.deathcount = self.deathcount + 1;
 					else
 					{
 						centerprint(self, "/P^1^b!!! YOU'RE DEAD !!!^7^b\n\n\nPress Fire to Respawn\n");
 						if (self.button0 || self.button3 || self.button4 || !self.ishuman)
 							RespawnPlayer();
 					}
+					self.deathcount_finished = time + 0.1;
 				}
 			}
 		}

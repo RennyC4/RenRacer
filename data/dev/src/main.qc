@@ -82,6 +82,7 @@ void() worldspawn =
 	precache_model("progs/mflash2.spr");
 	precache_model("progs/fire.spr");
 	precache_model("progs/xplode1.spr");
+	precache_model("progs/landmine.spr");
 
 	//
 	// func_vehicle - start
@@ -151,6 +152,7 @@ void() worldspawn =
 	precache_sound ("combat/death3.wav");
 	precache_sound ("combat/death4.wav");
 	precache_sound ("combat/jump.wav");
+	precache_sound ("combat/landmine.wav");
 
 	world_lights();
 	BotInit();  // FrikBot

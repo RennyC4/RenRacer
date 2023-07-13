@@ -19,7 +19,7 @@ entity() BotGetClosestPlayer =
 
 		if (bestv)
 		{
-			if (targ.health > 0)
+			if (targ.health > 0 && targ.invulnerable_finished < time)
 				return targ;
 		}
 	}
