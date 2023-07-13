@@ -664,6 +664,8 @@ void TryUpdateVehicle(){
 			else
 				pointparticles(PART_BUBBLE, self.origin - v_up * 16 - v_forward * 32, '0 0 0', 1);
 		}
+		
+		CarStabilizeCheat(); // Car can't flip
 
 		float roll = v_right * self.velocity;
 		if (roll > 100){
@@ -739,7 +741,7 @@ void TryUpdateVehicle(){
 			{
 				if (!self.driftspeed_timer)
 					self.driftspeed_timer = 10;
-				CarStabilizeCheat();
+				//CarStabilizeCheat();
 				self.car_stabilizer = -6; // Harder to tip while drifting
 				car_drift();
 				if (self.turbo_fuel < 100)
@@ -755,7 +757,7 @@ void TryUpdateVehicle(){
 			{
 				if (self.driftspeed_timer > 0)
 				{
-					CarStabilizeCheat();
+					//CarStabilizeCheat();
 					self.driftspeed_timer = self.driftspeed_timer - 1; // Remove it faster when button release
 				}
 				else
@@ -763,13 +765,13 @@ void TryUpdateVehicle(){
 			}
 			else
 			{
-				if (self.car_stabilizer < -2)
+				if (self.car_stabilizer < -1)
 				{
 					self.car_stabilizer = self.car_stabilizer + 0.05; // Lower # = more stability after letting go of drift
-					CarStabilizeCheat();
+					//CarStabilizeCheat();
 				}
 				else
-					self.car_stabilizer = -2; // Restore normal stablizer
+					self.car_stabilizer = -1; // Restore normal stablizer
 
 				if (f_left.physobj_friction_ground_y < 4.4)
 					f_left.physobj_friction_ground_y = f_left.physobj_friction_ground_y + 1;
