@@ -728,6 +728,7 @@ void() CommandSpecials =
 		sprint (self, "^2Command: ");
 		bprint ("^7Jump\n");
 		self.commandspcl_finished = time + 1;
+		return;
 	}
 	//
 
@@ -750,6 +751,7 @@ void() CommandSpecials =
 		CarAttack(1, TRUE);
 		self.cmdspecial_rear_step = 0;
 		self.commandspcl_finished = time + 1;
+		return;
 	}
 	if (self.cmdspecial_rear_step > 0)
 	{
@@ -777,6 +779,7 @@ void() CommandSpecials =
 		Fire_Landmine();
 		self.cmdspecial_landmine_step = 0;
 		self.commandspcl_finished = time + 1;
+		return;
 	}
 	if (self.cmdspecial_landmine_step > 0)
 	{
