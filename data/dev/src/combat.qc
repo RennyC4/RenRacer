@@ -708,6 +708,47 @@ void() Fire_Landmine =
 };
 
 //
+// Shield
+//
+
+void() Shield_Think =
+{
+	if (self.owner.shield_finished < time)
+	{
+		remove(self);
+		return;
+	}
+	self.scale = 8 + sin(time*128)*0.5;
+	setorigin (self, self.owner.origin);
+	frameskip(0.01);
+};
+
+void() Fire_Shield =
+{
+	local entity shield = spawn ();
+	shield.owner = self;
+	shield.solid = SOLID_SLIDEBOX;
+	shield.dimension_hit = shield.dimension_solid = 0;
+	shield.movetype = MOVETYPE_NOCLIP;
+	shield.classname = "shield";
+	shield.alpha = 0.5;
+	shield.scale = 8;
+	shield.effects = EF_ADDITIVE | EF_FULLBRIGHT;
+	shield.colormod = '1 3 1';
+	shield.avelocity = '0 100 0';
+
+	setmodel (shield, "progs/shield.mdl");
+	setsize (shield, '0 0 0', '0 0 0');
+	setorigin (shield, self.origin);
+
+	//sound (self, CHAN_AUTO, "combat/landmine.wav", 1, ATTN_NORM); // CHAN_WEAPON is for specials, mgun spams
+
+	shield.nextthink = time;
+	shield.think = Shield_Think;
+	spawn_color_glow(1, 3, 1, 125, shield); // dynamic light
+};
+
+//
 // Command Specials
 //
 
@@ -715,12 +756,31 @@ void() Fire_Landmine =
 .float cmdspecial_rear_step_finished;
 .float cmdspecial_landmine_step;
 .float cmdspecial_landmine_step_finished;
+
 void() CommandSpecials =
 {
 	if (!deathmatch)
 		return;
+	if (race_status != RACE_STARTED)
+		return;
 	if (self.commandspcl_finished > time)
 		return;
+
+
+	//
+	// Shield: Up, Up, Right
+	//
+	if (self.moveprog1 > 1 && self.moveprog4 > 0 && self.energy >= 80)
+	{
+		self.energy = self.energy - 80;
+		self.shield_finished = time + 3;
+		Fire_Shield();
+		sprint (self, "^2Command: ");
+		bprint ("^7Shield\n");
+		self.commandspcl_finished = time + 6;
+		return;
+	}
+	//
 
 	//
 	// Jump: Down, Down, Up
@@ -905,6 +965,8 @@ void() CycleWeaponBackward =
 void(float type, float rear) CarAttack =
 {
 	if (!deathmatch)
+		return;
+	if (race_status != RACE_STARTED)
 		return;
 
 	if (!type) // regular machine gun

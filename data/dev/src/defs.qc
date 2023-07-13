@@ -456,6 +456,7 @@ float total_checkpoints;
 .float forcejump;
 .float forcejump_strength;
 .float energy;
+.float shield_finished;
 float intermission_running;
 float intermission_exittime;
 string nextmap;

@@ -83,6 +83,7 @@ void() worldspawn =
 	precache_model("progs/fire.spr");
 	precache_model("progs/xplode1.spr");
 	precache_model("progs/landmine.spr");
+	precache_model("progs/shield.mdl");
 
 	//
 	// func_vehicle - start
