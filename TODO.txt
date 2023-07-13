@@ -4,7 +4,8 @@ TODO: More DM stuff
 	- Bot AI (starting / started / needs work but ok for now)
 	- Intermission with win condition / fraglimit (done)
 	- Add remote bombs, richochet, freeze blast
-	- Combo moves + energy meter? (Combo move logic implemented)
+	- Combo moves + energy meter? (Done)
+		- Add: Shield
 	- Figure out a safe way to have rockets push players (done)
 	- Remove screen tilt on death (done)
 	- Turbo lines should be removed on death/intermission (done)
