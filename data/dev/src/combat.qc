@@ -718,7 +718,7 @@ void() Shield_Think =
 		remove(self);
 		return;
 	}
-	self.scale = 8 + sin(time*128)*0.5;
+	self.scale = 8 + sin(time*512)*0.5;
 	setorigin (self, self.owner.origin);
 	frameskip(0.01);
 };
@@ -735,7 +735,7 @@ void() Fire_Shield =
 	shield.scale = 8;
 	shield.effects = EF_ADDITIVE | EF_FULLBRIGHT;
 	shield.colormod = '1 3 1';
-	shield.avelocity = '0 100 0';
+	//shield.avelocity = '0 100 0';
 
 	setmodel (shield, "progs/shield.mdl");
 	setsize (shield, '0 0 0', '0 0 0');
@@ -770,9 +770,9 @@ void() CommandSpecials =
 	//
 	// Shield: Up, Up, Right
 	//
-	if (self.moveprog1 > 1 && self.moveprog4 > 0 && self.energy >= 80)
+	if (self.moveprog1 > 1 && self.moveprog4 > 0 && self.energy >= 50)
 	{
-		self.energy = self.energy - 80;
+		self.energy = self.energy - 50;
 		self.shield_finished = time + 3;
 		Fire_Shield();
 		sprint (self, "^2Command: ");
