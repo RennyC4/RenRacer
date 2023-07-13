@@ -8,6 +8,9 @@ entity() BotGetClosestPlayer =
 
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
+		if (targ == self || targ.health < 1 || targ.invulnerable_finished > time)
+			continue; // skip
+
 		vector heading = targ.origin - self.origin;
 		float d = heading * heading;
 
@@ -30,6 +33,9 @@ entity() Bot_FindClosestItem =
 
 	for (entity thing = world;(thing = find(thing, netname, "item"));)
 	{
+		if (thing.solid == SOLID_NOT)
+			continue; // skip
+			
 		vector heading = thing.origin - self.origin;
 		float d = heading * heading;
 

@@ -133,7 +133,7 @@ void() PushPlayers =
 };
 
 // Instances that can force the car to jump (example: being hit by a rocket)
-// FIXME: Rockets can cause the player to blip out of existence (NaN error)
+// FIXME: This function can cause the player to blip out of existence (NaN error)
 void() ForceJump =
 {
 	entity wheels[] = {
@@ -144,7 +144,7 @@ void() ForceJump =
 	};
 	for (float i = 0; i < wheels.length; i++)
 	{	
-		traceline(wheels[i].origin, wheels[i].origin - wheels[i].lmat_up * 24, MOVE_NOMONSTERS, wheels[i]);
+		traceline(wheels[i].origin, wheels[i].origin - wheels[i].lmat_up * 32, MOVE_NOMONSTERS, wheels[i]);
 		if (trace_fraction < 1)
 			Phys_Force(self.driving, self.driving.physobj_mass, '0 0 1' * self.forcejump_strength * 1.0, trace_endpos, wheels[i].lmat_up);
 	}
@@ -412,7 +412,7 @@ void() PlayerPostThink =
 						self.deathcount = self.deathcount + 1;
 					else
 					{
-						centerprint(self, "/P^1^b!!! YOU'RE DEAD !!!^7^b\n\n\nPress Fire to Respawn\n");
+						centerprint(self, "/P^1^b!!! YOU'RE DEAD !!!^7^b\n\n\nPress [^1Fire^7] to Respawn\n");
 						if (self.button0 || self.button3 || self.button4 || !self.ishuman)
 							RespawnPlayer();
 					}
@@ -424,7 +424,7 @@ void() PlayerPostThink =
 
 	if (self.alpha < 1) // Smooth restore player transparency
 		self.alpha = self.alpha + 0.4 * frametime;
-	
+
 	//
 	// Get liquid level - RennyC
 	//

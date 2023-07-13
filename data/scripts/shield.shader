@@ -3,7 +3,7 @@ progs/shield.mdl_0
     {
 		map progs/shield.mdl_0
 		rgbGen lightingDiffuse // proper shading for vertex lit models, or something. 
-		tcMod scroll 0.05 0
+		tcMod scroll 0.25 0
     }		
 	{
 		map progs/shield.mdl_0
@@ -11,6 +11,6 @@ progs/shield.mdl_0
 		alphaGen const 0.15
 		tcGen environment
 		rgbgen entity
-		tcMod scroll -0.05 0
+		tcMod scroll -0.25 0
 	}
 }

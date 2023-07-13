@@ -8,9 +8,9 @@
 
 void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 {
-	if (attacker == targ)
+	if (attacker == targ) // suicide
 	{
-		targ.frags = targ.frags - 1; // lose a frag
+		targ.frags = targ.frags - 1;
 		bprint(targ.netname, " stupidly commited vehicular suicide\n");
 		return;
 	}
@@ -132,7 +132,10 @@ void(entity targ, entity attacker, float damage, string attackerclassname) DoDam
 
 	if (damage > 0)
 	{
-		targ.health = targ.health - damage;
+		if (targ.shield_finished < time)
+			targ.health = targ.health - damage;
+		else
+			targ.health = targ.health - ceil(damage / 2);
 		targ.colormod_x = 2;
 	}
 
@@ -641,8 +644,8 @@ void(float rear) Fire_Napalm =
 	napalm.avelocity = '-500 200 0';
 	napalm.hitcontentsmaski = CONTENTBIT_SOLID|0x00000002i|CONTENTBIT_BODY|CONTENTBIT_PLAYERCLIP|CONTENTBIT_WATER| CONTENTBIT_SLIME|CONTENTBIT_LAVA;
 
-	napalm.velocity_x = napalm.velocity_x + self.driving.velocity_x / 2;
-	napalm.velocity_y = napalm.velocity_y + self.driving.velocity_y / 2;
+	napalm.velocity_x = napalm.velocity_x + self.driving.velocity_x / 1.5;
+	napalm.velocity_y = napalm.velocity_y + self.driving.velocity_y / 1.5;
 
 	setmodel (napalm, "progs/napalm.mdl");
 	setsize (napalm, '0 0 0', '0 0 0');
@@ -718,7 +721,12 @@ void() Shield_Think =
 		remove(self);
 		return;
 	}
-	self.scale = 8 + sin(time*512)*0.5;
+	if (self.sound_finished < time)
+	{
+		sound (self, CHAN_BODY, "combat/shield.wav", 1, ATTN_NORM);
+		self.sound_finished = time + 0.5;
+	}
+	self.scale = 10 + sin(time*512)*0.5;
 	setorigin (self, self.owner.origin);
 	frameskip(0.01);
 };
@@ -732,16 +740,13 @@ void() Fire_Shield =
 	shield.movetype = MOVETYPE_NOCLIP;
 	shield.classname = "shield";
 	shield.alpha = 0.5;
-	shield.scale = 8;
+	shield.scale = 10;
 	shield.effects = EF_ADDITIVE | EF_FULLBRIGHT;
 	shield.colormod = '1 3 1';
-	//shield.avelocity = '0 100 0';
 
 	setmodel (shield, "progs/shield.mdl");
 	setsize (shield, '0 0 0', '0 0 0');
 	setorigin (shield, self.origin);
-
-	//sound (self, CHAN_AUTO, "combat/landmine.wav", 1, ATTN_NORM); // CHAN_WEAPON is for specials, mgun spams
 
 	shield.nextthink = time;
 	shield.think = Shield_Think;
@@ -776,8 +781,8 @@ void() CommandSpecials =
 		self.shield_finished = time + 3;
 		Fire_Shield();
 		sprint (self, "^2Command: ");
-		bprint ("^7Shield\n");
-		self.commandspcl_finished = time + 6;
+		sprint (self, "^7Shield\n");
+		self.commandspcl_finished = time + 3;
 		return;
 	}
 	//
@@ -792,7 +797,7 @@ void() CommandSpecials =
 		ForceJump();
 		sound (self, CHAN_BODY, "combat/jump.wav", 1, ATTN_NORM);
 		sprint (self, "^2Command: ");
-		bprint ("^7Jump\n");
+		sprint (self, "^7Jump\n");
 		self.commandspcl_finished = time + 1;
 		return;
 	}
@@ -815,7 +820,7 @@ void() CommandSpecials =
 	{
 		self.energy = self.energy - 30;
 		sprint (self, "^2Command: ");
-		bprint ("^7Rear Attack\n");
+		sprint (self, "^7Rear Attack\n");
 		CarAttack(1, TRUE);
 		self.cmdspecial_rear_step = 0;
 		self.commandspcl_finished = time + 1;
@@ -845,7 +850,7 @@ void() CommandSpecials =
 	{
 		self.energy = self.energy - 33;
 		sprint (self, "^2Command: ");
-		bprint ("^7Landmine\n");
+		sprint (self, "^7Landmine\n");
 		Fire_Landmine();
 		self.cmdspecial_landmine_step = 0;
 		self.commandspcl_finished = time + 1;
