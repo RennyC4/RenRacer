@@ -3,7 +3,6 @@
 
 entity() BotGetClosestPlayer =
 {
-//	float bestd = 9999999;
 	float bestd = 9999999999999;
 	entity bestv = world;
 
@@ -19,14 +18,16 @@ entity() BotGetClosestPlayer =
 		}
 
 		if (bestv)
-			return targ;
+		{
+			if (targ.health > 0)
+				return targ;
+		}
 	}
 	return world;
 };
 
 entity() Bot_FindClosestItem =
 {
-//	float bestd = 9999999;
 	float bestd = 9999999999999;
 	entity bestv = world;
 

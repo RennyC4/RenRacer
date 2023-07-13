@@ -651,7 +651,6 @@ void(float rear) Fire_Napalm =
 
 .float cmdspecial_rear_step;
 .float cmdspecial_rear_step_finished;
-//TODO: Refillable energy meter
 void() CommandSpecials =
 {
 	if (!deathmatch)
@@ -659,11 +658,10 @@ void() CommandSpecials =
 	if (self.commandspcl_finished > time)
 		return;
 
-	float cmdspecial_step;
-
 	// Jump: Down, Down, Up
-	if (self.moveprog1 > 0 && self.moveprog2 > 1)
+	if (self.moveprog1 > 0 && self.moveprog2 > 1 && self.energy >= 10)
 	{
+		self.energy = self.energy - 10;
 		self.forcejump_strength = 1000;
 		ForceJump();
 		sound (self, CHAN_BODY, "combat/jump.wav", 1, ATTN_NORM);
@@ -671,6 +669,7 @@ void() CommandSpecials =
 		bprint ("^7Jump\n");
 		self.commandspcl_finished = time + 1;
 	}
+	//
 
 	// Rear Attack: Left, Right, Down
 	if (self.moveprog3 == 1) // User pressed left
@@ -683,8 +682,9 @@ void() CommandSpecials =
 		self.cmdspecial_rear_step = 2;
 		self.cmdspecial_rear_step_finished = time + 0.2;
 	}
-	if (self.cmdspecial_rear_step == 2 && self.moveprog2 == 1) // Hit last step, user hit down
+	if (self.cmdspecial_rear_step == 2 && self.moveprog2 == 1 && self.energy >= 25) // Hit last step, user hit down
 	{
+		self.energy = self.energy - 30;
 		sprint (self, "^2Command: ");
 		bprint ("^7Rear Attack\n");
 		CarAttack(1, TRUE);
@@ -697,8 +697,6 @@ void() CommandSpecials =
 			self.cmdspecial_rear_step = 0;
 	}
 	//
-
-	bprint (ftos(self.cmdspecial_rear_step), "\n");
 };
 
 //

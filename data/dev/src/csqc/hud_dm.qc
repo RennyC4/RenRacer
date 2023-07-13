@@ -5,13 +5,57 @@ float WEP_NAPALM = 4;
 
 void() HUD_Deathmatch =
 {
+	//
+	// Draw Health
+	//
+
+	local vector pos = [(g_width - stringwidth("", TRUE, '18 18 0'))/12-28, (g_height - 36)];
+
+	local float h = getstatf(STAT_HEALTH);
+	local float hmax = getstatf(STAT_MAXHEALTH);
+
+	local string h1 = ftos(h);
+	local string h2 = ftos(hmax);
+
+	drawstring (pos + '1 1', "Health: ", '8 8 0', '0 0 0', 1, DRAWFLAG_NORMAL); // text shadow
+	drawstring (pos, "^1Health: ", '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+
+	drawstring (pos + '37 1', h1, '8 8 0', '0 0 0', 1, DRAWFLAG_NORMAL); // text shadow
+	drawstring (pos + '36 0', h1, '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+
+	drawstring (pos + '57 1', "/", '8 8 0', '0 0 0', 1, DRAWFLAG_NORMAL); // text shadow
+	drawstring (pos + '56 0', "/", '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+
+	drawstring (pos + '67 1', h2, '8 8 0', '0 0 0', 1, DRAWFLAG_NORMAL); // text shadow
+	drawstring (pos + '66 0', h2, '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+
+	//
+	// Draw Energy
+	//
+
+	pos = [(g_width - stringwidth("", TRUE, '18 18 0'))/12-32, (g_height - 26)];
+	float e = getstatf(STAT_ENERGY);
+	string e1 = ftos(e);
+
+	drawstring (pos + '1 1', "Energy: ", '8 8 0', '0 0 0', 1, DRAWFLAG_NORMAL); // text shadow
+	drawstring (pos, "^4Energy: ", '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+
+	drawstring (pos + '37 1', e1, '8 8 0', '0 0 0', 1, DRAWFLAG_NORMAL); // text shadow
+	drawstring (pos + '36 0', e1, '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+
+	drawstring (pos + '57 1', "/", '8 8 0', '0 0 0', 1, DRAWFLAG_NORMAL); // text shadow
+	drawstring (pos + '56 0', "/", '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+
+	drawstring (pos + '67 1', "100", '8 8 0', '0 0 0', 1, DRAWFLAG_NORMAL); // text shadow
+	drawstring (pos + '66 0', "100", '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+
 	local float wep = getstatf(STAT_WEAPON);
 
 	//
 	// Fire rocket information on HUD
 	//
 
-	vector pos = [(g_width - stringwidth("", TRUE, '32 16 0'))/4, (g_height)/1.05];
+	pos = [(g_width - stringwidth("", TRUE, '32 16 0'))/4, (g_height)/1.05];
 	drawpic (pos + '1 1', "progs/hud/hud_frckt.png", '32 16', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
 	drawpic (pos, "progs/hud/hud_frckt.png", '32 16', '1 1 1', 1, DRAWFLAG_NORMAL);
 

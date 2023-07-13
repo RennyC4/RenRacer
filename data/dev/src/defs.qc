@@ -455,6 +455,7 @@ float total_checkpoints;
 .float observer;
 .float forcejump;
 .float forcejump_strength;
+.float energy;
 float intermission_running;
 float intermission_exittime;
 string nextmap;
@@ -539,5 +540,6 @@ var float PART_MGUNSMOKE;
 #define STAT_AMMO_POWERROCKET 44
 #define STAT_AMMO_NAPALM 45
 #define STAT_WEAPON 46
+#define STAT_ENERGY 47
 
 #define STAT_INTERMISSION 50

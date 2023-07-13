@@ -152,6 +152,7 @@ void() ForceJump =
 
 void() spawn_car_countdown;
 .float turbo_fuel_finished;
+.float energy_finished;
 void() PlayerPreThink = 
 {
 	if (BotPreFrame()) // FrikBot
@@ -206,7 +207,7 @@ void() PlayerPreThink =
 		else
 			self.clearcprint = FALSE;
 
-		// Slow turbo fuel recharge
+		// Turbo fuel recharge
 		if (self.turbo_fuel < 100)
 		{
 			if (self.turbo_fuel_finished < time && !self.button2)
@@ -217,6 +218,18 @@ void() PlayerPreThink =
 		}
 		else
 			self.turbo_fuel = 100;
+
+		// Energy recharge
+		if (self.energy < 100)
+		{
+			if (self.energy_finished < time)
+			{
+				self.energy = self.energy + 1;
+				self.energy_finished = time + 0.1;
+			}
+		}
+		else
+			self.energy = 100;
 
 		if (self.start_laptime) // turned on by start/finish goal
 		{
@@ -691,6 +704,7 @@ void() PutClientInServer =
 	self.spawn_loc = self.origin + v_up * 64; // Stash it
 	self.spawn_loc_angles = self.angles; // Stash it
 	self.alpha = 1;
+	self.energy = 100;
 	self.deathcount_finished = time + 1;
 
 	if (cvar("developer") != 1)
