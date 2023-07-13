@@ -718,7 +718,9 @@ void() CommandSpecials =
 	if (self.commandspcl_finished > time)
 		return;
 
+	//
 	// Jump: Down, Down, Up
+	//
 	if (self.moveprog1 > 0 && self.moveprog2 > 1 && self.energy >= 10)
 	{
 		self.energy = self.energy - 10;
@@ -732,7 +734,9 @@ void() CommandSpecials =
 	}
 	//
 
+	//
 	// Rear Attack: Left, Right, Down
+	//
 	if (self.moveprog3 == 1) // User pressed left
 	{
 		self.cmdspecial_rear_step = 1;
@@ -759,8 +763,10 @@ void() CommandSpecials =
 			self.cmdspecial_rear_step = 0;
 	}
 	//
-	
+
+	//
 	// Landmine: Right, Left, Down
+	//
 	if (self.moveprog4 == 1) // User pressed left
 	{
 		self.cmdspecial_landmine_step = 1;

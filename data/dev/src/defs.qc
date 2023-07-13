@@ -429,7 +429,7 @@ float gameover; // match is over (dm)
 .float drift;
 .float clearcprint_finished;
 .float clearcprint;
-.float cardrift_stabilizer;
+.float car_stabilizer;
 .float radius;
 .entity driving;
 .vector checkpoint_lastpos;

@@ -270,7 +270,7 @@ void(float fscale, float ftime, float sv_gravity) Phys_Acceleration =
 			float p1_mult = p2.physobj_floor_frac - p1.physobj_floor_frac;
 			float p2_mult = p1.physobj_floor_frac - p2.physobj_floor_frac;
 
-			local float stabilizer = stick.owner.driving.cardrift_stabilizer; // RennyC
+			local float stabilizer = stick.owner.driving.car_stabilizer; // RennyC
 			if (p1_mult < 0)
 			{
 				p1.physobj_spring_mult = remap(p1_mult + 1, 0, 1, stabilizer, 1); // RennyC

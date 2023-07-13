@@ -657,7 +657,7 @@ void TryUpdateVehicle(){
 		// RennyC: Speed Booster
 		if (self.speed > 0 && self.speedboost_finished > time)
 		{
-			self.cardrift_stabilizer = -6; // Harder to tip while speed boosting
+			self.car_stabilizer = -6; // Harder to tip while speed boosting
 			car_boost(self.speed);
 			if (!self.waterlevel)
 				pointparticles(PART_SPEEDBOOST, self.origin - v_up * 16 - v_forward * 32, '0 0 0', 1);
@@ -740,7 +740,7 @@ void TryUpdateVehicle(){
 				if (!self.driftspeed_timer)
 					self.driftspeed_timer = 10;
 				CarStabilizeCheat();
-				self.cardrift_stabilizer = -6; // Harder to tip while drifting
+				self.car_stabilizer = -6; // Harder to tip while drifting
 				car_drift();
 				if (self.turbo_fuel < 100)
 					self.turbo_fuel = self.turbo_fuel + 1; // Drift adds turbo fuel
@@ -763,13 +763,13 @@ void TryUpdateVehicle(){
 			}
 			else
 			{
-				if (self.cardrift_stabilizer < -1)
+				if (self.car_stabilizer < -2)
 				{
-					self.cardrift_stabilizer = self.cardrift_stabilizer + 0.05; // Lower # = more stability after letting go of drift
+					self.car_stabilizer = self.car_stabilizer + 0.05; // Lower # = more stability after letting go of drift
 					CarStabilizeCheat();
 				}
 				else
-					self.cardrift_stabilizer = -1; // Restore normal stablizer
+					self.car_stabilizer = -2; // Restore normal stablizer
 
 				if (f_left.physobj_friction_ground_y < 4.4)
 					f_left.physobj_friction_ground_y = f_left.physobj_friction_ground_y + 1;
