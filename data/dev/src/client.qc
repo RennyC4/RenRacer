@@ -440,10 +440,14 @@ void() PlayerPostThink =
 	{
 		if (self.onfire_finished > time)
 			self.onfire_finished = time; // water removes napalm/fire
-		self.effects |= EF_BRIGHTFIELD;
+		if (!deathmatch)
+			self.effects |= EF_BRIGHTFIELD;
 	}
 	else
-		self.effects &= ~(EF_BRIGHTFIELD);
+	{
+		if (!deathmatch)
+			self.effects &= ~(EF_BRIGHTFIELD);
+	}
 
 	if (self.driving && deathmatch && self.health > 0 && self.invulnerable_finished < time && race_status == RACE_STARTED)
 	{
