@@ -69,6 +69,8 @@ void() Setup_level_effects =
 		else
 			stuffcmd (self, "sv_gravity 1200\n");
 	}
+	if (world.model == "maps/dm1.bsp")
+		stuffcmd (self, "r_waterstyle 2\n");
 };
 
 //

@@ -310,25 +310,26 @@ void() BotAI =
 	// Bot headlights
 	//
 
-	local vector x = getlight(self.origin);
-	if (world.model == "maps/map4.hmp")
+	if (!deathmatch)
 	{
-		if (!self.headlights)
-			headlights_on();
-	}
-	else
-	{
-		if (x_x <= 3 || x_y <= 3 || x_z <= 3)
+		local vector x = getlight(self.origin);
+		if (world.model == "maps/map4.hmp")
 		{
 			if (!self.headlights)
 				headlights_on();
 		}
-		else if (self.headlights)
-			headlights_off();
-	}
-
-	if (!deathmatch)
+		else
+		{
+			if (x_x <= 3 || x_y <= 3 || x_z <= 3)
+			{
+				if (!self.headlights)
+					headlights_on();
+			}
+			else if (self.headlights)
+				headlights_off();
+		}
 		bot_ai_race();
+	}
 	else
 		bot_ai_fight();
 };
