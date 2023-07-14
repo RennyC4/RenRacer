@@ -3,13 +3,22 @@ float WEP_HROCKET = 1;
 float WEP_PROCKET = 2;
 float WEP_NAPALM = 4;
 
+void() DrawRadar =
+{
+	vector pos = [(g_width / 1.1), (g_height / 32)];
+
+	drawfill(pos, '50 50 0', '0 1 0', 0.25, DRAWFLAG_NORMAL);
+};
+
 void() HUD_Deathmatch =
 {
+	DrawRadar();
+	
 	//
 	// Draw Health
 	//
 
-	local vector pos = [(g_width - stringwidth("", TRUE, '18 18 0'))/12-28, (g_height - 36)];
+	vector pos = [(g_width - stringwidth("", TRUE, '18 18 0'))/12-28, (g_height - 36)];
 
 	local float h = getstatf(STAT_HEALTH);
 	local float hmax = getstatf(STAT_MAXHEALTH);

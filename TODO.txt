@@ -6,7 +6,8 @@ TODO: More DM stuff
 	- Add remote bombs, richochet, freeze blast
 	- Combo moves + energy meter? (Done)
 		- Add: Shield (Done)
-	- Skyroom for DM1
+	- Skyroom for DM1 (Done)
+	- CSQC Radar
 	- Figure out a safe way to have rockets push players (done)
 	- Remove screen tilt on death (done)
 	- Turbo lines should be removed on death/intermission (done)
@@ -19,7 +20,6 @@ TODO: Tracebox on cars
 	- Is this needed? Probably not; would be nice to have though...
 TODO: Impact sound - Car smash (wall)
 TODO: Breakable brushes (request by xaGe)
-TODO: Add a 'horn' button, becausewhynot... Maybe not
 TODO: Add speed booster as a brush entity as well
 
 ====
@@ -45,7 +45,7 @@ Done: New collision car->car physics, even if it's fake/lame
 Done: Warp car (HACK!)
 Done: Car colors / Driver match .colormap
 Done: Proper waypoints for bots, if one exists.. they follow it around the course
-	- Have 999 waypoint speed cause the AI to turbo, done.
+	- Have 999 waypoint speed tells the AI to turbo, done.
 	- Hybrid checkpoint + waypoint system, done.
 Done: Add flares to Map4 to help light things a bit
 Done: Race4: Moon textures + low graivty + dark (use headlights)

@@ -442,8 +442,7 @@ void(entity attacker, float damage) Car_Pain = {
 	T_Damage(self.realowner.driving, attacker, attacker, damage * 0.5); // driving provides protection
 };
 
-
-void(float turn) Car_Turn =
+void(float turn, float backwards) Car_Turn =
 {
 	local float f;
 	local entity tright, tleft;
@@ -455,8 +454,18 @@ void(float turn) Car_Turn =
 	tright = car.frontright;
 	tright.physobj_flags = tright.physobj_flags - (tright.physobj_flags & PHFLAGS_RESTING);
 	tleft.physobj_flags = tleft.physobj_flags - (tleft.physobj_flags & PHFLAGS_RESTING);
-	f = 125;
-	float want_yaw = clamp(turn, -35, 35);
+	f = 90;
+
+	if (backwards)
+	{
+		turn *= -1;
+		if (turn > 100)
+			turn -= 180;
+		if (turn < -100)
+			turn += 180;
+	}
+
+	float want_yaw = bound(-30, turn, 30);
 	if (want_yaw < 0)
 		car.ideal_yaw = max(want_yaw, car.ideal_yaw - f*frametime);
 	else if (want_yaw > 0)
@@ -467,6 +476,7 @@ void(float turn) Car_Turn =
 		else
 			car.ideal_yaw = min(0, car.ideal_yaw + f*2*frametime);
 	}
+
 	// left tire
 	makevectors(tleft.base_pose);
 	matrix_forward = v_forward;
@@ -812,7 +822,7 @@ void TryUpdateVehicle(){
 			if (move < -180)
 				move = move + 360;
 		}
-		Car_Turn(move);
+
 		car_angs = self.driving.angles_x;
 		if (car_angs > 180)
 			car_angs -= 360;
@@ -868,7 +878,10 @@ void TryUpdateVehicle(){
 	}
 	// RennyC
  
-	Gun_Turn(move, pitch);
+	makevectors(self.driving.angles);
+	float backwards = (self.driving.velocity * v_forward) < 0;
+	Car_Turn(move, backwards);
+	
 	self.velocity = '0 0 0';
 	self.modelindex = modelindex_null;
 	self.frame = 0;
