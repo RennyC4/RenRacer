@@ -92,12 +92,11 @@ void() PushPlayers =
 			};
 
 			// TODO: Find a better way to 'bump' players - Start
-
 			for (float i = 0; i < wheels.length; i++)
 			{
 				traceline(wheels[i].origin, wheels[i].origin - wheels[i].lmat_up * 24, MOVE_NOMONSTERS, wheels[i]);
 				if (trace_fraction < 1)
-					Phys_Force(self.driving, self.driving.physobj_mass, '0 0 1' * 240 * 1.0, trace_endpos, wheels[i].lmat_up);
+					Phys_Force(self.driving, self.driving.physobj_mass, '0 0 1' * 240, trace_endpos, wheels[i].lmat_up);
 			}
 			vector worldorg = self.driving.origin;
 
@@ -108,9 +107,8 @@ void() PushPlayers =
 				Phys_Force(self.driving, self.driving.physobj_mass * 0.35, (v_right * 10000 * -1) * frametime, worldorg - v_right * 16, -v_right);
 			else
 				Phys_Force(self.driving, self.driving.physobj_mass * 0.35, v_right * 10000 * frametime, worldorg + v_right * 16, +v_right);
-			
 			// TODO: Find a better way to 'bump' players - End
-			
+
 			b.collide_finished = time + 1;
 			self.collide_finished = time + 1;
 
@@ -122,7 +120,7 @@ void() PushPlayers =
 				sound (self, CHAN_AUTO, "hit3.wav", 1, ATTN_NORM);
 			else
 				sound (self, CHAN_AUTO, "hit4.wav", 1, ATTN_NORM);
-			
+
 			if (b.onfire_finished > time) // catch fire on touch
 			{
 				self.onfire_finished = time + 2.5;
@@ -146,7 +144,7 @@ void() ForceJump =
 	{	
 		traceline(wheels[i].origin, wheels[i].origin - wheels[i].lmat_up * 32, MOVE_NOMONSTERS, wheels[i]);
 		if (trace_fraction < 1)
-			Phys_Force(self.driving, self.driving.physobj_mass, '0 0 1' * self.forcejump_strength * 1.0, trace_endpos, wheels[i].lmat_up);
+			Phys_Force(self.driving, self.driving.physobj_mass, '0 0 1' * self.forcejump_strength, trace_endpos, wheels[i].lmat_up);
 	}
 };
 
@@ -412,7 +410,7 @@ void() PlayerPostThink =
 						self.deathcount = self.deathcount + 1;
 					else
 					{
-						centerprint(self, "/P^1^b!!! YOU'RE DEAD !!!^7^b\n\n\nPress [^1Fire^7] to Respawn\n");
+						centerprint(self, "/P^1^b!!! YOU'RE DEAD !!!^7^b\n\n\nPress [^1^bFire^b^7] to Respawn\n");
 						if (self.button0 || self.button3 || self.button4 || !self.ishuman)
 							RespawnPlayer();
 					}

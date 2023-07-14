@@ -544,3 +544,5 @@ var float PART_MGUNSMOKE;
 #define STAT_ENERGY 47
 
 #define STAT_INTERMISSION 50
+
+#define isnan(n) (((int)(__variant)n)&0x7f800000i == 0x7f800000i)

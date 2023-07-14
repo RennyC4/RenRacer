@@ -79,7 +79,7 @@ void() CheckGameRules =
 
 	float timelimit = cvar("timelimit") * 60;
 	float fraglimit = cvar("fraglimit");
-	
+
 	if (timelimit && time >= timelimit)
 	{
 		if (self.driving)
@@ -87,9 +87,10 @@ void() CheckGameRules =
 		NextLevel();
 		return;
 	}
-	
+
 	if (fraglimit && self.frags >= fraglimit)
 	{
+		bprint (self.netname, " won the rage war!\n");
 		if (self.driving)
 			Car_AttachToVehicle(self, self.driving); // Remove player from car
 		NextLevel();

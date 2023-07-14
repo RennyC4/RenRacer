@@ -87,8 +87,6 @@ void() item_firerocket_touch =
 	entity toucher = other.owner.driving;
 	if (toucher.health <= 0)
 		return;
-	if (toucher.ammo_firerocket > 9)
-		return;
 
 	toucher.ammo_firerocket = toucher.ammo_firerocket + 3;
 	if (toucher.ammo_firerocket > 9)
@@ -136,10 +134,8 @@ void() item_homingrocket_touch =
 	entity toucher = other.owner.driving;
 	if (toucher.health <= 0)
 		return;
-	if (toucher.ammo_homingrocket > 9)
-		return;
 
-	toucher.ammo_homingrocket = toucher.ammo_homingrocket + 3;
+	toucher.ammo_homingrocket = toucher.ammo_homingrocket + 2;
 	if (toucher.ammo_homingrocket > 6)
 		toucher.ammo_homingrocket = 6;
 
@@ -184,8 +180,6 @@ void() item_powerrocket_touch =
 {
 	entity toucher = other.owner.driving;
 	if (toucher.health <= 0)
-		return;
-	if (toucher.ammo_powerrocket > 3)
 		return;
 
 	toucher.ammo_powerrocket = toucher.ammo_powerrocket + 2;
@@ -233,8 +227,6 @@ void() item_napalm_touch =
 {
 	entity toucher = other.owner.driving;
 	if (toucher.health <= 0)
-		return;
-	if (toucher.ammo_napalm > 5)
 		return;
 
 	toucher.ammo_napalm = toucher.ammo_napalm + 2;

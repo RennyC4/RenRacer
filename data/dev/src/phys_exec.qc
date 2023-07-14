@@ -25,7 +25,15 @@ float remap(float v, float ilow, float ihigh, float olow, float ohigh){
 
 void(entity targ, vector vel) setvelocity =
 {
+	vector vel2 = vel;
+	
+	//bprint ("Vel_X: ", ftos(vel2_x), "\n");
+	//bprint ("Vel_Y: ", ftos(vel2_y), "\n");
+	//bprint ("Vel_Z: ", ftos(vel2_z), "\n");
 	targ.physobj_flags = targ.physobj_flags | PHFLAGS_FORCE;
+	if (vel2_x == -1 || vel2_x == 0) vel2_x = 0.01; // RennyC: Fix NaN issue
+	if (vel2_y == -1 || vel2_y == 0)vel2_y = 0.01;  // RennyC: Fix NaN issue
+	if (vel2_z == -1 || vel2_z == 0) vel2_z = 0.01; // RennyC: Fix NaN issue
 	targ.velocity = vel;
 };
 
@@ -44,6 +52,8 @@ void(entity targ, float in_mass, vector inforce, vector hitspot, vector normal) 
 		targ = targ.realowner;
 
 	t_mass = min(1, in_mass/targ.physobj_mass);
+	//bprint ("t_mass: ", ftos(t_mass), "\n");
+
 	targ.physobj_flags = targ.physobj_flags | PHFLAGS_FORCE;
 	targ.physobj_flags = targ.physobj_flags - (targ.physobj_flags & PHFLAGS_RESTING);
 	targ.flags = targ.flags - (targ.flags & FL_ONGROUND);
@@ -62,6 +72,13 @@ void(entity targ, float in_mass, vector inforce, vector hitspot, vector normal) 
 		while (part)
 		{
 			part.force_calcscale = closest_dist/part.force_calcdist;
+			//bprint ("part.force_calcscale: ", ftos(part.force_calcscale), "\n");
+
+			if (part.force_calcscale == -1 || part.force_calcscale == 0) // RennyC: Fix NaN?
+			{
+				part.force_calcscale = 0.01; // RennyC: Fix NaN?
+				bprint ("We hit a NaN issue\n");
+			}
 			part = part.physobj_next;
 		}
 		targ = targ.physobj_particlelist;

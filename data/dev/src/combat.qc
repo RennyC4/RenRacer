@@ -392,31 +392,25 @@ void() Rocket_Touch =
 	{
 		DoDamage(other.owner.driving, self.owner, 7, self.classname); // fire
 
-		/* Broken for now - NaN issue
 		other.owner.driving.forcejump_strength = 250;
 		if (other.owner.driving.health > 7) // Possible fix for NaN on jump physics being called twice when target killed
 			other.owner.driving.forcejump = TRUE;
-		*/
 	}
 	if (self.classname == "rocket2")
 	{
 		DoDamage(other.owner.driving, self.owner, 10, self.classname); // homing
 
-		/* Broken for now - NaN issue
 		other.owner.driving.forcejump_strength = 350;
 		if (other.owner.driving.health > 10) // Possible fix for NaN on jump physics being called twice when target killed
 			other.owner.driving.forcejump = TRUE;
-		*/
 	}
 	if (self.classname == "rocket3")
 	{
 		DoDamage(other.owner.driving, self.owner, 15, self.classname); // power
 
-		/* Broken for now - NaN issue
 		other.owner.driving.forcejump_strength = 450;
 		if (other.owner.driving.health > 15) // Possible fix for NaN on jump physics being called twice when target killed
 			other.owner.driving.forcejump = TRUE;
-		*/
 	}
 
 	CreateExplosion(self.origin);
@@ -665,7 +659,7 @@ void(float rear) Fire_Napalm =
 
 void() Landmine_Touch =
 {
-	if (other == self.owner.driving)
+	if (other.owner.driving == self.owner) // Players can't trip their own mines
 		return;
 	if (self.hitobject_finished > time)
 		return;
@@ -704,7 +698,7 @@ void() Fire_Landmine =
 
 	sound (self, CHAN_AUTO, "combat/landmine.wav", 1, ATTN_NORM); // CHAN_WEAPON is for specials, mgun spams
 
-	landmine.hitobject_finished = time + 1; // How long till it's active
+	landmine.hitobject_finished = time + 0.5; // How long till it's active
 	landmine.touch = Landmine_Touch;
 	landmine.think = Landmine_Think;
 	landmine.nextthink = time;

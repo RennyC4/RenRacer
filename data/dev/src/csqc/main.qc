@@ -54,10 +54,7 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 				DrawSpeed(); // Draw Speed Stats
 			}
 			else
-			{
-				DrawHealth(); // Draw Health Stats
 				HUD_Deathmatch(); // Draw ammo, etc
-			}
 
 			// Engine sounds (taken from build a delivery, optimized (thanks spike))
 			local float speed = getstatf(STAT_SPEED);
@@ -109,24 +106,36 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 
 };
 
-/*
 float(float evtype, float scanx, float chary, float devid) CSQC_InputEvent =
 {
 	switch (evtype)
 	{
 		case IE_KEYDOWN:
-		if (getkeybind(scanx) == "+showscores")
-		{
-			showscores = TRUE;
-			return TRUE;
-		}
+			if (getkeybind(scanx) == "+moveleft")
+			{
+				localcmd("+left\n");
+				return FALSE;
+			}
+			if (getkeybind(scanx) == "+moveright")
+			{
+				localcmd("+right\n");
+				return FALSE;
+			}
 		case IE_KEYUP:
-			showscores = FALSE;
+			if (getkeybind(scanx) == "+moveleft")
+			{
+				localcmd("-left\n");
+				return FALSE;
+			}
+			if (getkeybind(scanx) == "+moveright")
+			{
+				localcmd("-right\n");
+				return FALSE;
+			}
 		return FALSE;
 	}
 	return FALSE;
 };
-*/
 
 noref void(float apiver, string enginename, float enginever) CSQC_Init = {};
 
