@@ -546,3 +546,5 @@ var float PART_MGUNSMOKE;
 #define STAT_INTERMISSION 50
 
 #define isnan(n) (((int)(__variant)n)&0x7f800000i == 0x7f800000i)
+#define deg2rad(n) ((n)*(M_PI/180))
+#define rad2deg(n) ((n)*(180/M_PI))

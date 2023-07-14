@@ -1,5 +1,19 @@
 void() SUB_Remove = {remove(self);return;};
 
+enum NETENTITY:float {
+	NULL,
+	RADARBLIP,
+};
+
+void CSQC_Ent_Update(float is_new)
+{
+	float type = readbyte();
+	switch(type)
+	{
+		case NETENTITY::RADARBLIP: EntUpdate_RadarBlip(is_new); break;
+	}
+}
+
 //
 // Main Loop
 //

@@ -47,7 +47,7 @@ void() countdown_think = // Race start countdown
 	//
 
 	//
-	// Spawn players cars
+	// Spawn players cars, spawn radar
 	//
 	
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
@@ -62,6 +62,7 @@ void() countdown_think = // Race start countdown
 			Car_InitVehicle(car);
 			self = oself;
 			targ.spawncar = TRUE;
+			Spawn_RadarBlip(targ);
 		}
 	}
 	//

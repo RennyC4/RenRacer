@@ -2636,3 +2636,6 @@ float RACE_FINISHED = 4;
 #define STAT_ENERGY 47
 
 #define STAT_INTERMISSION 50
+
+#define deg2rad(n) ((n)*(M_PI/180))
+#define rad2deg(n) ((n)*(180/M_PI))
