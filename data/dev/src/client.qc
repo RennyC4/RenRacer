@@ -30,15 +30,22 @@ void() ClientDisconnect =
 {
 	if (gameover)
 		return;
-
-	if (!deathmatch)
-		bprint (self.netname, " has retired!\n");
+	if (self.observer)
+		bprint (self.netname, " stopped observing\n");
 	else
-		bprint (self.netname, " has chickened out with ", ftos(self.frags), " frags!\n");
+	{
+		if (!deathmatch)
+			bprint (self.netname, " has retired!\n");
+		else
+			bprint (self.netname, " has chickened out with ", ftos(self.frags), " frags!\n");
+	}
 
-	if (self.fire)
-		remove(self.fire);
-	remove_car(self.driving);
+	if (!self.observer)
+	{
+		if (self.fire)
+			remove(self.fire);
+		remove_car(self.driving);
+	}
 
 	ClientDisconnected(); // FrikBot
 };

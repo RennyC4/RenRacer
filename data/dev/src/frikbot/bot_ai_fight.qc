@@ -8,7 +8,7 @@ entity() BotGetClosestPlayer =
 
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
-		if (targ == self || targ.health < 1 || targ.invulnerable_finished > time)
+		if (targ == self || targ.health < 1 || targ.invulnerable_finished > time || targ.observer)
 			continue; // skip
 
 		vector heading = targ.origin - self.origin;
@@ -70,10 +70,17 @@ void() bot_ai_fight =
 	if ((self.keys == KEY_MOVEFORWARD || (self.button0 && self.turbo_fuel > 0)) && self.realspeed <= 3)
 		self.bot_backup_finished = time + 0.3 + random()*0.6;
 
+	// Out of ammo, go search for some
+	if (self.ammo_firerocket < 1 && self.ammo_homingrocket < 1 && self.ammo_powerrocket < 1 && self.ammo_napalm < 1)
+	{
+		self.goalentity = Bot_FindClosestItem();
+		self.bot_huntitem_finished = time + 3;
+	}
+
 	if (!self.enemy && self.bot_huntitem_finished < time)
 		self.enemy = BotGetClosestPlayer();
 
-	if (self.enemy.health > 0 && self.enemy.invulnerable_finished < time)
+	if (self.enemy && self.enemy.health > 0 && self.enemy.invulnerable_finished < time)
 	{
 		if (visible(self.enemy))
 		{
@@ -106,17 +113,26 @@ void() bot_ai_fight =
 				self.button3 = FALSE;
 				self.button4 = FALSE;
 			}
-			self.goalentity = self.enemy;
+			if (self.bot_huntitem_finished < time)
+				self.goalentity = self.enemy;
 		}
 		else
 		{
+			//bprint ("BOT: Can't see enemy, hunting item\n");
+			self.button3 = FALSE;
+			self.button4 = FALSE;
 			self.goalentity = Bot_FindClosestItem();
 			self.enemy = BotGetClosestPlayer(); // Find new target while item hunting
-			self.bot_huntitem_finished = time + 3;
+			if (self.bot_huntitem_finished < time)
+				self.bot_huntitem_finished = time + 3;
 		}
 	}
 	else
-		self.enemy = world; // find next dude to kill
+	{
+		self.enemy = BotGetClosestPlayer(); // Find new target
+		if (self.enemy)
+			self.goalentity = self.enemy;
+	}
 
 	if (self.bot_backup_finished < time)
 	{

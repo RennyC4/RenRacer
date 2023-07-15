@@ -1,9 +1,10 @@
 TODO: More DM stuff
+	- Add remote bombs, richochet, freeze blast
+	- Enemies health+name should display under radar
 	- Cars should be on fire on death automatically (easy / done)
 	- A proper map to fight on (done)
 	- Bot AI (starting / started / needs work but ok for now)
 	- Intermission with win condition / fraglimit (done)
-	- Add remote bombs, richochet, freeze blast
 	- Combo moves + energy meter? (Done)
 		- Add: Shield (Done)
 	- Skyroom for DM1 (Done)
@@ -11,8 +12,9 @@ TODO: More DM stuff
 	- Figure out a safe way to have rockets push players (done)
 	- Remove screen tilt on death (done)
 	- Turbo lines should be removed on death/intermission (done)
-	- Add more homing to napalm
-	- NaN nonsense
+	- Add more homing to napalm (Done 50% more)
+	- NaN nonsense (Fixed)
+	- Dedicated Server: With zero players, have bots start the match instead (?)
 TODO: Teleporter brush
 TODO: Check out the breaking function from shpds delivery game
 TODO: Set direct angle on func_vehicle function

@@ -8,9 +8,15 @@
 
 void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 {
+	if (attacker == world) // This shouldn't happen, but lets add it anyways
+	{
+		bprint(targ.netname, " was killed by the karma gods\n");
+		return;
+	}
 	if (attacker == targ) // suicide
 	{
-		targ.frags = targ.frags - 1;
+		if (targ)
+			targ.frags = targ.frags - 1;
 		bprint(targ.netname, " stupidly commited vehicular suicide\n");
 		return;
 	}
@@ -173,6 +179,9 @@ void() GetTarget =
 
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
+		if (targ == self || targ.health < 1 || targ.invulnerable_finished > time)
+			continue; // skip
+
 		vector heading = targ.origin - self.origin;
 		float d = heading * heading;
 
@@ -184,7 +193,7 @@ void() GetTarget =
 
 		if (bestv)
 		{
-			if (visible(targ) && infront3(targ, 0.75) && !self.enemy && targ.health > 0 && targ != self.owner)
+			if (visible(targ) && infront3(targ, 0.75) && !self.enemy && targ.health > 0 && targ != self.owner && !targ.observer)
 				self.enemy = targ;
 		}
 	}
@@ -603,7 +612,7 @@ void() Napalm_Think =
 		vele = normalize(self.enemy.origin - self.origin);
 		vels = normalize(self.velocity);
 		ph = vele + (vels * 4);
-		ph = ph * (1/50); // increase seceond number for less homing capability
+		ph = ph * (1/25); // increase seceond number for less homing capability
 
 		self.velocity = normalize(vels + ph);
 		self.velocity = self.velocity * 350;
@@ -638,8 +647,8 @@ void(float rear) Fire_Napalm =
 	napalm.avelocity = '-500 200 0';
 	napalm.hitcontentsmaski = CONTENTBIT_SOLID|0x00000002i|CONTENTBIT_BODY|CONTENTBIT_PLAYERCLIP|CONTENTBIT_WATER| CONTENTBIT_SLIME|CONTENTBIT_LAVA;
 
-	napalm.velocity_x = napalm.velocity_x + self.driving.velocity_x / 1.5;
-	napalm.velocity_y = napalm.velocity_y + self.driving.velocity_y / 1.5;
+	napalm.velocity_x = napalm.velocity_x + self.driving.velocity_x / 1.75;
+	napalm.velocity_y = napalm.velocity_y + self.driving.velocity_y / 1.75;
 
 	setmodel (napalm, "progs/napalm.mdl");
 	setsize (napalm, '0 0 0', '0 0 0');
@@ -677,6 +686,11 @@ void() Landmine_Touch =
 
 void() Landmine_Think =
 {
+	if (!self.owner)
+	{
+		remove(self);
+		return;
+	}
 	droptofloor();
 	setorigin(self, self.origin + v_up * 16);
 

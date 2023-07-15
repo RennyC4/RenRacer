@@ -130,9 +130,19 @@ float(float evtype, float scanx, float chary, float devid) CSQC_InputEvent =
 				localcmd("+left\n");
 				return FALSE;
 			}
+			if (getkeybind(scanx) == "+left")
+			{
+				localcmd("+moveleft\n");
+				return FALSE;
+			}
 			if (getkeybind(scanx) == "+moveright")
 			{
 				localcmd("+right\n");
+				return FALSE;
+			}
+			if (getkeybind(scanx) == "+right")
+			{
+				localcmd("+moveright\n");
 				return FALSE;
 			}
 		case IE_KEYUP:
@@ -141,9 +151,19 @@ float(float evtype, float scanx, float chary, float devid) CSQC_InputEvent =
 				localcmd("-left\n");
 				return FALSE;
 			}
+			if (getkeybind(scanx) == "+left")
+			{
+				localcmd("-moveleft\n");
+				return FALSE;
+			}
 			if (getkeybind(scanx) == "+moveright")
 			{
 				localcmd("-right\n");
+				return FALSE;
+			}
+			if (getkeybind(scanx) == "+right")
+			{
+				localcmd("-moveright\n");
 				return FALSE;
 			}
 		return FALSE;

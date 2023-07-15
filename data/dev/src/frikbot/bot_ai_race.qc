@@ -123,19 +123,6 @@ void() bot_ai_race =
 
 	if (self.goalentity)
 	{
-		//
-		// Get out of being toppled / rolling
-		//
-
-		if (self.realang_z > -330 && self.realang_z < -30)
-		{
-			if (self.realang_z < -180)
-				self.keys = KEY_MOVELEFT;
-			else
-				self.keys = KEY_MOVERIGHT;
-			return;
-		}
-
 		local float r = vlen(self.origin - self.goalentity.origin) * 0.1; // Find distance to goalentity target
 
 		// Debug distance to goalentity
