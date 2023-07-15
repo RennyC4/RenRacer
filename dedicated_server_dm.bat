@@ -1,0 +1,1 @@
+RenRacer.exe -dedicated +deathmatch 1 +map dm1 +sv_public /ragewar

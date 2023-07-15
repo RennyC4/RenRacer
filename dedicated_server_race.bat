@@ -1,0 +1,1 @@
+RenRacer.exe -dedicated +map map1 +sv_public /renracer
