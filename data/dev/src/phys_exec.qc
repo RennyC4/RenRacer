@@ -76,11 +76,11 @@ void(entity targ, float in_mass, vector inforce, vector hitspot, vector normal) 
 			part.force_calcscale = closest_dist/part.force_calcdist;
 			//bprint ("part.force_calcscale: ", ftos(part.force_calcscale), "\n");
 
-			if (part.force_calcscale == -1 || part.force_calcscale == 0) // RennyC: Fix NaN?
-			{
-				part.force_calcscale = 0.01; // RennyC: Fix NaN?
+			//if (part.force_calcscale == -1 || part.force_calcscale == 0) // RennyC: Fix NaN?
+			//{
+				isnan(part.force_calcscale); // RennyC: Fix NaN?
 				bprint ("We hit a NaN issue\n");
-			}
+			//}
 			part = part.physobj_next;
 		}
 		targ = targ.physobj_particlelist;
