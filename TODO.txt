@@ -7,10 +7,12 @@ TODO: More DM stuff
 	- Combo moves + energy meter? (Done)
 		- Add: Shield (Done)
 	- Skyroom for DM1 (Done)
-	- CSQC Radar
+	- CSQC Radar (Done, thanks to Reki!)
 	- Figure out a safe way to have rockets push players (done)
 	- Remove screen tilt on death (done)
 	- Turbo lines should be removed on death/intermission (done)
+	- Add more homing to napalm
+	- NaN nonsense
 TODO: Teleporter brush
 TODO: Check out the breaking function from shpds delivery game
 TODO: Set direct angle on func_vehicle function

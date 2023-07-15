@@ -31,10 +31,14 @@ void(entity targ, vector vel) setvelocity =
 	//bprint ("Vel_Y: ", ftos(vel2_y), "\n");
 	//bprint ("Vel_Z: ", ftos(vel2_z), "\n");
 	targ.physobj_flags = targ.physobj_flags | PHFLAGS_FORCE;
-	if (vel2_x == -1 || vel2_x == 0) vel2_x = 0.1; // RennyC: Fix NaN issue?
-	if (vel2_y == -1 || vel2_y == 0)vel2_y = 0.1;  // RennyC: Fix NaN issue?
-	if (vel2_z == -1 || vel2_z == 0) vel2_z = 0.1; // RennyC: Fix NaN issue?
-	targ.velocity = vel;
+	if (isnan(vel2))
+		vel2 = '0.1 0.1 0.1';
+
+//	if (vel2_x == -1 || vel2_x == 0) vel2_x = 0.1; // RennyC: Fix NaN issue?
+//	if (vel2_y == -1 || vel2_y == 0)vel2_y = 0.1;  // RennyC: Fix NaN issue?
+//	if (vel2_z == -1 || vel2_z == 0) vel2_z = 0.1; // RennyC: Fix NaN issue?
+
+	targ.velocity = vel2;
 };
 
 void(entity targ, float in_mass, vector inforce, vector hitspot, vector normal) Phys_Force =
