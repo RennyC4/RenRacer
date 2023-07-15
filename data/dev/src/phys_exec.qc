@@ -25,6 +25,8 @@ float remap(float v, float ilow, float ihigh, float olow, float ohigh){
 
 void(entity targ, vector vel) setvelocity =
 {
+	return;
+
 	vector vel2 = vel;
 	
 	//bprint ("Vel_X: ", ftos(vel2_x), "\n");
