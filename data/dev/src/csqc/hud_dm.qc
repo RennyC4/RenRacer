@@ -14,7 +14,9 @@ void EntUpdate_RadarBlip(float is_new)
 	}
 	if (sendflags & 0x02)
 	{
-		self.colormap = readlong();
+		// FIXME (Reki July 14 2023): this should get resent with a `blip.SendFlags |= 0x02;` if/when the player's color changes
+		self.colormap = readbyte(); // just using this as a player index
+		self.colormod = stov(getplayerkeyvalue(self.colormap, INFOKEY_P_BOTTOMCOLOR_RGB)); // scrape the RGB bottom color from the player info
 	}
 	self.classname = "radarblip";
 }
@@ -24,22 +26,31 @@ void() DrawRadar =
 	vector radar_position = [(g_width / 1.15), (g_height / 32)];
 	vector radar_size = '75 75 0';
 	vector radar_centerpoint = radar_position + (radar_size / 2);
+	vector blip_size = '2 2';
 
 	// Draw radars view area
 	drawfill(radar_position, radar_size, '0 1 0', 0.25, DRAWFLAG_NORMAL); // draw radar
-	drawfill(radar_centerpoint, '2 2 0', '1 0 0', 0.5, DRAWFLAG_NORMAL); // draw centerdot (rotation point)
+	drawfill(radar_centerpoint - (blip_size / 2), blip_size, '1 0 0', 0.5, DRAWFLAG_NORMAL); // draw centerdot (rotation point)
+
+	vector view_org = getproperty(VF_ORIGIN);
+	float view_ang = deg2rad(view_angles_y + 90); // convert to radians because cos/sin are in radians not degrees
 
 	for(entity radarblip = find(world, classname, "radarblip"); radarblip; radarblip = find(radarblip, classname, "radarblip"))
 	{
-		vector view_org = getproperty(VF_ORIGIN);
-		float view_ang = deg2rad(getproperty(VF_ANGLES_Y)); // convert to radians because cos/sin are in radians not degrees
 		vector blip_origin = radarblip.origin - view_org;
 		vector translated_origin;
-		translated_origin_x = (blip_origin_x * cos(view_ang)) - (blip_origin_y * sin(view_ang));
-		translated_origin_y = (blip_origin_y * cos(view_ang)) + (blip_origin_x * sin(view_ang));
+		translated_origin_x = (-blip_origin_x * cos(view_ang)) + (blip_origin_y * -sin(view_ang));
+		translated_origin_y = (blip_origin_y * cos(view_ang)) + (-blip_origin_x * sin(view_ang));
 		translated_origin_z = 0;
 
-		drawfill(radar_centerpoint - translated_origin, '2 2 0', '1 1 1', 0.5, DRAWFLAG_NORMAL); // Draw other car blips
+		translated_origin /= 200; // each radar pixel is equal to 200 units
+		translated_origin += radar_centerpoint; // align to the center of the radar
+		translated_origin -= blip_size / 2; // we want the blip to be on the car's center
+
+		translated_origin_x = bound(radar_position_x, translated_origin_x, radar_position_x + radar_size_x - blip_size_x);
+		translated_origin_y = bound(radar_position_y, translated_origin_y, radar_position_y + radar_size_y - blip_size_y);
+
+		drawfill(translated_origin, blip_size, radarblip.colormod * 2, 0.7, DRAWFLAG_NORMAL); // Draw other car blips
 	}
 };
 

@@ -225,7 +225,7 @@ float SendEntity_RadarBlip(entity to, float sendflags) // in this, "to" is the c
 
 	if (sendflags & 0x02) // send color, you can replace this with colormod x y z or something
 	{
-		WriteLong(MSG_ENTITY, self.colormap);
+		WriteByte(MSG_ENTITY, num_for_edict(self.owner) - 1); // player index
 	}
 
 	return TRUE;
