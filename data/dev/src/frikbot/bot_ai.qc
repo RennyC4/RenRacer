@@ -331,7 +331,19 @@ void() BotAI =
 		bot_ai_race();
 	}
 	else
+	{
+		// am I dead? Fire randomly until I respawn
+		// health < 1 is used because fractional healths show up as 0 on normal player
+		// status bars, and the mod probably already compensated for that
+		if (self.health < 1 && !intermission_running)
+		{ 
+			self.button0 = floor(random() * 2);
+			self.button2 = 0;
+			self.keys = 0;
+			return;
+		}
 		bot_ai_fight();
+	}
 };
 
 //
@@ -339,22 +351,6 @@ void() BotAI =
 //
 
 /*
-
-	// am I dead? Fire randomly until I respawn
-	// health < 1 is used because fractional healths show up as 0 on normal player
-	// status bars, and the mod probably already compensated for that
-	if (self.health < 1)
-	{ 
-		self.button0 = floor(random() * 2);
-		self.button2 = 0;
-		self.keys = 0;
-		self.b_aiflags = 0;
-		ClearMyRoute();
-		self.target1 = self.target2 = self.target3 = self.target4 = self.enemy = world;
-		self.last_way = world;
-		return;
-	}
-
 	if (self.view_ofs == '0 0 0')
 		bot_start_topic(7);
 

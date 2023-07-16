@@ -54,6 +54,7 @@ entity() Bot_FindClosestItem =
 	return world;
 };
 
+.float startmatch;
 void() bot_ai_fight =
 {
 	// Get out of being toppled / rolling
@@ -82,7 +83,7 @@ void() bot_ai_fight =
 
 	if (self.enemy && self.enemy.health > 0 && self.enemy.invulnerable_finished < time)
 	{
-		if (visible(self.enemy))
+		if (visible(self.enemy) && self.enemy.cloak_finished < time)
 		{
 			if (infront(self.enemy, 0.75))
 			{

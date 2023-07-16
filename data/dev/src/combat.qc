@@ -779,7 +779,21 @@ void() CommandSpecials =
 	if (self.commandspcl_finished > time)
 		return;
 
+	//
+	// Cloak: Up, Up, Left
+	//
+	if (self.moveprog1 > 1 && self.moveprog3 > 0 && self.energy >= 50)
+	{
+		self.energy = self.energy - 50;
+		self.cloak_finished = time + 5;
+		sound (self, CHAN_BODY, "combat/cloak.wav", 1, ATTN_NORM);
+		sprint (self, "^2Command: ");
+		sprint (self, "^7Cloak\n");
+		self.commandspcl_finished = time + 5;
+		return;
+	}
 
+	//
 	//
 	// Shield: Up, Up, Right
 	//

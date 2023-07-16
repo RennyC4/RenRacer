@@ -155,6 +155,7 @@ void() worldspawn =
 	precache_sound ("combat/jump.wav");
 	precache_sound ("combat/landmine.wav");
 	precache_sound ("combat/shield.wav");
+	precache_sound ("combat/cloak.wav");
 
 	world_lights();
 	BotInit();  // FrikBot
@@ -236,12 +237,12 @@ void Think_RadarBlip()
 	if !(self.owner) // if we don't have an owner, we don't need to update since we won't be moving!
 		return;
 
-	setorigin(self, self.owner.origin);
+	if (self.cloak_finished < time)
+		setorigin(self, self.owner.origin);
 	self.SendFlags |= 0x01; // tell the SendEntity to update our coordinates on the client
 
 	self.think = Think_RadarBlip;
 	frameskip(0.01);
-	//self.nextthink = time + 0.1;
 }
 
 entity Spawn_RadarBlip(entity player)

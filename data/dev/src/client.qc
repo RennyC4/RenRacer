@@ -28,6 +28,8 @@ void() ClientConnect =
 
 void() ClientDisconnect =
 {
+	if (self.ishuman && human_players > 0)
+		human_players = human_players - 1;
 	if (gameover)
 		return;
 	if (self.observer)
@@ -408,7 +410,7 @@ void() PlayerPostThink =
 							sound(self, CHAN_AUTO, "combat/death4.wav", 1, ATTN_NORM);
 
 						Create2DExplosion(self.origin + v_up * 64, 10);
-						self.colormod = '0.1 0.1 0.1'; // car is cooked/black on death
+						self.colormod = '0.05 0.05 0.05'; // car is cooked/black on death
 						self.onfire_finished = time + 9999; // cars on fire
 					}
 					if (self.deathcount == 3 || self.deathcount == 6 || self.deathcount == 9 || self.deathcount == 12)
@@ -418,7 +420,7 @@ void() PlayerPostThink =
 					else
 					{
 						centerprint(self, "/P^1^b!!! YOU'RE DEAD !!!^7^b\n\n\nPress [^1^bFire^b^7] to Respawn\n");
-						if (self.button0 || self.button3 || self.button4 || !self.ishuman)
+						if (self.button0 || self.button3 || self.button4)
 							RespawnPlayer();
 					}
 					self.deathcount_finished = time + 0.1;
@@ -427,8 +429,18 @@ void() PlayerPostThink =
 		}
 	}
 
-	if (self.alpha < 1) // Smooth restore player transparency
-		self.alpha = self.alpha + 0.4 * frametime;
+	if (self.cloak_finished < time)
+	{
+		if (self.alpha < 1) // Smooth restore player transparency
+			self.alpha = self.alpha + 0.4 * frametime;
+	}
+	else // cloak logic
+	{
+		if (self.alpha > 0.3)
+			self.alpha = self.alpha - 0.75 * frametime;
+		else
+			self.alpha = 0.3; // cloak transparency
+	}
 
 	//
 	// Get liquid level - RennyC

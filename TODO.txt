@@ -1,6 +1,7 @@
 TODO: More DM stuff
 	- Add remote bombs, richochet, freeze blast
-	- Enemies health+name should display under radar
+	- Current enemy health+name should display under radar
+	- Add cloak command (Done)
 	- Cars should be on fire on death automatically (easy / done)
 	- A proper map to fight on (done)
 	- Bot AI (starting / started / needs work but ok for now)
@@ -14,7 +15,6 @@ TODO: More DM stuff
 	- Turbo lines should be removed on death/intermission (done)
 	- Add more homing to napalm (Done 50% more)
 	- NaN nonsense (Fixed)
-	- Dedicated Server: With zero players, have bots start the match instead (?)
 TODO: Teleporter brush
 TODO: Check out the breaking function from shpds delivery game
 TODO: Set direct angle on func_vehicle function
