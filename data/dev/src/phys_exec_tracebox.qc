@@ -382,7 +382,15 @@ void() Phys_CheckOnGround =
 			part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
 			part.dimension_hit = part.dimension_solid = 0; // RennyC: Disable player collisions
 			//traceline(part.origin, part.origin + spring, FALSE, part);
-			tracebox(part.origin, part.mins/2, part.maxs/2, part.origin + spring, FALSE, part);
+
+			// RennyC: Tracebox fix for floating off the ground
+			part.mins_z = -6;
+			//bprint(ftos(part.mins_z), "\n");
+			spring_z = -5;
+			//bprint(ftos(spring_z), "\n");
+			//
+			
+			tracebox(part.origin, part.mins, part.maxs, part.origin + spring, FALSE, part);
 			//print(ftos(trace_fraction), "\n");
 			if (trace_fraction < 1)
 				part.physobj_flags = part.physobj_flags | PHFLAGS_SPRING_TOUCH;
