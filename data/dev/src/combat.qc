@@ -1028,8 +1028,10 @@ void(float type, float rear) CarAttack =
 					self.ammo_firerocket = self.ammo_firerocket - 1;
 				}
 				else
+				{
 					sprint(self, "Fire Rocket bay empty!\n");
-					// TODO: Insert empty chamber sound
+					stuffcmd (self, "play combat/empty.wav\n");
+				}
 				self.spcl_finished = time + 1;
 			}
 			if (self.weapon == WEP_HROCKET)
@@ -1043,8 +1045,10 @@ void(float type, float rear) CarAttack =
 					self.ammo_homingrocket = self.ammo_homingrocket - 1;
 				}
 				else
+				{
 					sprint(self, "Homing Rocket bay empty!\n");
-					// TODO: Insert empty chamber sound
+					stuffcmd (self, "play combat/empty.wav\n");
+				}
 				self.spcl_finished = time + 1;
 			}
 			if (self.weapon == WEP_PROCKET)
@@ -1058,8 +1062,10 @@ void(float type, float rear) CarAttack =
 					self.ammo_powerrocket = self.ammo_powerrocket - 1;
 				}
 				else
+				{
 					sprint(self, "Power Rocket bay empty!\n");
-					// TODO: Insert empty chamber sound
+					stuffcmd (self, "play combat/empty.wav\n");
+				}
 				self.spcl_finished = time + 1;
 			}
 			if (self.weapon == WEP_NAPALM)
@@ -1079,8 +1085,10 @@ void(float type, float rear) CarAttack =
 					self.ammo_napalm = self.ammo_napalm - 1;
 				}
 				else
+				{
 					sprint(self, "Napalm fuel empty!\n");
-					// TODO: Insert empty chamber sound
+					stuffcmd (self, "play combat/empty.wav\n");
+				}
 				self.spcl_finished = time + 2;
 			}
 		}
