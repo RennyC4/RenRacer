@@ -460,6 +460,9 @@ float total_checkpoints;
 .float cloak_finished;
 float intermission_running;
 float intermission_exittime;
+.string enemy_displayname;
+.float enemy_displayhealth;
+.float enemy_displaymaxhealth;
 string nextmap;
 
 // Key flags
@@ -543,8 +546,11 @@ var float PART_MGUNSMOKE;
 #define STAT_AMMO_NAPALM 45
 #define STAT_WEAPON 46
 #define STAT_ENERGY 47
+#define STAT_ENEMYNAME 48
+#define STAT_ENEMYHEALTH 49
+#define STAT_ENEMYMAXHEALTH 50
 
-#define STAT_INTERMISSION 50
+#define STAT_INTERMISSION 75
 
 #define isnan(n) (((int)(__variant)n)&0x7f800000i == 0x7f800000i)
 #define deg2rad(n) ((n)*(M_PI/180))

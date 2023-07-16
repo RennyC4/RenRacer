@@ -2634,8 +2634,11 @@ float RACE_FINISHED = 4;
 #define STAT_AMMO_NAPALM 45
 #define STAT_WEAPON 46
 #define STAT_ENERGY 47
+#define STAT_ENEMYNAME 48
+#define STAT_ENEMYHEALTH 49
+#define STAT_ENEMYMAXHEALTH 50
 
-#define STAT_INTERMISSION 50
+#define STAT_INTERMISSION 75
 
 #define deg2rad(n) ((n)*(M_PI/180))
 #define rad2deg(n) ((n)*(180/M_PI))

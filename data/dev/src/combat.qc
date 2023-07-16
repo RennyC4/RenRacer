@@ -143,6 +143,15 @@ void(entity targ, entity attacker, float damage, string attackerclassname) DoDam
 		else
 			targ.health = targ.health - ceil(damage / 2);
 		targ.colormod_x = 2;
+
+		// Send stats to CSQC
+		attacker.enemy_displayname = targ.netname;
+		attacker.enemy_displayhealth = targ.health;
+		attacker.enemy_displaymaxhealth = targ.max_health;
+
+		targ.enemy_displayname = attacker.netname;
+		targ.enemy_displayhealth = attacker.health;
+		targ.enemy_displaymaxhealth = attacker.max_health;
 	}
 
 	if (targ.health <= 0)

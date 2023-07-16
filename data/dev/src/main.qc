@@ -39,6 +39,10 @@ void() CSEv_GrabCSQCValues =
 	globalstat(STAT_INTERMISSION, EV_FLOAT, "intermission_running");
 	clientstat(STAT_WEAPON, EV_FLOAT, weapon);
 	clientstat(STAT_ENERGY, EV_FLOAT, energy);
+	clientstat(STAT_ENEMYNAME, EV_STRING, enemy_displayname);
+	clientstat(STAT_ENEMYHEALTH, EV_FLOAT, enemy_displayhealth);
+	clientstat(STAT_ENEMYMAXHEALTH, EV_FLOAT, enemy_displaymaxhealth);
+
 };
 
 void() world_lights =
@@ -236,9 +240,10 @@ void Think_RadarBlip()
 {
 	if !(self.owner) // if we don't have an owner, we don't need to update since we won't be moving!
 		return;
+	if (self.owner.cloak_finished > time)
+		return;
 
-	if (self.cloak_finished < time)
-		setorigin(self, self.owner.origin);
+	setorigin(self, self.owner.origin);
 	self.SendFlags |= 0x01; // tell the SendEntity to update our coordinates on the client
 
 	self.think = Think_RadarBlip;

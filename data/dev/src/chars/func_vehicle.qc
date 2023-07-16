@@ -71,7 +71,8 @@ void(entity e, float strength) play_skidding =
 	if (time < sfx_skidding)
 		return;
 
-	sound(e, CHAN_AUTO, "skidding.wav", 0.025 + min(0.5, strength * 0.8), 0, 95 + strength * 60);
+	//sound(e, CHAN_AUTO, "skidding.wav", 0.025 + min(0.5, strength * 0.8), 0, 95 + strength * 60);
+	sound(e, CHAN_AUTO, "skidding.wav", 0.025 + min(0.5, strength * 0.8), 0, 95 + strength * 7);
 	sfx_skidding = time + random(0, 2);
 }
 //

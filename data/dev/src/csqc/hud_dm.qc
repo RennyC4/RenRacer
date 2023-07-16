@@ -56,13 +56,40 @@ void() DrawRadar =
 
 void() HUD_Deathmatch =
 {
+	vector pos;
+
 	DrawRadar();
-	
+
+	//
+	// Draw Enemy Health+Name Stats
+	//
+
+	pos = [(g_width / 1.15), (g_height / 32)];
+	pos_y = pos_y + 80;
+	float health = getstatf(STAT_ENEMYHEALTH);
+	float maxhealth = getstatf(STAT_ENEMYMAXHEALTH);
+	vector hbar_size = '75 6 0';
+	vector hbar_border_size = hbar_size + '6 6 0';
+	vector hbar_border_pos = pos - '3 3 0';
+	hbar_size_x = (health / maxhealth) * hbar_size_x;
+
+	if (health)
+	{
+		drawfill(hbar_border_pos, hbar_border_size, '1 0 0', 0.25, DRAWFLAG_NORMAL);
+		drawfill(pos, hbar_size, '1 0 0', 0.75, DRAWFLAG_NORMAL);
+
+		pos = [(g_width / 1.15), (g_height / 32)];
+		string name = getstats(STAT_ENEMYNAME);
+
+		drawstring (pos + '0 81', name, '8 8 0', '0 0 0', 1, DRAWFLAG_NORMAL); // text shadow
+		drawstring (pos + '0 80', name, '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+	}
+
 	//
 	// Draw Health
 	//
 
-	vector pos = [(g_width - stringwidth("", TRUE, '18 18 0'))/12-28, (g_height - 36)];
+	pos = [(g_width - stringwidth("", TRUE, '18 18 0'))/12-28, (g_height - 36)];
 
 	float h = getstatf(STAT_HEALTH);
 	float hmax = getstatf(STAT_MAXHEALTH);

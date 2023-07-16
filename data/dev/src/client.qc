@@ -276,6 +276,9 @@ void() RespawnPlayer =
 	self.igniter = world;
 	self.onfire_finished = time;
 	self.energy = 100;
+	self.enemy_displayname = "";
+	self.enemy_displayhealth = 0;
+	self.enemy_displaymaxhealth = 0;
 	car_teleport(self.spawn_loc,FALSE);
 	self.invulnerable_finished = time + 5; // disallow damage / firing
 	centerprint(self, "");
