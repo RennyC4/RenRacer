@@ -386,10 +386,10 @@ void() Phys_CheckOnGround =
 			// RennyC: Tracebox fix for floating off the ground
 			part.mins_z = -6;
 			//bprint(ftos(part.mins_z), "\n");
-			spring_z = -5;
+			spring_z = -8; // was -5
 			//bprint(ftos(spring_z), "\n");
 			//
-			
+
 			tracebox(part.origin, part.mins, part.maxs, part.origin + spring, FALSE, part);
 			//print(ftos(trace_fraction), "\n");
 			if (trace_fraction < 1)
