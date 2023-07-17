@@ -458,16 +458,23 @@ void() PlayerPostThink =
 	else
 		self.waterlevel = 0;
 
-	if (self.waterlevel > 0 && self.health > 0 || self.invulnerable_finished > time)
+	// EF_BRIGHTFIELD effects handler
+	if (!deathmatch)
 	{
-		if (self.onfire_finished > time)
-			self.onfire_finished = time; // water removes napalm/fire
-		if (!deathmatch)
+		if (self.waterlevel > 0)
 			self.effects |= EF_BRIGHTFIELD;
+		else
+			self.effects &= ~(EF_BRIGHTFIELD);
 	}
 	else
 	{
-		if (!deathmatch)
+		if (self.invulnerable_finished > time)
+		{
+			if (self.onfire_finished > time && self.waterlevel > 0)
+				self.onfire_finished = time; // water removes napalm/fire
+			self.effects |= EF_BRIGHTFIELD;
+		}
+		else
 			self.effects &= ~(EF_BRIGHTFIELD);
 	}
 

@@ -25,13 +25,8 @@ float remap(float v, float ilow, float ihigh, float olow, float ohigh){
 
 void(entity targ, vector vel) setvelocity =
 {
-	vector vel2 = vel;
-	
 	targ.physobj_flags = targ.physobj_flags | PHFLAGS_FORCE;
-	if (isnan(vel2))
-		vel2 = '0.1 0.1 0.1';
-
-	targ.velocity = vel2;
+	targ.velocity = vel;
 };
 
 void(entity targ, float in_mass, vector inforce, vector hitspot, vector normal) Phys_Force =
@@ -49,8 +44,6 @@ void(entity targ, float in_mass, vector inforce, vector hitspot, vector normal) 
 		targ = targ.realowner;
 
 	t_mass = min(1, in_mass/targ.physobj_mass);
-	//bprint ("t_mass: ", ftos(t_mass), "\n");
-
 	targ.physobj_flags = targ.physobj_flags | PHFLAGS_FORCE;
 	targ.physobj_flags = targ.physobj_flags - (targ.physobj_flags & PHFLAGS_RESTING);
 	targ.flags = targ.flags - (targ.flags & FL_ONGROUND);
@@ -69,12 +62,6 @@ void(entity targ, float in_mass, vector inforce, vector hitspot, vector normal) 
 		while (part)
 		{
 			part.force_calcscale = closest_dist/part.force_calcdist;
-			//bprint ("part.force_calcscale: ", ftos(part.force_calcscale), "\n");
-
-			float f = isnan(part.force_calcscale); // RennyC: Fix NaN?
-			if (f)
-				part.force_calcscale = 0.1;
-
 			part = part.physobj_next;
 		}
 		targ = targ.physobj_particlelist;
@@ -129,8 +116,6 @@ void(entity targ) Phys_CheckStatus =
 			part.physobj_flags = part.physobj_flags - (part.physobj_flags & PHFLAGS_RESTING);
 		}
 
-		part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
-		part.dimension_hit = part.dimension_solid = 0; // RennyC: Disable player collisions
 		//traceline(part.origin, part.origin, TRUE, part);
 		tracebox(part.origin, part.mins, part.maxs, part.origin, TRUE, part);
 		if (trace_startsolid) // we got jammed by a hitmodel or are generally stuck
@@ -154,12 +139,8 @@ void(entity targ) Phys_CheckStatus =
 				if (stick.physobj_p1 == part)
 				{
 					if (stick.physobj_p2.relative_size >= stick.physobj_p1.relative_size)
-					{
-						stick.physobj_p2.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
-						stick.dimension_hit = stick.dimension_solid = 0; // RennyC: Disable player collisions
 						//traceline(stick.physobj_p2.origin, stick.physobj_p1.origin, FALSE, stick.physobj_p2);
 						tracebox(stick.physobj_p2.origin, stick.physobj_p2.mins, stick.physobj_p2.maxs, stick.physobj_p1.origin, FALSE, stick.physobj_p2);
-					}
 					if (trace_fraction < 1)
 					{
 						dot = normalize(stick.physobj_p1.origin-stick.physobj_p2.origin)*trace_plane_normal*-1;
@@ -175,12 +156,8 @@ void(entity targ) Phys_CheckStatus =
 				else if (stick.physobj_p2 == part)
 				{
 					if (stick.physobj_p1.relative_size >= stick.physobj_p2.relative_size)
-					{
-						stick.physobj_p1.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
-						stick.dimension_hit = stick.dimension_solid = 0; // RennyC: Disable player collisions
 						//traceline(stick.physobj_p1.origin, stick.physobj_p2.origin, FALSE, stick.physobj_p1);
 						tracebox(stick.physobj_p1.origin, stick.physobj_p1.mins, stick.physobj_p1.maxs, stick.physobj_p2.origin, FALSE, stick.physobj_p1);
-					}
 					if (trace_fraction < 1)
 					{
 						dot = normalize(stick.physobj_p2.origin-stick.physobj_p1.origin)*trace_plane_normal*-1;
@@ -246,15 +223,13 @@ void(float fscale, float ftime, float sv_gravity) Phys_Acceleration =
 	part = self.physobj_particlelist;
 	while(part)
 	{
-		part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
-		part.dimension_hit = part.dimension_solid = 0; // RennyC: Disable player collisions
 		//traceline(part.origin, part.origin, FALSE, part);
 		tracebox(part.origin, part.mins, part.maxs, part.origin, FALSE, part);
-		// RennyC: Disable water physics
-		//if (trace_inwater)
-		//	part.velocity_z = part.velocity_z + sv_gravity*part.physobj_buoyancy*ftime*fscale; // Buoyancy
-		//else
-		//
+		/*
+		if (trace_inwater)
+			part.velocity_z = part.velocity_z + sv_gravity*part.physobj_buoyancy*ftime*fscale; // Buoyancy
+		else
+		*/
 			part.velocity_z = part.velocity_z - sv_gravity*ftime*fscale; // Gravity
 		if (part.flags & FL_ONGROUND && part.physobj_flags & PHFLAGS_SPRING_TOUCH) {
 			spring = -part.lmat_up;
@@ -282,18 +257,13 @@ void(float fscale, float ftime, float sv_gravity) Phys_Acceleration =
 
 			float p1_mult = p2.physobj_floor_frac - p1.physobj_floor_frac;
 			float p2_mult = p1.physobj_floor_frac - p2.physobj_floor_frac;
-
-			local float stabilizer = stick.owner.driving.car_stabilizer; // RennyC
+			
 			if (p1_mult < 0)
-			{
-				p1.physobj_spring_mult = remap(p1_mult + 1, 0, 1, stabilizer, 1); // RennyC
-				//p1.physobj_spring_mult = remap(p1_mult + 1, 0, 1, -0.5, 1); // Original value
-			}
+				p1.physobj_spring_mult = remap(p1_mult + 1, 0, 1, -0.5, 1);
 			else
 				p1.physobj_spring_mult = 1;
 			if (p2_mult < 0)
-				p2.physobj_spring_mult = remap(p2_mult + 1, 0, 1, stabilizer, 1); // RennyC
-				//p2.physobj_spring_mult = remap(p2_mult + 1, 0, 1, -0.5, 1); // Original value
+				p2.physobj_spring_mult = remap(p2_mult + 1, 0, 1, -0.5, 1);
 			else
 				p2.physobj_spring_mult = 1;
 		}
@@ -372,23 +342,17 @@ void() Phys_CheckOnGround =
 	part = self.physobj_particlelist;
 	while (part)
 	{
-		part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
-		part.dimension_hit = part.dimension_solid = 0; // RennyC: Disable player collisions
 		//traceline(part.origin, part.origin + '0 0 -1', FALSE, part);
 		tracebox(part.origin, part.mins, part.maxs, part.origin + '0 0 -1', FALSE, part);
 		if (part.physobj_spring_length) // check for springs
 		{
 			spring = -part.lmat_up * part.physobj_spring_length;
-			part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
-			part.dimension_hit = part.dimension_solid = 0; // RennyC: Disable player collisions
 			//traceline(part.origin, part.origin + spring, FALSE, part);
+			//Traceline Spring_Z = -12
+			//part.mins_z = -14 normally
 
-			// RennyC: Tracebox fix for floating off the ground
-			part.mins_z = -6;
-			//bprint(ftos(part.mins_z), "\n");
-			spring_z = -8; // was -5
-			//bprint(ftos(spring_z), "\n");
-			//
+			part.mins_z = -7;
+			spring_z = -6;
 
 			tracebox(part.origin, part.mins, part.maxs, part.origin + spring, FALSE, part);
 			//print(ftos(trace_fraction), "\n");
@@ -461,8 +425,6 @@ void(float ftime) Phys_Deceleration =
 				part.velocity = part.velocity - part.lmat_up*vlen(part.velocity)*(normalize(part.velocity)*part.lmat_up)*part.physobj_friction_ground_z*2*ftime;//(1+dot)*ftime;
 			//print(ftos(vlen(part.lmat_up*vlen(part.velocity)*(normalize(part.velocity)*part.lmat_up)*part.physobj_friction_ground_z*(1+dot)*ftime)), "\n");
 		}
-		part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
-		part.dimension_hit = part.dimension_solid = 0; // RennyC: Disable player collisions
 		//traceline(part.origin, part.origin, TRUE, part);
 		tracebox(part.origin, part.mins, part.maxs, part.origin, TRUE, part);
 		// Water friction
@@ -537,8 +499,6 @@ void(float ftime) Phys_Move =
 		stuck = FALSE;
 		t = ftime;
 		test_org = part.origin;
-		part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
-		part.dimension_hit = part.dimension_solid = 0; // RennyC: Disable player collisions
 		while (bump < 24)
 		{
 			// let's test if we're stuck first
@@ -565,8 +525,6 @@ void(float ftime) Phys_Move =
 				else
 					test_org = part.origin;
 			}
-			part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
-			part.dimension_hit = part.dimension_solid = 0; // RennyC: Disable player collisions
 			//traceline(test_org, test_org + part.velocity*t, part.physobj_movetype, part);
 			tracebox(test_org, part.mins, part.maxs, test_org + part.velocity*t, part.physobj_movetype, part);
 			save_fraction = trace_fraction;
@@ -750,8 +708,6 @@ float() Phys_CheckCollisionDot =
 	part = self.physobj_particlelist;
 	while(part)
 	{
-		part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
-		part.dimension_hit = part.dimension_solid = 0; // RennyC: Disable player collisions
 		//traceline(part.origin, part.origin + part.velocity*frametime, part.physobj_movetype, part);
 		tracebox(part.origin, part.mins, part.maxs, part.origin + part.velocity*frametime, part.physobj_movetype, part);
 		dot = trace_plane_normal*normalize(part.velocity)*-1;
@@ -780,9 +736,6 @@ void() Phys_ObjectThink =
 
 	// Run every frame
 	self.nextthink = time;
-	
-	self.dimension_solid = 0; // RennyC
-	self.dimension_hit = 0; // RennyC
 
 	local float sv_gravity = cvar("sv_gravity");
 
@@ -1110,7 +1063,7 @@ entity(vector org, entity e, entity obj) Phys_InitHitmodel =
 		e.physobj_mass = obj.physobj_mass;
 	e.takedamage = DAMAGE_AIM;
 	e.solid = SOLID_BSP;
-	e.movetype = MOVETYPE_PUSH; // RennyC: Disable this to prevent car -> car collisions going haywire
+	e.movetype = MOVETYPE_PUSH;
 	e.health = 99999999;
 	//e.effects = EF_NOMODELFLAGS;
 	e.model = ""; // better way to nosend than EF_NODRAW
@@ -1203,9 +1156,7 @@ entity(entity basepart) Phys_ObjectSpawn =
 	e.physobj_mass = basepart.physobj_mass;
 	e.physobj_impactevent = basepart.physobj_impactevent;
 	e.think = Phys_ObjectThink;
-	e.nextthink = time; // needs more leeway than a normal think tick otherwise there be errors for some reason when spawning from map entity
-						// RennyC: Doesn't happen in RenRacer, reducing the time makes spawning smoother
-	//e.nextthink = time + 0.2; // needs more leeway than a normal think tick otherwise there be errors for some reason when spawning from map entity
+	e.nextthink = time + 0.2; // needs more leeway than a normal think tick otherwise there be errors for some reason when spawning from map entity
 	//e.contentstransition = SUB_Null;
 	e.solid = SOLID_TRIGGER;
 	return e;
