@@ -463,6 +463,7 @@ float intermission_exittime;
 .string enemy_displayname;
 .float enemy_displayhealth;
 .float enemy_displaymaxhealth;
+.vector oldvelocity;
 string nextmap;
 
 // Key flags
@@ -491,9 +492,10 @@ float WEP_ROCKET = 0;
 float WEP_HROCKET = 1;
 float WEP_PROCKET = 2;
 float WEP_NAPALM = 4;
+float WEP_RICOCHET = 8;
 
 // Ammo
-.float ammo_firerocket, ammo_homingrocket, ammo_powerrocket, ammo_napalm;
+.float ammo_firerocket, ammo_homingrocket, ammo_powerrocket, ammo_napalm, ammo_rico;
 
 // Particle defs
 var float PART_DIRT;
@@ -549,6 +551,7 @@ var float PART_MGUNSMOKE;
 #define STAT_ENEMYNAME 48
 #define STAT_ENEMYHEALTH 49
 #define STAT_ENEMYMAXHEALTH 50
+#define STAT_AMMO_RICOCHET 51
 
 #define STAT_INTERMISSION 75
 

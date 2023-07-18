@@ -2,6 +2,7 @@ float WEP_ROCKET = 0;
 float WEP_HROCKET = 1;
 float WEP_PROCKET = 2;
 float WEP_NAPALM = 4;
+float WEP_RICOCHET = 8;
 
 void EntUpdate_RadarBlip(float is_new)
 {
@@ -191,7 +192,7 @@ void() HUD_Deathmatch =
 	drawstring (pos - '-13 10', printammo, '8 8', '1 1 1', 1, DRAWFLAG_NORMAL);
 
 	// Draw weapon select #
-	drawstring (pos - '-2 -6', "1", '6 6', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
+	drawstring (pos - '-2 -6', "3", '6 6', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
 	drawstring (pos - '-1 -5', "^13", '6 6', '1 1 1', 1, DRAWFLAG_NORMAL);
 
 	//
@@ -212,6 +213,27 @@ void() HUD_Deathmatch =
 	drawstring (pos - '-13 10', printammo, '8 8', '1 1 1', 1, DRAWFLAG_NORMAL);
 
 	// Draw weapon select #
-	drawstring (pos - '-2 -6', "1", '6 6', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
+	drawstring (pos - '-2 -6', "4", '6 6', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
 	drawstring (pos - '-1 -5', "^14", '6 6', '1 1 1', 1, DRAWFLAG_NORMAL);
+	
+	//
+	// Richochet Bomb information on HUD
+	//
+
+	pos = [(g_width - stringwidth("", TRUE, '32 16 0'))/2.125, (g_height)/1.05];
+	if (wep == WEP_RICOCHET)
+		drawfill(pos, '33 20 0', '1 0 0', 0.3, DRAWFLAG_NORMAL);
+
+	drawpic (pos + '1 1', "progs/hud/hud_rico.png", '32 16', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
+	drawpic (pos, "progs/hud/hud_rico.png", '32 16', '1 1 1', 1, DRAWFLAG_NORMAL);
+
+	float ricochet_ammo = getstatf(STAT_AMMO_RICOCHET);
+	printammo = ftos(ricochet_ammo);
+
+	drawstring (pos - '-14 9', printammo, '8 8', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
+	drawstring (pos - '-13 10', printammo, '8 8', '1 1 1', 1, DRAWFLAG_NORMAL);
+
+	// Draw weapon select #
+	drawstring (pos - '-2 -6', "5", '6 6', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
+	drawstring (pos - '-1 -5', "^15", '6 6', '1 1 1', 1, DRAWFLAG_NORMAL);
 };

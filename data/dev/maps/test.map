@@ -201,3 +201,9 @@
 "classname" "dm_spawnpoint"
 "origin" "-296 72 88"
 }
+// entity 12
+{
+"classname" "item_ricochet"
+"origin" "-272 -304 32"
+"angle" "90"
+}

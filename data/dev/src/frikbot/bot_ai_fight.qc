@@ -57,22 +57,12 @@ entity() Bot_FindClosestItem =
 .float startmatch;
 void() bot_ai_fight =
 {
-	// Get out of being toppled / rolling
-	if (self.realang_z > -330 && self.realang_z < -30)
-	{
-		if (self.realang_z < -180)
-			self.keys = KEY_MOVELEFT;
-		else
-			self.keys = KEY_MOVERIGHT;
-		return;
-	}
-
 	// Back up for randomly for a second, hit a wall/obstacle
 	if ((self.keys == KEY_MOVEFORWARD || (self.button0 && self.turbo_fuel > 0)) && self.realspeed <= 3)
 		self.bot_backup_finished = time + 0.3 + random()*0.6;
 
 	// Out of ammo, go search for some
-	if (self.ammo_firerocket < 1 && self.ammo_homingrocket < 1 && self.ammo_powerrocket < 1 && self.ammo_napalm < 1)
+	if (self.ammo_firerocket < 1 && self.ammo_homingrocket < 1 && self.ammo_powerrocket < 1 && self.ammo_napalm < 1 && self.ammo_rico < 1)
 	{
 		self.goalentity = Bot_FindClosestItem();
 		self.bot_huntitem_finished = time + 3;
@@ -105,6 +95,11 @@ void() bot_ai_fight =
 				if (self.ammo_napalm > 0)
 				{
 					self.weapon = WEP_NAPALM;
+					self.button4 = TRUE;
+				}
+				if (self.ammo_rico > 0)
+				{
+					self.weapon = WEP_RICOCHET;
 					self.button4 = TRUE;
 				}
 				self.button3 = TRUE; // Fire machine guns

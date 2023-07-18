@@ -42,7 +42,7 @@ void() CSEv_GrabCSQCValues =
 	clientstat(STAT_ENEMYNAME, EV_STRING, enemy_displayname);
 	clientstat(STAT_ENEMYHEALTH, EV_FLOAT, enemy_displayhealth);
 	clientstat(STAT_ENEMYMAXHEALTH, EV_FLOAT, enemy_displaymaxhealth);
-
+	clientstat(STAT_AMMO_RICOCHET, EV_FLOAT, ammo_rico);
 };
 
 void() world_lights =
@@ -88,6 +88,7 @@ void() worldspawn =
 	precache_model("progs/xplode1.spr");
 	precache_model("progs/landmine.spr");
 	precache_model("progs/shield.mdl");
+	precache_model("progs/ricochet.mdl");
 
 	//
 	// func_vehicle - start
@@ -160,6 +161,7 @@ void() worldspawn =
 	precache_sound ("combat/landmine.wav");
 	precache_sound ("combat/shield.wav");
 	precache_sound ("combat/cloak.wav");
+	precache_sound ("combat/ricochet.wav");
 
 	world_lights();
 	BotInit();  // FrikBot

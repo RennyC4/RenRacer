@@ -50,6 +50,11 @@ void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 	{
 		bprint(attacker.netname, "'s landmine tripped ");
 		bprint(targ.netname, " into the afterlife\n");
+	}
+	if (attackerclassname == "rico")
+	{
+		bprint(attacker.netname, "'s richochet bomb blew ");
+		bprint(targ.netname, " into twisted metal\n");
 	}	
 };
 
@@ -411,24 +416,21 @@ void() Rocket_Touch =
 		DoDamage(other.owner.driving, self.owner, 7, self.classname); // fire
 
 		other.owner.driving.forcejump_strength = 250;
-		if (other.owner.driving.health > 7) // Possible fix for NaN on jump physics being called twice when target killed
-			other.owner.driving.forcejump = TRUE;
+		other.owner.driving.forcejump = TRUE;
 	}
 	if (self.classname == "rocket2")
 	{
 		DoDamage(other.owner.driving, self.owner, 10, self.classname); // homing
 
 		other.owner.driving.forcejump_strength = 350;
-		if (other.owner.driving.health > 10) // Possible fix for NaN on jump physics being called twice when target killed
-			other.owner.driving.forcejump = TRUE;
+		other.owner.driving.forcejump = TRUE;
 	}
 	if (self.classname == "rocket3")
 	{
 		DoDamage(other.owner.driving, self.owner, 15, self.classname); // power
 
 		other.owner.driving.forcejump_strength = 450;
-		if (other.owner.driving.health > 15) // Possible fix for NaN on jump physics being called twice when target killed
-			other.owner.driving.forcejump = TRUE;
+		other.owner.driving.forcejump = TRUE;
 	}
 
 	CreateExplosion(self.origin);
@@ -672,6 +674,106 @@ void(float rear) Fire_Napalm =
 };
 
 //
+// Ricochet Bomb
+//
+
+void() Rico_Think =
+{
+	if (self.cnt > 9 || self.removeme_finished < time) // Explode on 10th bounce, or removal time hit
+	{
+		CreateExplosion(self.origin + v_up * 16);
+		Create2DExplosion(self.origin + v_up * 16, 4);
+		remove(self);
+		return;
+	}
+
+	makevectors_mdl(self.angles);
+
+	// Wall bounce
+	traceline(self.origin, (self.origin + self.velocity * frametime), FALSE, self);
+	if (trace_fraction < 1)
+	{
+		setorigin(self, trace_endpos);
+		vector normal = trace_plane_normal;
+		vector reflection = self.velocity - 2 * DotProduct(self.velocity, normal) * normal;
+		self.velocity = reflection;
+		self.cnt = self.cnt + 1; // Add damage
+	}
+
+	// Keep em slightly off the ground
+	traceline (self.origin, self.origin - v_up * 16, TRUE, self);
+	if (trace_fraction)
+	{
+		setorigin (self, trace_endpos + v_up * 3);
+		self.velocity_z = 0;
+	}
+
+	// Damage
+	for (entity targ = world;(targ = find(targ, classname, "player"));)
+	{
+		if (vlen(targ.origin - self.origin) <= 50)
+		{
+			float damage = self.cnt * 2;
+			DoDamage(targ, self.owner, 7+damage, self.classname); // base damage 7, bounce x 2, total: 27
+			if (self.cnt > 0)
+			{
+				targ.forcejump_strength = 750;
+				targ.forcejump = TRUE;
+			}
+			CreateExplosion(self.origin + v_up * 16);
+			Create2DExplosion(self.origin + v_up * 16, 4);
+			remove(self);
+			return;
+		}
+	}
+
+	frameskip(0.01);
+};
+
+void(float rear) Fire_Ricochet =
+{
+	local entity rico = spawn ();
+
+	makevectors (self.realang);
+	
+	if (rear)
+	{
+		vector v = self.realang;
+		v_y = v_y + 180;
+		makevectors(v);
+	}
+
+	rico.movetype = MOVETYPE_FLYMISSILE;
+	rico.owner = self;
+	rico.solid = SOLID_TRIGGER;
+	rico.classname = "rico";
+	rico.flags = FL_ITEM; // enlarge hitbox
+	rico.netname = "projectile";
+
+	rico.velocity = aim(self, 750);
+	rico.velocity = rico.velocity * 750;
+
+	rico.velocity_x = rico.velocity_x + self.driving.velocity_x;
+	rico.velocity_y = rico.velocity_y + self.driving.velocity_y;
+	rico.angles = vectoangles(rico.velocity);
+
+	// Test
+	rico.dimension_solid = 0;
+	rico.dimension_hit = 1;
+	//
+
+	setmodel (rico, "progs/ricochet.mdl");
+	setsize (rico, '0 0 0', '0 0 0');
+	setorigin (rico, self.origin + v_forward * (48 + self.realspeed));
+
+	sound (self, CHAN_WEAPON, "combat/ricochet.wav", 1, ATTN_NORM);
+
+	rico.removeme_finished = time + 30;
+	rico.think = Rico_Think;
+	rico.nextthink = time;
+};
+
+//
 // Landmine
 //
 
@@ -687,8 +789,7 @@ void() Landmine_Touch =
 	DoDamage(other.owner.driving, self.owner, 15, self.classname);
 
 	other.owner.driving.forcejump_strength = 450;
-	if (other.owner.driving.health > 15) // Possible fix for NaN on jump physics being called twice when target killed
-		other.owner.driving.forcejump = TRUE;
+	other.owner.driving.forcejump = TRUE;
 
 	remove(self);
 };
@@ -909,22 +1010,27 @@ void() ChangeWeapon =
 	if (self.impulse == 1)
 	{
 		self.weapon = WEP_ROCKET;
-		sprint (self, "Fire Rockets selected\n");
+		sprint (self, "Fire Rocket selected\n");
 	}
 	if (self.impulse == 2)
 	{
 		self.weapon = WEP_HROCKET;
-		sprint (self, "Homing Rockets selected\n");
+		sprint (self, "Homing Rocket selected\n");
 	}
 	if (self.impulse == 3)
 	{
 		self.weapon = WEP_PROCKET;
-		sprint (self, "Power Rockets selected\n");
+		sprint (self, "Power Rocket selected\n");
 	}
 	if (self.impulse == 4)
 	{
 		self.weapon = WEP_NAPALM;
 		sprint (self, "Napalm selected\n");
+	}
+	if (self.impulse == 5)
+	{
+		self.weapon = WEP_RICOCHET;
+		sprint (self, "Ricochet Bomb selected\n");
 	}
 };
 
@@ -938,13 +1044,13 @@ void() CycleWeaponForward =
 	if (self.weapon == WEP_ROCKET)
 	{
 		self.weapon = WEP_HROCKET;
-		sprint (self, "Homing Rockets selected\n");
+		sprint (self, "Homing Rocket selected\n");
 		return;
 	}
 	if (self.weapon == WEP_HROCKET)
 	{
 		self.weapon = WEP_PROCKET;
-		sprint (self, "Power Rockets selected\n");
+		sprint (self, "Power Rocket selected\n");
 		return;
 	}
 	if (self.weapon == WEP_PROCKET)
@@ -955,8 +1061,14 @@ void() CycleWeaponForward =
 	}
 	if (self.weapon == WEP_NAPALM)
 	{
+		self.weapon = WEP_RICOCHET;
+		sprint (self, "Ricochet Bomb selected\n");
+		return;
+	}
+	if (self.weapon == WEP_RICOCHET)
+	{
 		self.weapon = WEP_ROCKET;
-		sprint (self, "Fire Rockets selected\n");
+		sprint (self, "Fire Rocket selected\n");
 		return;
 	}
 };
@@ -970,26 +1082,32 @@ void() CycleWeaponBackward =
 
 	if (self.weapon == WEP_ROCKET)
 	{
+		self.weapon = WEP_RICOCHET;
+		sprint (self, "Ricochet Bomb selected\n");
+		return;
+	}
+	if (self.weapon == WEP_RICOCHET)
+	{
 		self.weapon = WEP_NAPALM;
 		sprint (self, "Napalm selected\n");
 		return;
-	}
+	}	
 	if (self.weapon == WEP_NAPALM)
 	{
 		self.weapon = WEP_PROCKET;
-		sprint (self, "Power Rockets selected\n");
+		sprint (self, "Power Rocket selected\n");
 		return;
 	}
 	if (self.weapon == WEP_PROCKET)
 	{
 		self.weapon = WEP_HROCKET;
-		sprint (self, "Homing Rockets selected\n");
+		sprint (self, "Homing Rocket selected\n");
 		return;
 	}
 	if (self.weapon == WEP_HROCKET)
 	{
 		self.weapon = WEP_ROCKET;
-		sprint (self, "Fire Rockets selected\n");
+		sprint (self, "Fire Rocket selected\n");
 		return;
 	}
 };
@@ -1029,7 +1147,7 @@ void(float type, float rear) CarAttack =
 				}
 				else
 				{
-					sprint(self, "Fire Rocket bay empty!\n");
+					sprint(self, "Fire rocket bay empty!\n");
 					stuffcmd (self, "play combat/empty.wav\n");
 				}
 				self.spcl_finished = time + 1;
@@ -1046,7 +1164,7 @@ void(float type, float rear) CarAttack =
 				}
 				else
 				{
-					sprint(self, "Homing Rocket bay empty!\n");
+					sprint(self, "Homing rocket bay empty!\n");
 					stuffcmd (self, "play combat/empty.wav\n");
 				}
 				self.spcl_finished = time + 1;
@@ -1063,7 +1181,7 @@ void(float type, float rear) CarAttack =
 				}
 				else
 				{
-					sprint(self, "Power Rocket bay empty!\n");
+					sprint(self, "Power rocket bay empty!\n");
 					stuffcmd (self, "play combat/empty.wav\n");
 				}
 				self.spcl_finished = time + 1;
@@ -1073,7 +1191,7 @@ void(float type, float rear) CarAttack =
 				if (self.waterlevel > 0)
 				{
 					self.spcl_finished = time + 0.5;
-					sprint(self, "Can't fire Napalm in water!\n");
+					sprint(self, "Can't fire napalm in water!\n");
 					return;
 				}
 				if (self.ammo_napalm > 0)
@@ -1087,6 +1205,23 @@ void(float type, float rear) CarAttack =
 				else
 				{
 					sprint(self, "Napalm fuel empty!\n");
+					stuffcmd (self, "play combat/empty.wav\n");
+				}
+				self.spcl_finished = time + 2;
+			}
+			if (self.weapon == WEP_RICOCHET)
+			{
+				if (self.ammo_rico > 0)
+				{
+					if (!rear)
+						Fire_Ricochet(FALSE);
+					else
+						Fire_Ricochet(TRUE);
+					self.ammo_rico = self.ammo_rico - 1;
+				}
+				else
+				{
+					sprint(self, "Ricochet bombs empty!\n");
 					stuffcmd (self, "play combat/empty.wav\n");
 				}
 				self.spcl_finished = time + 2;

@@ -265,3 +265,52 @@ void() item_napalm =
 	setsize (self, '0 0 0', '0 0 0');
 	SetupItemDynamicLight(); // init dlights
 };
+
+
+//
+// Ricochet Bomb Pickup
+//
+
+void() item_ricochet_touch =
+{
+	entity toucher = other.owner.driving;
+	if (toucher.health <= 0)
+		return;
+
+	toucher.ammo_rico = toucher.ammo_rico + 3;
+	if (toucher.ammo_rico > 3)
+		toucher.ammo_rico = 3;
+
+	sprint(toucher, "Ricochet bombs loaded!\n");
+	sound(self, CHAN_AUTO, "combat/item.wav", 1, ATTN_NORM);
+
+	// Remove item and setup for respawn
+	self.solid = SOLID_NOT;
+	setmodel (self, string_null);
+	self.think = SUB_Respawn;
+	self.nextthink = time + 20;
+};
+
+void() item_ricochet =
+{
+	if (!deathmatch)
+	{
+		remove(self);
+		return;
+	}
+	precache_model ("progs/item_rico.spr");
+
+	self.movetype = MOVETYPE_NONE;
+	self.solid = SOLID_TRIGGER;
+	self.classname = "item_ricochet";
+	self.flags = FL_ITEM;
+	self.netname = "item";
+	self.effects = EF_FULLBRIGHT;
+	self.touch = item_ricochet_touch;
+
+	setmodel (self, "progs/item_rico.spr");
+	self.mdl = self.model; // can be restored on respawn
+	setsize (self, '0 0 0', '0 0 0');
+	
+	//SetupItemDynamicLight(); // init dlights
+};
