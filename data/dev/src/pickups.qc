@@ -20,6 +20,10 @@ void() SetupItemDynamicLight =
 		spawn_color_glow(1, 1, 2, 100, self);
 	if (self.classname == "item_napalm")
 		spawn_color_glow(2, .75, .75, 100, self);
+	if (self.classname == "item_ricochet")
+		spawn_color_glow(1, 2, 1, 100, self);
+	if (self.classname == "item_remote")
+		spawn_color_glow(1, 2.36, 2.59, 100, self);
 };
 
 void() SUB_Respawn =
@@ -266,7 +270,6 @@ void() item_napalm =
 	SetupItemDynamicLight(); // init dlights
 };
 
-
 //
 // Ricochet Bomb Pickup
 //
@@ -312,5 +315,54 @@ void() item_ricochet =
 	self.mdl = self.model; // can be restored on respawn
 	setsize (self, '0 0 0', '0 0 0');
 	
-	//SetupItemDynamicLight(); // init dlights
+	SetupItemDynamicLight(); // init dlights
+};
+
+
+//
+// Remote Bomb Pickup
+//
+
+void() item_remote_touch =
+{
+	entity toucher = other.owner.driving;
+	if (toucher.health <= 0)
+		return;
+
+	toucher.ammo_remote = toucher.ammo_remote + 1;
+	if (toucher.ammo_remote > 2)
+		toucher.ammo_remote = 2;
+
+	sprint(toucher, "Remote bomb loaded!\n");
+	sound(self, CHAN_AUTO, "combat/item.wav", 1, ATTN_NORM);
+
+	// Remove item and setup for respawn
+	self.solid = SOLID_NOT;
+	setmodel (self, string_null);
+	self.think = SUB_Respawn;
+	self.nextthink = time + 20;
+};
+
+void() item_remote =
+{
+	if (!deathmatch)
+	{
+		remove(self);
+		return;
+	}
+	precache_model ("progs/item_remote.spr");
+
+	self.movetype = MOVETYPE_NONE;
+	self.solid = SOLID_TRIGGER;
+	self.classname = "item_remote";
+	self.flags = FL_ITEM;
+	self.netname = "item";
+	self.effects = EF_FULLBRIGHT;
+	self.touch = item_remote_touch;
+
+	setmodel (self, "progs/item_remote.spr");
+	self.mdl = self.model; // can be restored on respawn
+	setsize (self, '0 0 0', '0 0 0');
+	
+	SetupItemDynamicLight(); // init dlights
 };

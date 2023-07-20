@@ -15,8 +15,8 @@ void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 	}
 	if (attacker == targ) // suicide
 	{
-		if (targ)
-			targ.frags = targ.frags - 1;
+		if (attacker)
+			attacker.frags = attacker.frags - 1;
 		bprint(targ.netname, " stupidly commited vehicular suicide\n");
 		return;
 	}
@@ -55,6 +55,11 @@ void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 	{
 		bprint(attacker.netname, "'s richochet bomb blew ");
 		bprint(targ.netname, " into twisted metal\n");
+	}
+	if (attackerclassname == "remotebomb")
+	{
+		bprint(attacker.netname, "'s remote bomb vaporized ");
+		bprint(targ.netname, " into dust\n");
 	}	
 };
 
@@ -115,19 +120,8 @@ void(vector position, float size) Create2DExplosion =
 
 void(entity targ, entity attacker) Death =
 {
-	// Car jumps big on death
-	entity wheels[] = {
-		targ.driving.frontleft,
-		targ.driving.frontright,
-		targ.driving.backleft,
-		targ.driving.backright
-	};
-	for (float i = 0; i < wheels.length; i++)
-	{
-		traceline(wheels[i].origin, wheels[i].origin - wheels[i].lmat_up * 24, MOVE_NOMONSTERS, wheels[i]);
-		if (trace_fraction < 1)
-			Phys_Force(targ.driving, targ.driving.physobj_mass, '0 0 1' * 500 * 1.0, trace_endpos, wheels[i].lmat_up);
-	}
+	targ.forcejump_strength = 1000;
+	targ.forcejump = TRUE;
 	// Initial big explosion here
 	CreateExplosion(targ.origin + v_up * 32);
 };
@@ -150,13 +144,16 @@ void(entity targ, entity attacker, float damage, string attackerclassname) DoDam
 		targ.colormod_x = 2;
 
 		// Send stats to CSQC
-		attacker.enemy_displayname = targ.netname;
-		attacker.enemy_displayhealth = targ.health;
-		attacker.enemy_displaymaxhealth = targ.max_health;
+		if (attacker != targ)
+		{
+			attacker.enemy_displayname = targ.netname;
+			attacker.enemy_displayhealth = targ.health;
+			attacker.enemy_displaymaxhealth = targ.max_health;
 
-		targ.enemy_displayname = attacker.netname;
-		targ.enemy_displayhealth = attacker.health;
-		targ.enemy_displaymaxhealth = attacker.max_health;
+			targ.enemy_displayname = attacker.netname;
+			targ.enemy_displayhealth = attacker.health;
+			targ.enemy_displaymaxhealth = attacker.max_health;
+		}
 	}
 
 	if (targ.health <= 0)
@@ -169,13 +166,28 @@ void(entity targ, entity attacker, float damage, string attackerclassname) DoDam
 	}
 };
 
-void(entity attacker, float radius, float damage, float setfire, string attackerclassname) DoRadiusDamage =
+void(entity attacker, float radius, float damage, float setfire, string attackerclassname, float diminish) DoRadiusDamage =
 {
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
 		if (vlen(targ.origin - self.origin) <= radius)
 		{
-			DoDamage(targ, attacker, damage, self.classname);
+			float dmg = damage;
+			if (diminish)
+			{
+				float distance_length = vlen(targ.origin - self.origin);
+				float distance_factor = 1 - (distance_length / radius);
+				dmg = ceil(damage * distance_factor);
+			}
+			
+			DoDamage(targ, attacker, dmg, self.classname);
+
+			if (self.classname == "remotebomb")
+			{
+				targ.forcejump_strength = (1000 * distance_factor);
+				targ.forcejump = TRUE;
+			}
+
 			if (setfire)
 			{
 				targ.onfire_finished = time + 5;
@@ -440,7 +452,7 @@ void() Rocket_Touch =
 
 void(float type, float rear) Fire_Rocket =
 {
-	local entity rocket = spawn ();
+	local entity rocket = spawn();
 
 	makevectors (self.realang);
 	
@@ -517,7 +529,7 @@ void(float type, float rear) Fire_Rocket =
 void() napalmfire_think =
 {
 	if (self.onfire_finished > time)
-		DoRadiusDamage(self.owner, 150, 0, TRUE, self.classname); // Set whoever near me on fire
+		DoRadiusDamage(self.owner, 150, 0, TRUE, self.classname, FALSE); // Set whoever near me on fire
 	else
 	{
 		if (self.movetype != MOVETYPE_TOSS) // Gravity brings the napalm fire back down
@@ -600,7 +612,7 @@ void() Napalm_Touch = // Does 10 damage on direct player hit + fire damage is 4-
 	self.velocity = '0 0 0';
 	self.movetype = MOVETYPE_NONE;
 	CreateExplosion(self.origin);
-	DoRadiusDamage(self.owner, 50, 10, TRUE, self.classname);
+	DoRadiusDamage(self.owner, 50, 10, TRUE, self.classname, FALSE);
 	CreateNapalmFire();
 	self.think = NapalmTouch_Think;
 	self.nextthink = time;
@@ -617,13 +629,15 @@ void() Napalm_Think =
 
 	pointparticles(PART_NAPALM, self.origin, '0 0 0', 1);
 
+	if (self.velocity_z <= 0)
+		self.gravity = 1.75;
 	if (self.enemy && self.velocity_z <= 0) // Home in on enemy
 	{
 		local vector vele, vels, ph;
 		vele = normalize(self.enemy.origin - self.origin);
 		vels = normalize(self.velocity);
 		ph = vele + (vels * 4);
-		ph = ph * (1/25); // increase seceond number for less homing capability
+		ph = ph * (1/11); // increase seceond number for less homing capability
 
 		self.velocity = normalize(vels + ph);
 		self.velocity = self.velocity * 350;
@@ -634,7 +648,7 @@ void() Napalm_Think =
 
 void(float rear) Fire_Napalm =
 {
-	local entity napalm = spawn ();
+	local entity napalm = spawn();
 	napalm.owner = self;
 	napalm.solid = SOLID_SLIDEBOX;
 	napalm.movetype = MOVETYPE_TOSS;
@@ -698,6 +712,7 @@ void() Rico_Think =
 		vector reflection = self.velocity - 2 * DotProduct(self.velocity, normal) * normal;
 		self.velocity = reflection;
 		self.cnt = self.cnt + 1; // Add damage
+		self.scale = self.scale + 0.1; // Grow
 	}
 
 	// Keep em slightly off the ground
@@ -708,10 +723,20 @@ void() Rico_Think =
 		self.velocity_z = 0;
 	}
 
+	if (self.cnt > 0)
+		float size = 50 + (self.scale * 25);
+	else
+		size = 50;
+
 	// Damage
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
-		if (vlen(targ.origin - self.origin) <= 50)
+		if (self.cnt > 0)
+			float do_hit = TRUE;
+		else if (targ == self.owner)
+			do_hit = FALSE;
+		
+		if (vlen(targ.origin - self.origin) <= size && do_hit)
 		{
 			float damage = self.cnt * 2;
 			DoDamage(targ, self.owner, 7+damage, self.classname); // base damage 7, bounce x 2, total: 27
@@ -732,7 +757,7 @@ void() Rico_Think =
 
 void(float rear) Fire_Ricochet =
 {
-	local entity rico = spawn ();
+	local entity rico = spawn();
 
 	makevectors (self.realang);
 	
@@ -749,6 +774,7 @@ void(float rear) Fire_Ricochet =
 	rico.classname = "rico";
 	rico.flags = FL_ITEM; // enlarge hitbox
 	rico.netname = "projectile";
+	rico.scale = 1;
 
 	rico.velocity = aim(self, 750);
 	rico.velocity = rico.velocity * 750;
@@ -771,6 +797,63 @@ void(float rear) Fire_Ricochet =
 	rico.removeme_finished = time + 30;
 	rico.think = Rico_Think;
 	rico.nextthink = time;
+};
+
+//
+// Remote Bomb
+//
+
+void() Remote_Detonate =
+{
+	DoRadiusDamage(self.owner, 350, 25, FALSE, self.classname, TRUE);
+	CreateExplosion(self.origin + v_up * 8);
+	Create2DExplosion(self.origin + v_up * 48, 8);
+	if (self.owner)
+		self.owner.plyrremote = world;
+	remove(self);
+};
+
+void() Remote_Think =
+{
+	if (!self.owner)
+	{
+		remove(self);
+		return;
+	}
+	if (!self.cnt) // Run once
+	{
+		droptofloor();
+		setorigin(self, self.origin + v_up * 16);
+		self.cnt = TRUE;
+	}
+	frameskip(1);
+};
+
+void() Fire_Remote =
+{
+	if (!self.plyrremote)
+	{
+		entity remote = spawn();
+		remote.owner = self;
+		remote.solid = SOLID_TRIGGER;
+		remote.movetype = MOVETYPE_TOSS;
+		remote.classname = "remotebomb";
+
+		setmodel (remote, "progs/remote.spr");
+		setsize (remote, '0 0 0', '0 0 0');
+		setorigin (remote, self.origin);
+
+		sound (self, CHAN_AUTO, "combat/landmine.wav", 1, ATTN_NORM); // CHAN_WEAPON is for specials, mgun spams
+
+		remote.think = Remote_Think;
+		remote.nextthink = time;
+		self.plyrremote = remote; // link
+	}
+	else // Remote already in play
+	{
+		self.plyrremote.think = Remote_Detonate;
+		self.plyrremote.nextthink = time;
+	}
 };
 
 //
@@ -810,7 +893,7 @@ void() Landmine_Think =
 
 void() Fire_Landmine =
 {
-	local entity landmine = spawn ();
+	local entity landmine = spawn();
 	landmine.owner = self;
 	landmine.solid = SOLID_TRIGGER;
 	landmine.movetype = MOVETYPE_NONE;
@@ -851,7 +934,7 @@ void() Shield_Think =
 
 void() Fire_Shield =
 {
-	local entity shield = spawn ();
+	local entity shield = spawn();
 	shield.owner = self;
 	shield.solid = SOLID_SLIDEBOX;
 	shield.dimension_hit = shield.dimension_solid = 0;
@@ -1010,17 +1093,17 @@ void() ChangeWeapon =
 	if (self.impulse == 1)
 	{
 		self.weapon = WEP_ROCKET;
-		sprint (self, "Fire Rocket selected\n");
+		sprint (self, "Fire rocket selected\n");
 	}
 	if (self.impulse == 2)
 	{
 		self.weapon = WEP_HROCKET;
-		sprint (self, "Homing Rocket selected\n");
+		sprint (self, "Homing rocket selected\n");
 	}
 	if (self.impulse == 3)
 	{
 		self.weapon = WEP_PROCKET;
-		sprint (self, "Power Rocket selected\n");
+		sprint (self, "Power rocket selected\n");
 	}
 	if (self.impulse == 4)
 	{
@@ -1030,7 +1113,12 @@ void() ChangeWeapon =
 	if (self.impulse == 5)
 	{
 		self.weapon = WEP_RICOCHET;
-		sprint (self, "Ricochet Bomb selected\n");
+		sprint (self, "Ricochet bomb selected\n");
+	}
+	if (self.impulse == 6)
+	{
+		self.weapon = WEP_REMOTE;
+		sprint (self, "Remote bomb selected\n");
 	}
 };
 
@@ -1044,13 +1132,13 @@ void() CycleWeaponForward =
 	if (self.weapon == WEP_ROCKET)
 	{
 		self.weapon = WEP_HROCKET;
-		sprint (self, "Homing Rocket selected\n");
+		sprint (self, "Homing rocket selected\n");
 		return;
 	}
 	if (self.weapon == WEP_HROCKET)
 	{
 		self.weapon = WEP_PROCKET;
-		sprint (self, "Power Rocket selected\n");
+		sprint (self, "Power rocket selected\n");
 		return;
 	}
 	if (self.weapon == WEP_PROCKET)
@@ -1062,13 +1150,19 @@ void() CycleWeaponForward =
 	if (self.weapon == WEP_NAPALM)
 	{
 		self.weapon = WEP_RICOCHET;
-		sprint (self, "Ricochet Bomb selected\n");
+		sprint (self, "Ricochet bomb selected\n");
 		return;
 	}
 	if (self.weapon == WEP_RICOCHET)
 	{
+		self.weapon = WEP_REMOTE;
+		sprint (self, "Remote bomb selected\n");
+		return;
+	}
+	if (self.weapon == WEP_REMOTE)
+	{
 		self.weapon = WEP_ROCKET;
-		sprint (self, "Fire Rocket selected\n");
+		sprint (self, "Fire rocket selected\n");
 		return;
 	}
 };
@@ -1082,8 +1176,14 @@ void() CycleWeaponBackward =
 
 	if (self.weapon == WEP_ROCKET)
 	{
+		self.weapon = WEP_REMOTE;
+		sprint (self, "Remote bomb selected\n");
+		return;
+	}
+	if (self.weapon == WEP_REMOTE)
+	{
 		self.weapon = WEP_RICOCHET;
-		sprint (self, "Ricochet Bomb selected\n");
+		sprint (self, "Ricochet bomb selected\n");
 		return;
 	}
 	if (self.weapon == WEP_RICOCHET)
@@ -1095,19 +1195,19 @@ void() CycleWeaponBackward =
 	if (self.weapon == WEP_NAPALM)
 	{
 		self.weapon = WEP_PROCKET;
-		sprint (self, "Power Rocket selected\n");
+		sprint (self, "Power rocket selected\n");
 		return;
 	}
 	if (self.weapon == WEP_PROCKET)
 	{
 		self.weapon = WEP_HROCKET;
-		sprint (self, "Homing Rocket selected\n");
+		sprint (self, "Homing rocket selected\n");
 		return;
 	}
 	if (self.weapon == WEP_HROCKET)
 	{
 		self.weapon = WEP_ROCKET;
-		sprint (self, "Fire Rocket selected\n");
+		sprint (self, "Fire rocket selected\n");
 		return;
 	}
 };
@@ -1225,6 +1325,25 @@ void(float type, float rear) CarAttack =
 					stuffcmd (self, "play combat/empty.wav\n");
 				}
 				self.spcl_finished = time + 2;
+			}
+			if (self.weapon == WEP_REMOTE)
+			{
+				if (!self.plyrremote)
+				{
+					if (self.ammo_remote > 0)
+					{
+						Fire_Remote();
+						self.ammo_remote = self.ammo_remote - 1;
+					}
+					else
+					{
+						sprint(self, "Remote bombs empty!\n");
+						stuffcmd (self, "play combat/empty.wav\n");
+					}
+				}
+				else // Remote bomb in play
+					Fire_Remote();
+				self.spcl_finished = time + 0.75;
 			}
 		}
 	}

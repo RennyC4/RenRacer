@@ -207,3 +207,9 @@
 "origin" "-272 -304 32"
 "angle" "90"
 }
+// entity 13
+{
+"classname" "item_remote"
+"origin" "-336 -304 32"
+"angle" "90"
+}

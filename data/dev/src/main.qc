@@ -43,6 +43,7 @@ void() CSEv_GrabCSQCValues =
 	clientstat(STAT_ENEMYHEALTH, EV_FLOAT, enemy_displayhealth);
 	clientstat(STAT_ENEMYMAXHEALTH, EV_FLOAT, enemy_displaymaxhealth);
 	clientstat(STAT_AMMO_RICOCHET, EV_FLOAT, ammo_rico);
+	clientstat(STAT_AMMO_REMOTE, EV_FLOAT, ammo_remote);
 };
 
 void() world_lights =
@@ -89,6 +90,7 @@ void() worldspawn =
 	precache_model("progs/landmine.spr");
 	precache_model("progs/shield.mdl");
 	precache_model("progs/ricochet.mdl");
+	precache_model("progs/remote.spr");
 
 	//
 	// func_vehicle - start

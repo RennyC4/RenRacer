@@ -337,8 +337,11 @@ void() BotAI =
 		// status bars, and the mod probably already compensated for that
 		if (self.health < 1 && !intermission_running)
 		{ 
-			self.button0 = floor(random() * 2);
+			self.button0 = 0;
+			self.button1 = 0;
 			self.button2 = 0;
+			self.button3 = floor(random() * 2);
+			self.button4 = 0;
 			self.keys = 0;
 			return;
 		}
