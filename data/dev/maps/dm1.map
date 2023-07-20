@@ -3107,3 +3107,15 @@
 "origin" "0 128 -240"
 "angle" "90"
 }
+// entity 31
+{
+"classname" "item_freeze"
+"origin" "2536 608 528"
+"angle" "270"
+}
+// entity 32
+{
+"classname" "item_freeze"
+"origin" "-2504 -320 528"
+"angle" "270"
+}

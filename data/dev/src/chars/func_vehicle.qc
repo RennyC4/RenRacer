@@ -681,11 +681,11 @@ void TryUpdateVehicle(){
 		float roll = v_right * self.velocity;
 		if (roll > 100){
 			self.keyflags = self.keyflags | KEY_RIGHT; // RennyC
-			Car_Roll(-4000, 350);
+			//Car_Roll(-4000, 350);
 		}
 		else if (roll < -100){
 			self.keyflags = self.keyflags | KEY_LEFT; // RennyC
-			Car_Roll(4000, 350);
+			//Car_Roll(4000, 350);
 		}
 		else
 		{
