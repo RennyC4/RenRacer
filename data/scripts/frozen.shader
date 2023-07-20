@@ -7,7 +7,7 @@ progs/frozen.mdl_0
 	{
 		map progs/frozen.mdl_0
 		blendFunc GL_SRC_ALPHA GL_ONE
-		alphaGen const 0.15
+		alphaGen const 0.25
 		tcGen environment
 		rgbgen entity
 	}
