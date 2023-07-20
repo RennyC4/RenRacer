@@ -46,6 +46,8 @@ void() ClientDisconnect =
 	{
 		if (self.fire)
 			remove(self.fire);
+		if (self.frozen)
+			remove(self.frozen);
 		if (self.driving)
 			remove_car(self.driving);
 	}
@@ -276,6 +278,7 @@ void() RespawnPlayer =
 	self.deathcount = 0;
 	self.igniter = world;
 	self.onfire_finished = time;
+	self.frozen_finished = time;
 	self.energy = 100;
 	self.enemy_displayname = "";
 	self.enemy_displayhealth = 0;
@@ -307,6 +310,33 @@ void() fire_think =
 		self.sound_finished = time + 1;
 	}
 	setorigin(self, self.owner.origin + v_up * 52);
+	frameskip(0.01);
+};
+
+void() freeze_think =
+{
+	if (self.cnt)
+	{
+		if (self.alpha > 0)
+			self.alpha = self.alpha - (0.2 * frametime);
+		else
+		{
+			self.owner.frozen = world;
+			remove(self);
+			return;
+		}
+		setorigin(self, self.owner.origin);
+		frameskip(0.01);
+		return;
+	}
+	if (self.owner.invulnerable_finished > time || self.owner.frozen_finished < time)
+		self.cnt = TRUE;
+
+	self.alpha = 0.75 + sin(time*384)*0.25;
+	self.colormod_x = 1 + sin(time*512)*0.25; // glow pallet
+	self.colormod_y = 1 + sin(time*512)*0.25; // glow pallet
+	self.colormod_z = 3 + sin(time*512)*0.25; // glow pallet
+	setorigin(self, self.owner.origin);
 	frameskip(0.01);
 };
 
@@ -531,7 +561,33 @@ void() PlayerPostThink =
 			self.fire = world;
 		}
 	}
-
+	if (self.frozen_finished > time)
+	{
+		if (!self.frozen)
+		{
+			entity freeze1 = spawn();
+			freeze1.owner = self;
+			self.frozen = freeze1;
+			freeze1.classname = "freeze1";
+			freeze1.scale = 3;
+			freeze1.effects = EF_ADDITIVE | EF_FULLBRIGHT;
+			freeze1.alpha = 0.5;
+			freeze1.colormod = '1 1 1';
+			freeze1.movetype = MOVETYPE_NOCLIP;
+			freeze1.solid = SOLID_SLIDEBOX; // spawn_color_glow hack
+			freeze1.dimension_hit = freeze1.dimension_solid = 0;
+			freeze1.angles_x = random()*360;
+			freeze1.angles_y = random()*360;
+			freeze1.angles_z = random()*360;
+			setorigin (freeze1, self.origin);
+			setmodel (freeze1, "progs/frozen.mdl");
+			setsize (freeze1, '0 0 0', '0 0 0');
+			freeze1.think = freeze_think;
+			freeze1.nextthink = time;
+			spawn_color_glow(1, 1, 3, 100, freeze1); // dynamic light
+			sound (freeze1, CHAN_AUTO, "combat/frozen.wav", 1, ATTN_NORM);
+		}
+	}
 	TryUpdateVehicle();
 
 	//

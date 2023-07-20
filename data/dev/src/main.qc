@@ -95,6 +95,7 @@ void() worldspawn =
 	precache_model("progs/remote.spr");
 	precache_model("progs/frzsmk.spr");
 	precache_model("progs/frzsmk2.spr");
+	precache_model("progs/frozen.mdl");
 
 	//
 	// func_vehicle - start
@@ -169,6 +170,7 @@ void() worldspawn =
 	precache_sound ("combat/cloak.wav");
 	precache_sound ("combat/ricochet.wav");
 	precache_sound ("combat/freeze.wav");
+	precache_sound ("combat/frozen.wav");
 
 	world_lights();
 	BotInit();  // FrikBot

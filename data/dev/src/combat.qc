@@ -39,7 +39,7 @@ void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 	if (attackerclassname == "rocket3") // power rocket
 	{
 		bprint(attacker.netname, " showed ");
-		bprint(targ.netname, " true power!\n");
+		bprint(targ.netname, " true power\n");
 	}
 	if (attackerclassname == "napalm" || attackerclassname == "napalmfire")
 	{
@@ -60,6 +60,11 @@ void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 	{
 		bprint(attacker.netname, "'s remote bomb vaporized ");
 		bprint(targ.netname, " into dust\n");
+	}	
+	if (attackerclassname == "freeze")
+	{
+		bprint(attacker.netname, " gave ");
+		bprint(targ.netname, " the cold shoulder\n");
 	}	
 };
 
@@ -668,12 +673,12 @@ void() Napalm_Touch = // Does 10 damage on direct player hit + fire damage is 4-
 
 void() Napalm_Think =
 {
-	if (!self.cnt) // run once on projectile launch
-	{
+	//if (!self.cnt) // run once on projectile launch
+	//{
 		if (!self.enemy)
 			GetTarget();
-		self.cnt = TRUE;
-	}
+		//self.cnt = TRUE;
+	//}
 
 	pointparticles(PART_NAPALM, self.origin, '0 0 0', 1);
 
@@ -685,7 +690,7 @@ void() Napalm_Think =
 		vele = normalize(self.enemy.origin - self.origin);
 		vels = normalize(self.velocity);
 		ph = vele + (vels * 4);
-		ph = ph * (1/11); // increase seceond number for less homing capability
+		ph = ph * (1/25); // increase seceond number for less homing capability
 
 		self.velocity = normalize(vels + ph);
 		self.velocity = self.velocity * 350;
@@ -993,8 +998,8 @@ void(float rear) Fire_Freeze =
 	freeze.netname = "projectile";
 	freeze.effects = EF_ADDITIVE;
 	freeze.flags = FL_ITEM; // bigger hitbox
-	freeze.alpha = 0.75; // TODO: add sin wave
-	freeze.scale = 2; // TODO: add sin wave
+	freeze.alpha = 0.75;
+	freeze.scale = 2;
 	freeze.touch = Freeze_Touch;
 
 	freeze.velocity = aim(self, 500);

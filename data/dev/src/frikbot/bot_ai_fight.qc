@@ -59,7 +59,7 @@ void() bot_ai_fight =
 {
 	if (cvar("developer") == 2)
 	{
-		self.button2 = 0; // don't keep firing on respawn
+		self.button3 = 0; // don't keep firing on respawn
 		return;
 	}
 

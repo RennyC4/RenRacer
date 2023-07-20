@@ -467,6 +467,7 @@ float intermission_exittime;
 string nextmap;
 .entity plyrremote;
 .float frozen_finished;
+.entity frozen;
 
 // Key flags
 .float keyflags;
