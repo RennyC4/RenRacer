@@ -466,6 +466,7 @@ float intermission_exittime;
 .vector oldvelocity;
 string nextmap;
 .entity plyrremote;
+.float frozen_finished;
 
 // Key flags
 .float keyflags;
@@ -495,9 +496,10 @@ float WEP_PROCKET = 2;
 float WEP_NAPALM = 4;
 float WEP_RICOCHET = 8;
 float WEP_REMOTE = 16;
+float WEP_FREEZE = 32;
 
 // Ammo
-.float ammo_firerocket, ammo_homingrocket, ammo_powerrocket, ammo_napalm, ammo_rico, ammo_remote;
+.float ammo_firerocket, ammo_homingrocket, ammo_powerrocket, ammo_napalm, ammo_rico, ammo_remote, ammo_freeze;
 
 // Particle defs
 var float PART_DIRT;
@@ -509,6 +511,7 @@ var float PART_ROCKET2;
 var float PART_ROCKET3;
 var float PART_NAPALM;
 var float PART_MGUNSMOKE;
+var float PART_FREEZEBLAST;
 
 // Lap time stats
 .float start_laptime; // ON / OFF
@@ -555,6 +558,7 @@ var float PART_MGUNSMOKE;
 #define STAT_ENEMYMAXHEALTH 50
 #define STAT_AMMO_RICOCHET 51
 #define STAT_AMMO_REMOTE 52
+#define STAT_AMMO_FREEZE 53
 
 #define STAT_INTERMISSION 75
 

@@ -645,7 +645,7 @@ void TryUpdateVehicle(){
 	//
 
 	setorigin(self, Car_SpringyOrigin());
-	if (race_status == RACE_STARTED && self.health > 0) // RennyC: Allow player to control the car
+	if (race_status == RACE_STARTED && self.health > 0 && self.frozen_finished < time) // RennyC: Allow player to control the car
 	{
 		makevectors(self.v_angle);
 		float forw = v_forward * self.velocity;
@@ -857,7 +857,7 @@ void TryUpdateVehicle(){
 			b_right.physobj_stiction = 99999;
 			b_left.physobj_stiction = 99999;
 		}
-		else if (race_status < RACE_STARTED) // Lock DM players tires before count-down
+		else if (race_status < RACE_STARTED || self.frozen_finished > time) // Lock DM players tires before count-down & frozen status
 		{
 			f_right.physobj_stiction = 99999;
 			f_left.physobj_stiction = 99999;

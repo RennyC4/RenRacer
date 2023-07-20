@@ -44,6 +44,7 @@ void() CSEv_GrabCSQCValues =
 	clientstat(STAT_ENEMYMAXHEALTH, EV_FLOAT, enemy_displaymaxhealth);
 	clientstat(STAT_AMMO_RICOCHET, EV_FLOAT, ammo_rico);
 	clientstat(STAT_AMMO_REMOTE, EV_FLOAT, ammo_remote);
+	clientstat(STAT_AMMO_FREEZE, EV_FLOAT, ammo_freeze);
 };
 
 void() world_lights =
@@ -77,6 +78,7 @@ void() worldspawn =
 	PART_ROCKET3 = particleeffectnum("rocket3");
 	PART_NAPALM = particleeffectnum("napalm");
 	PART_MGUNSMOKE = particleeffectnum("mgunsmoke");
+	PART_FREEZEBLAST = particleeffectnum("freezeblast");
 
 	precache_model("progs/null.spr");
 	precache_model("progs/s_debug.spr");
@@ -91,6 +93,8 @@ void() worldspawn =
 	precache_model("progs/shield.mdl");
 	precache_model("progs/ricochet.mdl");
 	precache_model("progs/remote.spr");
+	precache_model("progs/frzsmk.spr");
+	precache_model("progs/frzsmk2.spr");
 
 	//
 	// func_vehicle - start
@@ -164,6 +168,7 @@ void() worldspawn =
 	precache_sound ("combat/shield.wav");
 	precache_sound ("combat/cloak.wav");
 	precache_sound ("combat/ricochet.wav");
+	precache_sound ("combat/freeze.wav");
 
 	world_lights();
 	BotInit();  // FrikBot

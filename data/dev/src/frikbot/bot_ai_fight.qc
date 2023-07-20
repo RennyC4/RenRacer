@@ -57,6 +57,12 @@ entity() Bot_FindClosestItem =
 .float startmatch;
 void() bot_ai_fight =
 {
+	if (cvar("developer") == 2)
+	{
+		self.button2 = 0; // don't keep firing on respawn
+		return;
+	}
+
 	// Back up for randomly for a second, hit a wall/obstacle
 	if ((self.keys == KEY_MOVEFORWARD || (self.button0 && self.turbo_fuel > 0)) && self.realspeed <= 3)
 		self.bot_backup_finished = time + 0.3 + random()*0.6;

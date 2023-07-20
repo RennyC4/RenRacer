@@ -24,6 +24,8 @@ void() SetupItemDynamicLight =
 		spawn_color_glow(1, 2, 1, 100, self);
 	if (self.classname == "item_remote")
 		spawn_color_glow(1, 2.36, 2.59, 100, self);
+	if (self.classname == "item_freeze")
+		spawn_color_glow(0.1, 0.1, 3, 100, self);
 };
 
 void() SUB_Respawn =
@@ -318,7 +320,6 @@ void() item_ricochet =
 	SetupItemDynamicLight(); // init dlights
 };
 
-
 //
 // Remote Bomb Pickup
 //
@@ -361,6 +362,55 @@ void() item_remote =
 	self.touch = item_remote_touch;
 
 	setmodel (self, "progs/item_remote.spr");
+	self.mdl = self.model; // can be restored on respawn
+	setsize (self, '0 0 0', '0 0 0');
+	
+	SetupItemDynamicLight(); // init dlights
+};
+
+//
+// Freeze Blast Pickup
+//
+
+void() item_freeze_touch =
+{
+	entity toucher = other.owner.driving;
+	if (toucher.health <= 0)
+		return;
+
+	toucher.ammo_freeze = toucher.ammo_freeze + 3;
+	if (toucher.ammo_freeze > 5)
+		toucher.ammo_freeze = 5;
+
+	sprint(toucher, "Freeze blast loaded!\n");
+	sound(self, CHAN_AUTO, "combat/item.wav", 1, ATTN_NORM);
+
+	// Remove item and setup for respawn
+	self.solid = SOLID_NOT;
+	setmodel (self, string_null);
+	self.think = SUB_Respawn;
+	self.nextthink = time + 20;
+};
+
+void() item_freeze =
+{
+	if (!deathmatch)
+	{
+		remove(self);
+		return;
+	}
+	precache_model ("progs/frzsmk.spr");
+
+	self.movetype = MOVETYPE_NONE;
+	self.solid = SOLID_TRIGGER;
+	self.classname = "item_freeze";
+	self.flags = FL_ITEM;
+	self.netname = "item";
+	self.effects = EF_FULLBRIGHT;
+	self.touch = item_freeze_touch;
+	self.colormod = '1 1 3';
+
+	setmodel (self, "progs/frzsmk.spr");
 	self.mdl = self.model; // can be restored on respawn
 	setsize (self, '0 0 0', '0 0 0');
 	

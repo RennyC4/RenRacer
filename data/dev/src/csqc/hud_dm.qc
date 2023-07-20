@@ -4,6 +4,7 @@ float WEP_PROCKET = 2;
 float WEP_NAPALM = 4;
 float WEP_RICOCHET = 8;
 float WEP_REMOTE = 16;
+float WEP_FREEZE = 32;
 
 void EntUpdate_RadarBlip(float is_new)
 {
@@ -258,4 +259,25 @@ void() HUD_Deathmatch =
 	// Draw weapon select #
 	drawstring (pos - '-2 -6', "6", '6 6', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
 	drawstring (pos - '-1 -5', "^16", '6 6', '1 1 1', 1, DRAWFLAG_NORMAL);
+
+	//
+	// Freeze Blast information on HUD
+	//
+
+	pos = [(g_width - stringwidth("", TRUE, '32 16 0'))/1.725, (g_height)/1.05];
+	if (wep == WEP_FREEZE)
+		drawfill(pos, '33 20 0', '1 0 0', 0.3, DRAWFLAG_NORMAL);
+
+	drawpic (pos + '1 1', "progs/hud/hud_freeze.png", '32 16', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
+	drawpic (pos, "progs/hud/hud_freeze.png", '32 16', '1 1 1', 1, DRAWFLAG_NORMAL);
+
+	float freeze_ammo = getstatf(STAT_AMMO_FREEZE);
+	printammo = ftos(freeze_ammo);
+
+	drawstring (pos - '-14 9', printammo, '8 8', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
+	drawstring (pos - '-13 10', printammo, '8 8', '1 1 1', 1, DRAWFLAG_NORMAL);
+
+	// Draw weapon select #
+	drawstring (pos - '-2 -6', "7", '6 6', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
+	drawstring (pos - '-1 -5', "^17", '6 6', '1 1 1', 1, DRAWFLAG_NORMAL);
 };

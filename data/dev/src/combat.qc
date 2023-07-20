@@ -99,7 +99,7 @@ void() Create2DExplosion_think =
 
 void(vector position, float size) Create2DExplosion =
 {
-	local entity xplode = spawn();
+	entity xplode = spawn();
 	xplode.owner = self.owner;
 	xplode.classname = "xplode1";
 	xplode.scale = size;
@@ -116,6 +116,47 @@ void(vector position, float size) Create2DExplosion =
 	xplode.think = Create2DExplosion_think;
 	xplode.nextthink = time;
 	spawn_color_glow(3, 1.25, 1, 75, xplode); // dynamic light
+};
+
+void() Create2DFreezeExplosion_think =
+{
+	if (self.animation_finished < time)
+	{
+		if (self.frame < 7)
+			self.frame = self.frame + 1;
+		else
+		{
+			self.solid = SOLID_NOT;
+			remove(self);
+			return;
+		}
+		self.animation_finished = time + 0.1;
+	}
+	self.scale = self.scale + 0.01;
+	self.alpha = self.alpha - 0.005;
+	frameskip(0.01);
+};
+
+void(vector position, float size) Create2DFreezeExplosion =
+{
+	entity xplode = spawn();
+	xplode.owner = self.owner;
+	xplode.classname = "xplode2";
+	xplode.scale = size;
+	xplode.effects = EF_ADDITIVE | EF_FULLBRIGHT;
+	xplode.alpha = 0.75;
+	xplode.movetype = MOVETYPE_NOCLIP;
+	xplode.solid = SOLID_SLIDEBOX;
+	xplode.velocity_z = 75;
+	xplode.dimension_hit = xplode.dimension_solid = 0;
+	xplode.colormod = '1 1 3';
+	setorigin (xplode, position);
+	setmodel (xplode, "progs/frzsmk2.spr");
+	setsize (xplode, '0 0 0', '0 0 0');
+
+	xplode.think = Create2DFreezeExplosion_think;
+	xplode.nextthink = time;
+	spawn_color_glow(1, 1, 3, 75, xplode); // dynamic light
 };
 
 void(entity targ, entity attacker) Death =
@@ -411,10 +452,11 @@ void() Rocket_Think =
 
 void() Rocket_Touch =
 {
+	makevectors_mdl(self.angles);
 	if (other.solid == SOLID_BSP && !other.owner) // Hit wall
 	{
-		CreateExplosion(self.origin);
-		Create2DExplosion(self.origin, 2);
+		CreateExplosion(self.origin - v_forward * 32);
+		Create2DExplosion(self.origin - v_forward * 32, 2);
 		remove(self);
 		return;
 	}
@@ -560,6 +602,11 @@ void() napalmfire_think =
 
 void() CreateNapalmFire =
 {
+	vector fix = self.angles;
+	fix_x = 0;
+	fix_z = 0;
+	makevectors_mdl(fix);
+
 	local entity nf = spawn();
 	nf.owner = self.owner;
 	nf.classname = "napalmfire";
@@ -570,7 +617,7 @@ void() CreateNapalmFire =
 	nf.solid = SOLID_SLIDEBOX;
 	nf.frame = random()*8;
 	nf.dimension_hit = nf.dimension_solid = 0;
-	setorigin (nf, self.origin + v_up * 64);
+	setorigin (nf, self.origin + v_up * 64 - v_forward * 32);
 	setmodel (nf, "progs/fire.spr");
 	setsize (nf, '0 0 0', '0 0 0');
 	nf.onfire_finished = time + 5;
@@ -609,9 +656,10 @@ void() NapalmTouch_Think =
 
 void() Napalm_Touch = // Does 10 damage on direct player hit + fire damage is 4-6 dmg / sec, flames stay for 5 seconds
 {
+	makevectors_mdl(self.angles);
 	self.velocity = '0 0 0';
 	self.movetype = MOVETYPE_NONE;
-	CreateExplosion(self.origin);
+	CreateExplosion(self.origin - v_forward * 8);
 	DoRadiusDamage(self.owner, 50, 10, TRUE, self.classname, FALSE);
 	CreateNapalmFire();
 	self.think = NapalmTouch_Think;
@@ -693,10 +741,11 @@ void(float rear) Fire_Napalm =
 
 void() Rico_Think =
 {
+	makevectors_mdl(self.angles);
 	if (self.cnt > 9 || self.removeme_finished < time) // Explode on 10th bounce, or removal time hit
 	{
-		CreateExplosion(self.origin + v_up * 16);
-		Create2DExplosion(self.origin + v_up * 16, 4);
+		CreateExplosion(self.origin + v_up * 48);
+		Create2DExplosion(self.origin + v_up * 48, 4);
 		remove(self);
 		return;
 	}
@@ -745,8 +794,8 @@ void() Rico_Think =
 				targ.forcejump_strength = 750;
 				targ.forcejump = TRUE;
 			}
-			CreateExplosion(self.origin + v_up * 16);
-			Create2DExplosion(self.origin + v_up * 16, 4);
+			CreateExplosion(self.origin + v_up * 48);
+			Create2DExplosion(self.origin + v_up * 48, 4);
 			remove(self);
 			return;
 		}
@@ -805,9 +854,10 @@ void(float rear) Fire_Ricochet =
 
 void() Remote_Detonate =
 {
+	makevectors_mdl(self.angles);
 	DoRadiusDamage(self.owner, 350, 25, FALSE, self.classname, TRUE);
 	CreateExplosion(self.origin + v_up * 8);
-	Create2DExplosion(self.origin + v_up * 48, 8);
+	Create2DExplosion(self.origin + v_up * 100, 8);
 	if (self.owner)
 		self.owner.plyrremote = world;
 	remove(self);
@@ -819,12 +869,6 @@ void() Remote_Think =
 	{
 		remove(self);
 		return;
-	}
-	if (!self.cnt) // Run once
-	{
-		droptofloor();
-		setorigin(self, self.origin + v_up * 16);
-		self.cnt = TRUE;
 	}
 	frameskip(1);
 };
@@ -838,9 +882,10 @@ void() Fire_Remote =
 		remote.solid = SOLID_TRIGGER;
 		remote.movetype = MOVETYPE_TOSS;
 		remote.classname = "remotebomb";
+		remote.dimension_hit = remote.dimension_solid = 0;
 
 		setmodel (remote, "progs/remote.spr");
-		setsize (remote, '0 0 0', '0 0 0');
+		setsize (remote, '0 0 -16', '0 0 0');
 		setorigin (remote, self.origin);
 
 		sound (self, CHAN_AUTO, "combat/landmine.wav", 1, ATTN_NORM); // CHAN_WEAPON is for specials, mgun spams
@@ -854,6 +899,125 @@ void() Fire_Remote =
 		self.plyrremote.think = Remote_Detonate;
 		self.plyrremote.nextthink = time;
 	}
+};
+
+//
+// Freeze Blast
+//
+
+void() Freeze_Think =
+{
+	if (self.removeme_finished < time)
+	{
+		Create2DFreezeExplosion(self.origin, 3);
+		remove(self);
+		return;
+	}
+
+	if (!self.enemy)
+		GetTarget();
+
+	pointparticles(PART_FREEZEBLAST, self.origin, '0 0 0', 1);
+
+	if (self.enemy) // Home in on enemy
+	{
+		local vector vele, vels, ph;
+		vele = normalize(self.enemy.origin - self.origin);
+		vels = normalize(self.velocity);
+		ph = vele + (vels * 4);
+		ph = ph * (1/7);
+
+		self.velocity = normalize(vels + ph);
+		self.velocity = self.velocity * 500;
+		self.angles = vectoangles(self.velocity);
+	}
+
+	// Animate
+	if (self.animation_finished < time)
+	{
+		if (self.frame < 7)
+			self.frame = self.frame + 1;
+		else
+			self.frame = 0;
+		self.animation_finished = time + 0.05;
+	}
+	self.scale = 2 + sin(time*512)*0.25;
+	self.alpha = 0.75 + sin(time*512)*0.25;
+
+	frameskip(0.01);
+};
+
+void() Freeze_Touch =
+{
+	makevectors_mdl(self.angles);
+	if (other.solid == SOLID_BSP && !other.owner) // Hit wall
+	{
+		Create2DFreezeExplosion(self.origin - v_forward * 32, 3);
+		remove(self);
+		return;
+	}
+	if (other.owner.driving.classname != "player")
+		return;
+	if (self.owner == other.owner.driving)
+		return;
+
+	DoDamage(other.owner.driving, self.owner, 7, self.classname);
+
+	if (other.owner.driving.onfire_finished > time) // remove fire
+		other.owner.driving.onfire_finished = time;
+	other.owner.driving.frozen_finished = time + 3;
+	other.owner.driving.colormod = '1 1 6';
+	Create2DFreezeExplosion(self.origin, 3);
+	remove(self);
+};
+
+void(float rear) Fire_Freeze =
+{
+	local entity freeze = spawn();
+
+	makevectors (self.realang);
+	
+	if (rear)
+	{
+		vector v = self.realang;
+		v_y = v_y + 180;
+		makevectors(v);
+	}
+
+	freeze.movetype = MOVETYPE_FLYMISSILE;
+	freeze.owner = self;
+	freeze.solid = SOLID_TRIGGER;
+
+	freeze.classname = "freeze";
+	freeze.colormod = '1 1 3';
+	freeze.netname = "projectile";
+	freeze.effects = EF_ADDITIVE;
+	freeze.flags = FL_ITEM; // bigger hitbox
+	freeze.alpha = 0.75; // TODO: add sin wave
+	freeze.scale = 2; // TODO: add sin wave
+	freeze.touch = Freeze_Touch;
+
+	freeze.velocity = aim(self, 500);
+	freeze.velocity = freeze.velocity * 500;
+
+	freeze.velocity_x = freeze.velocity_x + self.driving.velocity_x;
+	freeze.velocity_y = freeze.velocity_y + self.driving.velocity_y;
+	freeze.angles = vectoangles(freeze.velocity);
+
+	// Test
+	freeze.dimension_solid = 0;
+	freeze.dimension_hit = 1;
+	//
+
+	setmodel (freeze, "progs/frzsmk.spr");
+	setsize (freeze, '0 0 0', '0 0 0');
+	setorigin (freeze, self.origin + v_up * 8 + v_forward * (40 + self.realspeed));
+
+	sound (self, CHAN_WEAPON, "combat/freeze.wav", 1, ATTN_NORM);
+
+	freeze.removeme_finished = time + 2;
+	freeze.think = Freeze_Think;
+	freeze.nextthink = time;
 };
 
 //
@@ -1120,6 +1284,11 @@ void() ChangeWeapon =
 		self.weapon = WEP_REMOTE;
 		sprint (self, "Remote bomb selected\n");
 	}
+	if (self.impulse == 7)
+	{
+		self.weapon = WEP_FREEZE;
+		sprint (self, "Freeze blast selected\n");
+	}
 };
 
 void() CycleWeaponForward =
@@ -1161,6 +1330,12 @@ void() CycleWeaponForward =
 	}
 	if (self.weapon == WEP_REMOTE)
 	{
+		self.weapon = WEP_FREEZE;
+		sprint (self, "Freeze blast selected\n");
+		return;
+	}
+	if (self.weapon == WEP_FREEZE)
+	{
 		self.weapon = WEP_ROCKET;
 		sprint (self, "Fire rocket selected\n");
 		return;
@@ -1175,6 +1350,12 @@ void() CycleWeaponBackward =
 		return;
 
 	if (self.weapon == WEP_ROCKET)
+	{
+		self.weapon = WEP_FREEZE;
+		sprint (self, "Freeze blast selected\n");
+		return;
+	}
+	if (self.weapon == WEP_FREEZE)
 	{
 		self.weapon = WEP_REMOTE;
 		sprint (self, "Remote bomb selected\n");
@@ -1221,6 +1402,8 @@ void(float type, float rear) CarAttack =
 	if (!deathmatch)
 		return;
 	if (race_status != RACE_STARTED)
+		return;
+	if (self.frozen_finished > time)
 		return;
 
 	if (!type) // regular machine gun
@@ -1344,6 +1527,23 @@ void(float type, float rear) CarAttack =
 				else // Remote bomb in play
 					Fire_Remote();
 				self.spcl_finished = time + 0.75;
+			}
+			if (self.weapon == WEP_FREEZE)
+			{
+				if (self.ammo_freeze > 0)
+				{
+					if (!rear)
+						Fire_Freeze(FALSE);
+					else
+						Fire_Freeze(TRUE);
+					self.ammo_freeze = self.ammo_freeze - 1;
+				}
+				else
+				{
+					sprint(self, "Freeze blast bay empty!\n");
+					stuffcmd (self, "play combat/empty.wav\n");
+				}
+				self.spcl_finished = time + 1.5;
 			}
 		}
 	}

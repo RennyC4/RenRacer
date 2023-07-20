@@ -379,20 +379,23 @@ void() PlayerPostThink =
 		if (self.health > 0)
 		{
 			// Smooth restore colormod
-			if (self.colormod_x > 1)
+			if (self.colormod_x > 1) // red
 				self.colormod_x = self.colormod_x - 6 * frametime;
 			else
 				self.colormod_x = 0;
 
-			if (self.colormod_y > 1)
+			if (self.colormod_y > 1) // green
 				self.colormod_y = self.colormod_y - 6 * frametime;
 			else
 				self.colormod_y = 0;
 
-			if (self.colormod_z > 1)
-				self.colormod_z = self.colormod_z - 6 * frametime;
-			else
-				self.colormod_z = 0;
+			if (self.frozen_finished < time)
+			{
+				if (self.colormod_z > 1) // blue
+					self.colormod_z = self.colormod_z - 6 * frametime;
+				else
+					self.colormod_z = 0;
+			}
 		}
 		else // death animation / thinking
 		{
