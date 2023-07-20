@@ -46,7 +46,8 @@ void() ClientDisconnect =
 	{
 		if (self.fire)
 			remove(self.fire);
-		remove_car(self.driving);
+		if (self.driving)
+			remove_car(self.driving);
 	}
 
 	ClientDisconnected(); // FrikBot
