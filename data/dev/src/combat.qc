@@ -187,10 +187,11 @@ void(entity targ, entity attacker, float damage, string attackerclassname) DoDam
 			targ.health = targ.health - damage;
 		else
 			targ.health = targ.health - ceil(damage / 2);
-		targ.colormod_x = 2;
+		if (targ.classname == "player")
+			targ.colormod_x = 2;
 
 		// Send stats to CSQC
-		if (attacker != targ)
+		if (attacker != targ && (attacker.classname == "player" && targ.classname == "player"))
 		{
 			attacker.enemy_displayname = targ.netname;
 			attacker.enemy_displayhealth = targ.health;
@@ -204,11 +205,20 @@ void(entity targ, entity attacker, float damage, string attackerclassname) DoDam
 
 	if (targ.health <= 0)
 	{
-		if (attacker)
-			attacker.frags = attacker.frags + 1; // reward
-		Death(targ, attacker);
-		PrintDeathMessage(targ, attacker, attackerclassname);
+		if (targ.classname == "player")
+		{
+			if (attacker)
+				attacker.frags = attacker.frags + 1; // reward
+			Death(targ, attacker);
+			PrintDeathMessage(targ, attacker, attackerclassname);
+		}
 		targ.deadflag = TRUE;
+
+		entity oself = self;
+		self = targ;
+		if (self.th_die)
+			self.th_die();
+		self = oself;
 	}
 };
 
@@ -275,11 +285,9 @@ void() GetTarget =
 // Machine Gun
 // ---
 
-// func_vehicle is solid_bsp with an owner
-// so check for walls if there is none
 void() MachineGunBullet_Touch =
 {
-	if (other.solid == SOLID_BSP && !other.owner) // Hit wall
+	if (!other.takedamage) // Hit wall
 	{
 		float tt = ceil(random() * 3);
 		if (tt == 1)
@@ -297,10 +305,11 @@ void() MachineGunBullet_Touch =
 		remove(self);
 		return;
 	}
-	if (other.owner.driving.classname != "player")
+	if (self.owner == other.owner.driving) // Hit self
+	{
+		remove(self);
 		return;
-	if (self.owner == other.owner.driving)
-		return;
+	}
 
 	tt = ceil(random() * 3);
 	if (tt == 1)
@@ -310,7 +319,11 @@ void() MachineGunBullet_Touch =
 	else
 		sound(self, CHAN_BODY, "combat/mgunh3.wav", 1, ATTN_NORM);
 
-	DoDamage(other.owner.driving, self.owner, 2, self.classname); // other.owner.driving is the player
+	if (other.owner.driving) // other.owner.driving is the player
+		DoDamage(other.owner.driving, self.owner, 2, self.classname);
+	else if (other)
+		DoDamage(other, self.owner, 2, self.classname);
+
 	pointparticles(PART_MGUNSMOKE, self.origin, '0 0 0', 1);
 
 	remove(self);
@@ -458,38 +471,48 @@ void() Rocket_Think =
 void() Rocket_Touch =
 {
 	makevectors_mdl(self.angles);
-	if (other.solid == SOLID_BSP && !other.owner) // Hit wall
+	if (!other.takedamage) // Hit wall
 	{
 		CreateExplosion(self.origin - v_forward * 32);
 		Create2DExplosion(self.origin - v_forward * 32, 2);
 		remove(self);
 		return;
 	}
-	if (other.owner.driving.classname != "player")
-		return;
-	if (self.owner == other.owner.driving)
+	if (self.owner == other.owner.driving) // Hit self
 		return;
 
 	if (self.classname == "rocket")
 	{
-		DoDamage(other.owner.driving, self.owner, 7, self.classname); // fire
-
-		other.owner.driving.forcejump_strength = 250;
-		other.owner.driving.forcejump = TRUE;
+		if (other.owner.driving) // other.owner.driving is the player
+		{
+			DoDamage(other.owner.driving, self.owner, 7, self.classname); // fire
+			other.owner.driving.forcejump_strength = 250;
+			other.owner.driving.forcejump = TRUE;
+		}
+		else if (other)
+			DoDamage(other, self.owner, 7, self.classname);
 	}
 	if (self.classname == "rocket2")
 	{
-		DoDamage(other.owner.driving, self.owner, 10, self.classname); // homing
-
-		other.owner.driving.forcejump_strength = 350;
-		other.owner.driving.forcejump = TRUE;
+		if (other.owner.driving) // other.owner.driving is the player
+		{
+			DoDamage(other.owner.driving, self.owner, 10, self.classname); // homing
+			other.owner.driving.forcejump_strength = 350;
+			other.owner.driving.forcejump = TRUE;
+		}
+		else if (other)
+			DoDamage(other, self.owner, 10, self.classname);
 	}
 	if (self.classname == "rocket3")
 	{
-		DoDamage(other.owner.driving, self.owner, 15, self.classname); // power
-
-		other.owner.driving.forcejump_strength = 450;
-		other.owner.driving.forcejump = TRUE;
+		if (other.owner.driving) // other.owner.driving is the player
+		{
+			DoDamage(other.owner.driving, self.owner, 15, self.classname); // power
+			other.owner.driving.forcejump_strength = 450;
+			other.owner.driving.forcejump = TRUE;
+		}
+		else if (other)
+			DoDamage(other, self.owner, 15, self.classname);
 	}
 
 	CreateExplosion(self.origin);
@@ -560,7 +583,7 @@ void(float type, float rear) Fire_Rocket =
 
 	setmodel (rocket, "progs/rocket.mdl");
 	setsize (rocket, '0 0 0', '0 0 0');
-	setorigin (rocket, self.origin + v_up * 8 + v_forward * (40 + self.realspeed));
+	setorigin (rocket, self.origin + v_up * 8 + v_forward * (48 + self.realspeed));
 
 	sound (self, CHAN_WEAPON, "combat/rocket.wav", 1, ATTN_NORM);
 
@@ -1023,6 +1046,7 @@ void(float rear) Fire_Freeze =
 	freeze.removeme_finished = time + 2;
 	freeze.think = Freeze_Think;
 	freeze.nextthink = time;
+	spawn_color_glow(1, 1, 3, 150, freeze); // dynamic light
 };
 
 //

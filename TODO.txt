@@ -1,20 +1,7 @@
-TODO: More DM stuff
-	- Add remote bombs (done), richochet (done), freeze blast
-	- Current enemy health+name should display under radar (done)
-	- Add cloak command (done)
-	- Cars should be on fire on death automatically (easy / done)
-	- A proper map to fight on (done)
-	- Bot AI (starting / started / needs work but ok for now)
-	- Intermission with win condition / fraglimit (done)
-	- Combo moves + energy meter (done)
-	- Skyroom for DM1 (done)
-	- CSQC Radar (done, thanks to Reki!)
-	- Figure out a safe way to have rockets push players (done)
-	- Remove screen tilt on death (done)
-	- Turbo lines should be removed on death/intermission (done)
-	- Add more homing to napalm (done, 50% more)
-	- NaN nonsense (fixed/done)
+TODO: Remove "race start" stuff for deathmatch
+TODO: Add bot add/kick commands for DM
 TODO: Teleporter brush
+TODO: Revise PlayerPush stuff
 TODO: Check out the breaking function from shpds delivery game
 TODO: Set direct angle on func_vehicle function
 TODO: Move checkpoint particles to CSQC and only have the next markers particle effects ran
@@ -28,6 +15,22 @@ TODO: Add speed booster as a brush entity as well
 
 ====
 
+Done: More DM stuff
+	- Add remote bombs (done), richochet (done), freeze blast (done)
+	- Current enemy health+name should display under radar (done)
+	- Add cloak command (done)
+	- Cars should be on fire on death automatically (easy / done)
+	- A proper map to fight on (done)
+	- Bot AI (starting / started / needs work but ok for now)
+	- Intermission with win condition / fraglimit (done)
+	- Combo moves + energy meter (done)
+	- Skyroom for DM1 (done)
+	- CSQC Radar (done, thanks to Reki!)
+	- Figure out a safe way to have rockets push players (done)
+	- Remove screen tilt on death (done)
+	- Turbo lines should be removed on death/intermission (done)
+	- Add more homing to napalm (done, 50% more)
+Done: NaN nonsense (fixed/done)
 Done: Work on DM mode
 	- Car can fire guns (basic machinegun / specials), machinegun is done
 	- Button remappings, done

@@ -566,3 +566,13 @@ var float PART_FREEZEBLAST;
 #define isnan(n) (((int)(__variant)n)&0x7f800000i == 0x7f800000i)
 #define deg2rad(n) ((n)*(M_PI/180))
 #define rad2deg(n) ((n)*(180/M_PI))
+
+// Define bitmask constants
+#define FLAG_1 (1 << 0)  // 00000001
+#define FLAG_2 (1 << 1)  // 00000010
+#define FLAG_3 (1 << 2)  // 00000100
+#define FLAG_4 (1 << 3)  // 00001000
+#define FLAG_5 (1 << 4)  // 00010000
+#define FLAG_6 (1 << 5)  // 00100000
+#define FLAG_7 (1 << 6)  // 01000000
+#define FLAG_8 (1 << 7)  // 10000000
