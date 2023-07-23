@@ -1,6 +1,3 @@
-TODO: Revise PlayerPush stuff
-TODO: Ram damage
-TODO: Check out the breaking function from shpds delivery game
 TODO: Set direct angle on func_vehicle function
 TODO: Move checkpoint particles to CSQC and only have the next markers particle effects ran
 TODO: Tracebox on cars
@@ -13,6 +10,9 @@ TODO: Add speed booster as a brush entity as well
 
 ====
 
+Done: Check out the breaking function from shpds delivery game
+Done: Revise PlayerPush stuff
+Done: Ram damage
 Done: Add bot add/kick commands for DM
 Done: Remove "race start" stuff for deathmatch (Done, kept it for initial map start only)
 Done: Teleporter brush (trigger_teleport + info_teleport_destination)

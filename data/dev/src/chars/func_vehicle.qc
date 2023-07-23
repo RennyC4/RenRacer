@@ -518,6 +518,26 @@ void(float speed, float maxspeed) Car_Accelerate =
 	}
 };
 
+// schpuld: don't use for actual braking, it's hack
+void() Car_Brake =
+{
+	entity tright, tleft;
+
+	if (!self.driving)
+		return;
+	
+	tleft = self.driving.backleft;
+	tright = self.driving.backright;
+	if (tright.flags & FL_ONGROUND){
+		tright.physobj_flags = tright.physobj_flags - (tright.physobj_flags & PHFLAGS_RESTING);
+		tright.velocity *= 0.8;
+	}
+	if (tleft.flags & FL_ONGROUND){
+		tleft.physobj_flags = tleft.physobj_flags - (tleft.physobj_flags & PHFLAGS_RESTING);
+		tleft.velocity *= 0.8;
+	}
+};
+
 void(float speed, float maxspeed) Car_Roll =
 {
 	local entity f_right, f_left;
@@ -676,7 +696,7 @@ void TryUpdateVehicle(){
 				pointparticles(PART_BUBBLE, self.origin - v_up * 16 - v_forward * 32, '0 0 0', 1);
 		}
 		
-		CarStabilizeCheat(); // Car can't flip
+		CarStabilizeCheat(); // RennyC: Car auto corrects to prevent flipping
 
 		float roll = v_right * self.velocity;
 		if (roll > 100){
@@ -752,8 +772,7 @@ void TryUpdateVehicle(){
 			{
 				if (!self.driftspeed_timer)
 					self.driftspeed_timer = 10;
-				//CarStabilizeCheat();
-				self.car_stabilizer = -6; // Harder to tip while drifting
+				self.car_stabilizer = -6; // Harder to tip while drifting (lowers chassis)
 				car_drift();
 				if (self.turbo_fuel < 100)
 					self.turbo_fuel = self.turbo_fuel + 1; // Drift adds turbo fuel
@@ -767,20 +786,14 @@ void TryUpdateVehicle(){
 			if (self.driftspeed_timer != 0)
 			{
 				if (self.driftspeed_timer > 0)
-				{
-					//CarStabilizeCheat();
 					self.driftspeed_timer = self.driftspeed_timer - 1; // Remove it faster when button release
-				}
 				else
 					self.driftspeed_timer = 0;
 			}
 			else
 			{
 				if (self.car_stabilizer < -1)
-				{
 					self.car_stabilizer = self.car_stabilizer + 0.05; // Lower # = more stability after letting go of drift
-					//CarStabilizeCheat();
-				}
 				else
 					self.car_stabilizer = -1; // Restore normal stablizer
 
@@ -878,6 +891,8 @@ void TryUpdateVehicle(){
 		self.airborne_cnt = 0;
 	}
 	// RennyC
+	if (self.realspeed <= 10 && !self.keyflags) // RennyC: schpulds stuff applied to RenRacer
+		Car_Brake();
  
 	makevectors(self.driving.angles);
 	float backwards = (self.driving.velocity * v_forward) < 0;
