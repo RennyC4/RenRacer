@@ -18,6 +18,10 @@ void() CheckImpulses =
 		CycleWeaponForward();
 	if (self.impulse == 11)
 		CycleWeaponBackward();
+	if (self.impulse == 20)
+		BotConnect(0, 0, 0);
+	if (self.impulse == 21)
+		KickABot();
 
 	// Functions not related to gameplay
 	if (self.impulse == 101) // WIP: Change car angles instantly

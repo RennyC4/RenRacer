@@ -438,6 +438,7 @@ float gameover; // match is over (dm)
 .vector spawn_loc;
 .vector spawn_loc_angles;
 float human_players; // human players in-game
+.float player_id;
 .float collide_finished;
 float total_waypoints;
 float total_checkpoints;
@@ -468,6 +469,7 @@ string nextmap;
 .entity plyrremote;
 .float frozen_finished;
 .entity frozen;
+.float spawncar;
 
 // Key flags
 .float keyflags;

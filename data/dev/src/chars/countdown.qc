@@ -32,10 +32,13 @@ void() countdown_think = // Race start countdown
 		for (entity targ = world;(targ = find(targ, classname, "player"));)
 		{
 			if (targ.ishuman)
+			{
 				human_players = human_players + 1;
+				targ.player_id = human_players;
+			}
 		}
 
-		if (human_players == 1) // Add bots
+		if (human_players == 1 && !deathmatch) // Add bots
 		{
 			local float i;
 			local float g = cvar("sv_playerslots");

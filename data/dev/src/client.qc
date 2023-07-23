@@ -29,7 +29,11 @@ void() ClientConnect =
 void() ClientDisconnect =
 {
 	if (self.ishuman && human_players > 0)
+	{
 		human_players = human_players - 1;
+		for (entity targ = world;(targ = find(targ, classname, "player"));)
+			targ.player_id = targ.player_id - 1; // only player_id 1 can add/remove bots
+	}
 	if (gameover)
 		return;
 	if (self.observer)
@@ -51,7 +55,11 @@ void() ClientDisconnect =
 		if (self.driving)
 			remove_car(self.driving);
 	}
-
+	// Clear fields on disconnect
+	self.spawncar = FALSE;
+	self.deadflag = FALSE;
+	self.deathcount = 0;
+	self.ammo_firerocket = self.ammo_homingrocket = self.ammo_powerrocket = self.ammo_napalm = self.ammo_rico = self.ammo_remote = self.ammo_freeze = 0;
 	ClientDisconnected(); // FrikBot
 };
 
@@ -749,7 +757,7 @@ entity() SelectSpawnSpot =
 //----
 // Spawning the Player
 //----
-.float spawncar;
+
 void() PutClientInServer =
 {
 	local entity spawn_spot = SelectSpawnSpot();
@@ -803,7 +811,31 @@ void() PutClientInServer =
 			else
 				centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\n\nPress [^b^1FIRE^7^b] to unleash carnage");
 		}
-		else if (self.ishuman) // Game in progress, force observer
-			self.observer = TRUE;
+		else
+		{
+			if (!deathmatch)
+			{
+				if (self.ishuman)
+					self.observer = TRUE;
+			}
+			else
+			{
+				if (!self.spawncar) // Joined mid-deathmatch game
+				{
+					local entity car = hotrod();
+					makevectors(self.angles);
+					car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
+					Car_InitVehicle(car);
+					self.spawncar = TRUE;
+					Spawn_RadarBlip(self);
+					// Start music on player mid-game join
+					if (world.model == "maps/dm1.bsp")
+						self.music = "sound/music/dm1.ogg";
+					if (checkextension("DP_QC_SPRINTF"))
+						stuffcmd (self, sprintf("music %s\n", self.music));
+
+				}
+			}
+		}
 	}
 };

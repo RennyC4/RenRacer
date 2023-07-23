@@ -1,7 +1,5 @@
-TODO: Remove "race start" stuff for deathmatch
-TODO: Add bot add/kick commands for DM
-TODO: Ram damage
 TODO: Revise PlayerPush stuff
+TODO: Ram damage
 TODO: Check out the breaking function from shpds delivery game
 TODO: Set direct angle on func_vehicle function
 TODO: Move checkpoint particles to CSQC and only have the next markers particle effects ran
@@ -15,6 +13,8 @@ TODO: Add speed booster as a brush entity as well
 
 ====
 
+Done: Add bot add/kick commands for DM
+Done: Remove "race start" stuff for deathmatch (Done, kept it for initial map start only)
 Done: Teleporter brush (trigger_teleport + info_teleport_destination)
 Done: More DM stuff
 	- Add remote bombs (done), richochet (done), freeze blast (done)

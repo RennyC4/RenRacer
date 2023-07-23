@@ -263,7 +263,10 @@ float SendEntity_RadarBlip(entity to, float sendflags) // in this, "to" is the c
 void Think_RadarBlip()
 {
 	if !(self.owner) // if we don't have an owner, we don't need to update since we won't be moving!
+	{
+		remove(self);
 		return;
+	}
 	if (self.owner.cloak_finished > time)
 		return;
 
