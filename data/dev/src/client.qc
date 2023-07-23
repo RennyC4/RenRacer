@@ -101,36 +101,19 @@ void() PushPlayers =
 
 	for (entity b = world;(b = find(b, classname, "player"));)
 	{
-		if (vlen(b.origin - self.origin ) < 100 && b != self && b.driving && self.realspeed > 9 && self.health > 0 && b.health > 0)
+		if (vlen(b.origin - self.origin ) < 100 && b != self && b.driving && self.realspeed > b.realspeed && self.health > 0 && b.collide_finished < time)
 		{
-			entity wheels[] =
-			{
-				b.driving.frontleft,
-				b.driving.frontright,
-				b.driving.backleft,
-				b.driving.backright
-			};
+			b.forcejump_strength = 200 + self.realspeed;
+			b.forcejump = TRUE;
 
-			// TODO: Find a better way to 'bump' players - Start
-			for (float i = 0; i < wheels.length; i++)
+			b.collide_finished = time + 2.5;
+			self.collide_finished = time + 2.5;
+
+			if (self.turbo)
 			{
-				traceline(wheels[i].origin, wheels[i].origin - wheels[i].lmat_up * 24, MOVE_NOMONSTERS, wheels[i]);
-				if (trace_fraction < 1)
-					Phys_Force(self.driving, self.driving.physobj_mass, '0 0 1' * 240, trace_endpos, wheels[i].lmat_up);
+				float dmg = ceil(self.realspeed / 8);
+				DoDamage(b, self, dmg, "ramming");
 			}
-			vector worldorg = self.driving.origin;
-
-			local vector ran = '0 0 0';
-			ran_y = random()*360;
-			makevectors(ran);
-			if (random() < 0.5)
-				Phys_Force(self.driving, self.driving.physobj_mass * 0.35, (v_right * 10000 * -1) * frametime, worldorg - v_right * 16, -v_right);
-			else
-				Phys_Force(self.driving, self.driving.physobj_mass * 0.35, v_right * 10000 * frametime, worldorg + v_right * 16, +v_right);
-			// TODO: Find a better way to 'bump' players - End
-
-			b.collide_finished = time + 1;
-			self.collide_finished = time + 1;
 
 			if (random() < 0.25)
 				sound (self, CHAN_AUTO, "hit1.wav", 1, ATTN_NORM);
@@ -140,7 +123,6 @@ void() PushPlayers =
 				sound (self, CHAN_AUTO, "hit3.wav", 1, ATTN_NORM);
 			else
 				sound (self, CHAN_AUTO, "hit4.wav", 1, ATTN_NORM);
-
 			if (b.onfire_finished > time) // catch fire on touch
 			{
 				self.onfire_finished = time + 2.5;

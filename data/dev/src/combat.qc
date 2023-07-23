@@ -66,6 +66,11 @@ void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 		bprint(attacker.netname, " gave ");
 		bprint(targ.netname, " the cold shoulder\n");
 	}	
+	if (attackerclassname == "ramming")
+	{
+		bprint(attacker.netname, " rammed ");
+		bprint(targ.netname, " raw\n");
+	}	
 };
 
 // ---
