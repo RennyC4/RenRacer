@@ -50,6 +50,7 @@ chars/decor/barricade.qc
 chars/decor/flare.qc
 
 funcs.qc
+triggers.qc
 dummys.qc
 
 //CSQC extension start here.

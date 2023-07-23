@@ -262,29 +262,29 @@ void(entity car) remove_car =
 };
 
 // Huge thanks to spike for the help with displacement
-void(vector dest, float silent) car_teleport =
+void(entity targ, vector dest, float silent) car_teleport =
 {
-	if (self.teleport_finished > time)
+	if (targ.teleport_finished > time)
 		return;
 
-	self.collide_finished = time + 2; // Can't collide with other cars temporarily
+	targ.collide_finished = time + 2; // Can't collide with other cars temporarily
 
 	if (!silent)
 	{
 		if (random() < 0.5)
-			sound (self, CHAN_AUTO, "teleport1.wav", 1, ATTN_NORM);
+			sound (targ, CHAN_AUTO, "teleport1.wav", 1, ATTN_NORM);
 		else
-			sound (self, CHAN_AUTO, "teleport2.wav", 1, ATTN_NORM);
+			sound (targ, CHAN_AUTO, "teleport2.wav", 1, ATTN_NORM);
 
 		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 		WriteByte (MSG_BROADCAST, TE_TELEPORT);
-		WriteCoord (MSG_BROADCAST, self.origin_x);
-		WriteCoord (MSG_BROADCAST, self.origin_y);
-		WriteCoord (MSG_BROADCAST, self.origin_z);
+		WriteCoord (MSG_BROADCAST, targ.origin_x);
+		WriteCoord (MSG_BROADCAST, targ.origin_y);
+		WriteCoord (MSG_BROADCAST, targ.origin_z);
 	}
 	
-	local entity part = self.driving.physobj_particlelist;
-	local vector displacement = dest - self.origin;
+	entity part = targ.driving.physobj_particlelist;
+	vector displacement = dest - targ.origin;
     while(part)
     {
 		local vector v2 = part.origin;
@@ -301,10 +301,8 @@ void(vector dest, float silent) car_teleport =
 		WriteCoord (MSG_BROADCAST, dest_x);
 		WriteCoord (MSG_BROADCAST, dest_y);
 		WriteCoord (MSG_BROADCAST, dest_z);
+		targ.alpha = 0.1; // Teleport effect
 	}
-	
-	if (!silent)
-		self.alpha = 0.1; // Teleport effect
 };
 
 // directly set the car angles WIP

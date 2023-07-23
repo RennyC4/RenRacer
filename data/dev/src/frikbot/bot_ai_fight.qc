@@ -68,7 +68,7 @@ void() bot_ai_fight =
 		self.bot_backup_finished = time + 0.3 + random()*0.6;
 
 	// Out of ammo, go search for some
-	if (self.ammo_firerocket < 1 && self.ammo_homingrocket < 1 && self.ammo_powerrocket < 1 && self.ammo_napalm < 1 && self.ammo_rico < 1 && self.ammo_remote < 1)
+	if (self.ammo_firerocket < 1 && self.ammo_homingrocket < 1 && self.ammo_powerrocket < 1 && self.ammo_napalm < 1 && self.ammo_rico < 1 && self.ammo_remote < 1 && self.ammo_freeze < 1)
 	{
 		self.goalentity = Bot_FindClosestItem();
 		self.bot_huntitem_finished = time + 3;
@@ -111,6 +111,11 @@ void() bot_ai_fight =
 				if (self.ammo_remote > 0 || self.plyrremote)
 				{
 					self.weapon = WEP_REMOTE;
+					self.button4 = TRUE;
+				}
+				if (self.ammo_freeze > 0)
+				{
+					self.weapon = WEP_FREEZE;
 					self.button4 = TRUE;
 				}
 				self.button3 = TRUE; // Fire machine guns

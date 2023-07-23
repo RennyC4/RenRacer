@@ -44,7 +44,7 @@ this notice in its entirety.
 
 void() headlights_on;
 void() headlights_off;
-void(vector dest, float silent) car_teleport;
+void(entity targ, vector dest, float silent) car_teleport;
 
 float stagger_think;
 

@@ -42,7 +42,7 @@ void() marker_think =
 								self.angles = self.spawn_loc_angles;
 								self.fixangle = TRUE;
 								self.waypoint = 0;
-								car_teleport(self.spawn_loc, FALSE);
+								car_teleport(self, self.spawn_loc, FALSE);
 								self.teleport_finished = time + 2;
 								self = oldself;
 							}
@@ -52,7 +52,7 @@ void() marker_think =
 								targ.clearcprint_finished = time + 2;
 								oldself = self;
 								self = targ;
-								car_teleport(self.checkpoint_lastpos, FALSE);
+								car_teleport(self, self.checkpoint_lastpos, FALSE);
 								self.teleport_finished = time + 2;
 								self = oldself;
 							}
@@ -83,7 +83,7 @@ void() marker_think =
 					self.angles = self.spawn_loc_angles;
 					self.fixangle = TRUE;
 					self.waypoint = 0;
-					car_teleport(self.spawn_loc, FALSE);
+					car_teleport(self, self.spawn_loc, FALSE);
 					self.teleport_finished = time + 2;
 					self = oldself;
 					targ.clearcprint_finished = time + 2.5;
