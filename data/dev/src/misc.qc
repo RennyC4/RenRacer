@@ -306,29 +306,52 @@ void(entity targ, vector dest, float silent) car_teleport =
 };
 
 // directly set the car angles WIP
-void(vector dir) car_angle =
+void(entity targ, vector dir) set_carangle =
 {
-	local entity part = self.driving.physobj_particlelist;
+	vector displacement = dir - targ.angles;
+
+	entity part = self.driving.physobj_particlelist;
     while(part)
     {
-		bprint (ftos(part.angles_y), "\n");
-		part.angles = dir;
+		bprint ("1: ",ftos(part.angles_y),"\n");
+
+		vector v2 = part.angles;
+		v2 = v2 += displacement;
+		part.angles = v2;
+
+		bprint("2: ",ftos(part.angles_y),"\n");
+		bprint(part.classname, "\n");
+
 		part = part.physobj_next;
 	}
-
+	
 	entity hitmodel = self.driving.physobj_hitmodel;
 	while (hitmodel)
 	{
-		bprint (ftos(hitmodel.angles_y), "\n");
-		hitmodel.angles = dir;
+		bprint ("1: ",ftos(hitmodel.angles_y),"\n");
+
+		v2 = hitmodel.angles;
+		v2 = v2 += displacement;
+		hitmodel.angles = v2;
+
+		bprint("2: ",ftos(hitmodel.angles_y),"\n");
+		bprint(hitmodel.classname, "\n");
+
 		hitmodel = hitmodel.physobj_next;
 	}
 	
-	local entity e = self.driving.physobj_staticlist;
-    while (e)
+	entity staticmodel = self.driving.physobj_staticlist;
+    while (staticmodel)
     {
-		bprint (ftos(e.angles_y), "\n");
-		e.angles = dir;
-		e = e.physobj_next;
+		bprint ("1: ",ftos(staticmodel.angles_y),"\n");
+
+		v2 = staticmodel.angles;
+		v2 = v2 += displacement;
+		staticmodel.angles = v2;
+
+		bprint("2: ",ftos(staticmodel.angles_y),"\n");
+		bprint(staticmodel.classname, "\n");
+		
+		staticmodel = staticmodel.physobj_next;
     }
 };

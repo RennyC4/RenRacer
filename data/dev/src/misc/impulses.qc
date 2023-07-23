@@ -25,10 +25,8 @@ void() CheckImpulses =
 
 	// Functions not related to gameplay
 	if (self.impulse == 101) // WIP: Change car angles instantly
-	{
-		makevectors (self.angles);
-		car_angle(self.angles);
-	}
+		set_carangle(self, '0 0 0');
+
 	if (self.impulse == 102)
 	{
 		create_waypoint(self.origin, total_waypoints, 0);

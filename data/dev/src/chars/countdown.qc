@@ -50,7 +50,7 @@ void() countdown_think = // Race start countdown
 	//
 
 	//
-	// Spawn players cars, spawn radar
+	// Spawn players cars, spawn radar blip
 	//
 	
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
