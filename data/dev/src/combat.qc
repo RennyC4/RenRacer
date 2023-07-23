@@ -226,7 +226,7 @@ void(entity attacker, float radius, float damage, float setfire, string attacker
 {
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
-		if (vlen(targ.origin - self.origin) <= radius)
+		if (vlen(targ.origin - self.origin) <= radius && targ.invulnerable_finished < time)
 		{
 			float dmg = damage;
 			if (diminish)
@@ -599,7 +599,7 @@ void(float type, float rear) Fire_Rocket =
 void() napalmfire_think =
 {
 	if (self.onfire_finished > time)
-		DoRadiusDamage(self.owner, 150, 0, TRUE, self.classname, FALSE); // Set whoever near me on fire
+		DoRadiusDamage(self.owner, 150, 0, TRUE, self.classname, FALSE); // Set whoever's near me on fire
 	else
 	{
 		if (self.movetype != MOVETYPE_TOSS) // Gravity brings the napalm fire back down
@@ -978,7 +978,7 @@ void() Freeze_Think =
 void() Freeze_Touch =
 {
 	makevectors_mdl(self.angles);
-	if (other.solid == SOLID_BSP && !other.owner) // Hit wall
+	if (other.solid == SOLID_BSP && !other.owner || other.owner.driving.invulnerable_finished > time) // Hit wall / invunerable player
 	{
 		Create2DFreezeExplosion(self.origin - v_forward * 32, 3);
 		remove(self);

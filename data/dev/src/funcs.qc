@@ -136,8 +136,6 @@ void() func_breakable =
 	self.takedamage = DAMAGE_YES;
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
-	self.dimension_hit = 255;
-	self.dimension_solid = 255;
 	self.classname = "func_breakable";
 	self.th_die = func_breakable_death;
 	setmodel (self, self.model);

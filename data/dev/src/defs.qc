@@ -576,3 +576,6 @@ var float PART_FREEZEBLAST;
 #define FLAG_6 (1 << 5)  // 00100000
 #define FLAG_7 (1 << 6)  // 01000000
 #define FLAG_8 (1 << 7)  // 10000000
+
+float player_dimension_hit;
+float player_dimension_solid;

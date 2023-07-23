@@ -143,7 +143,6 @@ void() PushPlayers =
 };
 
 // Instances that can force the car to jump (example: being hit by a rocket)
-// FIXME: This function can cause the player to blip out of existence (NaN error)
 void() ForceJump =
 {
 	entity wheels[] = {
