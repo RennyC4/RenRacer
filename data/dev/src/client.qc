@@ -93,41 +93,49 @@ void() Setup_level_effects =
 
 //
 // RennyC: Work in progress to fake push other cars/players out of the way
+// 100 used to be the radius, revert once dimension_hit/solid are fixed
 //
 void() PushPlayers =
 {
-	if (self.collide_finished > time)
-		return;
-
 	for (entity b = world;(b = find(b, classname, "player"));)
 	{
-		if (vlen(b.origin - self.origin ) < 100 && b != self && b.driving && self.realspeed > b.realspeed && self.health > 0 && b.collide_finished < time)
+		if (vlen(b.origin - self.origin) <= 125 && b != self && b.driving && b.health > 0)
 		{
-			b.forcejump_strength = 200 + self.realspeed;
-			b.forcejump = TRUE;
-
-			b.collide_finished = time + 2.5;
-			self.collide_finished = time + 2.5;
+			if (self.realspeed >= 10 && self.realspeed > b.realspeed)
+			{
+				b.forcejump_strength = 240 + (self.realspeed * 2);
+				b.forcejump = TRUE;
+				
+				if (random() < 0.25)
+					sound (self, CHAN_AUTO, "hit1.wav", 1, ATTN_NORM);
+				else if (random() < 0.5)
+					sound (self, CHAN_AUTO, "hit2.wav", 1, ATTN_NORM);
+				else if (random() < 0.75)
+					sound (self, CHAN_AUTO, "hit3.wav", 1, ATTN_NORM);
+				else
+					sound (self, CHAN_AUTO, "hit4.wav", 1, ATTN_NORM);
+			}
 
 			if (self.turbo)
 			{
-				float dmg = ceil(self.realspeed / 8);
+				float dmg = floor(self.realspeed / 8);
+				if (dmg > 16) dmg = 16; // cap
 				DoDamage(b, self, dmg, "ramming");
 			}
 
-			if (random() < 0.25)
-				sound (self, CHAN_AUTO, "hit1.wav", 1, ATTN_NORM);
-			else if (random() < 0.5)
-				sound (self, CHAN_AUTO, "hit2.wav", 1, ATTN_NORM);
-			else if (random() < 0.75)
-				sound (self, CHAN_AUTO, "hit3.wav", 1, ATTN_NORM);
-			else
-				sound (self, CHAN_AUTO, "hit4.wav", 1, ATTN_NORM);
-			if (b.onfire_finished > time) // catch fire on touch
+			// Fire stuff on car touch
+			if (self.onfire_finished > time)
+			{
+				b.onfire_finished = time + 2.5;
+				b.igniter = self.igniter;
+			}
+			if (b.onfire_finished > time)
 			{
 				self.onfire_finished = time + 2.5;
 				self.igniter = b.igniter;
 			}
+
+			self.collide_finished = time + 1;
 		}
 	}
 };
@@ -348,7 +356,7 @@ void() PlayerPostThink =
 		return;
 	}
 
-	if (race_status == RACE_STARTED && !intermission_running)
+	if (race_status == RACE_STARTED && !intermission_running && self.health > 0 && self.collide_finished < time)
 		PushPlayers();
 	if (self.forcejump)
 	{

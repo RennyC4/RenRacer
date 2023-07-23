@@ -15,8 +15,6 @@ void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 	}
 	if (attacker == targ) // suicide
 	{
-		if (attacker)
-			attacker.frags = attacker.frags - 1;
 		bprint(targ.netname, " stupidly commited vehicular suicide\n");
 		return;
 	}
@@ -179,6 +177,8 @@ void(entity targ, entity attacker) Death =
 
 void(entity targ, entity attacker, float damage, string attackerclassname) DoDamage =
 {
+	if (!deathmatch)
+		return;
 	if (targ.health < 1)
 		return;
 	if (targ.invulnerable_finished > time)
@@ -212,8 +212,10 @@ void(entity targ, entity attacker, float damage, string attackerclassname) DoDam
 	{
 		if (targ.classname == "player")
 		{
-			if (attacker)
+			if (attacker != targ)
 				attacker.frags = attacker.frags + 1; // reward
+			else
+				attacker.frags = attacker.frags - 1; // suicide punish
 			Death(targ, attacker);
 			PrintDeathMessage(targ, attacker, attackerclassname);
 		}
@@ -229,6 +231,8 @@ void(entity targ, entity attacker, float damage, string attackerclassname) DoDam
 
 void(entity attacker, float radius, float damage, float setfire, string attackerclassname, float diminish) DoRadiusDamage =
 {
+	if (!deathmatch)
+		return;
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
 		if (vlen(targ.origin - self.origin) <= radius && targ.invulnerable_finished < time)
@@ -961,7 +965,7 @@ void() Freeze_Think =
 		ph = ph * (1/7);
 
 		self.velocity = normalize(vels + ph);
-		self.velocity = self.velocity * 500;
+		self.velocity = self.velocity * 700;
 		self.angles = vectoangles(self.velocity);
 	}
 
@@ -1030,8 +1034,8 @@ void(float rear) Fire_Freeze =
 	freeze.scale = 2;
 	freeze.touch = Freeze_Touch;
 
-	freeze.velocity = aim(self, 500);
-	freeze.velocity = freeze.velocity * 500;
+	freeze.velocity = aim(self, 700);
+	freeze.velocity = freeze.velocity * 700;
 
 	freeze.velocity_x = freeze.velocity_x + self.driving.velocity_x;
 	freeze.velocity_y = freeze.velocity_y + self.driving.velocity_y;
