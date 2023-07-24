@@ -438,6 +438,8 @@ void() Rocket_Think =
 {
 	if (self.removeme_finished < time)
 	{
+		CreateExplosion(self.origin);
+		Create2DExplosion(self.origin, 2);
 		remove(self);
 		return;
 	}

@@ -135,6 +135,20 @@ void() HUD_Deathmatch =
 	float wep = getstatf(STAT_WEAPON);
 
 	//
+	// Draw Player ID
+	//
+
+	pos = [(g_width - stringwidth("", TRUE, '18 18 0'))/12-50, (g_height - 8)];
+	float i = getstatf(STAT_PLAYERID);
+	string i1 = ftos(i);
+
+	drawstring (pos + '1 1', "ID: ", '8 8 0', '0 0 0', 1, DRAWFLAG_NORMAL); // text shadow
+	drawstring (pos, "ID: ", '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+
+	drawstring (pos + '17 1', i1, '8 8 0', '0 0 0', 1, DRAWFLAG_NORMAL); // text shadow
+	drawstring (pos + '16 0', i1, '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+
+	//
 	// Fire rocket information on HUD
 	//
 

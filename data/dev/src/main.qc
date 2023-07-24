@@ -45,6 +45,7 @@ void() CSEv_GrabCSQCValues =
 	clientstat(STAT_AMMO_RICOCHET, EV_FLOAT, ammo_rico);
 	clientstat(STAT_AMMO_REMOTE, EV_FLOAT, ammo_remote);
 	clientstat(STAT_AMMO_FREEZE, EV_FLOAT, ammo_freeze);
+	clientstat(STAT_PLAYERID, EV_FLOAT, player_id);
 };
 
 void() world_lights =
