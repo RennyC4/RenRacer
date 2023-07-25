@@ -1235,9 +1235,8 @@ void() CommandSpecials =
 		self.cmdspecial_rear_step = 2;
 		self.cmdspecial_rear_step_finished = time + 0.2;
 	}
-	if (self.cmdspecial_rear_step == 2 && self.moveprog2 == 1 && self.energy >= 30) // Hit last step, user hit down
+	if (self.cmdspecial_rear_step == 2 && self.moveprog2 == 1) // Hit last step, user hit down
 	{
-		self.energy = self.energy - 30;
 		sprint (self, "^2Command: ");
 		sprint (self, "^7Rear Attack\n");
 		CarAttack(1, TRUE);
