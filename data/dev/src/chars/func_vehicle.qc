@@ -84,7 +84,7 @@ void Car_TirePlace(entity tire){
 
 	// Spin Tires - RennyC
 	makevectors(tire.angles);
-	float pitch = -dotproduct(tire.angles, plyrent_tireowner.tire_forward) * 360.0;
+	float pitch = -dotproduct(tire.angles, plyrent_tireowner.tire_forward) * 360;
 	if (plyrent_tireowner.realspeed >= 4)
 		tire.angles_x += pitch * 0.1;
 	

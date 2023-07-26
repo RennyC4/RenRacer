@@ -42,7 +42,8 @@ void() SUB_Respawn =
 
 void() item_health_touch =
 {
-	entity toucher = other.owner.driving;
+	if (other.owner.driving)
+		entity toucher = other.owner.driving;
 
 	if (toucher.health <= 0)
 		return;
@@ -90,7 +91,8 @@ void() item_health =
 
 void() item_firerocket_touch =
 {
-	entity toucher = other.owner.driving;
+	if (other.owner.driving)
+		entity toucher = other.owner.driving;
 	if (toucher.health <= 0)
 		return;
 
@@ -137,7 +139,8 @@ void() item_firerocket =
 
 void() item_homingrocket_touch =
 {
-	entity toucher = other.owner.driving;
+	if (other.owner.driving)
+		entity toucher = other.owner.driving;
 	if (toucher.health <= 0)
 		return;
 
@@ -184,7 +187,8 @@ void() item_homingrocket =
 
 void() item_powerrocket_touch =
 {
-	entity toucher = other.owner.driving;
+	if (other.owner.driving)
+		entity toucher = other.owner.driving;
 	if (toucher.health <= 0)
 		return;
 
@@ -231,7 +235,8 @@ void() item_powerrocket =
 
 void() item_napalm_touch =
 {
-	entity toucher = other.owner.driving;
+	if (other.owner.driving)
+		entity toucher = other.owner.driving;
 	if (toucher.health <= 0)
 		return;
 
@@ -278,7 +283,8 @@ void() item_napalm =
 
 void() item_ricochet_touch =
 {
-	entity toucher = other.owner.driving;
+	if (other.owner.driving)
+		entity toucher = other.owner.driving;
 	if (toucher.health <= 0)
 		return;
 
@@ -326,7 +332,8 @@ void() item_ricochet =
 
 void() item_remote_touch =
 {
-	entity toucher = other.owner.driving;
+	if (other.owner.driving)
+		entity toucher = other.owner.driving;
 	if (toucher.health <= 0)
 		return;
 
@@ -374,7 +381,8 @@ void() item_remote =
 
 void() item_freeze_touch =
 {
-	entity toucher = other.owner.driving;
+	if (other.owner.driving)
+		entity toucher = other.owner.driving;
 	if (toucher.health <= 0)
 		return;
 

@@ -1064,35 +1064,34 @@ void(float rear) Fire_Freeze =
 // Landmine
 //
 
-void() Landmine_Touch =
-{
-	if (other.owner.driving == self.owner) // Players can't trip their own mines
-		return;
-	if (self.hitobject_finished > time)
-		return;
-
-	CreateExplosion(self.origin);
-	Create2DExplosion(self.origin + v_up * 24, 3);
-	DoDamage(other.owner.driving, self.owner, 15, self.classname);
-
-	other.owner.driving.forcejump_strength = 450;
-	other.owner.driving.forcejump = TRUE;
-
-	remove(self);
-};
-
 void() Landmine_Think =
 {
-	if (!self.owner)
+	if (self.cnt >= 30 || !self.owner)
 	{
 		remove(self);
 		return;
 	}
-	droptofloor();
-	setorigin(self, self.origin + v_up * 16);
+	if (self.animation_finished < time)
+	{
+		self.cnt = self.cnt + 1; // remove timer
+		self.animation_finished = time + 1;
+	}
 
-	self.think = SUB_Remove;
-	self.nextthink = time + 30;
+	for (entity targ = world;(targ = find(targ, classname, "player"));)
+	{
+		if (vlen(targ.origin - self.origin) <= 50 && targ != self.owner && self.hitobject_finished < time)
+		{
+			CreateExplosion(self.origin);
+			Create2DExplosion(self.origin + v_up * 24, 3);
+			DoDamage(targ, self.owner, 15, self.classname);
+
+			targ.forcejump_strength = 450;
+			targ.forcejump = TRUE;
+			remove(self);
+			return;
+		}
+	}
+	frameskip(0.1);
 };
 
 void() Fire_Landmine =
@@ -1100,17 +1099,17 @@ void() Fire_Landmine =
 	local entity landmine = spawn();
 	landmine.owner = self;
 	landmine.solid = SOLID_TRIGGER;
-	landmine.movetype = MOVETYPE_NONE;
+	landmine.movetype = MOVETYPE_TOSS;
 	landmine.classname = "landmine";
+	landmine.scale = .5;
 
 	setmodel (landmine, "progs/landmine.spr");
-	setsize (landmine, '0 0 0', '0 0 0');
+	setsize (landmine, '0 0 -16', '0 0 0');
 	setorigin (landmine, self.origin);
 
 	sound (self, CHAN_AUTO, "combat/landmine.wav", 1, ATTN_NORM); // CHAN_WEAPON is for specials, mgun spams
 
 	landmine.hitobject_finished = time + 0.5; // How long till it's active
-	landmine.touch = Landmine_Touch;
 	landmine.think = Landmine_Think;
 	landmine.nextthink = time;
 };
