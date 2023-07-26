@@ -79,8 +79,15 @@ void(entity e, float strength) play_skidding =
 
 void Car_TirePlace(entity tire){
 	entity tireparticle = tire.enemy;
+	entity plyrent_tireowner = self.owner.driving;
 	tire.angles = vectoangles2(tireparticle.lmat_forward, tireparticle.lmat_up);
 
+	// Spin Tires - RennyC
+	makevectors(tire.angles);
+	float pitch = -dotproduct(tire.angles, plyrent_tireowner.tire_forward) * 360.0;
+	if (plyrent_tireowner.realspeed >= 4)
+		tire.angles_x += pitch * 0.1;
+	
 	traceline(tireparticle.origin, tireparticle.origin + tireparticle.lmat_up * -tire.frags, TRUE, tire);
 	float tracelen = fabs(tireparticle.physobj_spring_length);
 #if defined(SMOOTH)
