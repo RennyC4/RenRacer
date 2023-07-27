@@ -360,11 +360,6 @@ void() Fire_MachineGun =
 
 	bullet.angles = vectoangles(bullet.velocity);
 
-	// Test
-	bullet.dimension_solid = 0;
-	bullet.dimension_hit = 1;
-	//
-
 	setmodel (bullet, "progs/bullet.mdl");
 	setsize (bullet, '0 0 0', '0 0 0');
 
@@ -586,11 +581,6 @@ void(float type, float rear) Fire_Rocket =
 	rocket.velocity_x = rocket.velocity_x + self.driving.velocity_x;
 	rocket.velocity_y = rocket.velocity_y + self.driving.velocity_y;
 	rocket.angles = vectoangles(rocket.velocity);
-
-	// Test
-	rocket.dimension_solid = 0;
-	rocket.dimension_hit = 1;
-	//
 
 	setmodel (rocket, "progs/rocket.mdl");
 	setsize (rocket, '0 0 0', '0 0 0');
@@ -819,9 +809,8 @@ void() Rico_Think =
 	// Damage
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
-		if (self.cnt > 0)
-			float do_hit = TRUE;
-		else if (targ == self.owner)
+		float do_hit = TRUE;
+		if (targ == self.owner && self.cnt == 0)
 			do_hit = FALSE;
 		
 		if (vlen(targ.origin - self.origin) <= size && do_hit)
@@ -870,11 +859,6 @@ void(float rear) Fire_Ricochet =
 	rico.velocity_x = rico.velocity_x + self.driving.velocity_x;
 	rico.velocity_y = rico.velocity_y + self.driving.velocity_y;
 	rico.angles = vectoangles(rico.velocity);
-
-	// Test
-	rico.dimension_solid = 0;
-	rico.dimension_hit = 1;
-	//
 
 	setmodel (rico, "progs/ricochet.mdl");
 	setsize (rico, '0 0 0', '0 0 0');
@@ -1042,11 +1026,6 @@ void(float rear) Fire_Freeze =
 	freeze.velocity_x = freeze.velocity_x + self.driving.velocity_x;
 	freeze.velocity_y = freeze.velocity_y + self.driving.velocity_y;
 	freeze.angles = vectoangles(freeze.velocity);
-
-	// Test
-	freeze.dimension_solid = 0;
-	freeze.dimension_hit = 1;
-	//
 
 	setmodel (freeze, "progs/frzsmk.spr");
 	setsize (freeze, '0 0 0', '0 0 0');

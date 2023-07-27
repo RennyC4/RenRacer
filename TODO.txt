@@ -1,6 +1,6 @@
 Semi-Done: Breakable brushes (request by xaGe)
 			- Add ones you can ram through instead of just shoot
-TODO: Time limit should announce the winner with the highest frags (like when fraglimit is hit / misc.qc)
+TODO: Timelimit should announce the winner with the highest frags (like when fraglimit is hit / misc.qc)
 TODO: Set direct angle on func_vehicle function *Difficult*
 TODO: Move checkpoint particles to CSQC and only have the next markers particle effects ran
 TODO: Tracebox on cars
@@ -10,10 +10,11 @@ TODO: Tracebox on cars
 TODO: Impact sound - Car smash (wall)
 TODO: Add speed booster as a brush entity as well
 
-TODO: Bug FTE authors about dimension_hit/dimension_solid being broken
-
 ====
 
+Done: Fix dimension_hit/solid on physobj_hitmodel
+	Done: Bug FTE authors about dimension_hit/dimension_solid being broken
+			- This was an oversight on my part :)
 Done: Check out the breaking function from shpds delivery game
 Done: Revise PlayerPush stuff
 Done: Ram damage

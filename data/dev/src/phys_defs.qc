@@ -14,7 +14,7 @@ entity physobj_spawning; // the current object in spawning
 .entity physobj_p2; // particle 2 of this stick (end)
 .entity physobj_p3; // particle 3 of this stick (rotation)
 
-entity p_damage_thinker;
+//entity p_damage_thinker;
 .entity p_damage_next;
 .float p_damage_val;
 

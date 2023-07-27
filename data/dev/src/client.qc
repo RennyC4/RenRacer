@@ -792,7 +792,6 @@ void() PutClientInServer =
 	self.spawn_loc_angles = self.angles; // Stash it
 	self.alpha = 1;
 	self.energy = 100;
-	self.deathcount_finished = time + 1;
 
 	if (cvar("developer") != 1)
 	{

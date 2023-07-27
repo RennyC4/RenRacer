@@ -186,19 +186,6 @@ void() StartFrame =
 {
 	BotFrame(); // FrikBot
 	framecount = framecount + 1;
-
-	// FIXME/TODO: FTE engine bug dimension_solid/hit is broken?
-	// Remove the !deathmatch conditional when bug is fixed.
-	if (!deathmatch)
-	{
-		player_dimension_hit = 0;
-		player_dimension_solid = 0; 
-	}
-	else
-	{
-		player_dimension_hit = FLAG_1;
-		player_dimension_solid = FLAG_2;
-	}
 };
 
 // =======

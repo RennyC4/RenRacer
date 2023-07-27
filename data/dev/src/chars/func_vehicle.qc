@@ -26,6 +26,7 @@ void PushAndDamageThink(){
 
 // FIXME: need to take attacker mass into account
 void PushAndDamageTarget(entity instigator, entity targ){
+/*
 	vector vel = instigator.velocity;
 	if (!p_damage_thinker){
 		p_damage_thinker = spawn();
@@ -57,12 +58,8 @@ void PushAndDamageTarget(entity instigator, entity targ){
 			targ.p_damage_val += len * 0.01;
 		}
 	}
+*/
 }
-
-void() PhysCrush =
-{
-	PushAndDamageTarget(other, self);
-};
 
 // RennyC: From build a delivery by shpuld
 float sfx_skidding;
@@ -80,14 +77,14 @@ void(entity e, float strength) play_skidding =
 void Car_TirePlace(entity tire){
 	entity tireparticle = tire.enemy;
 	entity plyrent_tireowner = self.owner.driving;
+
 	tire.angles = vectoangles2(tireparticle.lmat_forward, tireparticle.lmat_up);
 
 	// Spin Tires - RennyC
-	makevectors(tire.angles);
 	float pitch = -dotproduct(tire.angles, plyrent_tireowner.tire_forward) * 360;
 	if (plyrent_tireowner.realspeed >= 4)
 		tire.angles_x += pitch * 0.1;
-	
+
 	traceline(tireparticle.origin, tireparticle.origin + tireparticle.lmat_up * -tire.frags, TRUE, tire);
 	float tracelen = fabs(tireparticle.physobj_spring_length);
 #if defined(SMOOTH)
@@ -131,6 +128,9 @@ void() Car_ChassiThink =
 	entity hitmodel = self.realowner.physobj_hitmodel;
 	while (hitmodel)
 	{
+		hitmodel.dimension_hit = player_dimension_hit;
+		hitmodel.dimension_solid = player_dimension_solid;
+
 		hitmodel.solid = SOLID_TRIGGER;
 		setorigin(hitmodel, hitmodel.origin);
 		hitmodel = hitmodel.physobj_next;
@@ -144,6 +144,8 @@ void() Car_ChassiThink =
 	hitmodel = self.realowner.physobj_hitmodel;
 	while (hitmodel)
 	{
+		hitmodel.dimension_hit = player_dimension_hit;
+		hitmodel.dimension_solid = player_dimension_solid;
 		hitmodel.solid = SOLID_BSP;
 		setorigin(hitmodel, hitmodel.origin);
 		hitmodel = hitmodel.physobj_next;
@@ -155,6 +157,8 @@ void() Car_ChassiThink =
     {
 		local float plyralpha = car.driving.alpha;
 		local vector plyrcmod = car.driving.colormod;
+		e.dimension_hit = player_dimension_hit;
+		e.dimension_solid = player_dimension_solid;
 		if (plyralpha < 1)
 		{
 			e.effects |= EF_ADDITIVE;
