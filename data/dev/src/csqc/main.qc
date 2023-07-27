@@ -171,6 +171,13 @@ float(float evtype, float scanx, float chary, float devid) CSQC_InputEvent =
 	return FALSE;
 };
 
+void() CSQC_Input_Frame =
+{
+	input_movevalues_x = bound(-350, input_movevalues_x, 350);
+	input_movevalues_y = bound(-350, input_movevalues_y, 350);
+	input_movevalues_z = bound(-350, input_movevalues_z, 350);
+};
+
 noref void(float apiver, string enginename, float enginever) CSQC_Init = {};
 
 float(string strCommand) CSQC_ConsoleCommand =

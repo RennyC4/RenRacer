@@ -31,6 +31,7 @@ opt_func_vehicle_builtins.qc // RennyC optimized *Judderfest with sv_autoload 1*
 
 misc.qc
 client.qc
+sv.qc
 combat.qc
 pickups.qc
 
