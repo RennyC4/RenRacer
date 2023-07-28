@@ -17,6 +17,8 @@ void() ClientKill = {};
 
 void() ClientConnect =
 {
+	if (clienttype(self) == CLIENTTYPE_REAL)
+		human_players = human_players + 1;
 	if (intermission_running) // a client connecting during an intermission can cause problems
 		GotoNextMap();
 	if (!deathmatch)
@@ -27,7 +29,7 @@ void() ClientConnect =
 
 void() ClientDisconnect =
 {
-	if (self.ishuman && human_players > 0)
+	if (clienttype(self) == CLIENTTYPE_REAL && human_players > 0)
 	{
 		human_players = human_players - 1;
 		for (entity targ = world;(targ = find(targ, classname, "player"));)
@@ -496,12 +498,15 @@ void() PlayerPostThink =
 	{
 		if (self.invulnerable_finished > time)
 		{
-			if (self.onfire_finished > time && self.waterlevel > 0)
+			if (self.onfire_finished > time)
 				self.onfire_finished = time; // water removes napalm/fire
 			self.effects |= EF_BRIGHTFIELD;
 		}
 		else
 			self.effects &= ~(EF_BRIGHTFIELD);
+
+		if (self.onfire_finished > time && self.waterlevel > 0)
+			self.onfire_finished = time; // water removes napalm/fire
 	}
 
 	if (self.driving && deathmatch && self.health > 0 && self.invulnerable_finished < time && race_status == RACE_STARTED)
@@ -787,6 +792,7 @@ void() PutClientInServer =
 	self.spawn_loc_angles = self.angles; // Stash it
 	self.alpha = 1;
 	self.energy = 100;
+	self.player_id = human_players;
 
 	if (cvar("developer") != 1)
 	{
@@ -819,7 +825,6 @@ void() PutClientInServer =
 						self.music = "sound/music/dm1.ogg";
 					if (checkextension("DP_QC_SPRINTF"))
 						stuffcmd (self, sprintf("music %s\n", self.music));
-
 				}
 			}
 		}

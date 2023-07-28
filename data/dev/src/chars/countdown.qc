@@ -19,47 +19,27 @@ void(float type) countdown_announce =
 	}
 };
 
+.float bots_loaded;
 void() countdown_think = // Race start countdown
 {
-	local entity oself;
-
 	//
-	// Remove all bots if human_players > 1
-	//
-
-	if (!self.cnt)
-	{
-		for (entity targ = world;(targ = find(targ, classname, "player"));)
-		{
-			if (targ.ishuman)
-			{
-				human_players = human_players + 1;
-				targ.player_id = human_players;
-			}
-		}
-
-		if (human_players == 1 && !deathmatch) // Add bots
-		{
-			local float i;
-			local float g = cvar("sv_playerslots");
-//			for (i = 0; i < g-1; i = i+1)
-//				BotConnect(0, 0, 0);
-		}
-		self.cnt = TRUE; // run loop once
-	}
-	//
-
-	//
-	// Spawn players cars, spawn radar blip
+	// Spawn bots, players/bots cars, spawn radar blip
 	//
 	
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
 		if (!targ.spawncar)
 		{
-			oself = self;
+			entity oself = self;
 			self = targ;
-			local entity car = hotrod();
+
+			if (human_players == 1 && !deathmatch && !self.bots_loaded)
+			{
+				BotConnect();
+				self.bots_loaded = TRUE;
+			}
+
+			entity car = hotrod();
 			makevectors(targ.angles);
 			car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
 			Car_InitVehicle(car);

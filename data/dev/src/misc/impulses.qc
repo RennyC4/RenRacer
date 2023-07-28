@@ -20,17 +20,17 @@ void() CheckImpulses =
 		CycleWeaponBackward();
 	if (self.impulse == 20)
 		BotConnect();
-	if (self.impulse == 21) // Remove bot
+	if (self.impulse == 21) // Remove bots
 	{
-		entity head = find(world, classname, "player");
-		while (head)
+		float RunOnce = FALSE;
+		for (entity targ = world;(targ = find(targ, classname, "player"));)
 		{
-			if (clienttype(head) == CLIENTTYPE_BOT)
+			if (clienttype(targ) == CLIENTTYPE_BOT && !RunOnce)
 			{
 				bot_count = bot_count - 1;
-				dropclient(head);
+				dropclient(targ);
+				RunOnce = TRUE;
 			}
-			head = find(head, classname, "player");
 		}
 	}
 

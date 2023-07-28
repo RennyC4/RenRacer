@@ -178,8 +178,13 @@ void() worldspawn =
 	CSEv_GrabCSQCValues(); //CSQC Setup
 };
 
+//
+// Parms
+//
+
 void() SetNewParms = {};
 void() SetChangeParms = {};
+void() DecodeLevelParms ={};
 
 void() StartFrame = 
 {
