@@ -46,121 +46,52 @@ this notice in its entirety.
 
 BotName
 
-Sets bot's name and colors
+Sets bot's name
 
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 */
+
 string(float r) BotName =
 {
 	self.b_num = r;
 	if (r == 1)
-	{	
-		self.b_pants = 11;
-		self.b_shirt = 0; 
 		return "Vigil";
-	}
 	else if (r == 2)
-	{
-		self.b_pants = 1;
-		self.b_shirt = 3;
 		return "xaGe";
-	}
 	else if (r == 3)
-	{	
-		self.b_pants = 13;
-		self.b_shirt = 2;
 		return "KyleMac";
-	}
 	else if (r == 4)
-	{
-		self.b_pants = 7;
-		self.b_shirt = 6;
 		return "Spoike";
-	} 
 	else if (r == 5)
-	{
-		self.b_pants = 12;
-		self.b_shirt = 6;
 		return "FrikaC";
-	}
 	else if (r == 6)
-	{
-		self.b_pants = 4;
-		self.b_shirt = 4;
 		return "Reki";
-	}
 	else if (r == 7)
-	{
-		self.b_pants = 2;
-		self.b_shirt = 5;
 		return "ericw";
-	} 
 	else if (r == 8)
-	{	
-		self.b_pants = 10;
-		self.b_shirt = 3;
 		return "kristus";
-	}
 	else if (r == 9)
-	{
-		self.b_pants = 9;
-		self.b_shirt = 4;
 		return "Zwiffle";
-	}
 	else if (r == 10)
-	{
-		self.b_pants = 4;
-		self.b_shirt = 7;
 		return "Tomaz";
-	}
 	else if (r == 11)
-	{
-		self.b_pants = 3;
-		self.b_shirt = 11;
 		return "scar3crow";
-	} 
 	else if (r == 12)
-	{
-		self.b_pants = 13;
-		self.b_shirt = 12;
 		return "khreathor";
-	}
 	else if (r == 13)
-	{
-		self.b_pants = 11;
-		self.b_shirt = 2;
 		return "Harbinger";
-	}
 	else if (r == 14)
-	{
-		self.b_pants = 0;
-		self.b_shirt = 2;
 		return "Corporal";
-	}
 	else if (r == 15)
-	{
-		self.b_pants = 8;
-		self.b_shirt = 9;
 		return "E-Werd";
-	}
 	else if (r == 16)
-	{
-		self.b_pants = 5;
-		self.b_shirt = 10;
 		return "MauveBib";
-	}
 	else
-	{
-		self.b_pants = 0;
-		self.b_shirt = 0;
 		return "CleanRacer";
-	}
 };
+
 string () PickARandomName =
 {
-	if (bot_count > 16)
-		return "player";
-
 	local float y, test;
 	local string h;
 	local entity t;
@@ -175,8 +106,6 @@ string () PickARandomName =
 	}
 	return h;
 };
-
-
 
 // I didn't like the old code so this is very stripped down
 
@@ -212,33 +141,6 @@ void(float tpic) bot_start_topic =
 	else
 		b_topic = 0;
 };
-
-/*
--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-Kick A Bot. 
-
--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-*/
-
-void() KickABot =
-{
-	local entity ty;
-	ty = find(world, classname, "player");
-	while (ty != world)
-	{
-		if (!(ty.ishuman))
-		{
-			BotDisconnect(ty);
-			ty.ishuman = TRUE;
-			ty = world;
-		}
-		else
-			ty = find(ty, classname, "player");
-	}
-
-};
-
 
 /*
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

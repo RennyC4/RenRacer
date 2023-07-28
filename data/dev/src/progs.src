@@ -9,10 +9,11 @@ frikbot/bot_ai.qc
 frikbot/bot_ai_race.qc
 frikbot/bot_ai_fight.qc
 frikbot/bot_misc.qc
-frikbot/bot_phys.qc
 //frikbot x
 
 main.qc
+enums.qc
+csqc_radar.qc
 subs.qc
 math.qc
 damage.qc
@@ -31,7 +32,6 @@ opt_func_vehicle_builtins.qc // RennyC optimized *Judderfest with sv_autoload 1*
 
 misc.qc
 client.qc
-sv.qc
 combat.qc
 pickups.qc
 

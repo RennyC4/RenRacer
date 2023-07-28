@@ -159,6 +159,7 @@ void() Car_ChassiThink =
 		local vector plyrcmod = car.driving.colormod;
 		e.dimension_hit = player_dimension_hit;
 		e.dimension_solid = player_dimension_solid;
+		e.pvsflags = PVSF_IGNOREPVS; // FIXME: Stops cars from disappearing inside geometry?
 		if (plyralpha < 1)
 		{
 			e.effects |= EF_ADDITIVE;

@@ -46,8 +46,6 @@ void() headlights_on;
 void() headlights_off;
 void(entity targ, vector dest, float silent) car_teleport;
 
-float stagger_think;
-
 .float bot_backup_finished;
 .float bot_search_finished;
 .float bot_search_count;
@@ -76,7 +74,6 @@ float(entity targ, float howmuch) infront =
 		return TRUE;
 	return FALSE;
 };
-
 
 /*
 =============
@@ -130,9 +127,6 @@ float (entity targ) visible =
 	spot1 = self.origin + self.view_ofs;
 	spot2 = targ.origin + targ.view_ofs;
 	traceline (spot1, spot2, TRUE, self);	// see through other monsters
-	
-	//if (trace_inopen && trace_inwater)
-	//	return FALSE;			// sight line crossed contents
 
 	if (trace_fraction == 1)
 		return TRUE;
@@ -287,28 +281,10 @@ frame, the ai_time limits it's actual updating
 
 void() bot_ai_race;
 void() bot_ai_fight;
+.vector bot_wishvel;
 void() BotAI =
 {
-	// stagger the bots AI out so they all don't think at the same time, causing game 'spikes'
-	if (self.b_skill < 2)
-	{
-		if (self.ai_time > time)
-			return;
-
-		self.ai_time = time + 0.05;
-		if (bot_count > 0)
-		{
-			if ((time - stagger_think) < (0.1 / bot_count))
-				self.ai_time = self.ai_time + 0.1 / (2 * bot_count);
-		}
-		else
-			return;
-	}
-	stagger_think = time;
-
-	//
-	// Bot headlights
-	//
+	self.velocity = self.bot_wishvel; // wishvel is set by AI
 
 	if (!deathmatch)
 	{
@@ -335,80 +311,16 @@ void() BotAI =
 		// am I dead? Fire randomly until I respawn
 		// health < 1 is used because fractional healths show up as 0 on normal player
 		// status bars, and the mod probably already compensated for that
-		if (self.health < 1 && !intermission_running)
-		{ 
-			self.button0 = 0;
-			self.button1 = 0;
-			self.button2 = 0;
+		if (self.health < 1 && !intermission_running && race_status != RACE_NOTSTARTED)
+		{
 			self.button3 = floor(random() * 2);
+			self.button0 = 0;
+			self.button2 = 0;
 			self.button4 = 0;
 			self.keys = 0;
 			return;
 		}
-		bot_ai_fight();
+		if (race_status == RACE_STARTED)
+			bot_ai_fight();
 	}
 };
-
-//
-// Below is removed FrikBot AI code that won't work in RenRacer but is used for reference
-//
-
-/*
-	if (self.view_ofs == '0 0 0')
-		bot_start_topic(7);
-
-	stagger_think = time;
-
-	// shut the bot's buttons off, various functions will turn them on by AI end
-
-	self.button2 = 0;
-	self.button0 = 0;
-
-	// target1 is like goalentity in normal Quake monster AI.
-	// it's the bot's most immediate target
-	if (route_table == self)
-	{
-		if (busy_waypoints <= 0)
-		{
-			if (waypoint_mode < WM_EDITOR)
-				bot_look_for_crap(TRUE);
-		}
-		self.b_aiflags = 0;
-		self.keys = 0;
-	}
-	else if (self.target1)
-	{
-		frik_movetogoal();
-		bot_path();
-	}
-	else
-	{
-		if (waypoint_mode < WM_EDITOR)
-		{
-			if (self.route_failed)
-			{
-				if (waypoint_mode == WM_DYNAMIC)
-				{
-					frik_bot_roam();
-				}
-				else
-					self.keys = 0;
-				self.route_failed = 0;
-			}
-			else if (!begin_route())
-			{	
-				bot_look_for_crap(FALSE);
-				self.keys = 0;
-			}
-		}
-		else
-		{
-			self.b_aiflags = AI_WAIT;
-			self.keys = 0;
-		}
-	}
-
-	// bot_angle_set points the bot at it's goal (self.enemy or target1)
-	bot_angle_set();
-	bot_chat(); // don't want chat to screw him up if he's rjing or something
-*/

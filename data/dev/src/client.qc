@@ -19,7 +19,6 @@ void() ClientConnect =
 {
 	if (intermission_running) // a client connecting during an intermission can cause problems
 		GotoNextMap();
-	ClientInRankings(); // FrikBot
 	if (!deathmatch)
 		bprint (self.netname, " joined the race!\n");
 	else
@@ -60,7 +59,6 @@ void() ClientDisconnect =
 	self.deadflag = FALSE;
 	self.deathcount = 0;
 	self.ammo_firerocket = self.ammo_homingrocket = self.ammo_powerrocket = self.ammo_napalm = self.ammo_rico = self.ammo_remote = self.ammo_freeze = 0;
-	ClientDisconnected(); // FrikBot
 };
 
 // This is ugly
@@ -162,9 +160,6 @@ void() spawn_car_countdown;
 .float energy_finished;
 void() PlayerPreThink = 
 {
-	if (BotPreFrame()) // FrikBot
-		return;
-
 	if (cvar("developer") == 1) // Coord/Angle reporting, helps insert entities in hmp maps
 	{
 		local string x,y,z,ang_y,ang_x;
@@ -339,9 +334,9 @@ void() freeze_think =
 
 void() PlayerPostThink =
 {
-	if (BotPostFrame()) // FrikBot
-		return;
-	
+	if (clienttype(self) == CLIENTTYPE_BOT)
+		BotAI();
+
 	if (intermission_running)
 	{
 		self.onfire_finished = time;

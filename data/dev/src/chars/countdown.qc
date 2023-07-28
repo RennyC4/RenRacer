@@ -42,8 +42,8 @@ void() countdown_think = // Race start countdown
 		{
 			local float i;
 			local float g = cvar("sv_playerslots");
-			for (i = 0; i < g-1; i = i+1)
-				BotConnect(0, 0, 0);
+//			for (i = 0; i < g-1; i = i+1)
+//				BotConnect(0, 0, 0);
 		}
 		self.cnt = TRUE; // run loop once
 	}

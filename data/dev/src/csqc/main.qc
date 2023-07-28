@@ -1,18 +1,13 @@
 void() SUB_Remove = {remove(self);return;};
 
-enum NETENTITY:float {
-	NULL,
-	RADARBLIP,
-};
-
-void CSQC_Ent_Update(float is_new)
+void(float is_new) CSQC_Ent_Update =
 {
 	float type = readbyte();
 	switch(type)
 	{
-		case NETENTITY::RADARBLIP: EntUpdate_RadarBlip(is_new); break;
+		case NETENTITY::RADARBLIP: EntUpdate_RadarBlip(is_new); break; // ent 1 = radar blip
 	}
-}
+};
 
 //
 // Main Loop
@@ -37,13 +32,6 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 	clearscene(); // wipe entity lists, reset view properties to their defaults
 	setproperty(VF_DRAWENGINESBAR, 0); // turn off status bar
 
-	if (cvar("developer") != 1)
-	{
-		if (!intermiss)
-			GameCamera(); // Games camera
-		setproperty(VF_DRAWCROSSHAIR, 0); // Turn off crosshair
-	}
-
 	if (sky)
 	{
 		sky.origin = campos - '0 0 0';
@@ -53,6 +41,16 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 	}
 
 	addentities((intermission?0:MASK_VIEWMODEL)|MASK_ENGINE);
+
+//	setproperty(VF_ORIGIN, vPlayerOrigin + [0, 0, getstatf(STAT_VIEWHEIGHT)]);
+//	setproperty(VF_ANGLES, view_angles);
+
+	if (cvar("developer") != 1)
+	{
+		if (!intermiss)
+			GameCamera(); // Camera
+		setproperty(VF_DRAWCROSSHAIR, 0); // Turn off crosshair
+	}
 
 	renderscene();
 
@@ -117,7 +115,6 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 
 	if (framecount == 10)
 		localcmd("exec haze.cfg\n");
-
 };
 
 float(float evtype, float scanx, float chary, float devid) CSQC_InputEvent =
@@ -173,6 +170,9 @@ float(float evtype, float scanx, float chary, float devid) CSQC_InputEvent =
 
 void() CSQC_Input_Frame =
 {
+	for (float f = servercommandframe; f <= clientcommandframe; f++)
+		getinputstate(f);
+
 	input_movevalues_x = bound(-350, input_movevalues_x, 350);
 	input_movevalues_y = bound(-350, input_movevalues_y, 350);
 	input_movevalues_z = bound(-350, input_movevalues_z, 350);

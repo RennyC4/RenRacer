@@ -57,18 +57,19 @@ entity() Bot_FindClosestItem =
 .float startmatch;
 void() bot_ai_fight =
 {
-	if (cvar("developer") == 2)
-	{
-		self.button3 = 0; // don't keep firing on respawn
-		return;
-	}
+	makevectors_mdl(self.angles);
+	bot_angle_set();
 
 	// Back up for randomly for a second, hit a wall/obstacle
 	if ((self.keys == KEY_MOVEFORWARD || (self.button0 && self.turbo_fuel > 0)) && self.realspeed <= 3)
-		self.bot_backup_finished = time + 0.3 + random()*0.6;
+	{
+		self.keys = KEY_MOVEBACK;
+		self.bot_wishvel = v_forward * -9999;
+		self.bot_backup_finished = time + 0.3 + random()*0.3;
+	}
 
 	// Out of ammo, go search for some
-	if (self.ammo_firerocket < 1 && self.ammo_homingrocket < 1 && self.ammo_powerrocket < 1 && self.ammo_napalm < 1 && self.ammo_rico < 1 && self.ammo_remote < 1 && self.ammo_freeze < 1)
+	if (self.ammo_firerocket < 1 && self.ammo_homingrocket < 1 && self.ammo_powerrocket < 1 && self.ammo_napalm < 1)
 	{
 		self.goalentity = Bot_FindClosestItem();
 		self.bot_huntitem_finished = time + 3;
@@ -103,21 +104,6 @@ void() bot_ai_fight =
 					self.weapon = WEP_NAPALM;
 					self.button4 = TRUE;
 				}
-				if (self.ammo_rico > 0)
-				{
-					self.weapon = WEP_RICOCHET;
-					self.button4 = TRUE;
-				}
-				if (self.ammo_remote > 0 || self.plyrremote)
-				{
-					self.weapon = WEP_REMOTE;
-					self.button4 = TRUE;
-				}
-				if (self.ammo_freeze > 0)
-				{
-					self.weapon = WEP_FREEZE;
-					self.button4 = TRUE;
-				}
 				self.button3 = TRUE; // Fire machine guns
 			}
 			else
@@ -149,13 +135,16 @@ void() bot_ai_fight =
 	if (self.bot_backup_finished < time)
 	{
 		if (self.goalentity)
+		{
+			self.bot_wishvel = v_forward * 9999; // Forward
 			self.keys = KEY_MOVEFORWARD;
+		}
 	}
 	else
+	{
+		self.bot_wishvel = v_forward * -9999; // Back
 		self.keys = KEY_MOVEBACK;
-
-
-	bot_angle_set();
+	}
 
 	// Debugging prints
 //	bprint (self.goalentity.classname, "\n");

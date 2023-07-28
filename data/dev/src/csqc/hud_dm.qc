@@ -9,7 +9,6 @@ float WEP_FREEZE = 32;
 void EntUpdate_RadarBlip(float is_new)
 {
 	float sendflags = readbyte();
-
 	if (sendflags & 0x01)
 	{
 		self.origin_x = readcoord();

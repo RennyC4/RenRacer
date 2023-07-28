@@ -1868,8 +1868,8 @@ float(float) fabs = #43; /*
 
 #endif
 #ifdef SSQC
-//vector(entity player, float missilespeed) aim = #44; /*
-//		Returns a tweaked copy of the v_forward vector (must be set! ie: makevectors(player.v_angle) ). This is important for keyboard users (that don't want to have to look up/down the whole time), as well as joystick users (who's aim is otherwise annoyingly imprecise). Only the upwards component of the result will differ from the value of v_forward. The builtin will select the enemy closest to the crosshair within the angle of acos(sv_aim). */
+vector(entity player, float missilespeed) aim = #44; /*
+		Returns a tweaked copy of the v_forward vector (must be set! ie: makevectors(player.v_angle) ). This is important for keyboard users (that don't want to have to look up/down the whole time), as well as joystick users (who's aim is otherwise annoyingly imprecise). Only the upwards component of the result will differ from the value of v_forward. The builtin will select the enemy closest to the crosshair within the angle of acos(sv_aim). */
 
 #endif
 #if defined(CSQC) || defined(SSQC)
@@ -1894,29 +1894,29 @@ vector(vector fwd, optional vector up) vectoangles = #51; /*
 
 #endif
 //#ifdef SSQC
-//void(float to, float val) WriteByte = #52; /*
-//		Writes a single byte into a network message buffer. Typically you will find a more correct alternative to writing arbitary data. 'to' should be one of the MSG_* constants. MSG_ONE must have msg_entity set first. */
+void(float to, float val) WriteByte = #52; /*
+		Writes a single byte into a network message buffer. Typically you will find a more correct alternative to writing arbitary data. 'to' should be one of the MSG_* constants. MSG_ONE must have msg_entity set first. */
 
-//void(float to, float val) WriteChar = #53; /*
-//		Writes a signed value between -128 and 127. */
+void(float to, float val) WriteChar = #53; /*
+		Writes a signed value between -128 and 127. */
 
-//void(float to, float val) WriteShort = #54; /*
-//		Writes a signed value between -32768 and 32767. As an exception, values up to 65535 will not trigger warnings (but readshort will read the result as negative!) */
+void(float to, float val) WriteShort = #54; /*
+		Writes a signed value between -32768 and 32767. As an exception, values up to 65535 will not trigger warnings (but readshort will read the result as negative!) */
 
-//void(float to, float val) WriteLong = #55; /*
-//		Writes a signed 32bit integer. Note that the input argument being of float type limits the resulting integer to a mere 24 consecutive bits of validity. Use WriteInt if you want to write an entire 32bit int without data loss. */
+void(float to, float val) WriteLong = #55; /*
+		Writes a signed 32bit integer. Note that the input argument being of float type limits the resulting integer to a mere 24 consecutive bits of validity. Use WriteInt if you want to write an entire 32bit int without data loss. */
 
-//void(float to, float val) WriteCoord = #56; /*
-//		Writes a single value suitable for a map coordinate axis. The precision is not strictly specified but is assumed to be of at least 13.3 fixed-point precision (ie: +/-4k with 1/8th precision). */
+void(float to, float val) WriteCoord = #56; /*
+		Writes a single value suitable for a map coordinate axis. The precision is not strictly specified but is assumed to be of at least 13.3 fixed-point precision (ie: +/-4k with 1/8th precision). */
 
-//void(float to, float val) WriteAngle = #57; /*
-//		Writes a single value suitable for an angle axis. The precision is not strictly specified but is assumed to be 8bit, giving 256 notches instead of the assumed 360 range passed in. */
+void(float to, float val) WriteAngle = #57; /*
+		Writes a single value suitable for an angle axis. The precision is not strictly specified but is assumed to be 8bit, giving 256 notches instead of the assumed 360 range passed in. */
 
-//void(float to, string val) WriteString = #58; /*
-//		Writes a variable-length null terminated string. There are length limits. The codepage is not translated, so be sure that client+server agree on whether utf-8 is being used or not (or just stick to ascii+markup). */
+void(float to, string val) WriteString = #58; /*
+		Writes a variable-length null terminated string. There are length limits. The codepage is not translated, so be sure that client+server agree on whether utf-8 is being used or not (or just stick to ascii+markup). */
 
-//void(float to, entity val) WriteEntity = #59; /*
-//		Writes the index of the specified entity (the network data size is not specified). This can be read clientside using the readentitynum builtin, with caveats. */
+void(float to, entity val) WriteEntity = #59; /*
+		Writes the index of the specified entity (the network data size is not specified). This can be read clientside using the readentitynum builtin, with caveats. */
 
 //#endif
 //#if defined(CSQC) || defined(SSQC)

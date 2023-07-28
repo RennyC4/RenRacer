@@ -19,9 +19,20 @@ void() CheckImpulses =
 	if (self.impulse == 11)
 		CycleWeaponBackward();
 	if (self.impulse == 20)
-		BotConnect(0, 0, 0);
-	if (self.impulse == 21)
-		KickABot();
+		BotConnect();
+	if (self.impulse == 21) // Remove bot
+	{
+		entity head = find(world, classname, "player");
+		while (head)
+		{
+			if (clienttype(head) == CLIENTTYPE_BOT)
+			{
+				bot_count = bot_count - 1;
+				dropclient(head);
+			}
+			head = find(head, classname, "player");
+		}
+	}
 
 	// Functions not related to gameplay
 	if (self.impulse == 101) // WIP: Change car angles instantly

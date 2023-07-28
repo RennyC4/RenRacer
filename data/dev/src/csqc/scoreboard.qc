@@ -84,7 +84,7 @@ void() Hud_UpdateScores =
 		if not (name)
 			break; // end the loop, no more players
 
-		float frags = stof(getplayerkeyvalue(i, "frags")); // RennyC: FIXME: Grab players 'lap' not 'frags'
+		float frags = stof(getplayerkeyvalue(i, "frags"));
 		string bottomcolor = getplayerkeyvalue(i, "bottomcolor_rgb");
 
 		// loop thru cl_teamscores looking for bottom color match
@@ -226,7 +226,7 @@ void(vector virtmin, vector virtsize) Hud_Scoreboard =
 		players++;
 
 		float isspec = stof(getplayerkeyvalue(i, "*spectator"));
-		float frags = stof(getplayerkeyvalue(i, "frags")); // RennyC: FIXME: Grab players 'lap' not 'frags'
+		float frags = stof(getplayerkeyvalue(i, "frags"));
 		string ping = getplayerkeyvalue(i, "ping");
 		vector top = stov(getplayerkeyvalue(i, "topcolor_rgb"));
 		vector bot = stov(getplayerkeyvalue(i, "bottomcolor_rgb"));

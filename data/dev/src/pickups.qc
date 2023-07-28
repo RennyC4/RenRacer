@@ -78,6 +78,7 @@ void() item_health =
 	self.netname = "item";
 	self.effects = EF_FULLBRIGHT;
 	self.touch = item_health_touch;
+	self.scale = 1.5;
 
 	setmodel (self, "progs/item_health.spr");
 	self.mdl = self.model; // can be restored on respawn
@@ -126,6 +127,7 @@ void() item_firerocket =
 	self.netname = "item";
 	self.effects = EF_FULLBRIGHT;
 	self.touch = item_firerocket_touch;
+	self.scale = 1.5;
 
 	setmodel (self, "progs/item_frckt.spr");
 	self.mdl = self.model; // can be restored on respawn
@@ -174,6 +176,7 @@ void() item_homingrocket =
 	self.netname = "item";
 	self.effects = EF_FULLBRIGHT;
 	self.touch = item_homingrocket_touch;
+	self.scale = 1.5;
 
 	setmodel (self, "progs/item_hrckt.spr");
 	self.mdl = self.model; // can be restored on respawn
@@ -222,6 +225,7 @@ void() item_powerrocket =
 	self.netname = "item";
 	self.effects = EF_FULLBRIGHT;
 	self.touch = item_powerrocket_touch;
+	self.scale = 1.5;
 
 	setmodel (self, "progs/item_prckt.spr");
 	self.mdl = self.model; // can be restored on respawn
@@ -270,6 +274,7 @@ void() item_napalm =
 	self.netname = "item";
 	self.effects = EF_FULLBRIGHT;
 	self.touch = item_napalm_touch;
+	self.scale = 1.5;
 
 	setmodel (self, "progs/item_napalm.spr");
 	self.mdl = self.model; // can be restored on respawn
@@ -318,6 +323,7 @@ void() item_ricochet =
 	self.netname = "item";
 	self.effects = EF_FULLBRIGHT;
 	self.touch = item_ricochet_touch;
+	self.scale = 1.5;
 
 	setmodel (self, "progs/item_rico.spr");
 	self.mdl = self.model; // can be restored on respawn
@@ -367,10 +373,14 @@ void() item_remote =
 	self.netname = "item";
 	self.effects = EF_FULLBRIGHT;
 	self.touch = item_remote_touch;
+	self.scale = 1.5;
 
 	setmodel (self, "progs/item_remote.spr");
 	self.mdl = self.model; // can be restored on respawn
 	setsize (self, '0 0 0', '0 0 0');
+
+	self.origin_z = self.origin_z + 8;
+	setorigin(self, self.origin);
 	
 	SetupItemDynamicLight(); // init dlights
 };
@@ -417,6 +427,7 @@ void() item_freeze =
 	self.effects = EF_FULLBRIGHT;
 	self.touch = item_freeze_touch;
 	self.colormod = '1 1 3';
+	self.scale = 1.5;
 
 	setmodel (self, "progs/frzsmk.spr");
 	self.mdl = self.model; // can be restored on respawn
