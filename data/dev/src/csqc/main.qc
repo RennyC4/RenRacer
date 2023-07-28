@@ -42,9 +42,6 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 
 	addentities((intermission?0:MASK_VIEWMODEL)|MASK_ENGINE);
 
-//	setproperty(VF_ORIGIN, vPlayerOrigin + [0, 0, getstatf(STAT_VIEWHEIGHT)]);
-//	setproperty(VF_ANGLES, view_angles);
-
 	if (cvar("developer") != 1)
 	{
 		if (!intermiss)
@@ -168,15 +165,7 @@ float(float evtype, float scanx, float chary, float devid) CSQC_InputEvent =
 	return FALSE;
 };
 
-void() CSQC_Input_Frame =
-{
-	for (float f = servercommandframe; f <= clientcommandframe; f++)
-		getinputstate(f);
-
-	input_movevalues_x = bound(-350, input_movevalues_x, 350);
-	input_movevalues_y = bound(-350, input_movevalues_y, 350);
-	input_movevalues_z = bound(-350, input_movevalues_z, 350);
-};
+void() CSQC_Input_Frame = {};
 
 noref void(float apiver, string enginename, float enginever) CSQC_Init = {};
 

@@ -95,8 +95,7 @@ BotConnect and related functions.
 
 void() BotConnect =
 {
-	local entity oldself;
-	oldself = self;
+	entity oldself = self;
 	self = spawnclient();
 	if (!self)
 	{

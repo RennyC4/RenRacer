@@ -284,6 +284,7 @@ void() bot_ai_fight;
 .vector bot_wishvel;
 void() BotAI =
 {
+	makevectors_mdl(self.angles);
 	self.velocity = self.bot_wishvel; // wishvel is set by AI
 
 	if (!deathmatch)
