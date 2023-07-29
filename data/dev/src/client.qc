@@ -92,14 +92,14 @@ void() Setup_level_effects =
 };
 
 //
-// RennyC: Work in progress to fake push other cars/players out of the way
-// 100 used to be the radius, revert once dimension_hit/solid are fixed
+// RennyC: Fake push other cars/players out of the way, includes turbo ramming damage
 //
+
 void() PushPlayers =
 {
 	for (entity b = world;(b = find(b, classname, "player"));)
 	{
-		if (vlen(b.origin - self.origin) <= 125 && b != self && b.driving && b.health > 0)
+		if (vlen(b.origin - self.origin) <= 100 && b != self && b.driving && b.health > 0)
 		{
 			if (self.realspeed >= 10 && self.realspeed > b.realspeed)
 			{

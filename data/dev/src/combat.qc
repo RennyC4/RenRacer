@@ -793,12 +793,20 @@ void() Rico_Think =
 		self.scale = self.scale + 0.1; // Grow
 	}
 
-	// Keep em slightly off the ground
-	traceline (self.origin, self.origin - v_up * 16, TRUE, self);
-	if (trace_fraction)
+	// Ground slide + Slope climb
+    vector start = self.origin;
+    vector end = self.origin + [0, 0, -999];
+	traceline (start, end, TRUE, self);
+	if (trace_fraction < 1)
 	{
-		setorigin (self, trace_endpos + v_up * 3);
-		self.velocity_z = 0;
+		vector slopeNormal = trace_plane_normal;
+		vector upwardDirection = [0, 0, 1];
+		float slopeAngle = slopeNormal * upwardDirection;
+		slopeAngle = acos(slopeAngle) * 180.0 / M_PI;
+		if (slopeAngle == 0)
+			setorigin (self, trace_endpos + v_up * 3);
+		else
+			setorigin (self, trace_endpos + v_up * (3 + (slopeAngle / 2)));
 	}
 
 	if (self.cnt > 0)

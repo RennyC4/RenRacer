@@ -72,6 +72,22 @@ void() NextLevel =
 	gameover = TRUE;
 };
 
+entity highestScorer;
+float highestFrags;
+void() Timelimit_Printwinner =
+{
+    for (entity targ = world;(targ = find(targ, classname, "player"));)
+	{
+        if (targ.frags > highestFrags)
+		{
+            highestScorer = targ;
+            highestFrags = targ.frags;
+        }
+    }
+    if (highestScorer)
+		bprint (highestScorer.netname, " won the rage war with ", ftos(highestFrags), " frags!\n");
+};
+
 void() CheckGameRules =
 {
 	if (gameover)
@@ -82,6 +98,7 @@ void() CheckGameRules =
 
 	if (timelimit && time >= timelimit)
 	{
+		Timelimit_Printwinner();
 		if (self.driving)
 			Car_AttachToVehicle(self, self.driving); // Remove player from car
 		NextLevel();
@@ -90,7 +107,7 @@ void() CheckGameRules =
 
 	if (fraglimit && self.frags >= fraglimit)
 	{
-		bprint (self.netname, " won the rage war!\n");
+		bprint (self.netname, " won the rage war with ", ftos(self.frags), " frags!\n");
 		if (self.driving)
 			Car_AttachToVehicle(self, self.driving); // Remove player from car
 		NextLevel();

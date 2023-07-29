@@ -312,7 +312,7 @@ void() BotAI =
 		// am I dead? Fire randomly until I respawn
 		// health < 1 is used because fractional healths show up as 0 on normal player
 		// status bars, and the mod probably already compensated for that
-		if (self.health < 1 && !intermission_running && race_status != RACE_NOTSTARTED)
+		if (self.health < 1 && !intermission_running && race_status != RACE_NOTSTARTED && deathmatch)
 		{
 			self.button3 = floor(random() * 2);
 			self.button0 = 0;
