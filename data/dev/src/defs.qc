@@ -471,6 +471,7 @@ string nextmap;
 .entity frozen;
 .float spawncar;
 .vector tire_forward; // used for tire spinning
+.float backward; // used when user is backing up the car, used for weapons also
 
 // Key flags
 .float keyflags;

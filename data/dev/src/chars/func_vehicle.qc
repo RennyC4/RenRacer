@@ -81,6 +81,7 @@ void Car_TirePlace(entity tire){
 	tire.angles = vectoangles2(tireparticle.lmat_forward, tireparticle.lmat_up);
 
 	// Spin Tires - RennyC
+	// FIXME: Acts funky on slopes
 	float pitch = -dotproduct(tire.angles, plyrent_tireowner.tire_forward) * 360;
 	if (plyrent_tireowner.realspeed >= 4)
 		tire.angles_x += pitch * 0.1;
@@ -159,7 +160,7 @@ void() Car_ChassiThink =
 		local vector plyrcmod = car.driving.colormod;
 		e.dimension_hit = player_dimension_hit;
 		e.dimension_solid = player_dimension_solid;
-		e.pvsflags = PVSF_IGNOREPVS; // FIXME: Stops cars from disappearing inside geometry?
+		e.pvsflags = PVSF_IGNOREPVS; // FIXME: Fix certain instances of cars disappearing inside geometry (needs testing)
 		if (plyralpha < 1)
 		{
 			e.effects |= EF_ADDITIVE;
@@ -908,6 +909,11 @@ void TryUpdateVehicle(){
  
 	makevectors(self.driving.angles);
 	float backwards = (self.driving.velocity * v_forward) < 0;
+	if (backwards)
+		self.backward = TRUE;
+	else
+		self.backward = FALSE;
+
 	Car_Turn(move, backwards);
 	
 	self.velocity = '0 0 0';

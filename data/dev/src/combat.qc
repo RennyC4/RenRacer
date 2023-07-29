@@ -355,8 +355,13 @@ void() Fire_MachineGun =
 
 	bullet.velocity = aim(self, 1000);
 	bullet.velocity = bullet.velocity * 1000;
-	bullet.velocity_x = bullet.velocity_x + self.driving.velocity_x;
-	bullet.velocity_y = bullet.velocity_y + self.driving.velocity_y;
+
+	// Players forward velocity is added to projectiles
+	if (!self.backward)
+	{
+		bullet.velocity_x = bullet.velocity_x + self.driving.velocity_x;
+		bullet.velocity_y = bullet.velocity_y + self.driving.velocity_y;
+	}
 
 	bullet.angles = vectoangles(bullet.velocity);
 
@@ -402,16 +407,34 @@ void() Fire_MachineGun =
 
 	if (!self.mgun)
 	{
-		setorigin (mflash1, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) + v_right * 24); // flat
-		setorigin (mflash2, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) + v_right * 24); // side
-		setorigin (bullet, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) + v_right * 24);
+		if (!self.backward)
+		{
+			setorigin (mflash1, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) + v_right * 24); // flat
+			setorigin (mflash2, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) + v_right * 24); // side
+			setorigin (bullet, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) + v_right * 24);
+		}
+		else
+		{
+			setorigin (mflash1, self.origin + v_up * 8 + v_forward * (14 - self.realspeed) + v_right * 24); // flat
+			setorigin (mflash2, self.origin + v_up * 8 + v_forward * (14 - self.realspeed) + v_right * 24); // side
+			setorigin (bullet, self.origin + v_up * 8 + v_forward * (14 - self.realspeed) + v_right * 24);
+		}
 		self.mgun = TRUE;
 	}
 	else
 	{
-		setorigin (mflash1, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) - v_right * 24); // flat
-		setorigin (mflash2, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) - v_right * 24); // side
-		setorigin (bullet, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) - v_right * 24);
+		if (!self.backward)
+		{
+			setorigin (mflash1, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) - v_right * 24); // flat
+			setorigin (mflash2, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) - v_right * 24); // side
+			setorigin (bullet, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) - v_right * 24);
+		}
+		else
+		{
+			setorigin (mflash1, self.origin + v_up * 8 + v_forward * (14 - self.realspeed) - v_right * 24); // flat
+			setorigin (mflash2, self.origin + v_up * 8 + v_forward * (14 - self.realspeed) - v_right * 24); // side
+			setorigin (bullet, self.origin + v_up * 8 + v_forward * (14 - self.realspeed) - v_right * 24);
+		}
 		self.mgun = FALSE;
 	}
 
@@ -578,8 +601,12 @@ void(float type, float rear) Fire_Rocket =
 			rocket.velocity = rocket.velocity * 2000; // power
 		}
 	}
-	rocket.velocity_x = rocket.velocity_x + self.driving.velocity_x;
-	rocket.velocity_y = rocket.velocity_y + self.driving.velocity_y;
+	// Players forward velocity is added to projectiles
+	if (!self.backward)
+	{
+		rocket.velocity_x = rocket.velocity_x + self.driving.velocity_x;
+		rocket.velocity_y = rocket.velocity_y + self.driving.velocity_y;
+	}
 	rocket.angles = vectoangles(rocket.velocity);
 
 	setmodel (rocket, "progs/rocket.mdl");
@@ -749,8 +776,12 @@ void(float rear) Fire_Napalm =
 	napalm.avelocity = '-500 200 0';
 	napalm.hitcontentsmaski = CONTENTBIT_SOLID|0x00000002i|CONTENTBIT_BODY|CONTENTBIT_PLAYERCLIP|CONTENTBIT_WATER| CONTENTBIT_SLIME|CONTENTBIT_LAVA;
 
-	napalm.velocity_x = napalm.velocity_x + self.driving.velocity_x / 1.75;
-	napalm.velocity_y = napalm.velocity_y + self.driving.velocity_y / 1.75;
+	// Players forward velocity is added to projectiles
+	if (!self.backward)
+	{
+		napalm.velocity_x = napalm.velocity_x + self.driving.velocity_x / 1.75;
+		napalm.velocity_y = napalm.velocity_y + self.driving.velocity_y / 1.75;
+	}
 
 	setmodel (napalm, "progs/napalm.mdl");
 	setsize (napalm, '0 0 0', '0 0 0');
@@ -864,8 +895,12 @@ void(float rear) Fire_Ricochet =
 	rico.velocity = aim(self, 750);
 	rico.velocity = rico.velocity * 750;
 
-	rico.velocity_x = rico.velocity_x + self.driving.velocity_x;
-	rico.velocity_y = rico.velocity_y + self.driving.velocity_y;
+	// Players forward velocity is added to projectiles
+	if (!self.backward)
+	{
+		rico.velocity_x = rico.velocity_x + self.driving.velocity_x;
+		rico.velocity_y = rico.velocity_y + self.driving.velocity_y;
+	}
 	rico.angles = vectoangles(rico.velocity);
 
 	setmodel (rico, "progs/ricochet.mdl");
@@ -1031,8 +1066,12 @@ void(float rear) Fire_Freeze =
 	freeze.velocity = aim(self, 700);
 	freeze.velocity = freeze.velocity * 700;
 
-	freeze.velocity_x = freeze.velocity_x + self.driving.velocity_x;
-	freeze.velocity_y = freeze.velocity_y + self.driving.velocity_y;
+	// Players forward velocity is added to projectiles
+	if (!self.backward)
+	{
+		freeze.velocity_x = freeze.velocity_x + self.driving.velocity_x;
+		freeze.velocity_y = freeze.velocity_y + self.driving.velocity_y;
+	}
 	freeze.angles = vectoangles(freeze.velocity);
 
 	setmodel (freeze, "progs/frzsmk.spr");
