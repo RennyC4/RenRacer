@@ -33,7 +33,12 @@ void() ClientDisconnect =
 	{
 		human_players = human_players - 1;
 		for (entity targ = world;(targ = find(targ, classname, "player"));)
-			targ.player_id = targ.player_id - 1; // only player_id 1 can add/remove bots
+		{
+			if (targ.player_id != 1)
+				targ.player_id = targ.player_id - 1; // only player_id 1 can add/remove bots
+			if (targ.player_id < 1) // this shouldn't happen, but let's be sure
+				targ.player_id = 1;
+		}
 	}
 	if (gameover)
 		return;
