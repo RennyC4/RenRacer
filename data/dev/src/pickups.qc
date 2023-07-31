@@ -328,6 +328,9 @@ void() item_ricochet =
 	setmodel (self, "progs/item_rico.spr");
 	self.mdl = self.model; // can be restored on respawn
 	setsize (self, '0 0 0', '0 0 0');
+
+	self.origin_z = self.origin_z + 8;
+	setorigin(self, self.origin);
 	
 	SetupItemDynamicLight(); // init dlights
 };

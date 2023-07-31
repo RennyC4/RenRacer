@@ -36,7 +36,7 @@ void() CheckImpulses =
 
 	// Functions not related to gameplay
 	if (self.impulse == 101) // WIP: Change car angles instantly
-		set_carangle(self, '0 0 0');
+		set_carangle(self, 90, 90);
 
 	if (self.impulse == 102)
 	{

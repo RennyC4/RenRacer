@@ -323,9 +323,29 @@ void(entity targ, vector dest, float silent) car_teleport =
 };
 
 // directly set the car angles WIP
-void(entity targ, vector dir) set_carangle =
+void(entity ent, float distance, float angleDegrees) set_carangle =
 {
-	vector displacement = dir - targ.angles;
+    float angleRadians = angleDegrees * (M_PI / 180);
+    float deltaX = distance * cos(angleRadians);
+    float deltaY = distance * sin(angleRadians);
+
+	entity part = self.driving.physobj_particlelist;
+    while(part)
+    {
+		vector originalPosition = part.origin;
+		vector new;
+
+		new_x = originalPosition_x + deltaX;
+		new_y = originalPosition_y + deltaY;
+		new_z = 0;
+	
+		setorigin(part, new);
+		part = part.physobj_next;
+	}
+	self.angles_y = angleDegrees;
+	self.fixangle = TRUE;
+
+/*	vector displacement = dir - targ.angles;
 
 	entity part = self.driving.physobj_particlelist;
     while(part)
@@ -341,7 +361,8 @@ void(entity targ, vector dir) set_carangle =
 
 		part = part.physobj_next;
 	}
-	
+
+
 	entity hitmodel = self.driving.physobj_hitmodel;
 	while (hitmodel)
 	{
@@ -371,4 +392,5 @@ void(entity targ, vector dir) set_carangle =
 		
 		staticmodel = staticmodel.physobj_next;
     }
+*/
 };
