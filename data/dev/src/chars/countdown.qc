@@ -15,7 +15,12 @@ void(float type) countdown_announce =
 				centerprint (targ, "/PRAGE WAR STARTS IN\n\n[^1^b", f, "^b^7]\n");
 		}
 		else
-			centerprint (targ, "^1! GO GO GO !\n");
+		{
+			if (!deathmatch)
+				centerprint (targ, "^1! GO GO GO !\n");
+			else
+				centerprint (targ, "^1! KILL KILL KILL !\n");
+		}
 	}
 };
 
@@ -60,17 +65,35 @@ void() countdown_think = // Race start countdown
 		if (countdown_count > 0)
 		{
 			if (countdown_count == 3)
-				sound (self, CHAN_AUTO, "3.wav", 1, ATTN_NONE);
+			{
+				if (!deathmatch)
+					sound (self, CHAN_AUTO, "3.wav", 1, ATTN_NONE);
+				else
+					sound (self, CHAN_AUTO, "combat/rw3.wav", 1, ATTN_NONE);
+			}
 			if (countdown_count == 2)
-				sound (self, CHAN_AUTO, "2.wav", 1, ATTN_NONE);
-			sound (self, CHAN_AUTO, "cntdwn.wav", 1, ATTN_NONE);
+			{
+				if (!deathmatch)
+					sound (self, CHAN_AUTO, "2.wav", 1, ATTN_NONE);
+				else
+					sound (self, CHAN_AUTO, "combat/rw2.wav", 1, ATTN_NONE);
+			}
 			if (countdown_count == 1)
-				sound (self, CHAN_AUTO, "1.wav", 1, ATTN_NONE);
+			{
+				if (!deathmatch)
+					sound (self, CHAN_AUTO, "1.wav", 1, ATTN_NONE);
+				else
+					sound (self, CHAN_AUTO, "combat/rw1.wav", 1, ATTN_NONE);
+			}
+			sound (self, CHAN_AUTO, "cntdwn.wav", 1, ATTN_NONE);
 			countdown_announce(0);
 		}
 		else
 		{
-			sound (self, CHAN_AUTO, "gogo.wav", 1, ATTN_NONE);
+			if (!deathmatch)
+				sound (self, CHAN_AUTO, "gogo.wav", 1, ATTN_NONE);
+			else
+				sound (self, CHAN_AUTO, "combat/killkill.wav", 1, ATTN_NONE);				
 			countdown_announce(1);
 			race_status = RACE_STARTED;
 			if (deathmatch) // Start deathmatch music on round start
