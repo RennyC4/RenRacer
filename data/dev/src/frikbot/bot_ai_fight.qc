@@ -57,15 +57,23 @@ entity() Bot_FindClosestItem =
 .float startmatch;
 void() bot_ai_fight =
 {
-	makevectors_mdl(self.angles);
-	bot_angle_set();
+	if (race_status != RACE_STARTED)
+		return;
 
-	// Back up for randomly for a second, hit a wall/obstacle
-	if ((self.keys == KEY_MOVEFORWARD || (self.button0 && self.turbo_fuel > 0)) && self.realspeed <= 3)
+	makevectors_mdl(self.v_angle);
+
+	// Get rid of fire
+	if (self.onfire_finished > time)
+		self.button0 = TRUE;
+	else
+		self.button0 = FALSE;
+
+	// Get player to hunt
+	if (!self.enemy && self.bot_huntitem_finished < time)
 	{
-		self.keys = KEY_MOVEBACK;
-		self.bot_wishvel = v_forward * -9999;
-		self.bot_backup_finished = time + 0.3 + random()*0.3;
+		self.enemy = BotGetClosestPlayer();
+		if (self.enemy)
+			self.goalentity = self.enemy;
 	}
 
 	// Out of ammo, go search for some
@@ -75,54 +83,67 @@ void() bot_ai_fight =
 		self.bot_huntitem_finished = time + 3;
 	}
 
-	if (!self.enemy && self.bot_huntitem_finished < time)
-		self.enemy = BotGetClosestPlayer();
-
-	if (self.enemy && self.enemy.health > 0 && self.enemy.invulnerable_finished < time)
+	if (self.goalentity)
 	{
-		if (visible(self.enemy) && self.enemy.cloak_finished < time)
+		// Back up for randomly for a second, hit a wall/obstacle
+		// TODO: Add an actual check for a wall infront of me
+		if ((self.keys == KEY_MOVEFORWARD || (self.button0 && self.turbo_fuel > 0)) && self.realspeed <= 3 && self.bot_backup_finished < time)
+			self.bot_backup_finished = time + 0.3 + random()*0.3;
+
+		if (self.bot_backup_finished < time)
 		{
-			if (infront(self.enemy, 0.75))
+			if (visible(self.enemy) && self.enemy.cloak_finished < time && self.enemy.invulnerable_finished < time)
 			{
-				if (self.ammo_firerocket > 0)
+				if (infront(self.enemy, 0.75))
 				{
-					self.weapon = WEP_ROCKET;
-					self.button4 = TRUE;
+					if (self.ammo_firerocket > 0)
+					{
+						self.weapon = WEP_ROCKET;
+						self.button4 = TRUE;
+					}
+					if (self.ammo_homingrocket > 0)
+					{
+						self.weapon = WEP_HROCKET;
+						self.button4 = TRUE;
+					}
+					if (self.ammo_powerrocket > 0)
+					{
+						self.weapon = WEP_PROCKET;
+						self.button4 = TRUE;
+					}
+					if (self.ammo_napalm > 0)
+					{
+						self.weapon = WEP_NAPALM;
+						self.button4 = TRUE;
+					}
+					self.button3 = TRUE; // Fire machine guns
 				}
-				if (self.ammo_homingrocket > 0)
+				else
 				{
-					self.weapon = WEP_HROCKET;
-					self.button4 = TRUE;
+					self.button3 = FALSE;
+					self.button4 = FALSE;
 				}
-				if (self.ammo_powerrocket > 0)
-				{
-					self.weapon = WEP_PROCKET;
-					self.button4 = TRUE;
-				}
-				if (self.ammo_napalm > 0)
-				{
-					self.weapon = WEP_NAPALM;
-					self.button4 = TRUE;
-				}
-				self.button3 = TRUE; // Fire machine guns
+				if (self.bot_huntitem_finished < time)
+					self.goalentity = self.enemy;
 			}
 			else
 			{
+				//bprint ("BOT: Can't see enemy, hunting item\n");
 				self.button3 = FALSE;
 				self.button4 = FALSE;
+				self.goalentity = Bot_FindClosestItem();
+				self.enemy = BotGetClosestPlayer(); // Find new target while item hunting
+				if (self.bot_huntitem_finished < time)
+					self.bot_huntitem_finished = time + 3;
 			}
-			if (self.bot_huntitem_finished < time)
-				self.goalentity = self.enemy;
+			self.bot_wishvel = v_forward * 9999; // Forward
+
 		}
-		else
+		else // backing up
 		{
-			//bprint ("BOT: Can't see enemy, hunting item\n");
-			self.button3 = FALSE;
-			self.button4 = FALSE;
-			self.goalentity = Bot_FindClosestItem();
-			self.enemy = BotGetClosestPlayer(); // Find new target while item hunting
-			if (self.bot_huntitem_finished < time)
-				self.bot_huntitem_finished = time + 3;
+			self.button0 = FALSE;
+			self.bot_wishvel = v_forward * -9999; // Back
+			self.keys = KEY_MOVEBACK;
 		}
 	}
 	else
@@ -130,21 +151,12 @@ void() bot_ai_fight =
 		self.enemy = BotGetClosestPlayer(); // Find new target
 		if (self.enemy)
 			self.goalentity = self.enemy;
-	}
-
-	if (self.bot_backup_finished < time)
-	{
-		if (self.goalentity)
-		{
-			self.bot_wishvel = v_forward * 9999; // Forward
-			self.keys = KEY_MOVEFORWARD;
+		else
+			self.goalentity = Bot_FindClosestItem();
 		}
-	}
-	else
-	{
-		self.bot_wishvel = v_forward * -9999; // Back
-		self.keys = KEY_MOVEBACK;
-	}
+
+
+	bot_angle_set();
 
 	// Debugging prints
 //	bprint (self.goalentity.classname, "\n");

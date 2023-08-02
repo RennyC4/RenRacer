@@ -284,7 +284,7 @@ void() bot_ai_fight;
 .vector bot_wishvel;
 void() BotAI =
 {
-	makevectors_mdl(self.angles);
+	makevectors_mdl(self.v_angle);
 	self.velocity = self.bot_wishvel; // wishvel is set by AI
 
 	if (!deathmatch)
@@ -312,7 +312,8 @@ void() BotAI =
 		// am I dead? Fire randomly until I respawn
 		// health < 1 is used because fractional healths show up as 0 on normal player
 		// status bars, and the mod probably already compensated for that
-		if (self.health < 1 && !intermission_running && race_status != RACE_NOTSTARTED && deathmatch)
+
+		if (self.health < 1 && !intermission_running && (race_status == RACE_STARTED || human_players) && deathmatch)
 		{
 			self.button3 = floor(random() * 2);
 			self.button0 = 0;
@@ -321,7 +322,6 @@ void() BotAI =
 			self.keys = 0;
 			return;
 		}
-		if (race_status == RACE_STARTED)
-			bot_ai_fight();
+		bot_ai_fight();
 	}
 };

@@ -1,6 +1,9 @@
 void() bot_ai_race =
 {
-	makevectors_mdl(self.angles);
+	if (race_status != RACE_STARTED)
+		return;
+
+	makevectors_mdl(self.v_angle);
 
 	//
 	// Bot searches for stuff
