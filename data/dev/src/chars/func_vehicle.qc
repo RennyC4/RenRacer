@@ -76,13 +76,16 @@ void(entity e, float strength) play_skidding =
 
 void Car_TirePlace(entity tire){
 	entity tireparticle = tire.enemy;
-	entity plyrent_tireowner = self.owner.driving;
+	entity plyrent_tireowner = self.owner.driving; // RennyC
 
-	tire.angles = vectoangles2(tireparticle.lmat_forward, tireparticle.lmat_up);
+	//tire.angles = vectoangles2(tireparticle.lmat_forward, tireparticle.lmat_up);
+	tire.angles = vectoangles(tireparticle.lmat_forward, tireparticle.lmat_up); // RennyC
+	tire.angles_z = 0; // Fix wacky tires on slopes (TODO: Needs to match Z of car chassis)
 
 	// Spin Tires - RennyC
-	// FIXME: Acts funky on slopes
-	float pitch = -dotproduct(tire.angles, plyrent_tireowner.tire_forward) * 360;
+	makevectors(tire.angles);
+	vector forward = normalize(v_forward);
+	float pitch = -dotproduct(tire.angles, forward) * 360.0;
 	if (plyrent_tireowner.realspeed >= 4)
 		tire.angles_x += pitch * 0.1;
 

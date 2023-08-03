@@ -282,11 +282,20 @@ frame, the ai_time limits it's actual updating
 void() bot_ai_race;
 void() bot_ai_fight;
 .vector bot_wishvel;
+.float bot_hitwall;
+
 void() BotAI =
 {
 	makevectors_mdl(self.v_angle);
 	self.velocity = self.bot_wishvel; // wishvel is set by AI
 
+	makevectors_mdl(self.realang);
+	traceline (self.origin + v_forward * (48 + self.realspeed), self.origin + v_forward * (54 + self.realspeed), FALSE , self);
+	if (trace_fraction < 1)
+		self.bot_hitwall = TRUE;
+	else
+		self.bot_hitwall = FALSE;
+	
 	if (!deathmatch)
 	{
 		local vector x = getlight(self.origin);

@@ -590,8 +590,7 @@ void() PlayerPostThink =
 			sound (freeze1, CHAN_AUTO, "combat/frozen.wav", 1, ATTN_NORM);
 		}
 	}
-	makevectors_mdl(self.realang);
-	self.tire_forward = normalize(v_forward); // used for tire spinning
+
 	TryUpdateVehicle();
 
 	//

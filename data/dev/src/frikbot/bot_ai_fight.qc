@@ -87,7 +87,7 @@ void() bot_ai_fight =
 	{
 		// Back up for randomly for a second, hit a wall/obstacle
 		// TODO: Add an actual check for a wall infront of me
-		if ((self.keys == KEY_MOVEFORWARD || (self.button0 && self.turbo_fuel > 0)) && self.realspeed <= 3 && self.bot_backup_finished < time)
+		if (self.bot_hitwall && (self.keys == KEY_MOVEFORWARD || (self.button0 && self.turbo_fuel > 0)) && self.realspeed <= 3 && self.bot_backup_finished < time)
 			self.bot_backup_finished = time + 0.3 + random()*0.3;
 
 		if (self.bot_backup_finished < time)
