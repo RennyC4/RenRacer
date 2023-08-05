@@ -1,9 +1,8 @@
 void(float type) countdown_announce =
 {
-	local entity y, head, ent = world;
-	head = world;
-
-	local string f = ftos(countdown_count);
+	entity head = world, ent = world;
+	string f = ftos(countdown_count);
+	float runonce;
 
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
@@ -20,6 +19,14 @@ void(float type) countdown_announce =
 				centerprint (targ, "^1! GO GO GO !\n");
 			else
 				centerprint (targ, "^1! KILL KILL KILL !\n");
+			if (!runonce)
+			{
+				if (!deathmatch)
+					bprint ("Race Started!\n");
+				else
+					bprint ("Rage War Begins!\n");
+				runonce = TRUE;
+			}
 		}
 	}
 };

@@ -45,6 +45,7 @@ this notice in its entirety.
 void() headlights_on;
 void() headlights_off;
 void(entity targ, vector dest, float silent) car_teleport;
+float(float y1, float y2) angcomp;
 
 .float bot_backup_finished;
 .float bot_search_finished;
@@ -145,12 +146,9 @@ Steer towards target
 
 void() bot_angle_set =
 {
-	local float h;
-	local vector view;
-
 	if (self.goalentity)
 	{
-		view = realorigin(self.goalentity);
+		vector view = realorigin(self.goalentity);
 		view = view - (self.origin + self.view_ofs);
 		view = vectoangles(view);
 		view_x = view_x * -1;
@@ -286,16 +284,17 @@ void() bot_ai_fight;
 
 void() BotAI =
 {
-	makevectors_mdl(self.v_angle);
+	//makevectors_mdl(self.v_angle);
+	makevectors_mdl(self.realang);
 	self.velocity = self.bot_wishvel; // wishvel is set by AI
 
 	makevectors_mdl(self.realang);
-	traceline (self.origin + v_forward * (48 + self.realspeed), self.origin + v_forward * (54 + self.realspeed), FALSE , self);
+	traceline (self.origin + v_forward * (48 + self.realspeed), self.origin + v_forward * (54 + self.realspeed), FALSE, self);
 	if (trace_fraction < 1)
 		self.bot_hitwall = TRUE;
 	else
 		self.bot_hitwall = FALSE;
-	
+
 	if (!deathmatch)
 	{
 		local vector x = getlight(self.origin);
@@ -322,7 +321,9 @@ void() BotAI =
 		// health < 1 is used because fractional healths show up as 0 on normal player
 		// status bars, and the mod probably already compensated for that
 
-		if (self.health < 1 && !intermission_running && (race_status == RACE_STARTED || human_players) && deathmatch)
+		if (!human_players && deathmatch && race_status != RACE_STARTED) // bots can start/end matches on empty dedicated servers
+			self.button0 = 1;
+		if (self.health < 1 && !intermission_running && race_status == RACE_STARTED && deathmatch) // bot respawn
 		{
 			self.button3 = floor(random() * 2);
 			self.button0 = 0;

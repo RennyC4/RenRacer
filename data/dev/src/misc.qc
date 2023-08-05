@@ -99,6 +99,7 @@ void() CheckGameRules =
 	if (timelimit && time >= timelimit)
 	{
 		Timelimit_Printwinner();
+		race_status = RACE_FINISHED;
 		if (self.driving)
 			Car_AttachToVehicle(self, self.driving); // Remove player from car
 		NextLevel();
@@ -107,6 +108,7 @@ void() CheckGameRules =
 
 	if (fraglimit && self.frags >= fraglimit)
 	{
+		race_status = RACE_FINISHED;
 		bprint (self.netname, " won the rage war with ", ftos(self.frags), " frags!\n");
 		if (self.driving)
 			Car_AttachToVehicle(self, self.driving); // Remove player from car

@@ -3,7 +3,7 @@ void() bot_ai_race =
 	if (race_status != RACE_STARTED)
 		return;
 
-	makevectors_mdl(self.v_angle);
+	makevectors_mdl(self.realang);
 
 	//
 	// Bot searches for stuff

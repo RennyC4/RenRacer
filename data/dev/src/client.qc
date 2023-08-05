@@ -17,8 +17,6 @@ void() ClientKill = {};
 
 void() ClientConnect =
 {
-	if (clienttype(self) == CLIENTTYPE_REAL)
-		human_players = human_players + 1;
 	if (intermission_running) // a client connecting during an intermission can cause problems
 		GotoNextMap();
 	if (!deathmatch)
@@ -796,6 +794,9 @@ void() PutClientInServer =
 	self.spawn_loc_angles = self.angles; // Stash it
 	self.alpha = 1;
 	self.energy = 100;
+
+	if (clienttype(self) == CLIENTTYPE_REAL)
+		human_players = human_players + 1;
 	self.player_id = human_players;
 
 	if (cvar("developer") != 1)
