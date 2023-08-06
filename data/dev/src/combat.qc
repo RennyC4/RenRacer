@@ -342,7 +342,13 @@ void() Fire_MachineGun =
 {
 	local entity bullet = spawn();
 
-	makevectors (self.realang);
+	// machine gun slight tilt
+	vector v = self.realang;
+	if (self.mgun)
+		v_y = v_y - 1;
+	else
+		v_y = v_y + 1;
+	makevectors(v);
 
 	bullet.movetype = MOVETYPE_FLYMISSILE;
 	bullet.owner = self;
@@ -354,6 +360,8 @@ void() Fire_MachineGun =
 
 	bullet.velocity = aim(self, 1000);
 	bullet.velocity = bullet.velocity * 1000;
+
+	makevectors (self.realang);
 
 	// Players forward velocity is added to projectiles
 	if (!self.backward)
