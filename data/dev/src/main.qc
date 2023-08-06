@@ -181,6 +181,9 @@ void() worldspawn =
 	world_lights();
 	load_waypoints(); // Load waypoints
 	CSEv_GrabCSQCValues(); //CSQC Setup
+
+	// new cvars
+	registercvar("sv_car_physicssteps", "10"); // func_vehicle physics steps, higher is more stable with perf hit
 };
 
 //

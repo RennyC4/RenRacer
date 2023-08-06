@@ -316,8 +316,11 @@ void() BotAI =
 		// bots can start/end matches on empty dedicated servers
 		if (framecount >= 10 && !human_players && deathmatch && race_status != RACE_STARTED)
 		{
-			bprint ("AI started match\n");
-			self.button0 = 1;
+			if (!self.button0) // don't spam console
+			{
+				bprint ("AI started match\n");
+				self.button0 = 1;
+			}
 		}
 		
 		// am I dead? Fire randomly until I respawn
