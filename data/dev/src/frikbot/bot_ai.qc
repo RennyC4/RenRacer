@@ -313,16 +313,16 @@ void() BotAI =
 	}
 	else
 	{
-		// am I dead? Fire randomly until I respawn
-		// health < 1 is used because fractional healths show up as 0 on normal player
-		// status bars, and the mod probably already compensated for that
-
-		if (framecount >= 10 && !human_players && deathmatch && race_status != RACE_STARTED) // bots can start/end matches on empty dedicated servers
+		// bots can start/end matches on empty dedicated servers
+		if (framecount >= 10 && !human_players && deathmatch && race_status != RACE_STARTED)
 		{
 			bprint ("AI started match\n");
 			self.button0 = 1;
 		}
 		
+		// am I dead? Fire randomly until I respawn
+		// health < 1 is used because fractional healths show up as 0 on normal player
+		// status bars, and the mod probably already compensated for that - FrikaC
 		if (self.health < 1 && !intermission_running && race_status == RACE_STARTED && deathmatch) // bot respawn
 		{
 			self.button3 = floor(random() * 2);
