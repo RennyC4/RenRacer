@@ -938,6 +938,21 @@ void() Remote_Think =
 	frameskip(1);
 };
 
+void() RemoteSignal_Think =
+{
+	if (self.owner)
+	{
+		setorigin (self, self.owner.origin + v_up * 44);
+		self.scale = 1 + sin(time*512)*0.25;
+	}
+	if (!self.realowner.plyrremote)
+	{
+		remove(self);
+		return;
+	}
+	frameskip(0.1);
+};
+
 void() Fire_Remote =
 {
 	if (!self.plyrremote)
@@ -958,6 +973,24 @@ void() Fire_Remote =
 		remote.think = Remote_Think;
 		remote.nextthink = time;
 		self.plyrremote = remote; // link
+		
+		entity signal = spawn();
+		signal.owner = remote;
+		signal.realowner = self;
+		signal.solid = SOLID_NOT;
+		signal.movetype = MOVETYPE_NOCLIP;
+		signal.classname = "signal";
+		signal.dimension_hit = signal.dimension_solid = 0;
+		signal.scale = 1;
+		signal.alpha = 0.75;
+		signal.effects = EF_FULLBRIGHT | EF_ADDITIVE;
+
+		setmodel (signal, "progs/remote2.spr"); // just an effect
+		setsize (signal, '0 0 -16', '0 0 0');
+		setorigin (signal, self.origin + v_up * 44);
+
+		signal.think = RemoteSignal_Think;
+		signal.nextthink = time;
 	}
 	else // Remote already in play
 	{

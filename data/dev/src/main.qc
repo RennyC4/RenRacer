@@ -94,6 +94,7 @@ void() worldspawn =
 	precache_model("progs/shield.mdl");
 	precache_model("progs/ricochet.mdl");
 	precache_model("progs/remote.spr");
+	precache_model("progs/remote2.spr");
 	precache_model("progs/frzsmk.spr");
 	precache_model("progs/frzsmk2.spr");
 	precache_model("progs/frozen.mdl");

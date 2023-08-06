@@ -303,7 +303,7 @@ void() BotAI =
 		{
 			if (x_x <= 3 || x_y <= 3 || x_z <= 3)
 			{
-				if (!self.headlights)
+				if (!self.headlights) 
 					headlights_on();
 			}
 			else if (self.headlights)
@@ -317,8 +317,12 @@ void() BotAI =
 		// health < 1 is used because fractional healths show up as 0 on normal player
 		// status bars, and the mod probably already compensated for that
 
-		if (!human_players && deathmatch && race_status != RACE_STARTED) // bots can start/end matches on empty dedicated servers
+		if (framecount >= 10 && !human_players && deathmatch && race_status != RACE_STARTED) // bots can start/end matches on empty dedicated servers
+		{
+			bprint ("AI started match\n");
 			self.button0 = 1;
+		}
+		
 		if (self.health < 1 && !intermission_running && race_status == RACE_STARTED && deathmatch) // bot respawn
 		{
 			self.button3 = floor(random() * 2);
