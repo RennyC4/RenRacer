@@ -283,7 +283,27 @@ void() BotAI =
 	makevectors(self.realang);
 	float distance = 8;
 	vector start = self.origin + v_forward * 50;
+
+	// Middle trace
 	vector end = start + (v_forward * distance);
+	traceline (start, end, TRUE, self);
+
+	if (trace_fraction < 1)
+		self.bot_hitwall = TRUE;
+	else
+		self.bot_hitwall = FALSE;
+
+	// Right trace
+	end = start + (v_forward * distance) + v_right * 32;
+	traceline (start, end, TRUE, self);
+
+	if (trace_fraction < 1)
+		self.bot_hitwall = TRUE;
+	else
+		self.bot_hitwall = FALSE;
+
+	// Left trace
+	end = start + (v_forward * distance) - v_right * 32;
 	traceline (start, end, TRUE, self);
 
 	if (trace_fraction < 1)
@@ -314,7 +334,7 @@ void() BotAI =
 	else
 	{
 		// bots can start/end matches on empty dedicated servers
-		if (framecount >= 10 && !human_players && deathmatch && race_status != RACE_STARTED)
+		if (framecount >= 100 && !human_players && deathmatch && race_status != RACE_STARTED)
 		{
 			if (!self.button0) // don't spam console
 			{
