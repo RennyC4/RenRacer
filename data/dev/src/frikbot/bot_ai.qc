@@ -146,23 +146,17 @@ Steer towards target
 
 void() bot_angle_set =
 {
+	makevectors_mdl(self.v_angle);
+
 	if (self.goalentity)
 	{
-		vector view = realorigin(self.goalentity);
-		view = view - (self.origin + self.view_ofs);
-		view = vectoangles(view);
-		view_x = view_x * -1;
-		self.b_angle = view;
-	}
-	else
-		self.b_angle_x = 0;
+		vector view = vectoangles(self.goalentity.origin - self.origin);
+		self.angles_y = view_y;
+		self.angles_x = view_x;
+		self.angles_z = 0;
 
-	self.keys = self.keys & 63;
-	self.v_angle = self.b_angle;
-	while (self.v_angle_x < -180)
-		self.v_angle_x = self.v_angle_x + 360;
-	while (self.v_angle_x > 180)
-		self.v_angle_x = self.v_angle_x - 360;
+		self.v_angle = view;
+	}
 };
 
 .float findcheckpoint_fail;
@@ -277,19 +271,21 @@ frame, the ai_time limits it's actual updating
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 */
 
+entity() BotGetClosestPlayer;
+entity() Bot_FindClosestItem;
 void() bot_ai_race;
 void() bot_ai_fight;
-.vector bot_wishvel;
 .float bot_hitwall;
 
 void() BotAI =
 {
-	//makevectors_mdl(self.v_angle);
-	makevectors_mdl(self.realang);
-	self.velocity = self.bot_wishvel; // wishvel is set by AI
+	// Bot hit/close to wall
+	makevectors(self.realang);
+	float distance = 8;
+	vector start = self.origin + v_forward * 50;
+	vector end = start + (v_forward * distance);
+	traceline (start, end, TRUE, self);
 
-	makevectors_mdl(self.realang);
-	traceline (self.origin + v_forward * (48 + self.realspeed), self.origin + v_forward * (54 + self.realspeed), FALSE, self);
 	if (trace_fraction < 1)
 		self.bot_hitwall = TRUE;
 	else

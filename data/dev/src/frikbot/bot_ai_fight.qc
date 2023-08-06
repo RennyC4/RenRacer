@@ -60,15 +60,50 @@ void() bot_ai_fight =
 	if (race_status != RACE_STARTED)
 		return;
 
-	makevectors_mdl(self.realang);
+	makevectors_mdl(self.v_angle);
 
-	// Get rid of fire
+	//
+	// Driving logic
+	//
+
+	// Bot wall bump
+	if (self.bot_hitwall && self.keys == KEY_MOVEFORWARD && self.realspeed <= 3 && self.bot_backup_finished < time)
+		self.bot_backup_finished = time + 0.3 + random()*0.3;
+
+	if (self.bot_backup_finished > time)
+	{
+		if (random() < 0.5)
+		{
+			self.enemy = BotGetClosestPlayer(); // Find new target while backing up
+			if (self.enemy)
+				self.goalentity = self.enemy;
+		}
+		else
+			self.goalentity = Bot_FindClosestItem();
+
+		self.button0 = FALSE;
+		self.keys = KEY_MOVEBACK;
+		self.velocity = v_forward * -9999; // Backward
+	}
+	else // forward
+	{
+		self.keys = KEY_MOVEFORWARD;
+		self.velocity = v_forward * 9999; // Forward
+	}
+
+	//
+	// Turbo logic (hit player, remove napalm fire, etc)
+	//
+
 	if (self.onfire_finished > time)
 		self.button0 = TRUE;
 	else
 		self.button0 = FALSE;
 
+	//
 	// Get player to hunt
+	//
+
 	if (!self.enemy && self.bot_huntitem_finished < time)
 	{
 		self.enemy = BotGetClosestPlayer();
@@ -76,18 +111,21 @@ void() bot_ai_fight =
 			self.goalentity = self.enemy;
 	}
 
-	// Out of ammo, go search for some
-	if (self.ammo_firerocket < 1 && self.ammo_homingrocket < 1 && self.ammo_powerrocket < 1 && self.ammo_napalm < 1)
+	//
+	// Out of ammo routine
+	//
+
+	if (self.ammo_firerocket < 1 && self.ammo_homingrocket < 1 && self.ammo_powerrocket < 1 && self.ammo_napalm < 1 && self.ammo_rico < 1 && self.ammo_remote < 1 && self.ammo_freeze < 1)
 	{
 		self.goalentity = Bot_FindClosestItem();
 		self.bot_huntitem_finished = time + 3;
 	}
 
-	// Bot hit wall, backup for a sec
-	if (self.bot_hitwall && self.keys == KEY_MOVEFORWARD && self.realspeed <= 3 && self.bot_backup_finished < time)
-		self.bot_backup_finished = time + 0.3 + random()*0.3;
+	//
+	// Bot firing / targetting
+	//
 
-	if (self.goalentity)
+	if (self.goalentity || self.enemy)
 	{
 		if (visible(self.enemy) && self.enemy.cloak_finished < time && self.enemy.invulnerable_finished < time)
 		{
@@ -113,6 +151,21 @@ void() bot_ai_fight =
 					self.weapon = WEP_NAPALM;
 					self.button4 = TRUE;
 				}
+				if (self.ammo_rico > 0)
+				{
+					self.weapon = WEP_RICOCHET;
+					self.button4 = TRUE;
+				}
+				if (self.ammo_remote > 0 || self.plyrremote)
+				{
+					self.weapon = WEP_REMOTE;
+					self.button4 = TRUE;
+				}
+				if (self.ammo_freeze > 0)
+				{
+					self.weapon = WEP_FREEZE;
+					self.button4 = TRUE;
+				}
 				self.button3 = TRUE; // Fire machine guns
 			}
 			else
@@ -132,26 +185,6 @@ void() bot_ai_fight =
 			self.enemy = BotGetClosestPlayer(); // Find new target while item hunting
 			if (self.bot_huntitem_finished < time)
 				self.bot_huntitem_finished = time + 3;
-		}
-		if (self.bot_backup_finished < time)
-		{
-			self.keys = KEY_MOVEFORWARD;
-			self.bot_wishvel = v_forward * 9999; // Forward
-		}
-		else // backing up
-		{
-			if (random() < 0.5)
-			{
-				self.enemy = BotGetClosestPlayer(); // Find new target while backing up
-				if (self.enemy)
-					self.goalentity = self.enemy;
-			}
-			else
-				self.goalentity = Bot_FindClosestItem();
-
-			self.button0 = FALSE;
-			self.keys = KEY_MOVEBACK;
-			self.bot_wishvel = v_forward * -9999; // Back
 		}
 	}
 	else

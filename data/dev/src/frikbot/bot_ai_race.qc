@@ -3,7 +3,7 @@ void() bot_ai_race =
 	if (race_status != RACE_STARTED)
 		return;
 
-	makevectors_mdl(self.realang);
+	makevectors_mdl(self.v_angle);
 
 	//
 	// Bot searches for stuff
@@ -138,7 +138,7 @@ void() bot_ai_race =
 		// Back up for randomly for a second, hit a wall/obstacle
 		if (self.goal_touched && (self.keys == KEY_MOVEFORWARD || (self.button0 && self.turbo_fuel > 0)) && self.realspeed <= 3)
 		{
-			self.bot_wishvel = v_forward * -9999;
+			self.velocity = v_forward * -9999;
 			self.keys = KEY_MOVEBACK;
 			self.bot_backup_finished = time + 0.3 + random()*0.3;
 		}
@@ -224,7 +224,7 @@ void() bot_ai_race =
 					else
 						self.button0 = FALSE;
 				}
-				self.bot_wishvel = v_forward * 9999; // Forward
+				self.velocity = v_forward * 9999; // Forward
 				self.keys = KEY_MOVEFORWARD;
 			}
 			else // Close to goal
@@ -235,14 +235,14 @@ void() bot_ai_race =
 					{
 						if (self.waypoint_speed != 999)
 						{
-							self.bot_wishvel = v_forward * -9999; // Back
+							self.velocity = v_forward * -9999; // Back
 							self.keys = KEY_MOVEBACK; // Slow down, coming in too fast!
 						}
 						//bprint ("Moving in too hot!\n");
 					}
 					else
 					{
-						self.bot_wishvel = v_forward * 9999; // Forward
+						self.velocity = v_forward * 9999; // Forward
 						self.keys = KEY_MOVEFORWARD;
 					}
 				}
@@ -251,21 +251,21 @@ void() bot_ai_race =
 					if (!self.goal_touched) // Go for goal point
 					{
 						self.button0 = TRUE;
-						self.bot_wishvel = v_forward * 9999; // Forward
+						self.velocity = v_forward * 9999; // Forward
 						self.keys = KEY_MOVEFORWARD;
 					}
 					else
 					{
 						if (self.realspeed < 50)
 						{
-							self.bot_wishvel = v_forward * 9999; // Forward
+							self.velocity = v_forward * 9999; // Forward
 							self.keys = KEY_MOVEFORWARD;
 						}
 						else
 						{
 							if (self.waypoint_speed != 999)
 							{
-								self.bot_wishvel = v_forward * -9999; // Back
+								self.velocity = v_forward * -9999; // Back
 								self.keys = KEY_MOVEBACK;
 							}
 						}
@@ -278,12 +278,12 @@ void() bot_ai_race =
 				{
 					if (self.realspeed > self.waypoint_speed)
 					{
-						self.bot_wishvel = v_forward * -9999; // Back
+						self.velocity = v_forward * -9999; // Back
 						self.keys = KEY_MOVEBACK;
 					}
 					else
 					{
-						self.bot_wishvel = v_forward * 9999; // Forward
+						self.velocity = v_forward * 9999; // Forward
 						self.keys = KEY_MOVEFORWARD;
 					}
 					// 999 Speed waypoint tells bot to turbo, but only if facing goal entity & visible
@@ -292,7 +292,7 @@ void() bot_ai_race =
 						if (self.turbo_fuel > 0)
 						{
 							self.button0 = TRUE;
-							self.bot_wishvel = v_forward * 9999; // Forward
+							self.velocity = v_forward * 9999; // Forward
 							self.keys = KEY_MOVEFORWARD;
 							//bprint ("Waypoint says to Turbo\n");
 						}
@@ -305,7 +305,7 @@ void() bot_ai_race =
 			// Fight inclines
 			if (self.goalentity.origin_z > self.origin_z && self.angles_x >= 5 && infront(self.goalentity, 0.7))
 			{
-				self.bot_wishvel = v_forward * 9999; // Forward
+				self.velocity = v_forward * 9999; // Forward
 				self.keys = KEY_MOVEFORWARD;
 				if (self.turbo_fuel >= 0)
 					self.button0 = TRUE;
@@ -315,7 +315,7 @@ void() bot_ai_race =
 		else // backing up
 		{
 			self.button0 = FALSE;
-			self.bot_wishvel = v_forward * -9999; // Back
+			self.velocity = v_forward * -9999; // Back
 			self.keys = KEY_MOVEBACK;
 		}
 

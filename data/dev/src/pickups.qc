@@ -76,13 +76,18 @@ void() item_health =
 	self.classname = "item_health";
 	self.flags = FL_ITEM;
 	self.netname = "item";
-	self.effects = EF_FULLBRIGHT;
+	self.effects = EF_FULLBRIGHT | EF_ADDITIVE;
 	self.touch = item_health_touch;
 	self.scale = 1.5;
+	self.alpha = 0.9;
 
 	setmodel (self, "progs/item_health.spr");
 	self.mdl = self.model; // can be restored on respawn
 	setsize (self, '0 0 0', '0 0 0');
+
+	self.origin_z = self.origin_z + 8;
+	setorigin(self, self.origin);
+
 	SetupItemDynamicLight(); // init dlights
 };
 

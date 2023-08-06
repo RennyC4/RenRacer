@@ -107,41 +107,6 @@ string () PickARandomName =
 	return h;
 };
 
-// I didn't like the old code so this is very stripped down
-
-entity b_originator;
-float b_topic;
-/* FBX Topics
-
-b_originator == self
- 1 - sign on
- 2 - killed targ
- 3 - team message "friendly eyes"
- 4 - team message "on your back"
- 5 - team message "need back up"
- 6 - excuses
- ----
- 7 - gameover
- ----
- 8 - welcoming someone onto server
- 9 - ridicule lost frag (killed self?)
- 10 - ridicule lost frag (lava)
- 11 - lag
-b_originator == targ
-
- 
-*/
-void(float tpic) bot_start_topic =
-{
-	if (random() < 0.2)
-	{
-		b_topic = tpic;
-		b_originator = self;
-	}
-	else
-		b_topic = 0;
-};
-
 /*
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -250,41 +215,6 @@ float (entity targ) fisible =
 	return FALSE;
 };
 
-
-/*
--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-Wisible 
-
-goes through movable brushes/entities, used
-for waypoints
-
--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-*/
-
-// this is used for waypoint stuff....
-float (entity targ1, entity targ2) wisible =
-{
-	local vector	spot1, spot2;
-	local entity ignore;
-
-	spot1 = targ1.origin;
-	spot2 = realorigin(targ2);
-	
-	ignore = self;
-	do
-	{
-		traceline (spot1, spot2, TRUE, ignore);
-		spot1 = realorigin(trace_ent);
-                ignore = trace_ent;
-	} while ((trace_ent != world) && (trace_fraction != 1));
-	if (trace_endpos == spot2)
-		return TRUE;
-	else 
-		return FALSE;
-};
-
-
 /*
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -305,6 +235,7 @@ float (entity targ) sisible =
 		return TRUE;
 	return FALSE;
 };
+
 /*
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 

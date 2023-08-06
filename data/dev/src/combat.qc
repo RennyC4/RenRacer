@@ -171,7 +171,6 @@ void(entity targ, entity attacker) Death =
 {
 	targ.forcejump_strength = 750;
 	targ.forcejump = TRUE;
-	// Initial big explosion here
 	CreateExplosion(targ.origin + v_up * 32);
 };
 
