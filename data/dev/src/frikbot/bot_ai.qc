@@ -294,7 +294,7 @@ void() BotAI =
 		self.bot_hitwall = FALSE;
 
 	// Right trace
-	end = start + (v_forward * distance) + v_right * 32;
+	end = start + (v_forward * distance) + v_right * 16;
 	traceline (start, end, TRUE, self);
 
 	if (trace_fraction < 1)
@@ -303,7 +303,7 @@ void() BotAI =
 		self.bot_hitwall = FALSE;
 
 	// Left trace
-	end = start + (v_forward * distance) - v_right * 32;
+	end = start + (v_forward * distance) - v_right * 16;
 	traceline (start, end, TRUE, self);
 
 	if (trace_fraction < 1)
