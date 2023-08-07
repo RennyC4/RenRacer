@@ -14,6 +14,11 @@ vector(vector c_maxs, vector c_mins, vector c_org) Clamp =
 	return ret_vec;
 };
 
+float(float a, float b, float frac) lerp =
+{
+	return max(0, 1 - frac) * a + min(1.0, frac) * b;
+}
+
 float invlerp( float a, float b, float v ){
 	return (v-a)/(b-a);
 }
@@ -866,7 +871,7 @@ void() Phys_ObjectThink =
 			part.lmat_left = matrix_left;
 			part.lmat_up = matrix_up;
 			// Update euler angles for viewing ingame
-			part.angles = vectoangles2(matrix_forward, matrix_up);
+			part.angles = vectoangles(matrix_forward, matrix_up);
 			if (part.physobj_flags & PHFLAGS_BSPMODEL)
 				part.angles_x = part.angles_x*-1;
 			part = part.physobj_next;
@@ -884,7 +889,7 @@ void() Phys_ObjectThink =
 #if defined(SMOOTH)
 			stat.view_ofs = self.physobj_p1.origin + self.lmat_forward*stat.relative_org_x + self.lmat_left*stat.relative_org_y + self.lmat_up*stat.relative_org_z;
 #else
-			stat.angles = vectoangles2(matrix_forward, matrix_up);
+			stat.angles = vectoangles(matrix_forward, matrix_up);
 			if (stat.physobj_flags & PHFLAGS_BSPMODEL)
 				stat.angles_x = stat.angles_x*-1;
 			stat.oldorigin = stat.origin;
@@ -911,7 +916,7 @@ void() Phys_ObjectThink =
 		}
 		*/
 		setorigin (self, self.physobj_p1.origin + self.lmat_forward*self.relative_org_x + self.lmat_left*self.relative_org_y + self.lmat_up*self.relative_org_z);
-		self.angles = vectoangles2(self.lmat_forward, self.lmat_up);
+		self.angles = vectoangles(self.lmat_forward, self.lmat_up);
 		self.angles_x = -self.angles_x;
 		self.velocity = self.physobj_p1.velocity; // FIXME: count average velocity
 	}

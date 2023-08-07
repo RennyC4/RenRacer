@@ -21,7 +21,11 @@
  * Returns: A number within the given range.
  */
  
-float(float a, float b) mod;
+float(float a, float b) mod =
+{
+	return a - (floor(a / b) * b);
+}
+
 float(float value, float minValue, float maxValue) wrap =
 {
     local float range = maxValue - minValue;

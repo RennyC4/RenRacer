@@ -211,67 +211,6 @@ void() DriverThink =
 };
 #endif
 
-void(float turn, float pitch) Gun_Turn =
-{
-	local float f;
-	if (!self.driving)
-		return;
-	f = 125;
-	entity car = self.driving;
-	entity base = car.gun;
-	if (!base.modelindex)
-		return;
-	entity swivel = base.gun;
-	if (!swivel)
-		return;
-	entity body = swivel.gun;
-	entity barrel = body.gun;
-	float want_yaw = turn;
-	//float want_yaw = clamp(turn, -35, 35);
-	if (want_yaw < 0)
-		swivel.ideal_yaw = max(want_yaw, swivel.ideal_yaw - f*frametime);
-	else if (want_yaw > 0)
-		swivel.ideal_yaw = min(want_yaw, swivel.ideal_yaw + f*frametime);
-	else{
-		if (swivel.ideal_yaw > 0)
-			swivel.ideal_yaw = max(0, swivel.ideal_yaw - f*2*frametime);
-		else
-			swivel.ideal_yaw = min(0, swivel.ideal_yaw + f*2*frametime);
-	}
-	makevectors(swivel.base_pose);
-	matrix_forward = v_forward;
-	matrix_left = -v_right;
-	matrix_up = v_up;
-	Matrix_RotateByAxisAngle('0 0 1', swivel.ideal_yaw);
-	swivel.relative_forward = matrix_forward;
-	swivel.relative_left = matrix_left;
-	swivel.relative_up = matrix_up;
-
-	want_yaw = clamp(pitch, -25, 90);
-	if (want_yaw < 0)
-		body.ideal_yaw = max(want_yaw, body.ideal_yaw - f*frametime);
-	else if (want_yaw > 0)
-		body.ideal_yaw = min(want_yaw, body.ideal_yaw + f*frametime);
-	else{
-		if (body.ideal_yaw > 0)
-			body.ideal_yaw = max(0, body.ideal_yaw - f*2*frametime);
-		else
-			body.ideal_yaw = min(0, body.ideal_yaw + f*2*frametime);
-	}
-	makevectors(swivel.base_pose);
-	matrix_forward = v_forward;
-	matrix_left = -v_right;
-	matrix_up = v_up;
-	Matrix_RotateByAxisAngle('0 1 0', body.ideal_yaw);
-	Matrix_RotateByAxisAngle('0 0 1', swivel.ideal_yaw);
-	body.relative_forward = matrix_forward;
-	body.relative_left = matrix_left;
-	body.relative_up = matrix_up;
-	barrel.relative_forward = matrix_forward;
-	barrel.relative_left = matrix_left;
-	barrel.relative_up = matrix_up;
-};
-
 vector() Car_SpringyOrigin;
 
 entity FindStaticOfName(string name, entity obj){

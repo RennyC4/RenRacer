@@ -19,15 +19,14 @@ math.qc
 damage.qc
 
 // func_vehicle
-maths.qc
 phys_defs.qc
 phys_matrix.qc
 phys_exec.qc
-//phys_exec_tracebox.qc
+//phys_exec_tracebox.qc // Tracebox version of phys_exec.qc
 
 chars/func_vehicle.qc
-opt_func_vehicle_builtins.qc // RennyC optimized *Judderfest with sv_autoload 1*
-//func_vehicle_builtins.qc // Original func_vehicle, Urre
+opt_func_vehicle_builtins.qc // RennyC optimized
+//func_vehicle_builtins.qc // Urre original (heavy) func_vehicle
 // func_vehicle
 
 misc.qc

@@ -1893,7 +1893,7 @@ vector(vector fwd, optional vector up) vectoangles = #51; /*
 		Returns the angles (+x=UP) required to orient an entity to look in the given direction. The 'up' argument is required if you wish to set a roll angle, otherwise it will be limited to just monster-style turning. */
 
 #endif
-//#ifdef SSQC
+#ifdef SSQC
 void(float to, float val) WriteByte = #52; /*
 		Writes a single byte into a network message buffer. Typically you will find a more correct alternative to writing arbitary data. 'to' should be one of the MSG_* constants. MSG_ONE must have msg_entity set first. */
 
@@ -1918,14 +1918,14 @@ void(float to, string val) WriteString = #58; /*
 void(float to, entity val) WriteEntity = #59; /*
 		Writes the index of the specified entity (the network data size is not specified). This can be read clientside using the readentitynum builtin, with caveats. */
 
-//#endif
-//#if defined(CSQC) || defined(SSQC)
-//float(float angle) sin = #60; /* Part of DP_QC_SINCOSSQRTPOW
-//		Forgive me father, for I have trigonometry homework. */
+#endif
+#if defined(CSQC) || defined(SSQC)
+float(float angle) sin = #60; /* Part of DP_QC_SINCOSSQRTPOW
+		Forgive me father, for I have trigonometry homework. */
 
-//float(float angle) cos = #61; /* Part of DP_QC_SINCOSSQRTPOW*/
-//float(float value) sqrt = #62; /* Part of DP_QC_SINCOSSQRTPOW*/
-//#endif
+float(float angle) cos = #61; /* Part of DP_QC_SINCOSSQRTPOW*/
+float(float value) sqrt = #62; /* Part of DP_QC_SINCOSSQRTPOW*/
+#endif
 #ifdef SSQC
 float(float a, float n) modulo = #0:modulo;
 #endif
@@ -2038,8 +2038,8 @@ void(float style, float val, optional vector rgb) lightstylestatic = #5; /*
 void(vector start, vector mins, vector maxs, vector end, float nomonsters, entity ent) tracebox = #90; /* Part of DP_QC_TRACEBOX
 		Exactly like traceline, but a box instead of a uselessly thin point. Acceptable sizes are limited by bsp format, q1bsp has strict acceptable size values. */
 
-//vector() randomvec = #91; /* Part of DP_QC_RANDOMVEC
-//		Returns a vector with random values. Each axis is independantly a value between -1 and 1 inclusive. */
+vector() randomvec = #91; /* Part of DP_QC_RANDOMVEC
+		Returns a vector with random values. Each axis is independantly a value between -1 and 1 inclusive. */
 
 vector(vector org) getlight = #92; /* Part of DP_QC_GETLIGHT*/
 float(string cvarname, string defaultvalue) registercvar = #93; /* Part of DP_REGISTERCVAR
@@ -2047,11 +2047,11 @@ float(string cvarname, string defaultvalue) registercvar = #93; /* Part of DP_RE
 		This builtin has the limitation that it does not apply to configs or commandlines. Such configs will need to use the set or seta command causing this builtin to be a noop.
 		In engines that support it, you will generally find the autocvar feature easier and more efficient to use. */
 
-//float(float a, float b, ...) min = #94; /* Part of DP_QC_MINMAXBOUND
-//		Returns the lowest value of its arguments. */
+float(float a, float b, ...) min = #94; /* Part of DP_QC_MINMAXBOUND
+		Returns the lowest value of its arguments. */
 
-//float(float a, float b, ...) max = #95; /* Part of DP_QC_MINMAXBOUND
-//		Returns the highest value of its arguments. */
+float(float a, float b, ...) max = #95; /* Part of DP_QC_MINMAXBOUND
+		Returns the highest value of its arguments. */
 
 float(float minimum, float val, float maximum) bound = #96; /* Part of DP_QC_MINMAXBOUND
 		Returns val, unless minimum is higher, or maximum is less. */
@@ -3347,9 +3347,9 @@ void(strbuf bufhandle, float string_index) bufstr_free = #469; /* Part of DP_QC_
 float(float s) asin = #471; /* Part of DP_QC_ASINACOSATANATAN2TAN*/
 float(float c) acos = #472; /* Part of DP_QC_ASINACOSATANATAN2TAN*/
 float(float t) atan = #473; /* Part of DP_QC_ASINACOSATANATAN2TAN*/
-//float(float c, float s) atan2 = #474; /* Part of DP_QC_ASINACOSATANATAN2TAN*/
-//float(float a) tan = #475; /* Part of DP_QC_ASINACOSATANATAN2TAN
-//		Forgive me father, for I have a sunbed and I'm not afraid to use it. */
+float(float c, float s) atan2 = #474; /* Part of DP_QC_ASINACOSATANATAN2TAN*/
+float(float a) tan = #475; /* Part of DP_QC_ASINACOSATANATAN2TAN
+		Forgive me father, for I have a sunbed and I'm not afraid to use it. */
 
 float(string s) strlennocol = #476; /* Part of DP_QC_STRINGCOLORFUNCTIONS
 		Returns the number of characters in the string after any colour codes or other markup has been parsed. */

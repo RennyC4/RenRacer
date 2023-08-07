@@ -825,7 +825,7 @@ void() Rico_Think =
 	{
 		setorigin(self, trace_endpos);
 		vector normal = trace_plane_normal;
-		vector reflection = self.velocity - 2 * DotProduct(self.velocity, normal) * normal;
+		vector reflection = self.velocity - 2 * dotproduct(self.velocity, normal) * normal;
 		self.velocity = reflection;
 		self.cnt = self.cnt + 1; // Add damage
 		self.scale = self.scale + 0.1; // Grow

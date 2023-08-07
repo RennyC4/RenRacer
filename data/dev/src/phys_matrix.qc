@@ -21,9 +21,9 @@ void(vector axis, float angle) Matrix_RotateByAxisAngle =
 	forward = matrix_forward;
 	left = matrix_left;
 	up = matrix_up;
-#ifdef QSSDEP
-	angle = angle * DEG2RAD;
-#endif
+
+	//angle = angle * DEG2RAD;
+	angle = deg2rad(angle);
 
 	axis = normalize(axis);
 	c = cos(angle);mc = 1 - c;
@@ -165,51 +165,7 @@ void(entity obj) Matrix_CalculateObjectMatrix =
 	matrix_left    = obj.relative_forward_y * tpart_forward + obj.relative_left_y * tpart_left + obj.relative_up_y * tpart_up;
 	matrix_up      = obj.relative_forward_z * tpart_forward + obj.relative_left_z * tpart_left + obj.relative_up_z * tpart_up;
 };
-#ifndef QSSDEP
-vector randomvec(){
-	vector v;
-	do {
-		v_x = random()*2-1;
-		v_y = random()*2-1;
-		v_z = random()*2-1;
-	}
-	while(vlen(v) > 1);
-	return v;
-}
 
 float DotProduct2(vector x, vector y){
 	return x.x*y.x+x.y*y.y;
 }
-
-vector vectoangles2 (vector forward, vector up) {
-	vector result;
-	if (forward.x == 0 && forward.y == 0) {	//either vertically up or down
-		if (forward.z > 0) {
-			result.x = -90;
-			result.y = atan2(-up.y, -up.x);
-		}
-		else {
-			result.x = 90;
-			result.y = atan2(up.y, up.x);
-		}
-		result.z = 0;
-	}
-	else {
-		result.x = -atan2(forward.z, sqrt(DotProduct2(forward, forward)));
-		result.y = atan2(forward.y, forward.x);
-
-		float cp = cos(result.x), sp = sin(result.x);
-		float cy = cos(result.y), sy = sin(result.y);
-		vector tleft, tup;
-		tleft.x = -sy;
-		tleft.y = cy;
-		tleft.z = 0;
-		tup.x = sp*cy;
-		tup.y = sp*sy;
-		tup.z = cp;
-		result.z = -atan2(up * tleft, up * tup);
-	}
-	result.x = -result.x;
-	return result;
-}
-#endif
