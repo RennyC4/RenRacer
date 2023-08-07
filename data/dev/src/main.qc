@@ -183,7 +183,8 @@ void() worldspawn =
 	CSEv_GrabCSQCValues(); //CSQC Setup
 
 	// new cvars
-	registercvar("sv_car_physicssteps", "10"); // func_vehicle physics steps, higher is more stable with perf hit
+	registercvar("sv_car_physics_steps", "10"); // func_vehicle physics steps, higher is more stable with perf hit
+	registercvar("sv_car_physics_iterations", "1"); // physics iterations, default 1
 };
 
 //

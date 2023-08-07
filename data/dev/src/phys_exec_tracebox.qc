@@ -730,21 +730,23 @@ float() Phys_CheckCollisionDot =
 // The think function for our physics objects in the game
 void() Phys_ObjectThink =
 {
-	local float f, ftime, steps, iterations, coldot;
-	local float best_vel, best_len, vel_limit, vel;
+	local float f, ftime, steps, iterations;//, coldot;
 	local entity part, hitmodel, stat;
 
 	// Run every frame
 	self.nextthink = time;
 
-	local float sv_gravity = cvar("sv_gravity");
+	self.dimension_hit = player_dimension_hit; // RennyC: Disable player collisions
+	self.dimension_solid = player_dimension_solid; // RennyC: Disable player collisions
 
+	local float sv_gravity = cvar("sv_gravity");
 	Phys_CheckStatus(world); // Check in case we got pushed, blocked by a hitmodel or otherwise stuck
 	Phys_CheckOnGround(); // Check onground status in case we need to wake up the object
 	Phys_CheckRestState(); // See above
 
 	if (!(self.physobj_flags & PHFLAGS_RESTING))
 	{
+		/*
 		// Figure out the amount of steps needed to abide with the length of the shortest stick
 		// This is used to prevent sign errors
 		// Limit the amount of steps based on the angle of collision, unless there was a force change
@@ -769,6 +771,13 @@ void() Phys_ObjectThink =
 			part = part.physobj_next;
 		}
 		steps = max(1, ceil((best_vel/best_len)*coldot));
+		*/
+
+		float car_physics_step = cvar("sv_car_physicssteps"); // RennyC
+		float car_physics_iterations = cvar("sv_car_physics_iterations"); // RennyC
+
+		steps = car_physics_step; // higher means more stable but costs more perf, RennyC: made it a cvar
+		iterations = car_physics_iterations; // should always be 1
 		ftime = 1/steps;
 		ftime = ftime*frametime;
 
@@ -784,16 +793,13 @@ void() Phys_ObjectThink =
 			Phys_Acceleration(0.5, ftime, sv_gravity);
 		}
 		self.physobj_flags = self.physobj_flags - (self.physobj_flags & PHFLAGS_FORCE);
-
 		//If movement was very minor, and atleast three particles are on the ground, let's stick to the floor
 		Phys_CheckRestState();
-
 		// calculate an object matrix from the first three particles, used for orientation (magic)
 		Matrix_CalculateObjectMatrix(self);
 		self.lmat_forward = matrix_forward;
 		self.lmat_left = matrix_left;
 		self.lmat_up = matrix_up;
-
 		// Update particle orientations
 		part = self.physobj_particlelist;
 		while(part)
