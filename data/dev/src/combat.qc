@@ -1196,7 +1196,7 @@ void() Shield_Think =
 		sound (self, CHAN_BODY, "combat/shield.wav", 1, ATTN_NORM);
 		self.sound_finished = time + 0.5;
 	}
-	self.scale = 10 + sin(time*512)*0.5;
+	self.scale = 10 + sin(time*8)*0.5;
 	setorigin (self, self.owner.origin);
 	frameskip(0.01);
 };
