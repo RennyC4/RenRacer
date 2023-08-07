@@ -781,7 +781,8 @@ float() Phys_CheckCollisionDot =
 // The think function for our physics objects in the game
 void() Phys_ObjectThink =
 {
-	local float f, ftime, steps, iterations;//, coldot;
+	local float f, ftime, steps, iterations, coldot;
+	local float best_vel, best_len, vel_limit, vel;
 	local entity part, hitmodel, stat;
 
 	// Run every frame
@@ -795,40 +796,46 @@ void() Phys_ObjectThink =
 	Phys_CheckOnGround(); // Check onground status in case we need to wake up the object
 	Phys_CheckRestState(); // See above
 
+	float car_physics_new = cvar("sv_car_physics_new"); // RennyC
+
 	if (!(self.physobj_flags & PHFLAGS_RESTING))
 	{
-		/*
-		// Figure out the amount of steps needed to abide with the length of the shortest stick
-		// This is used to prevent sign errors
-		// Limit the amount of steps based on the angle of collision, unless there was a force change
-		coldot = 0;
-		if (!(self.physobj_flags & PHFLAGS_FORCE))
-			coldot = Phys_CheckCollisionDot();
-		// Limit velocities to not cause too many steps to occur
-		//vel_limit = cvar("phys_maxvelocity");
-		iterations = max(1, cvar("phys_constraints_linear_iterations"));
-		best_len = 999999999;
-		best_vel = 0;
-		part = self.physobj_particlelist;
-		while(part)
+		if (!car_physics_new)
 		{
-			vel = vlen(part.velocity);
-			f = 1;
-			if (vel_limit > 0)
-				f = min(1, vel_limit/vel);
-			part.velocity = part.velocity*f;
-			best_vel = max(vlen(part.velocity*frametime), best_vel);
-			best_len = min(part.stick_preferredlength, best_len);
-			part = part.physobj_next;
+			// Figure out the amount of steps needed to abide with the length of the shortest stick
+			// This is used to prevent sign errors
+			// Limit the amount of steps based on the angle of collision, unless there was a force change
+			coldot = 0;
+			if (!(self.physobj_flags & PHFLAGS_FORCE))
+				coldot = Phys_CheckCollisionDot();
+			// Limit velocities to not cause too many steps to occur
+			//vel_limit = cvar("phys_maxvelocity");
+			iterations = max(1, cvar("phys_constraints_linear_iterations"));
+			best_len = 999999999;
+			best_vel = 0;
+			part = self.physobj_particlelist;
+			while(part)
+			{
+				vel = vlen(part.velocity);
+				f = 1;
+				if (vel_limit > 0)
+					f = min(1, vel_limit/vel);
+				part.velocity = part.velocity*f;
+				best_vel = max(vlen(part.velocity*frametime), best_vel);
+				best_len = min(part.stick_preferredlength, best_len);
+				part = part.physobj_next;
+			}
+			steps = max(1, ceil((best_vel/best_len)*coldot));
 		}
-		steps = max(1, ceil((best_vel/best_len)*coldot));
-		*/
+		else
+		{
+			float car_physics_step = cvar("sv_car_physics_steps"); // RennyC
+			float car_physics_iterations = cvar("sv_car_physics_iterations"); // RennyC
 
-		float car_physics_step = cvar("sv_car_physics_steps"); // RennyC
-		float car_physics_iterations = cvar("sv_car_physics_iterations"); // RennyC
+			steps = car_physics_step; // higher means more stable but costs more perf, RennyC: made it a cvar
+			iterations = car_physics_iterations; // should always be 1?
+		}
 
-		steps = car_physics_step; // higher means more stable but costs more perf, RennyC: made it a cvar
-		iterations = car_physics_iterations; // should always be 1?
 		ftime = 1/steps;
 		ftime = ftime*frametime;
 

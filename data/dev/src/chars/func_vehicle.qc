@@ -78,11 +78,10 @@ void Car_TirePlace(entity tire){
 	entity tireparticle = tire.enemy;
 	entity plyrent_tireowner = self.owner.driving; // RennyC
 
-	//tire.angles = vectoangles2(tireparticle.lmat_forward, tireparticle.lmat_up);
-	tire.angles = vectoangles(tireparticle.lmat_forward, tireparticle.lmat_up); // RennyC
-	tire.angles_z = 0; // Fix wacky tires on slopes (TODO: Needs to match Z of car chassis)
+	tire.angles = vectoangles(tireparticle.lmat_forward, tireparticle.lmat_up);
 
 	// Spin Tires - RennyC
+	tire.angles_z = 0; // Fix wacky tires on slopes (TODO: Needs to match Z of car chassis)
 	makevectors(tire.angles);
 	vector forward = normalize(v_forward);
 	float pitch = -dotproduct(tire.angles, forward) * 360.0;
@@ -193,7 +192,6 @@ void() Car_ChassiThink =
 	// RennyC - Send real (car) speed / angles to player
 	local float r = vlen(car.velocity) * 0.1;
 	local vector v = car.angles;
-	
 	if (car.driving.classname == "player")
 	{
 		car.driving.realang = v;
@@ -586,16 +584,15 @@ void() car_drift =
 		Phys_Force(self.driving, self.driving.physobj_mass * 0.35, v_right * strength * frametime, worldorg + v_right * 16, +v_right);
 };
 
-// RennyC
-// Helps to keep the car balanced if it's tipping in a cheaty manner
+// RennyC - helps to keep the car balanced if it's tipping in a cheaty manner
 void() CarStabilizeCheat =
 {
-	if (self.realang_z > -330 && self.realang_z < -30)
+	if (self.realang_z > 30 && self.realang_z < 330)
 	{
-		if (self.realang_z < -180)
-			Car_Roll(4000, 500);
-		else
+		if (self.realang_z > 180)
 			Car_Roll(-4000, 500);
+		else
+			Car_Roll(4000, 500);
 	}
 };
 //RennyC
@@ -623,6 +620,7 @@ void TryUpdateVehicle(){
 	if (race_status == RACE_STARTED && self.health > 0 && self.frozen_finished < time) // RennyC: Allow player to control the car
 	{
 		makevectors(self.v_angle);
+
 		float forw = v_forward * self.velocity;
 		if (forw > 100){
 			self.keyflags = self.keyflags | KEY_UP; // RennyC
@@ -650,17 +648,15 @@ void TryUpdateVehicle(){
 			else
 				pointparticles(PART_BUBBLE, self.origin - v_up * 16 - v_forward * 32, '0 0 0', 1);
 		}
-		
-		CarStabilizeCheat(); // RennyC: Car auto corrects to prevent flipping
 
 		float roll = v_right * self.velocity;
 		if (roll > 100){
 			self.keyflags = self.keyflags | KEY_RIGHT; // RennyC
-			//Car_Roll(-4000, 350);
+			Car_Roll(-4000, 350);
 		}
 		else if (roll < -100){
 			self.keyflags = self.keyflags | KEY_LEFT; // RennyC
-			//Car_Roll(4000, 350);
+			Car_Roll(4000, 350);
 		}
 		else
 		{
@@ -848,7 +844,9 @@ void TryUpdateVehicle(){
 	// RennyC
 	if (self.realspeed <= 10 && !self.keyflags) // RennyC: schpulds stuff applied to RenRacer
 		Car_Brake();
- 
+
+	CarStabilizeCheat(); // RennyC: Car auto corrects to prevent flipping
+
 	makevectors(self.driving.angles);
 	float backwards = (self.driving.velocity * v_forward) < 0;
 	if (backwards)
