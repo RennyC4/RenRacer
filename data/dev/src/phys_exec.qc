@@ -819,11 +819,11 @@ void() Phys_ObjectThink =
 		steps = max(1, ceil((best_vel/best_len)*coldot));
 		*/
 
-		float car_physics_step = cvar("sv_car_physicssteps"); // RennyC
+		float car_physics_step = cvar("sv_car_physics_steps"); // RennyC
 		float car_physics_iterations = cvar("sv_car_physics_iterations"); // RennyC
 
 		steps = car_physics_step; // higher means more stable but costs more perf, RennyC: made it a cvar
-		iterations = car_physics_iterations; // should always be 1
+		iterations = car_physics_iterations; // should always be 1?
 		ftime = 1/steps;
 		ftime = ftime*frametime;
 
