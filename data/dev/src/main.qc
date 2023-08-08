@@ -99,6 +99,7 @@ void() worldspawn =
 	precache_model("progs/frzsmk.spr");
 	precache_model("progs/frzsmk2.spr");
 	precache_model("progs/frozen.mdl");
+	precache_model("progs/flame.spr");
 
 	//
 	// func_vehicle - start

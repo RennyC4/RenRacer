@@ -1234,9 +1234,9 @@ void() Shield_Think =
 
 void() Fire_Shield =
 {
-	local entity shield = spawn();
+	entity shield = spawn();
 	shield.owner = self;
-	shield.solid = SOLID_SLIDEBOX;
+	shield.solid = SOLID_NOT;
 	shield.dimension_hit = shield.dimension_solid = 0;
 	shield.movetype = MOVETYPE_NOCLIP;
 	shield.classname = "shield";
@@ -1252,6 +1252,81 @@ void() Fire_Shield =
 	shield.nextthink = time;
 	shield.think = Shield_Think;
 	spawn_color_glow(1, 3, 1, 125, shield); // dynamic light
+};
+
+//
+// Special Weapon - HotRod (Flame Thrower)
+//
+
+void() SpecialWeapon_HotRod_Think =
+{
+	// Animation speed
+	if (self.think_finished < time)
+	{
+		if (self.animation_finished > time)
+		{
+			if (self.frame < 7)
+				self.frame = self.frame + 1;
+			else
+				self.frame = 0;
+		}
+		else
+		{
+			self.frame = 8 + self.cnt;
+
+			if (self.cnt < 6)
+				self.cnt = self.cnt + 1;
+			else
+			{
+				remove(self);
+				return;
+			}
+		}
+		self.think_finished = time + 0.05;
+	}
+
+	// Update origin
+	makevectors(self.owner.realang);
+	vector start = self.owner.origin + v_forward * 50;
+	vector end = start + (v_forward * self.cnt2);
+	traceline (start, end, TRUE, self);
+	setorigin(self, end);
+
+	frameskip(0.01);
+};
+
+void() SpecialWeapon_HotRod =
+{
+	makevectors(self.realang);
+	vector start = self.origin + v_forward * 50;
+
+	float i;
+	for (i = 0; i < 6; i = i+1) // 6 flames
+	{
+		float distance = distance + 30;
+
+		vector end = start + (v_forward * distance);
+		traceline (start, end, TRUE, self);
+
+		entity flame = spawn();
+		flame.owner = self;
+		flame.angles = self.owner.angles;
+		flame.solid = SOLID_TRIGGER;
+		flame.movetype = MOVETYPE_NONE;
+		flame.classname = "flame";
+		flame.alpha = 0.9;
+		flame.scale = 1;
+		flame.animation_finished = time + 3; // how long flames last
+		flame.cnt = 0;
+		flame.cnt2 = distance;
+		flame.effects = EF_ADDITIVE | EF_FULLBRIGHT;
+		setmodel (flame, "progs/flame.spr");
+		setsize (flame, '0 0 0', '0 0 0');
+		setorigin (flame, trace_endpos);
+
+		flame.nextthink = time;
+		flame.think = SpecialWeapon_HotRod_Think;
+	}
 };
 
 //
@@ -1576,6 +1651,7 @@ void(float type, float rear) CarAttack =
 				{
 					if (self.vehicle == VEH_HOTROD)
 					{
+						SpecialWeapon_HotRod();
 						bprint ("Fire HotRod Special Attack\n");
 					}
 					if (self.vehicle == VEH_ZUMA)

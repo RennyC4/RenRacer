@@ -417,6 +417,7 @@ float gameover; // match is over (dm)
 .float checkpoint;
 .float hitobject_finished;
 .float animation_finished;
+.float think_finished;
 .float sound_finished;
 .float headlights;
 .float engine_sound_time;
