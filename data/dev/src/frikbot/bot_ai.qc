@@ -279,37 +279,38 @@ void() bot_ai_fight;
 
 void() BotAI =
 {
-	// Bot hit/close to wall
+	// Traceline: Bot hit/close to wall
+	// RennyC: Needs improvement for being accurate
 	makevectors(self.realang);
+	float test1, test2, test3;
 	float distance = 8;
 	vector start = self.origin + v_forward * 50;
 
-	// Middle trace
+	// Center trace
 	vector end = start + (v_forward * distance);
 	traceline (start, end, TRUE, self);
-
-	if (trace_fraction < 1)
-		self.bot_hitwall = TRUE;
-	else
-		self.bot_hitwall = FALSE;
+	if (trace_fraction < 1)	test1 = TRUE; // hit
+	else					test2 = FALSE;
 
 	// Right trace
 	end = start + (v_forward * distance) + v_right * 16;
 	traceline (start, end, TRUE, self);
-
-	if (trace_fraction < 1)
-		self.bot_hitwall = TRUE;
-	else
-		self.bot_hitwall = FALSE;
+	if (trace_fraction < 1)	test2 = TRUE; // hit
+	else					test1 = FALSE;
 
 	// Left trace
 	end = start + (v_forward * distance) - v_right * 16;
 	traceline (start, end, TRUE, self);
-
-	if (trace_fraction < 1)
+	if (trace_fraction < 1)	test3 = TRUE; // hit
+	else					test3 = FALSE;
+		
+	if (test1 || test2 || test3)
 		self.bot_hitwall = TRUE;
 	else
-		self.bot_hitwall = FALSE;
+	{
+		if (!self.bot_hitwall)
+			self.bot_hitwall = FALSE;
+	}
 
 	if (!deathmatch)
 	{

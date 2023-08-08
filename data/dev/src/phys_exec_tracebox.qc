@@ -1,5 +1,8 @@
 void(entity attacker, float damage) SUB_NullPain = {};
 void(entity part, entity targ) SUB_NullImpact = {};
+void(entity part) Particle_CheckOnGround;
+void(entity part, float ftime) Particle_Friction;
+void(entity part, entity object) Phys_ObjectRemoveParticle;
 
 vector(vector c_maxs, vector c_mins, vector c_org) Clamp =
 {
@@ -13,6 +16,11 @@ vector(vector c_maxs, vector c_mins, vector c_org) Clamp =
 	ret_vec_z = max(c_mins_z, ret_vec_z);
 	return ret_vec;
 };
+
+float(float a, float b, float frac) lerp =
+{
+	return max(0, 1 - frac) * a + min(1.0, frac) * b;
+}
 
 float invlerp( float a, float b, float v ){
 	return (v-a)/(b-a);
@@ -62,6 +70,12 @@ void(entity targ, float in_mass, vector inforce, vector hitspot, vector normal) 
 		while (part)
 		{
 			part.force_calcscale = closest_dist/part.force_calcdist;
+			//bprint ("part.force_calcscale: ", ftos(part.force_calcscale), "\n");
+
+			float f = isnan(part.force_calcscale); // RennyC: Fix NaN?
+			if (f)
+				part.force_calcscale = 0.1;
+
 			part = part.physobj_next;
 		}
 		targ = targ.physobj_particlelist;
@@ -71,7 +85,6 @@ void(entity targ, float in_mass, vector inforce, vector hitspot, vector normal) 
 		dot = normalize(inforce)*normal;
 		force = normal*vlen(inforce)*dot*t_mass*targ.force_calcscale;
 		setvelocity(targ, targ.velocity + force*0.8); // hack to soften things up a bit, before I figure out wtf is wrong
-		//targ.velocity = targ.velocity + force*0.8; // hack to soften things up a bit, before I figure out wtf is wrong
 		targ.physobj_flags = targ.physobj_flags - (targ.physobj_flags & PHFLAGS_RESTING);
 		targ.flags = targ.flags - (targ.flags & FL_ONGROUND);
 		targ = targ.physobj_next;
@@ -116,6 +129,9 @@ void(entity targ) Phys_CheckStatus =
 			part.physobj_flags = part.physobj_flags - (part.physobj_flags & PHFLAGS_RESTING);
 		}
 
+		part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
+		part.dimension_hit = player_dimension_hit; // RennyC: Disable player collisions
+		part.dimension_solid = player_dimension_solid; // RennyC: Disable player collisions
 		//traceline(part.origin, part.origin, TRUE, part);
 		tracebox(part.origin, part.mins, part.maxs, part.origin, TRUE, part);
 		if (trace_startsolid) // we got jammed by a hitmodel or are generally stuck
@@ -139,8 +155,14 @@ void(entity targ) Phys_CheckStatus =
 				if (stick.physobj_p1 == part)
 				{
 					if (stick.physobj_p2.relative_size >= stick.physobj_p1.relative_size)
+					{
+						stick.physobj_p2.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
+						stick.dimension_hit = player_dimension_hit; // RennyC: Disable player collisions
+						stick.dimension_solid = player_dimension_solid; // RennyC: Disable player collisions
+
 						//traceline(stick.physobj_p2.origin, stick.physobj_p1.origin, FALSE, stick.physobj_p2);
 						tracebox(stick.physobj_p2.origin, stick.physobj_p2.mins, stick.physobj_p2.maxs, stick.physobj_p1.origin, FALSE, stick.physobj_p2);
+					}
 					if (trace_fraction < 1)
 					{
 						dot = normalize(stick.physobj_p1.origin-stick.physobj_p2.origin)*trace_plane_normal*-1;
@@ -156,8 +178,13 @@ void(entity targ) Phys_CheckStatus =
 				else if (stick.physobj_p2 == part)
 				{
 					if (stick.physobj_p1.relative_size >= stick.physobj_p2.relative_size)
+					{
+						stick.physobj_p1.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
+						stick.dimension_hit = player_dimension_hit; // RennyC: Disable player collisions
+						stick.dimension_solid = player_dimension_solid; // RennyC: Disable player collisions
 						//traceline(stick.physobj_p1.origin, stick.physobj_p2.origin, FALSE, stick.physobj_p1);
 						tracebox(stick.physobj_p1.origin, stick.physobj_p1.mins, stick.physobj_p1.maxs, stick.physobj_p2.origin, FALSE, stick.physobj_p1);
+					}
 					if (trace_fraction < 1)
 					{
 						dot = normalize(stick.physobj_p2.origin-stick.physobj_p1.origin)*trace_plane_normal*-1;
@@ -203,12 +230,11 @@ void(entity targ) Phys_CheckStatus =
 };
 
 // Particle acceleration, such as gravity, buoyancy
-void(float fscale, float ftime, float sv_gravity) Phys_Acceleration =
+void(float ftime, float sv_gravity) Phys_Acceleration =
 {
 	local float p;
 	local vector spring, v;
-	local entity part, hitmodel, stick;
-	local entity p1, p2;
+	local entity part, hitmodel;
 
 	const float ANTIROLL_MULT = 1.25;
 
@@ -223,51 +249,37 @@ void(float fscale, float ftime, float sv_gravity) Phys_Acceleration =
 	part = self.physobj_particlelist;
 	while(part)
 	{
+		part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
+		part.dimension_hit = player_dimension_hit; // RennyC: Disable player collisions
+		part.dimension_solid = player_dimension_solid; // RennyC: Disable player collisions
+		Particle_CheckOnGround(part);
+
 		//traceline(part.origin, part.origin, FALSE, part);
 		tracebox(part.origin, part.mins, part.maxs, part.origin, FALSE, part);
-		/*
-		if (trace_inwater)
-			part.velocity_z = part.velocity_z + sv_gravity*part.physobj_buoyancy*ftime*fscale; // Buoyancy
-		else
-		*/
-			part.velocity_z = part.velocity_z - sv_gravity*ftime*fscale; // Gravity
+		// RennyC: Disable water physics
+		//if (trace_inwater)
+		//	part.velocity_z = part.velocity_z + sv_gravity*part.physobj_buoyancy*ftime; // Buoyancy
+		//else
+			part.velocity_z = part.velocity_z - sv_gravity*ftime; // Gravity
 		if (part.flags & FL_ONGROUND && part.physobj_flags & PHFLAGS_SPRING_TOUCH) {
 			spring = -part.lmat_up;
 			p = (1-part.physobj_floor_frac);
 			part.frags = lerp(sv_gravity*part.physobj_spring_force_x, sv_gravity*part.physobj_spring_force_y, p*p) * part.physobj_spring_mult;
-			v = spring*part.frags*ftime*fscale;
+			v = spring*part.frags*ftime;
 			part.velocity = part.velocity - v;
 			// Marko 2021: I have no idea what the point of this is, or why it says FIXME, but it stays since it works.
 			// It appears to simply undo some spring force, making springs a bit slower, but that should be handled by dampeners already.
 			// Removing it makes springs bouncier, nothing really breaks
 			//FIXME
-			part.velocity = part.velocity + spring*part.physobj_floor_frac*100*ftime*fscale;
+			part.velocity = part.velocity + spring*part.physobj_floor_frac*100*ftime;
 		}
 		else {
 			part.frags = sv_gravity*part.physobj_spring_force_x;
 		}
+		// Build future positions for particles
+		part.destorigin = part.origin + part.velocity * ftime * 2;
+		Particle_Friction(part, ftime * 2);
 		part = part.physobj_next;
-	}
-
-	stick = self.physobj_sticklist;
-	while(stick){
-		if (stick.physobj_flags & PHFLAGS_STABILIZERBAR){
-			p1 = stick.physobj_p1;
-			p2 = stick.physobj_p2;
-
-			float p1_mult = p2.physobj_floor_frac - p1.physobj_floor_frac;
-			float p2_mult = p1.physobj_floor_frac - p2.physobj_floor_frac;
-			
-			if (p1_mult < 0)
-				p1.physobj_spring_mult = remap(p1_mult + 1, 0, 1, -0.5, 1);
-			else
-				p1.physobj_spring_mult = 1;
-			if (p2_mult < 0)
-				p2.physobj_spring_mult = remap(p2_mult + 1, 0, 1, -0.5, 1);
-			else
-				p2.physobj_spring_mult = 1;
-		}
-		stick = stick.physobj_next;
 	}
 
 	hitmodel = self.physobj_hitmodel;
@@ -279,12 +291,11 @@ void(float fscale, float ftime, float sv_gravity) Phys_Acceleration =
 	}
 };
 
-const float STABILITY_MULTIPLIER = 0.75;
+const float STABILITY_MULTIPLIER = 0.8;
 
 // Run constraints on all particles
-void(float iterations, float ftime) Phys_Constraints =
+void(float ftime) Phys_Constraints =
 {
-	local float i;
 	local float offsetlength, diff;
 	local float inverse_frametime;
 	local vector offset;
@@ -292,29 +303,42 @@ void(float iterations, float ftime) Phys_Constraints =
 	local entity p1, p2;
 
 	inverse_frametime = 1 / ftime;
-	// Build future positions for particles
-	part = self.physobj_particlelist;
-	while (part)
+	
+	// Marko 2023: we are running a single iteration because the entire update loop runs multiple times instead, XPBD style
+	stick = self.physobj_sticklist;
+	while(stick)
 	{
-		part.destorigin = part.origin + part.velocity * ftime;
-		part = part.physobj_next;
-	}
-	// Run constraints multiple times to calm them down
-	while (i < iterations)
-	{
-		i = i + 1;
-		stick = self.physobj_sticklist;
-		while(stick)
-		{
+		if (stick.physobj_flags & PHFLAGS_STABILIZERBAR){
 			p1 = stick.physobj_p1;
 			p2 = stick.physobj_p2;
-			offset = p1.destorigin - p2.destorigin;
-			offsetlength = vlen(offset);
-			diff = (offsetlength-stick.stick_preferredlength)/(offsetlength*(p1.physobj_inversemass+p2.physobj_inversemass));
-			p1.destorigin = p1.destorigin - p1.physobj_inversemass*offset*diff*STABILITY_MULTIPLIER;
-			p2.destorigin = p2.destorigin + p2.physobj_inversemass*offset*diff*STABILITY_MULTIPLIER;
-			stick = stick.physobj_next;
+
+			float p1_mult = p2.physobj_floor_frac - p1.physobj_floor_frac;
+			float p2_mult = p1.physobj_floor_frac - p2.physobj_floor_frac;
+			
+			float stabilizer = stick.owner.driving.car_stabilizer; // RennyC
+			if (p1_mult < 0)
+			{
+				p1.physobj_spring_mult = remap(p1_mult + 1, 0, 1, stabilizer, 1); // RennyC
+				//p1.physobj_spring_mult = remap(p1_mult + 1, 0, 1, -0.5, 1); //Original value
+			}
+			else
+				p1.physobj_spring_mult = 1;
+			if (p2_mult < 0)
+			{
+				p2.physobj_spring_mult = remap(p2_mult + 1, 0, 1, stabilizer, 1); // RennyC
+				//p2.physobj_spring_mult = remap(p2_mult + 1, 0, 1, -0.5, 1); // Original value
+			}
+			else
+				p2.physobj_spring_mult = 1;
 		}
+		p1 = stick.physobj_p1;
+		p2 = stick.physobj_p2;
+		offset = p1.destorigin - p2.destorigin;
+		offsetlength = vlen(offset);
+		diff = (offsetlength-stick.stick_preferredlength)/(offsetlength*(p1.physobj_inversemass+p2.physobj_inversemass));
+		p1.destorigin = p1.destorigin - p1.physobj_inversemass*offset*diff*STABILITY_MULTIPLIER;
+		p2.destorigin = p2.destorigin + p2.physobj_inversemass*offset*diff*STABILITY_MULTIPLIER;
+		stick = stick.physobj_next;
 	}
 	// Convert back from future positions to velocities again
 	part = self.physobj_particlelist;
@@ -325,70 +349,48 @@ void(float iterations, float ftime) Phys_Constraints =
 	}
 };
 
-// Check if we're touching the ground
-void() Phys_CheckOnGround =
+void(entity part) Particle_CheckOnGround =
 {
 	local vector spring;
-	local entity part, hitmodel;
 
-	hitmodel = self.physobj_hitmodel;
-	while (hitmodel)
+	if (part.physobj_spring_length) // check for springs
 	{
-		hitmodel.solid = SOLID_TRIGGER;
-		setorigin(hitmodel, hitmodel.origin);
-		hitmodel = hitmodel.physobj_next;
-	}
+		//spring = -part.lmat_up * part.physobj_spring_length;
 
-	part = self.physobj_particlelist;
-	while (part)
+		// RennyC: Haxx, otherwise the car floats off the ground
+		part.mins_z = -7;
+		spring_z = -6;
+
+		//traceline(part.origin, part.origin + spring, FALSE, part);
+		tracebox(part.origin, part.mins, part.maxs, part.origin + spring, FALSE, part);
+		if (trace_fraction < 1)
+			part.physobj_flags = part.physobj_flags | PHFLAGS_SPRING_TOUCH;
+		else
+			part.physobj_flags = part.physobj_flags - (part.physobj_flags & PHFLAGS_SPRING_TOUCH);
+	}
+	else
 	{
 		//traceline(part.origin, part.origin + '0 0 -1', FALSE, part);
 		tracebox(part.origin, part.mins, part.maxs, part.origin + '0 0 -1', FALSE, part);
-		if (part.physobj_spring_length) // check for springs
-		{
-			spring = -part.lmat_up * part.physobj_spring_length;
-			//traceline(part.origin, part.origin + spring, FALSE, part);
-			//Traceline Spring_Z = -12
-			//part.mins_z = -14 normally
-
-			part.mins_z = -7;
-			spring_z = -6;
-
-			tracebox(part.origin, part.mins, part.maxs, part.origin + spring, FALSE, part);
-			//print(ftos(trace_fraction), "\n");
-			if (trace_fraction < 1)
-				part.physobj_flags = part.physobj_flags | PHFLAGS_SPRING_TOUCH;
-			else
-				part.physobj_flags = part.physobj_flags - (part.physobj_flags & PHFLAGS_SPRING_TOUCH);
-		}
-		// We're touching the ground
-		if (trace_fraction < 1 && trace_plane_normal_z > 0.7)
-		{
-			part.flags = part.flags | FL_ONGROUND;
-			// FIXME: this almost works, and it'd be awesome to have
-			//part.physobj_floor_plane = trace_plane_normal*(trace_plane_normal*normalize(trace_endpos))*vlen(trace_endpos);
-			part.physobj_floor_plane_normal = trace_plane_normal;
-			part.physobj_floor_frac = trace_fraction;
-		}
-		else{
-			part.flags = part.flags - (part.flags & FL_ONGROUND);
-			part.physobj_floor_frac = 1;
-		}
-		part = part.physobj_next;
 	}
-	hitmodel = self.physobj_hitmodel;
-	while (hitmodel)
+	// We're touching the ground
+	if (trace_fraction < 1 && trace_plane_normal_z > 0.7)
 	{
-		hitmodel.solid = SOLID_BSP;
-		setorigin(hitmodel, hitmodel.origin);
-		hitmodel = hitmodel.physobj_next;
+		part.flags = part.flags | FL_ONGROUND;
+		// FIXME: this almost works, and it'd be awesome to have
+		//part.physobj_floor_plane = trace_plane_normal*(trace_plane_normal*normalize(trace_endpos))*vlen(trace_endpos);
+		part.physobj_floor_plane_normal = trace_plane_normal;
+		part.physobj_floor_frac = trace_fraction;
 	}
-};
+	else{
+		part.flags = part.flags - (part.flags & FL_ONGROUND);
+		part.physobj_floor_frac = 1;
+	}
+}
 
-// Apply water friction, stiction
-void(float ftime) Phys_Deceleration =
+// Check if we're touching the ground
+void() Phys_CheckOnGround =
 {
-	local float vel, st, dot;
 	local entity part, hitmodel;
 
 	hitmodel = self.physobj_hitmodel;
@@ -402,54 +404,7 @@ void(float ftime) Phys_Deceleration =
 	part = self.physobj_particlelist;
 	while (part)
 	{
-		if (part.flags & FL_ONGROUND)
-		{
-			// Stiction
-			if (part.physobj_stiction > 0)
-			{
-				vel = vlen(part.velocity);
-				if (vel <= part.physobj_stiction) // stiction occurs when moving slow enough
-				{
-					st = vel/part.physobj_stiction;
-					//part.velocity = part.velocity*st*ftime;
-					part.velocity = part.velocity*st;
-				}
-			}
-			// Directional ground friction
-			dot = part.physobj_floor_plane_normal*normalize(part.velocity)*-1;
-			if (part.physobj_friction_ground_x)
-				part.velocity = part.velocity - part.lmat_forward*vlen(part.velocity)*(normalize(part.velocity)*part.lmat_forward)*part.physobj_friction_ground_x*2*ftime;//(1+dot)*ftime;
-			if (part.physobj_friction_ground_y)
-				part.velocity = part.velocity - part.lmat_left*vlen(part.velocity)*(normalize(part.velocity)*part.lmat_left)*part.physobj_friction_ground_y*2*ftime;//(1+dot)*ftime;
-			if (part.physobj_friction_ground_z)
-				part.velocity = part.velocity - part.lmat_up*vlen(part.velocity)*(normalize(part.velocity)*part.lmat_up)*part.physobj_friction_ground_z*2*ftime;//(1+dot)*ftime;
-			//print(ftos(vlen(part.lmat_up*vlen(part.velocity)*(normalize(part.velocity)*part.lmat_up)*part.physobj_friction_ground_z*(1+dot)*ftime)), "\n");
-		}
-		//traceline(part.origin, part.origin, TRUE, part);
-		tracebox(part.origin, part.mins, part.maxs, part.origin, TRUE, part);
-		// Water friction
-		//if (trace_inwater)
-		/*
-		if (pointcontents(part.origin) < CONTENT_SOLID)
-		{
-			if (part.physobj_friction_water_x)
-				part.velocity = part.velocity - part.lmat_forward*vlen(part.velocity)*normalize(part.velocity)*part.lmat_forward*part.physobj_friction_water_x*ftime;
-			if (part.physobj_friction_water_y)
-				part.velocity = part.velocity - part.lmat_left*vlen(part.velocity)*normalize(part.velocity)*part.lmat_left*part.physobj_friction_water_y*ftime;
-			if (part.physobj_friction_water_z)
-				part.velocity = part.velocity - part.lmat_up*vlen(part.velocity)*normalize(part.velocity)*part.lmat_up*part.physobj_friction_water_z*ftime;
-		}
-		*/
-		// Air friction
-		if (!trace_startsolid)
-		{
-			if (part.physobj_friction_air_x)
-				part.velocity = part.velocity - part.lmat_forward*vlen(part.velocity)*normalize(part.velocity)*part.lmat_forward*part.physobj_friction_air_x*ftime;
-			if (part.physobj_friction_air_y)
-				part.velocity = part.velocity - part.lmat_left*vlen(part.velocity)*normalize(part.velocity)*part.lmat_left*part.physobj_friction_air_y*ftime;
-			if (part.physobj_friction_air_z)
-				part.velocity = part.velocity - part.lmat_up*vlen(part.velocity)*normalize(part.velocity)*part.lmat_up*part.physobj_friction_air_z*ftime;
-		}
+		Particle_CheckOnGround(part);
 		part = part.physobj_next;
 	}
 	hitmodel = self.physobj_hitmodel;
@@ -461,7 +416,65 @@ void(float ftime) Phys_Deceleration =
 	}
 };
 
-void(entity part, entity object) Phys_ObjectRemoveParticle;
+// Apply friction, stiction
+void(entity part, float ftime) Particle_Friction =
+{
+	local float vel, st, dot;
+
+	if (part.flags & FL_ONGROUND)
+	{
+		// Stiction
+		if (part.physobj_stiction > 0)
+		{
+			vel = vlen(part.velocity);
+			if (vel <= part.physobj_stiction) // stiction occurs when moving slow enough
+			{
+				st = vel/part.physobj_stiction;
+				//part.velocity = part.velocity*st*ftime;
+				part.velocity = part.velocity*st;
+			}
+		}
+		// Directional ground friction
+		dot = part.physobj_floor_plane_normal*normalize(part.velocity)*-1;
+		if (part.physobj_friction_ground_x)
+			part.velocity = part.velocity - part.lmat_forward*vlen(part.velocity)*(normalize(part.velocity)*part.lmat_forward)*part.physobj_friction_ground_x*2*ftime;//(1+dot)*ftime;
+		if (part.physobj_friction_ground_y)
+			part.velocity = part.velocity - part.lmat_left*vlen(part.velocity)*(normalize(part.velocity)*part.lmat_left)*part.physobj_friction_ground_y*2*ftime;//(1+dot)*ftime;
+		if (part.physobj_friction_ground_z)
+			part.velocity = part.velocity - part.lmat_up*vlen(part.velocity)*(normalize(part.velocity)*part.lmat_up)*part.physobj_friction_ground_z*2*ftime;//(1+dot)*ftime;
+		//print(ftos(vlen(part.lmat_up*vlen(part.velocity)*(normalize(part.velocity)*part.lmat_up)*part.physobj_friction_ground_z*(1+dot)*ftime)), "\n");
+	}
+	part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
+	part.dimension_hit = player_dimension_hit; // RennyC: Disable player collisions
+	part.dimension_solid = player_dimension_solid; // RennyC: Disable player collisions
+	//traceline(part.origin, part.origin, TRUE, part);
+	tracebox(part.origin, part.mins, part.maxs, part.origin, TRUE, part);
+
+	/*
+	// Water friction
+	//if (trace_inwater)
+	if (pointcontents(part.origin) < CONTENT_SOLID)
+	{
+		if (part.physobj_friction_water_x)
+			part.velocity = part.velocity - part.lmat_forward*vlen(part.velocity)*normalize(part.velocity)*part.lmat_forward*part.physobj_friction_water_x*ftime;
+		if (part.physobj_friction_water_y)
+			part.velocity = part.velocity - part.lmat_left*vlen(part.velocity)*normalize(part.velocity)*part.lmat_left*part.physobj_friction_water_y*ftime;
+		if (part.physobj_friction_water_z)
+			part.velocity = part.velocity - part.lmat_up*vlen(part.velocity)*normalize(part.velocity)*part.lmat_up*part.physobj_friction_water_z*ftime;
+	}
+	// Marko 2023: disabled air friction because it's a bunch of calcs for probably unused feature, remove the comments if you need it
+	// Air friction
+	else if (!trace_startsolid)
+	{
+		if (part.physobj_friction_air_x)
+			part.velocity = part.velocity - part.lmat_forward*vlen(part.velocity)*normalize(part.velocity)*part.lmat_forward*part.physobj_friction_air_x*ftime;
+		if (part.physobj_friction_air_y)
+			part.velocity = part.velocity - part.lmat_left*vlen(part.velocity)*normalize(part.velocity)*part.lmat_left*part.physobj_friction_air_y*ftime;
+		if (part.physobj_friction_air_z)
+			part.velocity = part.velocity - part.lmat_up*vlen(part.velocity)*normalize(part.velocity)*part.lmat_up*part.physobj_friction_air_z*ftime;
+	}
+	*/
+};
 
 // Velocity Verlet physics, meant to be used for all moving entities in the game
 void(float ftime) Phys_Move =
@@ -499,6 +512,9 @@ void(float ftime) Phys_Move =
 		stuck = FALSE;
 		t = ftime;
 		test_org = part.origin;
+		part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
+		part.dimension_hit = player_dimension_hit; // RennyC: Disable player collisions
+		part.dimension_solid = player_dimension_solid; // RennyC: Disable player collisions
 		while (bump < 24)
 		{
 			// let's test if we're stuck first
@@ -525,6 +541,9 @@ void(float ftime) Phys_Move =
 				else
 					test_org = part.origin;
 			}
+			part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
+			part.dimension_hit = player_dimension_hit; // RennyC: Disable player collisions
+			part.dimension_solid = player_dimension_solid; // RennyC: Disable player collisions
 			//traceline(test_org, test_org + part.velocity*t, part.physobj_movetype, part);
 			tracebox(test_org, part.mins, part.maxs, test_org + part.velocity*t, part.physobj_movetype, part);
 			save_fraction = trace_fraction;
@@ -594,7 +613,8 @@ void(float ftime) Phys_Move =
 				save_endpos = trace_endpos;
 
 				vector end_org = test_org + part.velocity*ftime*5;// + normalize(part.velocity)*part.relative_size;
-				traceline(test_org, end_org, part.physobj_movetype, part);
+				//traceline(test_org, end_org, part.physobj_movetype, part);
+				tracebox(test_org, part.mins, part.maxs, end_org, part.physobj_movetype, part);
 				if (trace_fraction < 1)
 					self.physobj_impactevent(part, trace_ent);
 
@@ -692,45 +712,11 @@ void() Phys_CheckRestState =
 	}
 }
 
-float() Phys_CheckCollisionDot =
-{
-	local float dot, highest_dot;
-	local entity part, hitmodel;
-
-	hitmodel = self.physobj_hitmodel;
-	while (hitmodel)
-	{
-		hitmodel.solid = SOLID_TRIGGER;
-		setorigin(hitmodel, hitmodel.origin);
-		hitmodel = hitmodel.physobj_next;
-	}
-
-	part = self.physobj_particlelist;
-	while(part)
-	{
-		//traceline(part.origin, part.origin + part.velocity*frametime, part.physobj_movetype, part);
-		tracebox(part.origin, part.mins, part.maxs, part.origin + part.velocity*frametime, part.physobj_movetype, part);
-		dot = trace_plane_normal*normalize(part.velocity)*-1;
-		if (dot > highest_dot)
-		{
-			highest_dot = dot;
-		}
-		part = part.physobj_next;
-	}
-	hitmodel = self.physobj_hitmodel;
-	while (hitmodel)
-	{
-		hitmodel.solid = SOLID_BSP;
-		setorigin(hitmodel, hitmodel.origin);
-		hitmodel = hitmodel.physobj_next;
-	}
-	return highest_dot;
-};
-
 // The think function for our physics objects in the game
 void() Phys_ObjectThink =
 {
-	local float f, ftime, steps, iterations;//, coldot;
+	local float f, ftime, steps;//, iterations, coldot;
+	//local float best_vel, best_len, vel_limit, vel;
 	local entity part, hitmodel, stat;
 
 	// Run every frame
@@ -740,66 +726,39 @@ void() Phys_ObjectThink =
 	self.dimension_solid = player_dimension_solid; // RennyC: Disable player collisions
 
 	local float sv_gravity = cvar("sv_gravity");
+
 	Phys_CheckStatus(world); // Check in case we got pushed, blocked by a hitmodel or otherwise stuck
 	Phys_CheckOnGround(); // Check onground status in case we need to wake up the object
 	Phys_CheckRestState(); // See above
 
+	float car_physics_step = cvar("sv_car_physics_steps"); // RennyC, default 3
+
 	if (!(self.physobj_flags & PHFLAGS_RESTING))
 	{
-		/*
-		// Figure out the amount of steps needed to abide with the length of the shortest stick
-		// This is used to prevent sign errors
-		// Limit the amount of steps based on the angle of collision, unless there was a force change
-		coldot = 0;
-		if (!(self.physobj_flags & PHFLAGS_FORCE))
-			coldot = Phys_CheckCollisionDot();
-		// Limit velocities to not cause too many steps to occur
-		//vel_limit = cvar("phys_maxvelocity");
-		iterations = max(1, cvar("phys_constraints_linear_iterations"));
-		best_len = 999999999;
-		best_vel = 0;
-		part = self.physobj_particlelist;
-		while(part)
-		{
-			vel = vlen(part.velocity);
-			f = 1;
-			if (vel_limit > 0)
-				f = min(1, vel_limit/vel);
-			part.velocity = part.velocity*f;
-			best_vel = max(vlen(part.velocity*frametime), best_vel);
-			best_len = min(part.stick_preferredlength, best_len);
-			part = part.physobj_next;
-		}
-		steps = max(1, ceil((best_vel/best_len)*coldot));
-		*/
-
-		float car_physics_step = cvar("sv_car_physicssteps"); // RennyC
-		float car_physics_iterations = cvar("sv_car_physics_iterations"); // RennyC
-
-		steps = car_physics_step; // higher means more stable but costs more perf, RennyC: made it a cvar
-		iterations = car_physics_iterations; // should always be 1
+		steps = car_physics_step; // should be a cvar, higher means more stable but costs more perf
 		ftime = 1/steps;
 		ftime = ftime*frametime;
 
 		// Let's run some physics
 		while(steps)
 		{
-			steps = steps - 1;
-			Phys_CheckOnGround();
-			Phys_Acceleration(0.5, ftime, sv_gravity);
-			Phys_Constraints(iterations, ftime);
-			Phys_Deceleration(ftime);
+			steps--;
+			Phys_Acceleration(ftime*0.5, sv_gravity);
+			Phys_Constraints(ftime);
 			Phys_Move(ftime);
-			Phys_Acceleration(0.5, ftime, sv_gravity);
+			Phys_Acceleration(ftime*0.5, sv_gravity);
 		}
 		self.physobj_flags = self.physobj_flags - (self.physobj_flags & PHFLAGS_FORCE);
+
 		//If movement was very minor, and atleast three particles are on the ground, let's stick to the floor
 		Phys_CheckRestState();
+
 		// calculate an object matrix from the first three particles, used for orientation (magic)
 		Matrix_CalculateObjectMatrix(self);
 		self.lmat_forward = matrix_forward;
 		self.lmat_left = matrix_left;
 		self.lmat_up = matrix_up;
+
 		// Update particle orientations
 		part = self.physobj_particlelist;
 		while(part)
@@ -820,7 +779,7 @@ void() Phys_ObjectThink =
 			part.lmat_left = matrix_left;
 			part.lmat_up = matrix_up;
 			// Update euler angles for viewing ingame
-			part.angles = vectoangles2(matrix_forward, matrix_up);
+			part.angles = vectoangles(matrix_forward, matrix_up);
 			if (part.physobj_flags & PHFLAGS_BSPMODEL)
 				part.angles_x = part.angles_x*-1;
 			part = part.physobj_next;
@@ -838,7 +797,7 @@ void() Phys_ObjectThink =
 #if defined(SMOOTH)
 			stat.view_ofs = self.physobj_p1.origin + self.lmat_forward*stat.relative_org_x + self.lmat_left*stat.relative_org_y + self.lmat_up*stat.relative_org_z;
 #else
-			stat.angles = vectoangles2(matrix_forward, matrix_up);
+			stat.angles = vectoangles(matrix_forward, matrix_up);
 			if (stat.physobj_flags & PHFLAGS_BSPMODEL)
 				stat.angles_x = stat.angles_x*-1;
 			stat.oldorigin = stat.origin;
@@ -865,7 +824,7 @@ void() Phys_ObjectThink =
 		}
 		*/
 		setorigin (self, self.physobj_p1.origin + self.lmat_forward*self.relative_org_x + self.lmat_left*self.relative_org_y + self.lmat_up*self.relative_org_z);
-		self.angles = vectoangles2(self.lmat_forward, self.lmat_up);
+		self.angles = vectoangles(self.lmat_forward, self.lmat_up);
 		self.angles_x = -self.angles_x;
 		self.velocity = self.physobj_p1.velocity; // FIXME: count average velocity
 	}
@@ -1502,3 +1461,4 @@ entity(entity obj, vector org, vector forward, vector left, vector up, vector to
 	}
 	return Phys_InitPhysicsObject(physobj_spawning, org, forward, left, up);
 };
+

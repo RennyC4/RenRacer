@@ -3773,13 +3773,13 @@
 // entity 26
 {
 "classname" "item_health"
-"origin" "-576 560 208"
+"origin" "-576 560 176"
 "angle" "90"
 }
 // entity 27
 {
 "classname" "item_health"
-"origin" "560 -312 208"
+"origin" "560 -312 176"
 "angle" "90"
 }
 // entity 28

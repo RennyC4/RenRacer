@@ -136,7 +136,7 @@ void() bot_ai_race =
 		// bprint ("Speed: ", f, " Dist: ", n, "\n");
 
 		// Back up for randomly for a second, hit a wall/obstacle
-		if (self.goal_touched && (self.keys == KEY_MOVEFORWARD || (self.button0 && self.turbo_fuel > 0)) && self.realspeed <= 3)
+		if (self.goal_touched && self.bot_hitwall && (self.keys == KEY_MOVEFORWARD || (self.button0 && self.turbo_fuel > 0)) && self.realspeed <= 3)
 		{
 			self.velocity = v_forward * -9999;
 			self.keys = KEY_MOVEBACK;
