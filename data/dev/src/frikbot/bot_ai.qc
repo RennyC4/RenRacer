@@ -44,7 +44,7 @@ this notice in its entirety.
 
 void() headlights_on;
 void() headlights_off;
-void(entity targ, vector dest, float silent) car_teleport;
+void(entity targ, vector dest, float silent, float stop) car_teleport;
 float(float y1, float y2) angcomp;
 
 .float bot_backup_finished;

@@ -281,7 +281,7 @@ void(entity car) remove_car =
 };
 
 // Huge thanks to spike for the help with displacement
-void(entity targ, vector dest, float silent) car_teleport =
+void(entity targ, vector dest, float silent, float stop) car_teleport =
 {
 	if (targ.teleport_finished > time)
 		return;
@@ -309,7 +309,8 @@ void(entity targ, vector dest, float silent) car_teleport =
 		local vector v2 = part.origin;
 		v2 = v2 += displacement;
 		setorigin(part, v2 + '0 0 32'); // add 32qu Z, helps keep cars out of the ground
-		part.velocity = part.velocity / 1000;
+		if (stop)
+			part.velocity = part.velocity / 1000;
 		part = part.physobj_next;
 	}
 	

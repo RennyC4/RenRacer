@@ -416,15 +416,15 @@ void() Fire_MachineGun =
 	{
 		if (!self.backward)
 		{
-			setorigin (mflash1, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) + v_right * 24); // flat
-			setorigin (mflash2, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) + v_right * 24); // side
-			setorigin (bullet, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) + v_right * 24);
+			setorigin (mflash1, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) + v_right * 27); // flat
+			setorigin (mflash2, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) + v_right * 27); // side
+			setorigin (bullet, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) + v_right * 27);
 		}
 		else
 		{
-			setorigin (mflash1, self.origin + v_up * 8 + v_forward * (14 - self.realspeed) + v_right * 24); // flat
-			setorigin (mflash2, self.origin + v_up * 8 + v_forward * (14 - self.realspeed) + v_right * 24); // side
-			setorigin (bullet, self.origin + v_up * 8 + v_forward * (14 - self.realspeed) + v_right * 24);
+			setorigin (mflash1, self.origin + v_up * 8 + v_forward * (14 - self.realspeed) + v_right * 27); // flat
+			setorigin (mflash2, self.origin + v_up * 8 + v_forward * (14 - self.realspeed) + v_right * 27); // side
+			setorigin (bullet, self.origin + v_up * 8 + v_forward * (14 - self.realspeed) + v_right * 27);
 		}
 		self.mgun = TRUE;
 	}
@@ -432,15 +432,15 @@ void() Fire_MachineGun =
 	{
 		if (!self.backward)
 		{
-			setorigin (mflash1, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) - v_right * 24); // flat
-			setorigin (mflash2, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) - v_right * 24); // side
-			setorigin (bullet, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) - v_right * 24);
+			setorigin (mflash1, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) - v_right * 27); // flat
+			setorigin (mflash2, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) - v_right * 27); // side
+			setorigin (bullet, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) - v_right * 27);
 		}
 		else
 		{
-			setorigin (mflash1, self.origin + v_up * 8 + v_forward * (14 - self.realspeed) - v_right * 24); // flat
-			setorigin (mflash2, self.origin + v_up * 8 + v_forward * (14 - self.realspeed) - v_right * 24); // side
-			setorigin (bullet, self.origin + v_up * 8 + v_forward * (14 - self.realspeed) - v_right * 24);
+			setorigin (mflash1, self.origin + v_up * 8 + v_forward * (14 - self.realspeed) - v_right * 27); // flat
+			setorigin (mflash2, self.origin + v_up * 8 + v_forward * (14 - self.realspeed) - v_right * 27); // side
+			setorigin (bullet, self.origin + v_up * 8 + v_forward * (14 - self.realspeed) - v_right * 27);
 		}
 		self.mgun = FALSE;
 	}

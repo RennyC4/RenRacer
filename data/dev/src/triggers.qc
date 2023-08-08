@@ -20,6 +20,8 @@ void() info_teleport_destination =
 		objerror ("info_teleport_destination: no targetname\n");
 };
 
+// Spawnflag 1 ON = Silent
+// Spawnflag 2 ON = Keep player velocity on teleport
 void() trigger_teleport_touch =
 {
 	if (!other.owner.driving)
@@ -33,10 +35,15 @@ void() trigger_teleport_touch =
 	if (!e)
 		objerror ("trigger_teleport: no destination set\n");
 
-	if !(self.spawnflags & 1)
-		car_teleport(toucher, e.origin, FALSE);
+	if !(self.spawnflags & 2)
+		float stop = TRUE;
 	else
-		car_teleport(toucher, e.origin, TRUE);
+		stop = FALSE;
+
+	if !(self.spawnflags & 1)
+		car_teleport(toucher, e.origin, FALSE, stop);
+	else
+		car_teleport(toucher, e.origin, TRUE, stop);
 	
 	toucher.teleport_finished = time + 1;
 };

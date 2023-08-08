@@ -189,7 +189,7 @@ void() bot_ai_race =
 							self.bot_search_count = 0;
 							self.collide_finished = time + 1; // Don't bump player on teleport
 							makevectors(self.realang);
-							car_teleport(self, targ.trail.origin, TRUE);
+							car_teleport(self, targ.trail.origin, TRUE, FALSE);
 							self.bot_search_count = 0;
 
 							if (cvar("developer") == 2)							
