@@ -12,6 +12,7 @@ void(vector position) CreateExplosion;
 void(vector position, float scale) Create2DExplosion;
 void(entity targ, entity attacker, float damage, string attackerclassname) DoDamage;
 void() CommandSpecials;
+void() SpecialRegenerate;
 
 void() ClientKill = {};
 
@@ -665,6 +666,7 @@ void() PlayerPostThink =
 	*/
 	
 	CommandSpecials();
+	SpecialRegenerate();
 
 	//
 	// SPECIAL MOVE MOTIONS: Reset keys if timer is dropped
@@ -794,7 +796,9 @@ void() PutClientInServer =
 	self.spawn_loc_angles = self.angles; // Stash it
 	self.alpha = 1;
 	self.energy = 100;
+
 	self.weapon = WEP_SPECIAL;
+	self.ammo_special = 1;
 
 	if (clienttype(self) == CLIENTTYPE_REAL)
 		human_players = human_players + 1;

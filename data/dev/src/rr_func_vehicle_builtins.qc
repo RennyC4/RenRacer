@@ -4,6 +4,8 @@
 
 entity() hotrod =
 {
+	self.vehicle = VEH_HOTROD;
+
 	local entity obj, part;
 
 	obj = spawn();
@@ -517,6 +519,8 @@ entity() hotrod =
 
 entity() zuma =
 {
+	self.vehicle = VEH_ZUMA;
+
 	local entity obj, part;
 
 	obj = spawn();

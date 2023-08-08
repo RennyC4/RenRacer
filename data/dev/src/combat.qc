@@ -6,6 +6,10 @@
 //| Weapons and combat functions are done here								   |
 //+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
 
+// ---
+// Obituary
+// ---
+
 void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 {
 	if (attacker == world) // This shouldn't happen, but lets add it anyways
@@ -285,6 +289,33 @@ void() GetTarget =
 		{
 			if (visible(targ) && infront3(targ, 0.75) && !self.enemy && targ.health > 0 && targ != self.owner && !targ.observer)
 				self.enemy = targ;
+		}
+	}
+};
+
+// ---
+// Special weapon regeneration
+// ---
+
+void() SpecialRegenerate =
+{
+	if (self.special_regen_finished > time)
+		return;
+
+	if (self.vehicle == VEH_HOTROD)
+	{
+		if (self.ammo_special < 5) // max held
+		{
+			self.ammo_special = self.ammo_special + 1;
+			self.special_regen_finished = time + 80; // regen time
+		}
+	}
+	if (self.vehicle == VEH_ZUMA)
+	{
+		if (self.ammo_special < 4) // max held
+		{
+			self.ammo_special = self.ammo_special + 1;
+			self.special_regen_finished = time + 35; // regen time
 		}
 	}
 };
@@ -1445,6 +1476,12 @@ void() CycleWeaponForward =
 	}
 	if (self.weapon == WEP_FREEZE)
 	{
+		self.weapon = WEP_SPECIAL;
+		sprint (self, "Special weapon selected\n");
+		return;
+	}
+	if (self.weapon == WEP_SPECIAL)
+	{
 		self.weapon = WEP_ROCKET;
 		sprint (self, "Fire rocket selected\n");
 		return;
@@ -1458,7 +1495,7 @@ void() CycleWeaponBackward =
 	if (race_status != RACE_STARTED)
 		return;
 
-	if (self.weapon == WEP_ROCKET)
+	if (self.weapon == WEP_SPECIAL)
 	{
 		self.weapon = WEP_FREEZE;
 		sprint (self, "Freeze blast selected\n");
@@ -1500,6 +1537,12 @@ void() CycleWeaponBackward =
 		sprint (self, "Fire rocket selected\n");
 		return;
 	}
+	if (self.weapon == WEP_ROCKET)
+	{
+		self.weapon = WEP_SPECIAL;
+		sprint (self, "Special weapon selected\n");
+		return;
+	}
 };
 
 //
@@ -1527,6 +1570,32 @@ void(float type, float rear) CarAttack =
 	{
 		if (self.spcl_finished < time)
 		{
+			if (self.weapon == WEP_SPECIAL)
+			{
+				if (self.ammo_special > 0)
+				{
+					if (self.vehicle == VEH_HOTROD)
+					{
+						bprint ("Fire HotRod Special Attack\n");
+					}
+					if (self.vehicle == VEH_ZUMA)
+					{
+						bprint ("Fire Zuma Special Attack\n");
+					}
+
+					//if (!rear)
+					//	Fire_Rocket(0, FALSE);
+					//else
+					//	Fire_Rocket(0, TRUE);
+					self.ammo_special = self.ammo_special - 1;
+				}
+				else
+				{
+					sprint(self, "Special weapon bay empty!\n");
+					stuffcmd (self, "play combat/empty.wav\n");
+				}
+				self.spcl_finished = time + 1;
+			}
 			if (self.weapon == WEP_ROCKET)
 			{
 				if (self.ammo_firerocket > 0)

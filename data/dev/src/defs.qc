@@ -502,6 +502,8 @@ float WEP_RICOCHET = 8;
 float WEP_REMOTE = 16;
 float WEP_FREEZE = 32;
 float WEP_SPECIAL = 64; // Weapon 1
+.float special_regen_finished;
+.float special_max;
 
 // Vehicles
 .float vehicle;
