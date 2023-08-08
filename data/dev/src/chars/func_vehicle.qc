@@ -1,6 +1,6 @@
 .entity frontright, frontleft, backright, backleft;
 entity() hotrod;
-entity() triton;
+entity() zuma;
 
 void PushAndDamageThink(){
 // RennyC: Disable this
@@ -634,11 +634,11 @@ void TryUpdateVehicle(){
 		float roll = v_right * self.velocity;
 		if (roll > 100){
 			self.keyflags = self.keyflags | KEY_RIGHT; // RennyC
-			Car_Roll(-4000, 350);
+			//Car_Roll(-4000, 350);
 		}
 		else if (roll < -100){
 			self.keyflags = self.keyflags | KEY_LEFT; // RennyC
-			Car_Roll(4000, 350);
+			//Car_Roll(4000, 350);
 		}
 		else
 		{
@@ -863,17 +863,6 @@ vector() Car_SpringyOrigin =
 	return pos;
 };
 
-/*
-void() automake_triton =
-{
-	entity car = triton();
-	
-	makevectors(self.angles);
-	car = Phys_ObjectCreate(car, self.origin + '0 0 16', v_forward, v_right * -1, v_up, '0 0 1', 0);
-	Car_InitVehicle(car);
-	Car_AttachToVehicle(self, car);
-};
-*/
 
 void(entity wheel, entity car) AddWheelStatic =
 {
@@ -1111,64 +1100,6 @@ void() func_vehicle_wheel =
 	phys_wheel();
 }
 
-// legacy, hopefully can remove in next release
-void() func_vehicle_builtins =
-{
-	precache_model("maps/cube16.bsp");
-	precache_model("maps/cube32.bsp");
-	precache_model("maps/round16.bsp");
-	precache_model("maps/round32.bsp");
-
-	if (cvar("developer") != 0){
-		precache_model("progs/debug/org.mdl");
-		precache_model("progs/debug/orgbig.mdl");
-	}
-	precache_model("progs/null.spr");
-
-	entity car;
-	if (self.netname == "triton"){
-		precache_model("progs/test/whl.mdl");
-		precache_model("progs/test/triton.mdl");
-		car = triton();
-	}
-	else if (self.netname == "hotrod"){
-		precache_model("progs/HotRod_body.mdl");
-		precache_model("progs/HotRod_roof.mdl");
-		precache_model("progs/HotRod_player_driver.mdl");
-		precache_model("progs/HotRod_wheel_front_L.mdl");
-		precache_model("progs/HotRod_wheel_rear_L.mdl");
-		precache_model("progs/HotRod_wheel_front_R.mdl");
-		precache_model("progs/HotRod_wheel_rear_R.mdl");
-		car = hotrod();
-	}
-	//car.netname = self.netname;
-	
-	makevectors(self.angles);
-	car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
-	Car_InitVehicle(car);
-};
-// legacy, hopefully can remove in next release
-void() func_vehicle_triton =
-{
-	precache_model("maps/cube16.bsp");
-	precache_model("maps/cube32.bsp");
-	precache_model("maps/round16.bsp");
-	precache_model("maps/round32.bsp");
-
-	if (cvar("developer") != 0){
-		precache_model("progs/debug/org.mdl");
-		precache_model("progs/debug/orgbig.mdl");
-	}
-	precache_model("progs/null.spr");
-
-	precache_model("progs/test/whl.mdl");
-	precache_model("progs/test/triton.mdl");
-	entity car = triton();
-
-	makevectors(self.angles);
-	car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
-	Car_InitVehicle(car);
-};
 
 void() vehicle_hotrod =
 {
@@ -1196,9 +1127,4 @@ void() vehicle_hotrod =
 	makevectors(self.angles);
 	car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
 	Car_InitVehicle(car);
-};
-// legacy, hopefully can remove in next release
-void() func_vehicle_hotrod =
-{
-	vehicle_hotrod();
 };
