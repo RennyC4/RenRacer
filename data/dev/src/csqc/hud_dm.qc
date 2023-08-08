@@ -5,6 +5,7 @@ float WEP_NAPALM = 4;
 float WEP_RICOCHET = 8;
 float WEP_REMOTE = 16;
 float WEP_FREEZE = 32;
+float WEP_SPECIAL = 64; // Weapon 1
 
 void EntUpdate_RadarBlip(float is_new)
 {
@@ -148,6 +149,27 @@ void() HUD_Deathmatch =
 	drawstring (pos + '16 0', i1, '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
 
 	//
+	// Special weapon information on HUD
+	//
+
+	pos = [(g_width - stringwidth("", TRUE, '32 16 0'))/5.5, (g_height)/1.05];
+	if (wep == WEP_SPECIAL)
+		drawfill(pos - '0 11', '33 23 0', '1 0 0', 0.3, DRAWFLAG_NORMAL);
+
+	drawpic (pos - '-1 14', "progs/hud/hud_spcl.png", '32 32', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
+	drawpic (pos - '0 15', "progs/hud/hud_spcl.png", '32 32', '1 1 1', 1, DRAWFLAG_NORMAL);
+
+	float special_ammo = getstatf(STAT_AMMO_SPECIAL);
+	string printammo = ftos(special_ammo);
+
+	drawstring (pos - '-14 9', printammo, '8 8', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
+	drawstring (pos - '-13 10', printammo, '8 8', '1 1 1', 1, DRAWFLAG_NORMAL);
+
+	// Draw weapon select #
+	drawstring (pos - '-2 -6', "1", '6 6', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
+	drawstring (pos - '-1 -5', "^11", '6 6', '1 1 1', 1, DRAWFLAG_NORMAL);
+
+	//
 	// Fire rocket information on HUD
 	//
 
@@ -159,14 +181,14 @@ void() HUD_Deathmatch =
 	drawpic (pos, "progs/hud/hud_frckt.png", '32 16', '1 1 1', 1, DRAWFLAG_NORMAL);
 
 	float firerocket_ammo = getstatf(STAT_AMMO_FIREROCKET);
-	string printammo = ftos(firerocket_ammo);
+	printammo = ftos(firerocket_ammo);
 
 	drawstring (pos - '-14 9', printammo, '8 8', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
 	drawstring (pos - '-13 10', printammo, '8 8', '1 1 1', 1, DRAWFLAG_NORMAL);
 
 	// Draw weapon select #
-	drawstring (pos - '-2 -6', "1", '6 6', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
-	drawstring (pos - '-1 -5', "^11", '6 6', '1 1 1', 1, DRAWFLAG_NORMAL);
+	drawstring (pos - '-2 -6', "2", '6 6', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
+	drawstring (pos - '-1 -5', "^12", '6 6', '1 1 1', 1, DRAWFLAG_NORMAL);
 
 	//
 	// Homing rocket information on HUD
@@ -186,8 +208,8 @@ void() HUD_Deathmatch =
 	drawstring (pos - '-13 10', printammo, '8 8', '1 1 1', 1, DRAWFLAG_NORMAL);
 
 	// Draw weapon select #
-	drawstring (pos - '-2 -6', "2", '6 6', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
-	drawstring (pos - '-1 -5', "^12", '6 6', '1 1 1', 1, DRAWFLAG_NORMAL);
+	drawstring (pos - '-2 -6', "3", '6 6', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
+	drawstring (pos - '-1 -5', "^13", '6 6', '1 1 1', 1, DRAWFLAG_NORMAL);
 
 	//
 	// Power rocket information on HUD
@@ -207,8 +229,8 @@ void() HUD_Deathmatch =
 	drawstring (pos - '-13 10', printammo, '8 8', '1 1 1', 1, DRAWFLAG_NORMAL);
 
 	// Draw weapon select #
-	drawstring (pos - '-2 -6', "3", '6 6', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
-	drawstring (pos - '-1 -5', "^13", '6 6', '1 1 1', 1, DRAWFLAG_NORMAL);
+	drawstring (pos - '-2 -6', "4", '6 6', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
+	drawstring (pos - '-1 -5', "^14", '6 6', '1 1 1', 1, DRAWFLAG_NORMAL);
 
 	//
 	// Napalm information on HUD
@@ -228,8 +250,8 @@ void() HUD_Deathmatch =
 	drawstring (pos - '-13 10', printammo, '8 8', '1 1 1', 1, DRAWFLAG_NORMAL);
 
 	// Draw weapon select #
-	drawstring (pos - '-2 -6', "4", '6 6', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
-	drawstring (pos - '-1 -5', "^14", '6 6', '1 1 1', 1, DRAWFLAG_NORMAL);
+	drawstring (pos - '-2 -6', "5", '6 6', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
+	drawstring (pos - '-1 -5', "^15", '6 6', '1 1 1', 1, DRAWFLAG_NORMAL);
 	
 	//
 	// Richochet Bomb information on HUD
@@ -249,8 +271,8 @@ void() HUD_Deathmatch =
 	drawstring (pos - '-13 10', printammo, '8 8', '1 1 1', 1, DRAWFLAG_NORMAL);
 
 	// Draw weapon select #
-	drawstring (pos - '-2 -6', "5", '6 6', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
-	drawstring (pos - '-1 -5', "^15", '6 6', '1 1 1', 1, DRAWFLAG_NORMAL);
+	drawstring (pos - '-2 -6', "6", '6 6', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
+	drawstring (pos - '-1 -5', "^16", '6 6', '1 1 1', 1, DRAWFLAG_NORMAL);
 
 	//
 	// Remote Bomb information on HUD
@@ -270,8 +292,8 @@ void() HUD_Deathmatch =
 	drawstring (pos - '-13 10', printammo, '8 8', '1 1 1', 1, DRAWFLAG_NORMAL);
 
 	// Draw weapon select #
-	drawstring (pos - '-2 -6', "6", '6 6', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
-	drawstring (pos - '-1 -5', "^16", '6 6', '1 1 1', 1, DRAWFLAG_NORMAL);
+	drawstring (pos - '-2 -6', "7", '6 6', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
+	drawstring (pos - '-1 -5', "^17", '6 6', '1 1 1', 1, DRAWFLAG_NORMAL);
 
 	//
 	// Freeze Blast information on HUD
@@ -291,6 +313,6 @@ void() HUD_Deathmatch =
 	drawstring (pos - '-13 10', printammo, '8 8', '1 1 1', 1, DRAWFLAG_NORMAL);
 
 	// Draw weapon select #
-	drawstring (pos - '-2 -6', "7", '6 6', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
-	drawstring (pos - '-1 -5', "^17", '6 6', '1 1 1', 1, DRAWFLAG_NORMAL);
+	drawstring (pos - '-2 -6', "8", '6 6', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
+	drawstring (pos - '-1 -5', "^18", '6 6', '1 1 1', 1, DRAWFLAG_NORMAL);
 };

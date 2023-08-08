@@ -29,9 +29,8 @@ phys_exec.qc // traceline (recommended)
 
 chars/func_vehicle.qc
 
-// only uncomment one of these
-opt_func_vehicle_builtins.qc // RennyC optimized
-//func_vehicle_builtins.qc // Urre original (heavy) func_vehicle
+rr_func_vehicle_builtins.qc // RenRacer vehicles
+
 //
 // func_vehicle
 

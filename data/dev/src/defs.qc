@@ -501,9 +501,15 @@ float WEP_NAPALM = 4;
 float WEP_RICOCHET = 8;
 float WEP_REMOTE = 16;
 float WEP_FREEZE = 32;
+float WEP_SPECIAL = 64; // Weapon 1
+
+// Vehicles
+.float vehicle;
+float VEH_HOTROD = 0;
+float VEH_ZUMA = 1;
 
 // Ammo
-.float ammo_firerocket, ammo_homingrocket, ammo_powerrocket, ammo_napalm, ammo_rico, ammo_remote, ammo_freeze;
+.float ammo_firerocket, ammo_homingrocket, ammo_powerrocket, ammo_napalm, ammo_rico, ammo_remote, ammo_freeze, ammo_special;
 
 // Particle defs
 var float PART_DIRT;
@@ -564,6 +570,7 @@ var float PART_FREEZEBLAST;
 #define STAT_AMMO_REMOTE 52
 #define STAT_AMMO_FREEZE 53
 #define STAT_PLAYERID 54
+#define STAT_AMMO_SPECIAL 55
 
 #define STAT_INTERMISSION 75
 

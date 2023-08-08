@@ -1360,35 +1360,40 @@ void() ChangeWeapon =
 
 	if (self.impulse == 1)
 	{
+		self.weapon = WEP_SPECIAL;
+		sprint (self, "Special weapon selected\n");
+	}
+	if (self.impulse == 2)
+	{
 		self.weapon = WEP_ROCKET;
 		sprint (self, "Fire rocket selected\n");
 	}
-	if (self.impulse == 2)
+	if (self.impulse == 3)
 	{
 		self.weapon = WEP_HROCKET;
 		sprint (self, "Homing rocket selected\n");
 	}
-	if (self.impulse == 3)
+	if (self.impulse == 4)
 	{
 		self.weapon = WEP_PROCKET;
 		sprint (self, "Power rocket selected\n");
 	}
-	if (self.impulse == 4)
+	if (self.impulse == 5)
 	{
 		self.weapon = WEP_NAPALM;
 		sprint (self, "Napalm selected\n");
 	}
-	if (self.impulse == 5)
+	if (self.impulse == 6)
 	{
 		self.weapon = WEP_RICOCHET;
 		sprint (self, "Ricochet bomb selected\n");
 	}
-	if (self.impulse == 6)
+	if (self.impulse == 7)
 	{
 		self.weapon = WEP_REMOTE;
 		sprint (self, "Remote bomb selected\n");
 	}
-	if (self.impulse == 7)
+	if (self.impulse == 8)
 	{
 		self.weapon = WEP_FREEZE;
 		sprint (self, "Freeze blast selected\n");

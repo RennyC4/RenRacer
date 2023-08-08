@@ -794,6 +794,7 @@ void() PutClientInServer =
 	self.spawn_loc_angles = self.angles; // Stash it
 	self.alpha = 1;
 	self.energy = 100;
+	self.weapon = WEP_SPECIAL;
 
 	if (clienttype(self) == CLIENTTYPE_REAL)
 		human_players = human_players + 1;
