@@ -131,6 +131,11 @@ void() bot_ai_fight =
 		{
 			if (infront(self.enemy, 0.75))
 			{
+				if (self.ammo_special > 0) // TODO: Add logic for range stuff
+				{
+					self.weapon = WEP_SPECIAL;
+					self.button4 = TRUE;
+				}
 				if (self.ammo_firerocket > 0)
 				{
 					self.weapon = WEP_ROCKET;
@@ -146,7 +151,7 @@ void() bot_ai_fight =
 					self.weapon = WEP_PROCKET;
 					self.button4 = TRUE;
 				}
-				if (self.ammo_napalm > 0)
+				if (self.ammo_napalm > 0) // TODO: Add logic for range stuff
 				{
 					self.weapon = WEP_NAPALM;
 					self.button4 = TRUE;
