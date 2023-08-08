@@ -1315,6 +1315,14 @@ void() SpecialWeapon_HotRod_Think =
 
 	// Update origin
 	makevectors(self.owner.realang);
+	
+	if (self.backward)
+	{
+		vector v = self.owner.realang;
+		v_y = v_y + 180;
+		makevectors(v);
+	}
+
 	vector start = self.owner.origin + v_forward * 50;
 	vector end = start + (v_forward * self.cnt2);
 	traceline (start, end, TRUE, self);
@@ -1350,9 +1358,17 @@ void() SpecialWeapon_HotRod_Think =
 	frameskip(0.01);
 };
 
-void() SpecialWeapon_HotRod =
+void(float rear) SpecialWeapon_HotRod =
 {
 	makevectors(self.realang);
+
+	if (rear)
+	{
+		vector v = self.realang;
+		v_y = v_y + 180;
+		makevectors(v);
+	}
+
 	vector start = self.origin + v_forward * 50;
 
 	float i;
@@ -1379,6 +1395,9 @@ void() SpecialWeapon_HotRod =
 		setmodel (flame, "progs/flame.spr");
 		setsize (flame, '0 0 0', '0 0 0');
 		setorigin (flame, trace_endpos);
+
+		if (rear)
+			flame.backward = TRUE;
 
 		flame.touch = SpecialWeapon_HotRod_Touch;
 		flame.think = SpecialWeapon_HotRod_Think;
@@ -1709,18 +1728,15 @@ void(float type, float rear) CarAttack =
 				{
 					if (self.vehicle == VEH_HOTROD)
 					{
-						SpecialWeapon_HotRod();
-						bprint ("Fire HotRod Special Attack\n");
+						if (!rear)
+							SpecialWeapon_HotRod(FALSE);
+						else
+							SpecialWeapon_HotRod(TRUE);
 					}
 					if (self.vehicle == VEH_ZUMA)
 					{
 						bprint ("Fire Zuma Special Attack\n");
 					}
-
-					//if (!rear)
-					//	Fire_Rocket(0, FALSE);
-					//else
-					//	Fire_Rocket(0, TRUE);
 					self.ammo_special = self.ammo_special - 1;
 				}
 				else
