@@ -432,7 +432,7 @@ void() PlayerPostThink =
 			{
 				if (self.deathcount_finished < time)
 				{
-					if (self.deathcount == 0)
+					if (!self.deathcount)
 					{
 						float tt = ceil(random() * 3);
 						if (tt == 1)
@@ -445,9 +445,9 @@ void() PlayerPostThink =
 							sound(self, CHAN_AUTO, "combat/death4.wav", 1, ATTN_NORM);
 
 						Create2DExplosion(self.origin + v_up * 64, 10);
-						self.colormod = '0.05 0.05 0.05'; // car is cooked/black on death
 						self.onfire_finished = time + 9999; // cars on fire
 					}
+					self.colormod = '0.05 0.05 0.05'; // car is cooked/black on death
 					if (self.deathcount == 3 || self.deathcount == 6 || self.deathcount == 9 || self.deathcount == 12)
 						CreateExplosion(self.origin);
 					if (self.deathcount < 30)
@@ -520,10 +520,10 @@ void() PlayerPostThink =
 		if (self.button4)
 			CarAttack(1, FALSE);
 	}
+
+	// on fire
 	if (self.onfire_finished > time)
 	{
-		if (self.frozen_finished > time)
-			self.onfire_finished = time; // Can't set someone on fire when iced
 		if (self.health > 0)
 		{
 			centerprint (self, "You're on fire!\n");
@@ -556,14 +556,8 @@ void() PlayerPostThink =
 			spawn_color_glow(3, 1.25, 1, 100, fire1); // dynamic light
 		}
 	}
-	else
-	{
-		if (self.fire)
-		{
-			remove(self.fire);
-			self.fire = world;
-		}
-	}
+	
+	// in ice
 	if (self.frozen_finished > time)
 	{
 		if (!self.frozen)

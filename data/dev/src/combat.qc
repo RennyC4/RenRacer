@@ -261,7 +261,7 @@ void(entity attacker, float radius, float damage, float setfire, string attacker
 				targ.forcejump = TRUE;
 			}
 
-			if (setfire)
+			if (setfire && targ.frozen_finished < time)
 			{
 				targ.onfire_finished = time + 5;
 				targ.igniter = attacker;
@@ -1108,7 +1108,8 @@ void() Freeze_Touch =
 	if (other.owner.driving.onfire_finished > time) // remove fire
 		other.owner.driving.onfire_finished = time;
 	other.owner.driving.frozen_finished = time + 3;
-	other.owner.driving.colormod = '1 1 6';
+	if (other.owner.driving.health > 0) // dont interfere with death colormod stuff
+		other.owner.driving.colormod = '1 1 6';
 	Create2DFreezeExplosion(self.origin, 3);
 	remove(self);
 };
@@ -1273,9 +1274,12 @@ void() SpecialWeapon_HotRod_Touch =
 	if (self.frame < 7 && self.hitobject_finished < time)
 	{
 		DoDamage(other.owner.driving, self.owner, 1, self.classname);
-		other.owner.driving.onfire_finished = time + 5;
-		other.owner.driving.igniter = self.owner;
-		self.hitobject_finished = time + 0.25;
+		if (other.owner.driving.frozen_finished < time)
+		{
+			other.owner.driving.onfire_finished = time + 5;
+			other.owner.driving.igniter = self.owner;
+		}
+		self.hitobject_finished = time + 0.5;
 	}
 };
 
@@ -1293,6 +1297,8 @@ void() SpecialWeapon_HotRod_Think =
 		}
 		else // remove animation
 		{
+			self.movetype = MOVETYPE_NOCLIP;
+			self.velocity_z = 125;
 			self.frame = 8 + self.cnt;
 
 			if (self.cnt < 6)
@@ -1314,17 +1320,31 @@ void() SpecialWeapon_HotRod_Think =
 	traceline (start, end, TRUE, self);
 
 	// Effects
+	float scl;
+	if (self.cnt < 60)
+		scl = 1;
+	if (self.cnt2 == 60)
+		scl = 1.2;
+	if (self.cnt2 == 90)
+		scl = 1.4;
+	if (self.cnt2 == 120)
+		scl = 1.6;
+	if (self.cnt2 == 150)
+		scl = 1.8;
 	if (self.cnt2 == 180)
 	{
-		self.scale = 2;
-		self.effects = EF_ADDITIVE | EF_FULLBRIGHT | EF_DIMLIGHT;
-		setorigin(self, end + v_up * 16);
+		scl = 2;
+		self.effects = EF_ADDITIVE | EF_FULLBRIGHT | EF_DIMLIGHT; // Add dimlight effect at flame throwers end
 	}
-	else
+
+	if (self.animation_finished > time)
 	{
-		self.scale = 1 + random()*0.5 + sin(time*16)*0.15;
+		self.scale = scl + random()*0.5 + sin(time*16)*0.15;
 		self.alpha = 0.9 + sin(time*4)*0.25;
-		setorigin(self, end);
+		if (trace_fraction < 1)
+			setorigin(self, trace_endpos);
+		else
+			setorigin(self, end);			
 	}
 
 	frameskip(0.01);
@@ -1347,7 +1367,7 @@ void() SpecialWeapon_HotRod =
 		flame.owner = self;
 		flame.angles = self.owner.angles;
 		flame.solid = SOLID_TRIGGER;
-		flame.movetype = MOVETYPE_NONE;
+		flame.movetype = MOVETYPE_NOCLIP;
 		flame.classname = "flame";
 		flame.alpha = 0.9;
 		flame.scale = 1+random()*1;
