@@ -1304,6 +1304,7 @@ void() SpecialWeapon_HotRod_Think =
 			}
 		}
 		self.think_finished = time + 0.05;
+		pointparticles(PART_FLAME, self.origin, '0 0 0', 1);
 	}
 
 	// Update origin

@@ -81,6 +81,7 @@ void() worldspawn =
 	PART_NAPALM = particleeffectnum("napalm");
 	PART_MGUNSMOKE = particleeffectnum("mgunsmoke");
 	PART_FREEZEBLAST = particleeffectnum("freezeblast");
+	PART_FLAME = particleeffectnum("flamethrower");
 
 	precache_model("progs/null.spr");
 	precache_model("progs/s_debug.spr");
