@@ -82,6 +82,7 @@ void() worldspawn =
 	PART_MGUNSMOKE = particleeffectnum("mgunsmoke");
 	PART_FREEZEBLAST = particleeffectnum("freezeblast");
 	PART_FLAME = particleeffectnum("flamethrower");
+	PART_GROCKET = particleeffectnum("ghostrocket");
 
 	precache_model("progs/null.spr");
 	precache_model("progs/s_debug.spr");
@@ -181,6 +182,7 @@ void() worldspawn =
 	precache_sound ("combat/rw3.wav");
 	precache_sound ("combat/killkill.wav");
 	precache_sound ("combat/flamethr.wav");
+	precache_sound ("combat/ghstrckt.wav");
 
 	world_lights();
 	load_waypoints(); // Load waypoints

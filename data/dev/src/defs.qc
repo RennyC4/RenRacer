@@ -526,6 +526,7 @@ var float PART_NAPALM;
 var float PART_MGUNSMOKE;
 var float PART_FREEZEBLAST;
 var float PART_FLAME;
+var float PART_GROCKET;
 
 // Lap time stats
 .float start_laptime; // ON / OFF

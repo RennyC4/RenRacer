@@ -1279,7 +1279,7 @@ void() SpecialWeapon_HotRod_Touch =
 			other.owner.driving.onfire_finished = time + 5;
 			other.owner.driving.igniter = self.owner;
 		}
-		self.hitobject_finished = time + 0.5;
+		self.hitobject_finished = time + 0.5; // how fast to damage, closer to target deals more damage
 	}
 };
 
@@ -1404,6 +1404,140 @@ void(float rear) SpecialWeapon_HotRod =
 		flame.nextthink = time;
 	}
 	sound (self, CHAN_AUTO, "combat/flamethr.wav", 1, ATTN_NORM);
+};
+
+//
+// Special Weapon - Zuma (Ghost Rocket)
+//
+
+void() SpecialWeapon_Zuma_GetTarget =
+{
+	float bestd = 9999999;
+	entity bestv = world;
+
+	for (entity targ = world;(targ = find(targ, classname, "player"));)
+	{
+		if (targ == self || targ.health < 1 || targ.invulnerable_finished > time)
+			continue; // skip
+
+		vector heading = targ.origin - self.origin;
+		float d = heading * heading;
+
+		if (d < bestd)
+		{
+			bestd = d;
+			bestv = targ;
+		}
+
+		if (bestv)
+		{
+			if (!self.enemy && targ.health > 0 && targ != self.owner && !targ.observer)
+				self.enemy = targ;
+		}
+	}
+};
+
+void() SpecialWeapon_Zuma_Think =
+{
+	if (self.removeme_finished < time)
+	{
+		CreateExplosion(self.origin);
+		Create2DExplosion(self.origin, 2);
+		remove(self);
+		return;
+	}
+
+	if (!self.enemy)
+		SpecialWeapon_Zuma_GetTarget();
+
+	pointparticles(PART_GROCKET, self.origin, '0 0 0', 1);
+
+	if (self.enemy) // Home in on enemy
+	{
+		local vector vele, vels, ph;
+		vele = normalize(self.enemy.origin - self.origin);
+		vels = normalize(self.velocity);
+		ph = vele + (vels * 4);
+		ph = ph * (1/10); // increase seceond number for less homing capability
+
+		self.velocity = normalize(vels + ph);
+		self.velocity = self.velocity * 1500;
+
+		self.angles = vectoangles(self.velocity);
+	}
+
+	frameskip(0.01);
+};
+
+void() SpecialWeapon_Zuma_Touch =
+{
+	makevectors_mdl(self.angles);
+
+	if (self.owner == other.owner.driving) // Hit self
+		return;
+
+	if (other.owner.driving) // other.owner.driving is the player
+	{
+		DoDamage(other.owner.driving, self.owner, 12, self.classname);
+		other.owner.driving.forcejump_strength = 250;
+		other.owner.driving.forcejump = TRUE;
+	}
+	else if (other)
+		DoDamage(other, self.owner, 12, self.classname);
+
+	CreateExplosion(self.origin);
+	Create2DExplosion(self.origin, 2);
+	remove(self);
+};
+
+void(float rear) SpecialWeapon_Zuma =
+{
+	makevectors (self.realang);
+
+	float i;
+	for (i = 0; i < 2; i = i+1) // 2 ghost rockets
+	{
+		if (rear)
+		{
+			vector v = self.realang;
+			v_y = v_y + 180;
+			makevectors(v);
+		}
+
+		entity rocket = spawn();
+		rocket.movetype = MOVETYPE_NOCLIP;
+		rocket.owner = self;
+		rocket.solid = SOLID_TRIGGER;
+		rocket.netname = "ghostrocket";
+		rocket.effects = EF_ADDITIVE | EF_FULLBRIGHT;
+		rocket.alpha = 0.9;
+		rocket.touch = SpecialWeapon_Zuma_Touch;
+
+		rocket.velocity = aim(self, 1500);
+		rocket.velocity = rocket.velocity * 1500;
+
+		// Players forward velocity is added to projectiles
+		if (!self.backward)
+		{
+			rocket.velocity_x = rocket.velocity_x + self.driving.velocity_x;
+			rocket.velocity_y = rocket.velocity_y + self.driving.velocity_y;
+		}
+		rocket.angles = vectoangles(rocket.velocity);
+
+		setmodel (rocket, "progs/rocket.mdl");
+		setsize (rocket, '0 0 0', '0 0 0');
+
+		if (!i)
+			setorigin (rocket, self.origin + v_up * 8 + v_forward * (48 + self.realspeed) + v_right * 16);
+		else
+			setorigin (rocket, self.origin + v_up * 8 + v_forward * (48 + self.realspeed) - v_right * 16);
+
+		rocket.removeme_finished = time + 6;
+		rocket.think = SpecialWeapon_Zuma_Think;
+		rocket.nextthink = time;
+	}
+	sound (self, CHAN_WEAPON, "combat/rocket.wav", 1, ATTN_NORM);
+	sound(self, CHAN_BODY, "combat/ghstrckt.wav", 1, ATTN_NORM);
 };
 
 //
@@ -1735,7 +1869,10 @@ void(float type, float rear) CarAttack =
 					}
 					if (self.vehicle == VEH_ZUMA)
 					{
-						bprint ("Fire Zuma Special Attack\n");
+						if (!rear)
+							SpecialWeapon_Zuma(FALSE);
+						else
+							SpecialWeapon_Zuma(TRUE);
 					}
 					self.ammo_special = self.ammo_special - 1;
 				}
