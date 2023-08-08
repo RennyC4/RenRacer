@@ -72,6 +72,11 @@ void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 	{
 		bprint(attacker.netname, " rammed ");
 		bprint(targ.netname, " raw\n");
+	}
+	if (attackerclassname == "flame")
+	{
+		bprint(attacker.netname, " nicely toasted ");
+		bprint(targ.netname, "\n");
 	}	
 };
 
@@ -1078,8 +1083,8 @@ void() Freeze_Think =
 			self.frame = 0;
 		self.animation_finished = time + 0.05;
 	}
-	self.scale = 2 + sin(time*512)*0.25;
-	self.alpha = 0.75 + sin(time*512)*0.25;
+	self.scale = 2 + sin(time*16)*0.25;
+	self.alpha = 0.75 + sin(time*16)*0.25;
 
 	frameskip(0.01);
 };
@@ -1258,6 +1263,22 @@ void() Fire_Shield =
 // Special Weapon - HotRod (Flame Thrower)
 //
 
+void() SpecialWeapon_HotRod_Touch =
+{
+	if (other.owner.driving.classname != "player")
+		return;
+	if (self.owner == other.owner.driving)
+		return;
+
+	if (self.frame < 7 && self.hitobject_finished < time)
+	{
+		DoDamage(other.owner.driving, self.owner, 1, self.classname);
+		other.owner.driving.onfire_finished = time + 5;
+		other.owner.driving.igniter = self.owner;
+		self.hitobject_finished = time + 0.25;
+	}
+};
+
 void() SpecialWeapon_HotRod_Think =
 {
 	// Animation speed
@@ -1270,7 +1291,7 @@ void() SpecialWeapon_HotRod_Think =
 			else
 				self.frame = 0;
 		}
-		else
+		else // remove animation
 		{
 			self.frame = 8 + self.cnt;
 
@@ -1290,7 +1311,20 @@ void() SpecialWeapon_HotRod_Think =
 	vector start = self.owner.origin + v_forward * 50;
 	vector end = start + (v_forward * self.cnt2);
 	traceline (start, end, TRUE, self);
-	setorigin(self, end);
+
+	// Effects
+	if (self.cnt2 == 180)
+	{
+		self.scale = 2;
+		self.effects = EF_ADDITIVE | EF_FULLBRIGHT | EF_DIMLIGHT;
+		setorigin(self, end + v_up * 16);
+	}
+	else
+	{
+		self.scale = 1 + random()*0.5 + sin(time*16)*0.15;
+		self.alpha = 0.9 + sin(time*4)*0.25;
+		setorigin(self, end);
+	}
 
 	frameskip(0.01);
 };
@@ -1315,18 +1349,21 @@ void() SpecialWeapon_HotRod =
 		flame.movetype = MOVETYPE_NONE;
 		flame.classname = "flame";
 		flame.alpha = 0.9;
-		flame.scale = 1;
+		flame.scale = 1+random()*1;
 		flame.animation_finished = time + 3; // how long flames last
 		flame.cnt = 0;
 		flame.cnt2 = distance;
+		flame.frame = random()*7;
 		flame.effects = EF_ADDITIVE | EF_FULLBRIGHT;
 		setmodel (flame, "progs/flame.spr");
 		setsize (flame, '0 0 0', '0 0 0');
 		setorigin (flame, trace_endpos);
 
-		flame.nextthink = time;
+		flame.touch = SpecialWeapon_HotRod_Touch;
 		flame.think = SpecialWeapon_HotRod_Think;
+		flame.nextthink = time;
 	}
+	sound (self, CHAN_AUTO, "combat/flamethr.wav", 1, ATTN_NORM);
 };
 
 //

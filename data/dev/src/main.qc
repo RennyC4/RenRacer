@@ -179,6 +179,7 @@ void() worldspawn =
 	precache_sound ("combat/rw2.wav");
 	precache_sound ("combat/rw3.wav");
 	precache_sound ("combat/killkill.wav");
+	precache_sound ("combat/flamethr.wav");
 
 	world_lights();
 	load_waypoints(); // Load waypoints

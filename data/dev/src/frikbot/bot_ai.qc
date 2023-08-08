@@ -279,6 +279,9 @@ void() bot_ai_fight;
 
 void() BotAI =
 {
+	if (cvar("developer") == 2)
+		return;
+
 	// Traceline: Bot hit/close to wall
 	// RennyC: Needs improvement for being accurate
 	makevectors(self.realang);

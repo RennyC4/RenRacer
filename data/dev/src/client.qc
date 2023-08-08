@@ -330,10 +330,10 @@ void() freeze_think =
 	if (self.owner.invulnerable_finished > time || self.owner.frozen_finished < time)
 		self.cnt = TRUE;
 
-	self.alpha = 0.75 + sin(time*384)*0.25;
-	self.colormod_x = 1 + sin(time*512)*0.25; // glow pallet
-	self.colormod_y = 1 + sin(time*512)*0.25; // glow pallet
-	self.colormod_z = 3 + sin(time*512)*0.25; // glow pallet
+	self.alpha = 0.75 + sin(time*8)*0.25;
+	self.colormod_x = 1 + sin(time*8)*0.25; // glow pallet
+	self.colormod_y = 1 + sin(time*8)*0.25; // glow pallet
+	self.colormod_z = 3 + sin(time*8)*0.25; // glow pallet
 	setorigin(self, self.owner.origin);
 	frameskip(0.01);
 };
@@ -522,6 +522,8 @@ void() PlayerPostThink =
 	}
 	if (self.onfire_finished > time)
 	{
+		if (self.frozen_finished > time)
+			self.onfire_finished = time; // Can't set someone on fire when iced
 		if (self.health > 0)
 		{
 			centerprint (self, "You're on fire!\n");
