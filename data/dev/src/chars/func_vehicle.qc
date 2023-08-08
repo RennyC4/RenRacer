@@ -1,9 +1,4 @@
 .entity frontright, frontleft, backright, backleft;
-.entity gun;
-
-float VEHICLE_NO_ROOF = 1;
-float VEHICLE_PERMANENT_GUN = 2;
-
 entity() hotrod;
 entity() triton;
 
@@ -293,12 +288,12 @@ void(entity car) Car_InitVehicle =
 			e.think = Car_ChassiThink;
 			e.nextthink = time;
 		}
-		else if (e.netname == "roof")
-		{
-			if (car.spawnflags & VEHICLE_NO_ROOF){ // hide
-				e.modelindex = 0;
-			}
-		}
+//		else if (e.netname == "roof")
+//		{
+//			if (car.spawnflags & VEHICLE_NO_ROOF){ // hide
+//				e.modelindex = 0;
+//			}
+//		}
 #if defined(SMOOTH)
 		else if (e.netname == "driver")
 		{
@@ -306,19 +301,6 @@ void(entity car) Car_InitVehicle =
 			e.nextthink = time;
 		}
 #endif
-		else if (e.netname == "turretbase")
-		{
-			car.gun = e;
-			car.gun.gun = FindStaticOfName("turretswivel", car);
-			car.gun.gun.gun = FindStaticOfName("turretbody", car);
-			car.gun.gun.gun.gun = FindStaticOfName("turretbarrel", car);
-			if (!(car.spawnflags & VEHICLE_PERMANENT_GUN)){ // hide
-				car.gun.modelindex = 0;
-				car.gun.gun.modelindex = 0;
-				car.gun.gun.gun.modelindex = 0;
-				car.gun.gun.gun.gun.modelindex = 0;
-			}
-		}
 		e = e.physobj_next;
 	}
 };
@@ -1157,10 +1139,6 @@ void() func_vehicle_builtins =
 		precache_model("progs/HotRod_wheel_rear_L.mdl");
 		precache_model("progs/HotRod_wheel_front_R.mdl");
 		precache_model("progs/HotRod_wheel_rear_R.mdl");
-		precache_model("progs/HotRod_turret_base.mdl");
-		precache_model("progs/HotRod_turret_swivel.mdl");
-		precache_model("progs/HotRod_turret_body.mdl");
-		precache_model("progs/HotRod_turret_barrel.mdl");
 		car = hotrod();
 	}
 	//car.netname = self.netname;
@@ -1191,13 +1169,7 @@ void() func_vehicle_triton =
 	car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
 	Car_InitVehicle(car);
 };
-/*QUAKED vehicle_hotrod (1 0 0) (-8 -8 -8) (8 8 8) VEHICLE_NO_ROOF VEHICLE_PERMANENT_GUN
-The built-in Mad Max styled hotrod. 
 
-SPAWNFLAGS
-"vehicle_no_roof" convertible style
-"vehicle_permanent_gun" turret always active
-*/
 void() vehicle_hotrod =
 {
 	precache_model("maps/cube16.bsp");
@@ -1218,10 +1190,6 @@ void() vehicle_hotrod =
 	precache_model("progs/HotRod_wheel_rear_L.mdl");
 	precache_model("progs/HotRod_wheel_front_R.mdl");
 	precache_model("progs/HotRod_wheel_rear_R.mdl");
-	precache_model("progs/HotRod_turret_base.mdl");
-	precache_model("progs/HotRod_turret_swivel.mdl");
-	precache_model("progs/HotRod_turret_body.mdl");
-	precache_model("progs/HotRod_turret_barrel.mdl");
 	entity car = hotrod();
 	car.spawnflags = self.spawnflags;
 	

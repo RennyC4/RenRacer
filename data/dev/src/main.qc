@@ -116,10 +116,6 @@ void() worldspawn =
 	precache_model("progs/HotRod_wheel_rear_L.mdl");
 	precache_model("progs/HotRod_wheel_front_R.mdl");
 	precache_model("progs/HotRod_wheel_rear_R.mdl");
-	precache_model("progs/HotRod_turret_base.mdl");
-	precache_model("progs/HotRod_turret_swivel.mdl");
-	precache_model("progs/HotRod_turret_body.mdl");
-	precache_model("progs/HotRod_turret_barrel.mdl");
 
 	//
 	// func_vehicle - end
