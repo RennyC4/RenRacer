@@ -606,11 +606,17 @@ void TryUpdateVehicle(){
 		float forw = v_forward * self.velocity;
 		if (forw > 100){
 			self.keyflags = self.keyflags | KEY_UP; // RennyC
-			Car_Accelerate(3000, 950);
+			if (!deathmatch)
+				Car_Accelerate(3000, 950);
+			else
+				Car_Accelerate(self.speed, self.max_speed);
 		}
 		else if (forw < -100){
 			self.keyflags = self.keyflags | KEY_DOWN; // RennyC
-			Car_Accelerate(-2500, 800);
+			if (!deathmatch)
+				Car_Accelerate(-2500, 800);
+			else
+				Car_Accelerate(-self.speed - 500, self.max_speed - 200);
 		}
 		else
 		{

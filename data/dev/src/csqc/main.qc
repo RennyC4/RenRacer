@@ -58,12 +58,12 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 			DrawTurbo(); // Draw Turbo Stats
 			DrawDrift(); // Draw Drift Stats
 			if (!deathmatch)
-			{
 				DrawTime();  // Draw Lap Time Stats
+			else
+			{
+				HUD_Deathmatch(); // Draw ammo, etc
 				DrawSpeed(); // Draw Speed Stats
 			}
-			else
-				HUD_Deathmatch(); // Draw ammo, etc
 
 			// Engine sounds (taken from build a delivery, optimized (thanks spike))
 			local float speed = getstatf(STAT_SPEED);

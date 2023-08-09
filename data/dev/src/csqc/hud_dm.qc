@@ -142,11 +142,11 @@ void() HUD_Deathmatch =
 	float i = getstatf(STAT_PLAYERID);
 	string i1 = ftos(i);
 
-	drawstring (pos + '1 1', "ID: ", '8 8 0', '0 0 0', 1, DRAWFLAG_NORMAL); // text shadow
-	drawstring (pos, "ID: ", '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+	drawstring (pos + '1 1', "ID: ", '6 6 0', '0 0 0', 1, DRAWFLAG_NORMAL); // text shadow
+	drawstring (pos, "ID: ", '6 6 0', '1 1 1', 1, DRAWFLAG_NORMAL);
 
-	drawstring (pos + '17 1', i1, '8 8 0', '0 0 0', 1, DRAWFLAG_NORMAL); // text shadow
-	drawstring (pos + '16 0', i1, '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+	drawstring (pos + '17 1', i1, '6 6 0', '0 0 0', 1, DRAWFLAG_NORMAL); // text shadow
+	drawstring (pos + '16 0', i1, '6 6 0', '1 1 1', 1, DRAWFLAG_NORMAL);
 
 	//
 	// Special weapon information on HUD

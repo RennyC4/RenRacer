@@ -5,6 +5,9 @@
 entity() hotrod =
 {
 	self.vehicle = VEH_HOTROD;
+	self.health = self.max_health = 110;
+	self.speed = 2000; // also acceleration
+	self.max_speed = 825;
 
 	local entity obj, part;
 
@@ -520,6 +523,9 @@ entity() hotrod =
 entity() zuma =
 {
 	self.vehicle = VEH_ZUMA;
+	self.health = self.max_health = 90;
+	self.speed = 4000; // also acceleration
+	self.max_speed = 1000;
 
 	local entity obj, part;
 
@@ -548,13 +554,13 @@ entity() zuma =
 	part.classname = "phys_particle";
 	part.netname = "frontleft";
 	part.relative_org = '30 15 -15'; // RennyC
-	part.physobj_spring_length = 3.25; // RennyC
+	part.physobj_spring_length = 8; // RennyC
 	part.physobj_spring_force = '2 4 0';
-	part.relative_size = 8.5; // RennyC
+	part.relative_size = 12; // RennyC
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
-	part.physobj_stepup = 18;
+	part.physobj_stepup = 20;
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
 	part.physobj_friction_ground = '0.225 4.4 5';
@@ -582,13 +588,13 @@ entity() zuma =
 	part.classname = "phys_particle";
 	part.netname = "frontright";
 	part.relative_org = '30 -15 -15';
-	part.physobj_spring_length = 3.25;
+	part.physobj_spring_length = 8;
 	part.physobj_spring_force = '2 4 0';
-	part.relative_size = 8.5; // RennyC
+	part.relative_size = 12; // RennyC
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
-	part.physobj_stepup = 18;
+	part.physobj_stepup = 20;
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
 	part.physobj_friction_ground = '0.225 4.4 5';
@@ -616,13 +622,13 @@ entity() zuma =
 	part.classname = "phys_particle";
 	part.netname = "backleft";
 	part.relative_org = '-35 15 -15'; // RennyC
-	part.physobj_spring_length = 3.25; // RennyC
+	part.physobj_spring_length = 8; // RennyC
 	part.physobj_spring_force = '2 4 0';
-	part.relative_size = 8.5; // RennyC
+	part.relative_size = 12; // RennyC
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
-	part.physobj_stepup = 18;
+	part.physobj_stepup = 20;
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
 	part.physobj_friction_ground = '0.225 3.3 5';
@@ -650,13 +656,13 @@ entity() zuma =
 	part.classname = "phys_particle";
 	part.netname = "backright";
 	part.relative_org = '-35 -15 -15'; // RennyC
-	part.physobj_spring_length = 3.25; // RennyC
+	part.physobj_spring_length = 8; // RennyC
 	part.physobj_spring_force = '2 4 0';
-	part.relative_size = 8.5; // RennyC
+	part.relative_size = 12; // RennyC
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
-	part.physobj_stepup = 18;
+	part.physobj_stepup = 20;
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
 	part.physobj_friction_ground = '0.225 3.3 5';

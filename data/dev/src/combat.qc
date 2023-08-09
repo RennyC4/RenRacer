@@ -77,7 +77,12 @@ void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 	{
 		bprint(attacker.netname, " nicely toasted ");
 		bprint(targ.netname, "\n");
-	}	
+	}
+	if (attackerclassname == "ghostrocket")
+	{
+		bprint(targ.netname, " was ghosted by ");
+		bprint(attacker.netname, "'s spectral missile\n");
+	}
 };
 
 // ---
@@ -1107,7 +1112,7 @@ void() Freeze_Touch =
 
 	if (other.owner.driving.onfire_finished > time) // remove fire
 		other.owner.driving.onfire_finished = time;
-	other.owner.driving.frozen_finished = time + 3;
+	other.owner.driving.frozen_finished = time + 4;
 	if (other.owner.driving.health > 0) // dont interfere with death colormod stuff
 		other.owner.driving.colormod = '1 1 6';
 	Create2DFreezeExplosion(self.origin, 3);
@@ -1431,7 +1436,7 @@ void() SpecialWeapon_Zuma_GetTarget =
 
 		if (bestv)
 		{
-			if (!self.enemy && targ.health > 0 && targ != self.owner && !targ.observer)
+			if (infront3(targ, 0.75) && !self.enemy && targ.health > 0 && targ != self.owner && !targ.observer)
 				self.enemy = targ;
 		}
 	}
@@ -1439,6 +1444,7 @@ void() SpecialWeapon_Zuma_GetTarget =
 
 void() SpecialWeapon_Zuma_Think =
 {
+	makevectors_mdl(self.angles);
 	if (self.removeme_finished < time)
 	{
 		CreateExplosion(self.origin);
@@ -1447,6 +1453,24 @@ void() SpecialWeapon_Zuma_Think =
 		return;
 	}
 
+	if (self.cnt >= 20) // zig-zag
+	{
+		if (random() < 0.5)
+			self.angles_y = self.angles_y + random()*90;
+		else
+			self.angles_y = self.angles_y - random()*90;
+
+		if (random() < 0.2)
+			self.angles_x = self.angles_x + random()*15;
+		else
+			self.angles_x = 0;
+
+		self.velocity = aim(self, 1000);
+		self.velocity = self.velocity * 1000;
+		self.fixangle = TRUE;
+		self.think_finished = time + 0.121;
+		self.cnt = 0;
+	}
 	if (!self.enemy)
 		SpecialWeapon_Zuma_GetTarget();
 
@@ -1454,18 +1478,14 @@ void() SpecialWeapon_Zuma_Think =
 
 	if (self.enemy) // Home in on enemy
 	{
-		local vector vele, vels, ph;
-		vele = normalize(self.enemy.origin - self.origin);
-		vels = normalize(self.velocity);
-		ph = vele + (vels * 4);
-		ph = ph * (1/10); // increase seceond number for less homing capability
-
-		self.velocity = normalize(vels + ph);
-		self.velocity = self.velocity * 1500;
-
-		self.angles = vectoangles(self.velocity);
+		if (self.think_finished < time)
+		{
+			vector dir = normalize(self.enemy.origin - self.origin);
+			self.velocity = dir * 1000;
+			self.angles = vectoangles(self.velocity);
+		}
 	}
-
+	self.cnt = self.cnt + 1;
 	frameskip(0.01);
 };
 
@@ -1494,48 +1514,44 @@ void(float rear) SpecialWeapon_Zuma =
 {
 	makevectors (self.realang);
 
-	float i;
-	for (i = 0; i < 2; i = i+1) // 2 ghost rockets
+	if (rear)
 	{
-		if (rear)
-		{
-			vector v = self.realang;
-			v_y = v_y + 180;
-			makevectors(v);
-		}
-
-		entity rocket = spawn();
-		rocket.movetype = MOVETYPE_NOCLIP;
-		rocket.owner = self;
-		rocket.solid = SOLID_TRIGGER;
-		rocket.netname = "ghostrocket";
-		rocket.effects = EF_ADDITIVE | EF_FULLBRIGHT;
-		rocket.alpha = 0.9;
-		rocket.touch = SpecialWeapon_Zuma_Touch;
-
-		rocket.velocity = aim(self, 1500);
-		rocket.velocity = rocket.velocity * 1500;
-
-		// Players forward velocity is added to projectiles
-		if (!self.backward)
-		{
-			rocket.velocity_x = rocket.velocity_x + self.driving.velocity_x;
-			rocket.velocity_y = rocket.velocity_y + self.driving.velocity_y;
-		}
-		rocket.angles = vectoangles(rocket.velocity);
-
-		setmodel (rocket, "progs/rocket.mdl");
-		setsize (rocket, '0 0 0', '0 0 0');
-
-		if (!i)
-			setorigin (rocket, self.origin + v_up * 8 + v_forward * (48 + self.realspeed) + v_right * 16);
-		else
-			setorigin (rocket, self.origin + v_up * 8 + v_forward * (48 + self.realspeed) - v_right * 16);
-
-		rocket.removeme_finished = time + 6;
-		rocket.think = SpecialWeapon_Zuma_Think;
-		rocket.nextthink = time;
+		vector v = self.realang;
+		v_y = v_y + 180;
+		makevectors(v);
 	}
+
+	entity rocket = spawn();
+	rocket.movetype = MOVETYPE_NOCLIP;
+	rocket.owner = self;
+	rocket.solid = SOLID_TRIGGER;
+	rocket.classname = "ghostrocket";
+	rocket.effects = EF_ADDITIVE | EF_FULLBRIGHT;
+	rocket.alpha = 0.5;
+	rocket.cnt = 0; // zig-zag counter
+	rocket.skin = 1; // white/ghosty skin
+	rocket.touch = SpecialWeapon_Zuma_Touch;
+
+	rocket.velocity = aim(self, 1000);
+	rocket.velocity = rocket.velocity * 1000;
+
+	// Players forward velocity is added to projectiles
+	if (!self.backward)
+	{
+		rocket.velocity_x = rocket.velocity_x + self.driving.velocity_x;
+		rocket.velocity_y = rocket.velocity_y + self.driving.velocity_y;
+	}
+	rocket.angles = vectoangles(rocket.velocity);
+
+	setmodel (rocket, "progs/rocket.mdl");
+	setsize (rocket, '0 0 0', '0 0 0');
+
+	setorigin (rocket, self.origin + v_up * 8 + v_forward * (48 + self.realspeed));
+
+	rocket.removeme_finished = time + 6;
+	rocket.think = SpecialWeapon_Zuma_Think;
+	rocket.nextthink = time;
+
 	sound (self, CHAN_WEAPON, "combat/rocket.wav", 1, ATTN_NORM);
 	sound(self, CHAN_BODY, "combat/ghstrckt.wav", 1, ATTN_NORM);
 };
@@ -1860,14 +1876,23 @@ void(float type, float rear) CarAttack =
 			{
 				if (self.ammo_special > 0)
 				{
-					if (self.vehicle == VEH_HOTROD)
+					if (self.vehicle == VEH_HOTROD) // Hotrod special
 					{
-						if (!rear)
-							SpecialWeapon_HotRod(FALSE);
+						if (self.waterlevel > 0)
+						{
+							self.spcl_finished = time + 0.5;
+							sprint(self, "Can't use flame thrower in water!\n");
+							return;
+						}
 						else
-							SpecialWeapon_HotRod(TRUE);
+						{
+							if (!rear)
+								SpecialWeapon_HotRod(FALSE);
+							else
+								SpecialWeapon_HotRod(TRUE);
+						}
 					}
-					if (self.vehicle == VEH_ZUMA)
+					if (self.vehicle == VEH_ZUMA) // Zuma special
 					{
 						if (!rear)
 							SpecialWeapon_Zuma(FALSE);

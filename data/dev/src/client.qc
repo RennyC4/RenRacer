@@ -164,6 +164,7 @@ void() ForceJump =
 void() spawn_car_countdown;
 .float turbo_fuel_finished;
 .float energy_finished;
+.float button4_held;
 void() PlayerPreThink = 
 {
 	if (cvar("developer") == 1) // Coord/Angle reporting, helps insert entities in hmp maps
@@ -191,12 +192,38 @@ void() PlayerPreThink =
 
 	if (self.observer)
 		return;
+
 	// Force player in car, give greetings message
 	if (!self.driving)
 	{
-		Car_CheckAttach(); // Shove the player in the car
-		if (framecount > 75 && (self.button0 || self.button3 || self.button4) && race_status == RACE_NOTSTARTED)
+		if (race_status == RACE_NOTSTARTED)
 		{
+			// Print welcome message
+			if (self.vehicle == VEH_HOTROD)
+				centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1HotRod^7\n\nSpecial Weapon: Flame Thrower\nSpecial Power: High\nHealth: High\nSpeed: Slow\n\nPress [^b^4SPECIAL^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
+			if (self.vehicle == VEH_ZUMA)
+				centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Zuma^7\n\nSpecial Weapon: Spectral Missile\nSpecial Power: Medium\nHealth: Medium\nSpeed: Fast\n\nPress [^b^4SPECIAL^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
+		}
+
+		// Scroll through car list
+		if (self.button4)
+		{
+			if (!self.button4_held)
+			{
+				if (self.vehicle == VEH_HOTROD)
+					self.vehicle = VEH_ZUMA;
+				else if (self.vehicle == VEH_ZUMA)
+					self.vehicle = VEH_HOTROD;
+			}
+			self.button4_held = TRUE;
+		}
+		else
+			self.button4_held = FALSE;
+			
+		Car_CheckAttach(); // Shove the player in the car
+		if (framecount > 75 && (self.button0 || self.button3) && race_status == RACE_NOTSTARTED)
+		{
+			centerprint(self, ""); // clear any centerprints
 			spawn_car_countdown(); // Start countdown
 			race_status = RACE_COUNTDOWN;
 			sound (self, CHAN_AUTO, "engine/start.wav", 1, ATTN_NORM);
@@ -798,6 +825,13 @@ void() PutClientInServer =
 
 	if (clienttype(self) == CLIENTTYPE_REAL)
 		human_players = human_players + 1;
+	else // Bots just randomly select whatever vehicle
+	{
+		if (random() < 0.5)
+			self.vehicle = VEH_HOTROD;
+		else
+			self.vehicle = VEH_ZUMA;
+	}
 	self.player_id = human_players;
 
 	if (cvar("developer") != 1)
@@ -806,21 +840,26 @@ void() PutClientInServer =
 		{
 			if (!deathmatch)
 				centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________\n\n\nPress [^b^1FIRE^7^b] to start the race");
-			else
-				centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\n\nPress [^b^1FIRE^7^b] to unleash carnage");
 		}
 		else
 		{
-			if (!deathmatch)
+			if (!deathmatch) // race is on, shove new player as observer
 			{
-				if (self.ishuman)
+				if (clienttype(self) == CLIENTTYPE_REAL)
 					self.observer = TRUE;
 			}
 			else
 			{
-				if (!self.spawncar) // Joined mid-deathmatch game
+				if (!self.spawncar) // Joined mid-deathmatch game, TODO: Add vehicle selection stuff
 				{
-					local entity car = hotrod();
+					// Bots just randomly select whatever vehicle
+					if (clienttype(self) == CLIENTTYPE_BOT)
+					{
+						if (random() < 0.5)
+							entity car = hotrod();
+						else
+							car = zuma();
+					}	
 					makevectors(self.angles);
 					car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
 					Car_InitVehicle(car);

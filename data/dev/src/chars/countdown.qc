@@ -50,9 +50,12 @@ void() countdown_think = // Race start countdown
 				BotConnect();
 				self.bots_loaded = TRUE;
 			}
+			// Put cars in game
+			if (self.vehicle == VEH_HOTROD)
+				entity car = hotrod();
+			if (self.vehicle == VEH_ZUMA)
+				car = zuma();
 
-			//entity car = hotrod();
-			entity car = zuma();
 			makevectors(targ.angles);
 			car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
 			Car_InitVehicle(car);
