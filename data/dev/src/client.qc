@@ -196,30 +196,32 @@ void() PlayerPreThink =
 	// Force player in car, give greetings message
 	if (!self.driving)
 	{
-		if (race_status == RACE_NOTSTARTED)
+		if (deathmatch)
 		{
-			// Print welcome message
-			if (self.vehicle == VEH_HOTROD)
-				centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1HotRod^7\n\nSpecial Weapon: Flame Thrower\nSpecial Power: High\nHealth: High\nSpeed: Slow\n\nPress [^b^4SPECIAL^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
-			if (self.vehicle == VEH_ZUMA)
-				centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Zuma^7\n\nSpecial Weapon: Spectral Missile\nSpecial Power: Medium\nHealth: Medium\nSpeed: Fast\n\nPress [^b^4SPECIAL^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
-		}
-
-		// Scroll through car list
-		if (self.button4)
-		{
-			if (!self.button4_held)
+			if (race_status == RACE_NOTSTARTED)
 			{
+				// Print welcome message
 				if (self.vehicle == VEH_HOTROD)
-					self.vehicle = VEH_ZUMA;
-				else if (self.vehicle == VEH_ZUMA)
-					self.vehicle = VEH_HOTROD;
+					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1HotRod^7\n\nSpecial Weapon: Flame Thrower\nSpecial Power: High\nHealth: High\nSpeed: Slow\n\nPress [^b^4SPECIAL^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
+				if (self.vehicle == VEH_ZUMA)
+					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Zuma^7\n\nSpecial Weapon: Spectral Missile\nSpecial Power: Medium\nHealth: Medium\nSpeed: Fast\n\nPress [^b^4SPECIAL^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 			}
-			self.button4_held = TRUE;
-		}
-		else
-			self.button4_held = FALSE;
-			
+
+			// Scroll through car list
+			if (self.button4)
+			{
+				if (!self.button4_held)
+				{
+					if (self.vehicle == VEH_HOTROD)
+						self.vehicle = VEH_ZUMA;
+					else if (self.vehicle == VEH_ZUMA)
+						self.vehicle = VEH_HOTROD;
+				}
+				self.button4_held = TRUE;
+			}
+			else
+				self.button4_held = FALSE;
+		}	
 		Car_CheckAttach(); // Shove the player in the car
 		if (framecount > 75 && (self.button0 || self.button3) && race_status == RACE_NOTSTARTED)
 		{
