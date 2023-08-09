@@ -162,6 +162,7 @@ void() ForceJump =
 };
 
 void() spawn_car_countdown;
+entity() SelectSpawnSpot;
 .float turbo_fuel_finished;
 .float energy_finished;
 .float button4_held;
@@ -190,15 +191,12 @@ void() PlayerPreThink =
 	if (framecount == 10)
 		Setup_level_effects();
 
-	if (self.observer)
-		return;
-
 	// Force player in car, give greetings message
-	if (!self.driving)
+	if (!self.driving || (self.observer && deathmatch))
 	{
 		if (deathmatch)
 		{
-			if (race_status == RACE_NOTSTARTED)
+			if (race_status == RACE_NOTSTARTED || self.observer)
 			{
 				// Print welcome message
 				if (self.vehicle == VEH_HOTROD)
@@ -223,12 +221,34 @@ void() PlayerPreThink =
 				self.button4_held = FALSE;
 		}	
 		Car_CheckAttach(); // Shove the player in the car
-		if (framecount > 75 && (self.button0 || self.button3) && race_status == RACE_NOTSTARTED)
+		if (framecount > 75 && (self.button0 || self.button3))
 		{
 			centerprint(self, ""); // clear any centerprints
-			spawn_car_countdown(); // Start countdown
-			race_status = RACE_COUNTDOWN;
-			sound (self, CHAN_AUTO, "engine/start.wav", 1, ATTN_NORM);
+			if (race_status == RACE_NOTSTARTED)
+			{
+				spawn_car_countdown(); // Start countdown
+				race_status = RACE_COUNTDOWN;
+				sound (self, CHAN_AUTO, "engine/start.wav", 1, ATTN_NORM);
+			}
+			if (deathmatch && self.observer) // Allow player to join in mid-game
+			{
+				self.observer = FALSE; // important!
+				entity spawn_spot = SelectSpawnSpot();
+				self.origin = spawn_spot.origin;
+
+				// Put car in game
+				if (self.vehicle == VEH_HOTROD)
+					entity car = hotrod();
+				if (self.vehicle == VEH_ZUMA)
+					car = zuma();
+
+				makevectors(self.angles);
+				car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
+				Car_InitVehicle(car);
+				self.spawncar = TRUE;
+				Spawn_RadarBlip(self);
+
+			}
 		}
 	}
 	else
@@ -781,7 +801,7 @@ entity() SelectSpawnSpot =
 
 void() PutClientInServer =
 {
-	local entity spawn_spot = SelectSpawnSpot();
+	entity spawn_spot = SelectSpawnSpot();
 
 	self.classname = "player";
 	self.health = self.max_health = 100;
@@ -852,7 +872,7 @@ void() PutClientInServer =
 			}
 			else
 			{
-				if (!self.spawncar) // Joined mid-deathmatch game, TODO: Add vehicle selection stuff
+				if (!self.spawncar) // Joined mid-deathmatch game, TODO: Add vehicle selection stuff for players
 				{
 					// Bots just randomly select whatever vehicle
 					if (clienttype(self) == CLIENTTYPE_BOT)
@@ -861,12 +881,15 @@ void() PutClientInServer =
 							entity car = hotrod();
 						else
 							car = zuma();
-					}	
-					makevectors(self.angles);
-					car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
-					Car_InitVehicle(car);
-					self.spawncar = TRUE;
-					Spawn_RadarBlip(self);
+						makevectors(self.angles);
+						car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
+						Car_InitVehicle(car);
+						self.spawncar = TRUE;
+						Spawn_RadarBlip(self);
+					}
+					else // Present player with the menu
+						self.observer = TRUE;
+					
 					// Start music on player mid-game join
 					if (world.model == "maps/dm1.bsp")
 						self.music = "sound/music/dm1.ogg";
