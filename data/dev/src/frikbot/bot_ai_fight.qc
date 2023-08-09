@@ -1,5 +1,6 @@
 .float bot_hunttarget_finished;
 .float bot_huntitem_finished;
+float(entity targ) range;
 
 entity() BotGetClosestPlayer =
 {
@@ -131,11 +132,20 @@ void() bot_ai_fight =
 		{
 			if (infront(self.enemy, 0.75))
 			{
-				if (self.ammo_special > 0) // TODO: Add logic for range stuff
+				float rangetest = range(self.enemy);
+				if (self.ammo_special > 0) // Car specific special Weapons
 				{
-					self.weapon = WEP_SPECIAL;
-					self.button4 = TRUE;
-				}
+					if (self.vehicle == VEH_HOTROD && rangetest == RANGE_CLOSE)
+					{
+						self.weapon = WEP_SPECIAL;
+						self.button4 = TRUE;
+					}
+					if (self.vehicle == VEH_ZUMA)
+					{
+						self.weapon = WEP_SPECIAL;
+						self.button4 = TRUE;
+					}
+				} //
 				if (self.ammo_firerocket > 0)
 				{
 					self.weapon = WEP_ROCKET;
@@ -151,7 +161,7 @@ void() bot_ai_fight =
 					self.weapon = WEP_PROCKET;
 					self.button4 = TRUE;
 				}
-				if (self.ammo_napalm > 0) // TODO: Add logic for range stuff
+				if (self.ammo_napalm > 0 && (rangetest == RANGE_CLOSE || rangetest == RANGE_NEAR))
 				{
 					self.weapon = WEP_NAPALM;
 					self.button4 = TRUE;
@@ -161,12 +171,12 @@ void() bot_ai_fight =
 					self.weapon = WEP_RICOCHET;
 					self.button4 = TRUE;
 				}
-				if (self.ammo_remote > 0 || self.plyrremote)
+				if (self.ammo_remote > 0 || self.plyrremote) // TODO: Needs logic on how to use remotes
 				{
 					self.weapon = WEP_REMOTE;
 					self.button4 = TRUE;
 				}
-				if (self.ammo_freeze > 0)
+				if (self.ammo_freeze > 0 && (rangetest == RANGE_CLOSE || rangetest == RANGE_NEAR))
 				{
 					self.weapon = WEP_FREEZE;
 					self.button4 = TRUE;

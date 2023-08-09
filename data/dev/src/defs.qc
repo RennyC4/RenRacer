@@ -238,10 +238,9 @@ float	SOLID_SLIDEBOX			= 3;	// touch on edge, but not an onground
 float	SOLID_BSP				= 4;	// bsp clip, touch on edge, block
 
 // range values
-float	RANGE_CLOSE				= 0;
-float	RANGE_MELEE				= 1;
-float	RANGE_NEAR				= 2;
-float	RANGE_MID				= 3;
+float	RANGE_CLOSE 			= 0;
+float	RANGE_NEAR				= 1;
+float	RANGE_MID				= 2;
 float	RANGE_FAR				= 4;
 
 // deadflag values

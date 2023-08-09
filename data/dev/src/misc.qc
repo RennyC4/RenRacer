@@ -7,8 +7,28 @@
 //+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
 
 //
+// Range - compare distance between two entities
+//
+
+float(entity targ) range =
+{
+	vector spot1 = self.origin;
+	vector spot2 = targ.origin;
+
+	float r = vlen(spot1 - spot2);
+	if (r < 120)
+		return RANGE_CLOSE;
+	if (r < 500)
+		return RANGE_NEAR;
+	if (r < 1000)
+		return RANGE_MID;
+	return RANGE_FAR;
+};
+
+//
 // Intermission / Next map
 //
+
 void() info_intermission = {self.classname = "info_intermission";};
 
 void() GotoNextMap =
