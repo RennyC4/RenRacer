@@ -152,7 +152,7 @@ void() bot_angle_set =
 	{
 		vector view = vectoangles(self.goalentity.origin - self.origin);
 		self.angles_y = view_y;
-		self.angles_x = view_x;
+		self.angles_x = 0;
 		self.angles_z = 0;
 
 		self.v_angle = view;

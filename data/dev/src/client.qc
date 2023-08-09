@@ -338,11 +338,6 @@ void() RespawnPlayer =
 
 void() fire_think =
 {
-	if (self.owner.invulnerable_finished > time || self.owner.onfire_finished < time)
-	{
-		remove(self);
-		return;
-	}
 	if (self.animation_finished < time)
 	{
 		if (self.frame < 9)
@@ -605,6 +600,15 @@ void() PlayerPostThink =
 			spawn_color_glow(3, 1.25, 1, 100, fire1); // dynamic light
 		}
 	}
+	else
+	{
+		if (self.fire)
+		{
+			remove(self.fire);
+			self.fire = world;
+		}
+	}
+	
 	
 	// in ice
 	if (self.frozen_finished > time)
