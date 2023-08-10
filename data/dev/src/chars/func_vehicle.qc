@@ -1,6 +1,6 @@
 .entity frontright, frontleft, backright, backleft;
 entity() hotrod;
-entity() zuma;
+entity() wraith;
 
 void PushAndDamageThink(){
 // RennyC: Disable this

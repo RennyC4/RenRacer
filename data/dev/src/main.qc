@@ -121,8 +121,8 @@ void() worldspawn =
 	precache_model("progs/HotRod_wheel_front_R.mdl");
 	precache_model("progs/HotRod_wheel_rear_R.mdl");
 
-	// zuma
-	precache_model("progs/Zuma_body.mdl");
+	// wraith
+	precache_model("progs/Wraith_body.mdl");
 	precache_model("progs/wheel.mdl");
 
 	//

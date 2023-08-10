@@ -517,12 +517,12 @@ entity() hotrod =
 }
 
 //
-// zuma - car 2
+// wraith - car 2
 //
 
-entity() zuma =
+entity() wraith =
 {
-	self.vehicle = VEH_ZUMA;
+	self.vehicle = VEH_WRAITH;
 	self.health = self.max_health = 90;
 	self.speed = 4000; // also acceleration
 	self.max_speed = 1000;
@@ -530,7 +530,7 @@ entity() zuma =
 	local entity obj, part;
 
 	obj = spawn();
-	obj.netname = "zuma";
+	obj.netname = "wraith";
 	obj.physobj_mass = 1000;
 	obj.physobj_impactevent = PushAndDamageTarget;
 
@@ -540,7 +540,7 @@ entity() zuma =
 	part.owner = obj;
 	part.classname = "phys_static";
 	part.netname = "chassis";
-	part.model = "progs/Zuma_body.mdl";
+	part.model = "progs/Wraith_body.mdl";
 	part.relative_org = '0 0 0';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';

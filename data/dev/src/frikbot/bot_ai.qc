@@ -152,7 +152,13 @@ void() bot_angle_set =
 	{
 		vector view = vectoangles(self.goalentity.origin - self.origin);
 		self.angles_y = view_y;
-		self.angles_x = 0;
+		// Cap X angle: Bots check their X angle for incline vs goalentity crap
+		// at the same time don't allow straight up/down X, this will slow/stop their drive forward velocity
+		if (self.angles_x > 10)
+			self.angles_x = 10;
+		if (self.angles_x < -10)
+			self.angles_x = -10;
+		//
 		self.angles_z = 0;
 
 		self.v_angle = view;
@@ -277,6 +283,9 @@ void() bot_ai_race;
 void() bot_ai_fight;
 .float bot_hitwall;
 
+float stagger_think;
+.float ai_time;
+
 void() BotAI =
 {
 	if (cvar("developer") == 2)
@@ -313,6 +322,17 @@ void() BotAI =
 	{
 		if (!self.bot_hitwall)
 			self.bot_hitwall = FALSE;
+	}
+
+	// stagger the bot's AI out so they all don't think at the same time, causing game spikes
+	if (self.ai_time > time)
+		return;
+
+	//self.ai_time = time + 0.025;
+	if (bot_count > 0)
+	{
+		if ((time - stagger_think) < (0.1 / bot_count))
+			self.ai_time = self.ai_time + 0.1 / (2 * bot_count);
 	}
 
 	if (!deathmatch)

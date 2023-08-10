@@ -201,8 +201,8 @@ void() PlayerPreThink =
 				// Print welcome message
 				if (self.vehicle == VEH_HOTROD)
 					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1HotRod^7\n\nSpecial Weapon: Flame Thrower\nSpecial Power: High\nHealth: High\nSpeed: Slow\n\nPress [^b^4SPECIAL^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
-				if (self.vehicle == VEH_ZUMA)
-					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Zuma^7\n\nSpecial Weapon: Spectral Missile\nSpecial Power: Medium\nHealth: Medium\nSpeed: Fast\n\nPress [^b^4SPECIAL^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
+				if (self.vehicle == VEH_WRAITH)
+					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Wraith^7\n\nSpecial Weapon: Spectral Missile\nSpecial Power: Medium\nHealth: Medium\nSpeed: Fast\n\nPress [^b^4SPECIAL^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 			}
 
 			// Scroll through car list
@@ -211,8 +211,8 @@ void() PlayerPreThink =
 				if (!self.button4_held)
 				{
 					if (self.vehicle == VEH_HOTROD)
-						self.vehicle = VEH_ZUMA;
-					else if (self.vehicle == VEH_ZUMA)
+						self.vehicle = VEH_WRAITH;
+					else if (self.vehicle == VEH_WRAITH)
 						self.vehicle = VEH_HOTROD;
 				}
 				self.button4_held = TRUE;
@@ -239,8 +239,8 @@ void() PlayerPreThink =
 				// Put car in game
 				if (self.vehicle == VEH_HOTROD)
 					entity car = hotrod();
-				if (self.vehicle == VEH_ZUMA)
-					car = zuma();
+				if (self.vehicle == VEH_WRAITH)
+					car = wraith();
 
 				makevectors(self.angles);
 				car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
@@ -856,7 +856,7 @@ void() PutClientInServer =
 		if (random() < 0.5)
 			self.vehicle = VEH_HOTROD;
 		else
-			self.vehicle = VEH_ZUMA;
+			self.vehicle = VEH_WRAITH;
 	}
 	self.player_id = human_players;
 
@@ -884,7 +884,7 @@ void() PutClientInServer =
 						if (random() < 0.5)
 							entity car = hotrod();
 						else
-							car = zuma();
+							car = wraith();
 						makevectors(self.angles);
 						car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
 						Car_InitVehicle(car);

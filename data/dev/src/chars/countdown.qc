@@ -53,8 +53,8 @@ void() countdown_think = // Race start countdown
 			// Put cars in game
 			if (self.vehicle == VEH_HOTROD)
 				entity car = hotrod();
-			if (self.vehicle == VEH_ZUMA)
-				car = zuma();
+			if (self.vehicle == VEH_WRAITH)
+				car = wraith();
 
 			makevectors(targ.angles);
 			car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);

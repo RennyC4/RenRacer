@@ -95,8 +95,9 @@ void() bot_ai_fight =
 	//
 	// Turbo logic (hit player, remove napalm fire, etc)
 	//
-
-	if (self.onfire_finished > time)
+	float rangetest = range(self.goalentity);
+	if (self.goalentity.origin_z > self.origin_z && self.angles_x >= 5 && infront(self.goalentity, 0.7) || (self.onfire_finished > time)
+	|| (infront(self.goalentity, 0.8) && visible(self.goalentity) && self.turbo_fuel > 0 && rangetest != RANGE_CLOSE))
 		self.button0 = TRUE;
 	else
 		self.button0 = FALSE;
@@ -132,7 +133,7 @@ void() bot_ai_fight =
 		{
 			if (infront(self.enemy, 0.75))
 			{
-				float rangetest = range(self.enemy);
+				rangetest = range(self.enemy);
 				if (self.ammo_special > 0) // Car specific special Weapons
 				{
 					if (self.vehicle == VEH_HOTROD && rangetest == RANGE_CLOSE)
@@ -140,7 +141,7 @@ void() bot_ai_fight =
 						self.weapon = WEP_SPECIAL;
 						self.button4 = TRUE;
 					}
-					if (self.vehicle == VEH_ZUMA)
+					if (self.vehicle == VEH_WRAITH)
 					{
 						self.weapon = WEP_SPECIAL;
 						self.button4 = TRUE;

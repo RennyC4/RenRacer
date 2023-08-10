@@ -320,7 +320,7 @@ void() SpecialRegenerate =
 			self.special_regen_finished = time + 80; // regen time
 		}
 	}
-	if (self.vehicle == VEH_ZUMA)
+	if (self.vehicle == VEH_WRAITH)
 	{
 		if (self.ammo_special < 4) // max held
 		{
@@ -1284,7 +1284,7 @@ void() SpecialWeapon_HotRod_Touch =
 			other.owner.driving.onfire_finished = time + 5;
 			other.owner.driving.igniter = self.owner;
 		}
-		self.hitobject_finished = time + 0.5; // how fast to damage, closer to target deals more damage
+		self.hitobject_finished = time + 0.2; // how fast to damage, closer to target deals more damage
 	}
 };
 
@@ -1354,9 +1354,11 @@ void() SpecialWeapon_HotRod_Think =
 	{
 		self.scale = scl + random()*0.5 + sin(time*16)*0.15;
 		self.alpha = 0.9 + sin(time*4)*0.25;
-		if (trace_fraction < 1)
-			setorigin(self, trace_endpos);
-		else
+
+		// RennyC: Uncomment this for HotRod's flame thrower to be stopped by walls/objects, be sure to adjust damage timer
+		//if (trace_fraction < 1)
+		//	setorigin(self, trace_endpos);
+		//else
 			setorigin(self, end);			
 	}
 
@@ -1412,10 +1414,10 @@ void(float rear) SpecialWeapon_HotRod =
 };
 
 //
-// Special Weapon - Zuma (Ghost Rocket)
+// Special Weapon - Wraith (Spectral Missile)
 //
 
-void() SpecialWeapon_Zuma_GetTarget =
+void() SpecialWeapon_Wraith_GetTarget =
 {
 	float bestd = 9999999;
 	entity bestv = world;
@@ -1442,7 +1444,7 @@ void() SpecialWeapon_Zuma_GetTarget =
 	}
 };
 
-void() SpecialWeapon_Zuma_Think =
+void() SpecialWeapon_Wraith_Think =
 {
 	makevectors_mdl(self.angles);
 	if (self.removeme_finished < time)
@@ -1467,12 +1469,12 @@ void() SpecialWeapon_Zuma_Think =
 
 		self.velocity = aim(self, 1000);
 		self.velocity = self.velocity * 1000;
-		self.fixangle = TRUE;
+
 		self.think_finished = time + 0.121;
 		self.cnt = 0;
 	}
 	if (!self.enemy)
-		SpecialWeapon_Zuma_GetTarget();
+		SpecialWeapon_Wraith_GetTarget();
 
 	pointparticles(PART_GROCKET, self.origin, '0 0 0', 1);
 
@@ -1489,7 +1491,7 @@ void() SpecialWeapon_Zuma_Think =
 	frameskip(0.01);
 };
 
-void() SpecialWeapon_Zuma_Touch =
+void() SpecialWeapon_Wraith_Touch =
 {
 	makevectors_mdl(self.angles);
 
@@ -1510,7 +1512,7 @@ void() SpecialWeapon_Zuma_Touch =
 	remove(self);
 };
 
-void(float rear) SpecialWeapon_Zuma =
+void(float rear) SpecialWeapon_Wraith =
 {
 	makevectors (self.realang);
 
@@ -1530,7 +1532,7 @@ void(float rear) SpecialWeapon_Zuma =
 	rocket.alpha = 0.5;
 	rocket.cnt = 0; // zig-zag counter
 	rocket.skin = 1; // white/ghosty skin
-	rocket.touch = SpecialWeapon_Zuma_Touch;
+	rocket.touch = SpecialWeapon_Wraith_Touch;
 
 	rocket.velocity = aim(self, 1000);
 	rocket.velocity = rocket.velocity * 1000;
@@ -1549,7 +1551,7 @@ void(float rear) SpecialWeapon_Zuma =
 	setorigin (rocket, self.origin + v_up * 8 + v_forward * (48 + self.realspeed));
 
 	rocket.removeme_finished = time + 6;
-	rocket.think = SpecialWeapon_Zuma_Think;
+	rocket.think = SpecialWeapon_Wraith_Think;
 	rocket.nextthink = time;
 
 	sound (self, CHAN_WEAPON, "combat/rocket.wav", 1, ATTN_NORM);
@@ -1892,12 +1894,12 @@ void(float type, float rear) CarAttack =
 								SpecialWeapon_HotRod(TRUE);
 						}
 					}
-					if (self.vehicle == VEH_ZUMA) // Zuma special
+					if (self.vehicle == VEH_WRAITH) // Wraith special
 					{
 						if (!rear)
-							SpecialWeapon_Zuma(FALSE);
+							SpecialWeapon_Wraith(FALSE);
 						else
-							SpecialWeapon_Zuma(TRUE);
+							SpecialWeapon_Wraith(TRUE);
 					}
 					self.ammo_special = self.ammo_special - 1;
 				}
