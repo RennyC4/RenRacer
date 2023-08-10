@@ -334,6 +334,7 @@ void() BotAI =
 		if ((time - stagger_think) < (0.1 / bot_count))
 			self.ai_time = self.ai_time + 0.1 / (2 * bot_count);
 	}
+	stagger_think = time;
 
 	if (!deathmatch)
 	{
