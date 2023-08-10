@@ -453,6 +453,29 @@ void(float speed, float maxspeed) Car_Accelerate =
 	}
 };
 
+void(float speed, float maxspeed) Car_Decelerate =
+{
+	entity tright, tleft;
+	maxspeed = maxspeed * -1; // reverse
+
+	if (!self.driving || self.drift) // RennyC
+		return;
+	tleft = self.driving.backleft;
+	tright = self.driving.backright;
+
+	float allowDeccelerateRight = tright.velocity * tright.lmat_forward > maxspeed;
+	float allowDeccelerateLeft = tleft.velocity * tleft.lmat_forward > maxspeed;
+
+	if (allowDeccelerateRight && tright.flags & FL_ONGROUND){
+		tright.physobj_flags = tright.physobj_flags - (tright.physobj_flags & PHFLAGS_RESTING);
+		tright.velocity = tright.velocity - tright.lmat_forward *speed*frametime;
+	}
+	if (allowDeccelerateLeft && tleft.flags & FL_ONGROUND){
+		tleft.physobj_flags = tleft.physobj_flags - (tleft.physobj_flags & PHFLAGS_RESTING);
+		tleft.velocity = tleft.velocity - tleft.lmat_forward *speed*frametime;
+	}
+};
+
 // schpuld: don't use for actual braking, it's hack
 void() Car_Brake =
 {
@@ -614,9 +637,9 @@ void TryUpdateVehicle(){
 		else if (forw < -100){
 			self.keyflags = self.keyflags | KEY_DOWN; // RennyC
 			if (!deathmatch)
-				Car_Accelerate(-2500, 800);
+				Car_Decelerate(2500, 800);
 			else
-				Car_Accelerate(-self.speed - 500, self.max_speed - 200);
+				Car_Decelerate(self.speed, self.max_speed / 2);
 		}
 		else
 		{
