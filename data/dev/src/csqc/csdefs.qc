@@ -2606,6 +2606,8 @@ accessor jsonnode : json_t
 #undef DEP
 #pragma noref 0
 
+float ragewar; /* ssqc global */
+
 // RenRacer
 float framecount;
 float showscores;
@@ -2642,6 +2644,7 @@ float RACE_FINISHED = 4;
 #define STAT_AMMO_FREEZE 53
 #define STAT_PLAYERID 54
 #define STAT_AMMO_SPECIAL 55
+#define SERVER_RAGEWAR 56
 
 #define STAT_INTERMISSION 75
 

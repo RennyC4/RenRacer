@@ -116,7 +116,7 @@ void() marker_think =
 
 void() rally_marker =
 {
-	if (deathmatch)
+	if (ragewar)
 	{
 		remove(self);
 		return;

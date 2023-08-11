@@ -27,6 +27,7 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 
 	framecount = framecount + 1;
 	float intermiss = getstatf(STAT_INTERMISSION);
+	ragewar = getstatf(SERVER_RAGEWAR);
 	local float rs = getstatf(STAT_RACESTATUS); // Game status
 
 	clearscene(); // wipe entity lists, reset view properties to their defaults
@@ -57,10 +58,10 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 		{
 			DrawTurbo(); // Draw Turbo Stats
 			DrawDrift(); // Draw Drift Stats
-			if (!deathmatch)
+			if (!ragewar)
 				DrawTime();  // Draw Lap Time Stats
 			else
-				HUD_Deathmatch(); // Draw ammo, etc
+				HUD_Ragewar(); // Draw ammo, etc
 			DrawSpeed(); // Draw Speed Stats
 
 			// Engine sounds (taken from build a delivery, optimized (thanks spike))

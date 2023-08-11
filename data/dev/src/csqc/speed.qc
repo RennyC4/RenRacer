@@ -1,6 +1,6 @@
 void() DrawSpeed =
 {
-	if (!deathmatch)
+	if (!ragewar)
 		vector pos = [(g_width - stringwidth("", TRUE, '18 18 0'))/12-28, (g_height - 36)];
 	else
 		pos = [(g_width - stringwidth("", TRUE, '18 18 0'))/12-36, (g_height - 16)];

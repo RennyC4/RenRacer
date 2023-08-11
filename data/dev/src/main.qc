@@ -47,6 +47,7 @@ void() CSEv_GrabCSQCValues =
 	clientstat(STAT_AMMO_FREEZE, EV_FLOAT, ammo_freeze);
 	clientstat(STAT_PLAYERID, EV_FLOAT, player_id);
 	clientstat(STAT_AMMO_SPECIAL, EV_FLOAT, ammo_special);
+	globalstat(SERVER_RAGEWAR, EV_FLOAT, "ragewar");
 };
 
 void() world_lights =
@@ -188,13 +189,17 @@ void() worldspawn =
 	load_waypoints(); // Load waypoints
 	CSEv_GrabCSQCValues(); //CSQC Setup
 
-	// new cvars
+	// new cvar stuff
 	registercvar("ragewar", "0"); // ragewar on/off
-	ragewar = cvar("ragewar");
 
-	registercvar("sv_car_physics_steps", "5"); // func_vehicle physics steps, higher is more stable with perf hit
-	if (substring(world.model, -3, 3) == "hmp") // thanks reki
-		cvar_set("sv_car_physics_steps", "1"); // fixes physics steps destroying FPS on heightmap levels
+	registercvar("sv_car_physics_steps", "1"); // func_vehicle physics steps, higher is more stable with perf hit
+	//if (substring(world.model, -3, 3) == "hmp") // thanks reki
+	//	cvar_set("sv_car_physics_steps", "1"); // fixes physics steps destroying FPS on heightmap levels
+
+	if (!ragewar) // only 4 racers max in race mode
+		cvar_set("sv_playerslots", "4");
+	else if (ragewar) // 8 in ragewar max
+		cvar_set("sv_playerslots", "8");
 };
 
 //

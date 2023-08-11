@@ -62,7 +62,6 @@ r_hdr_irisadaptation_maxvalue 1.5 // adjustment value
 r_deluxemapping 0 // needs to be 0 with bumpscale base textures
 r_shadow_shadowmapping 1 // draw shadow maps (stencil is faster however)
 r_dynamic 0 // fixes odd ugly lighting
-sv_playerslots 4 // 4 racers, 1 player + 3 bots
 r_shadows 2 // realtime shadows
 r_coronas 0 // turn off, looks silly with headlights
 musicvolume 0.5

@@ -190,7 +190,7 @@ void(entity targ, entity attacker) Death =
 
 void(entity targ, entity attacker, float damage, string attackerclassname) DoDamage =
 {
-	if (!deathmatch)
+	if (!ragewar)
 		return;
 	if (targ.health < 1)
 		return;
@@ -244,7 +244,7 @@ void(entity targ, entity attacker, float damage, string attackerclassname) DoDam
 
 void(entity attacker, float radius, float damage, float setfire, string attackerclassname, float diminish) DoRadiusDamage =
 {
-	if (!deathmatch)
+	if (!ragewar)
 		return;
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
@@ -1574,7 +1574,7 @@ void(float rear) SpecialWeapon_Wraith =
 
 void() CommandSpecials =
 {
-	if (!deathmatch)
+	if (!ragewar)
 		return;
 	if (race_status != RACE_STARTED)
 		return;
@@ -1693,7 +1693,7 @@ void() CommandSpecials =
 
 void() ChangeWeapon =
 {
-	if (!deathmatch)
+	if (!ragewar)
 		return;
 	if (race_status != RACE_STARTED)
 		return;
@@ -1742,7 +1742,7 @@ void() ChangeWeapon =
 
 void() CycleWeaponForward =
 {
-	if (!deathmatch)
+	if (!ragewar)
 		return;
 	if (race_status != RACE_STARTED)
 		return;
@@ -1799,7 +1799,7 @@ void() CycleWeaponForward =
 
 void() CycleWeaponBackward =
 {
-	if (!deathmatch)
+	if (!ragewar)
 		return;
 	if (race_status != RACE_STARTED)
 		return;
@@ -1860,7 +1860,7 @@ void() CycleWeaponBackward =
 
 void(float type, float rear) CarAttack =
 {
-	if (!deathmatch)
+	if (!ragewar)
 		return;
 	if (race_status != RACE_STARTED)
 		return;

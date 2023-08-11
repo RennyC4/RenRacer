@@ -336,7 +336,7 @@ void() BotAI =
 	}
 	stagger_think = time;
 
-	if (!deathmatch)
+	if (!ragewar)
 	{
 		local vector x = getlight(self.origin);
 		if (world.model == "maps/map4.hmp")
@@ -359,7 +359,7 @@ void() BotAI =
 	else
 	{
 		// bots can start/end matches on empty dedicated servers
-		if (framecount >= 100 && !human_players && deathmatch && race_status != RACE_STARTED)
+		if (framecount >= 100 && !human_players && ragewar && race_status != RACE_STARTED)
 		{
 			if (!self.button0) // don't spam console
 			{
@@ -371,7 +371,7 @@ void() BotAI =
 		// am I dead? Fire randomly until I respawn
 		// health < 1 is used because fractional healths show up as 0 on normal player
 		// status bars, and the mod probably already compensated for that - FrikaC
-		if (self.health < 1 && !intermission_running && race_status == RACE_STARTED && deathmatch) // bot respawn
+		if (self.health < 1 && !intermission_running && race_status == RACE_STARTED && ragewar) // bot respawn
 		{
 			self.button3 = floor(random() * 2);
 			self.button0 = 0;

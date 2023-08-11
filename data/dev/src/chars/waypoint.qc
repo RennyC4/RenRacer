@@ -42,7 +42,7 @@ void(vector org, float which, optional float cnt) create_waypoint =
 
 void() load_waypoints =
 {
-	if (deathmatch)
+	if (ragewar)
 		return;
 
 	if (world.model == "maps/map1.bsp")

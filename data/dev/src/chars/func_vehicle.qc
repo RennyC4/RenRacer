@@ -629,14 +629,14 @@ void TryUpdateVehicle(){
 		float forw = v_forward * self.velocity;
 		if (forw > 100){
 			self.keyflags = self.keyflags | KEY_UP; // RennyC
-			if (!deathmatch)
+			if (!ragewar)
 				Car_Accelerate(3000, 950);
 			else
 				Car_Accelerate(self.speed, self.max_speed);
 		}
 		else if (forw < -100){
 			self.keyflags = self.keyflags | KEY_DOWN; // RennyC
-			if (!deathmatch)
+			if (!ragewar)
 				Car_Decelerate(2500, 800);
 			else
 				Car_Decelerate(self.speed, self.max_speed / 2);
@@ -825,7 +825,7 @@ void TryUpdateVehicle(){
 	}
 	else // RennyC: Race not started, lock tires
 	{
-		if (!deathmatch)
+		if (!ragewar)
 		{
 			f_right.physobj_stiction = 99999;
 			f_left.physobj_stiction = 99999;

@@ -135,7 +135,7 @@ void() rally_goal_proxy_think =
 
 void() rally_startfinish_flag =
 {
-	if (deathmatch)
+	if (ragewar)
 	{
 		remove(self);
 		return;

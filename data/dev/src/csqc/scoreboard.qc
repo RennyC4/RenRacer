@@ -208,7 +208,7 @@ void(vector virtmin, vector virtsize) Hud_Scoreboard =
 
 	players++;
 	players++;
-	if (!deathmatch)
+	if (!ragewar)
 		drawstring(pos+[5,10*players], strconv(0,2,2, "Laps"), [6,6], [1,1,1], 1, 0);
 	else
 		drawstring(pos+[5,10*players], strconv(0,2,2, "Frags"), [6,6], [1,1,1], 1, 0);

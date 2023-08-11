@@ -57,7 +57,7 @@ void() DrawRadar =
 	}
 };
 
-void() HUD_Deathmatch =
+void() HUD_Ragewar =
 {
 	vector pos;
 

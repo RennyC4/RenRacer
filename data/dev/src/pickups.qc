@@ -64,7 +64,7 @@ void() item_health_touch =
 
 void() item_health =
 {
-	if (!deathmatch)
+	if (!ragewar)
 	{
 		remove(self);
 		return;
@@ -118,7 +118,7 @@ void() item_firerocket_touch =
 
 void() item_firerocket =
 {
-	if (!deathmatch)
+	if (!ragewar)
 	{
 		remove(self);
 		return;
@@ -167,7 +167,7 @@ void() item_homingrocket_touch =
 
 void() item_homingrocket =
 {
-	if (!deathmatch)
+	if (!ragewar)
 	{
 		remove(self);
 		return;
@@ -216,7 +216,7 @@ void() item_powerrocket_touch =
 
 void() item_powerrocket =
 {
-	if (!deathmatch)
+	if (!ragewar)
 	{
 		remove(self);
 		return;
@@ -265,7 +265,7 @@ void() item_napalm_touch =
 
 void() item_napalm =
 {
-	if (!deathmatch)
+	if (!ragewar)
 	{
 		remove(self);
 		return;
@@ -314,7 +314,7 @@ void() item_ricochet_touch =
 
 void() item_ricochet =
 {
-	if (!deathmatch)
+	if (!ragewar)
 	{
 		remove(self);
 		return;
@@ -367,7 +367,7 @@ void() item_remote_touch =
 
 void() item_remote =
 {
-	if (!deathmatch)
+	if (!ragewar)
 	{
 		remove(self);
 		return;
@@ -420,7 +420,7 @@ void() item_freeze_touch =
 
 void() item_freeze =
 {
-	if (!deathmatch)
+	if (!ragewar)
 	{
 		remove(self);
 		return;

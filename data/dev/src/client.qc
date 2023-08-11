@@ -20,7 +20,7 @@ void() ClientConnect =
 {
 	if (intermission_running) // a client connecting during an intermission can cause problems
 		GotoNextMap();
-	if (!deathmatch)
+	if (!ragewar)
 		bprint (self.netname, " joined the race!\n");
 	else
 		bprint (self.netname, " has come to hunt!\n");
@@ -45,7 +45,7 @@ void() ClientDisconnect =
 		bprint (self.netname, " stopped observing\n");
 	else
 	{
-		if (!deathmatch)
+		if (!ragewar)
 			bprint (self.netname, " has retired!\n");
 		else
 			bprint (self.netname, " has chickened out with ", ftos(self.frags), " frags!\n");
@@ -210,9 +210,9 @@ void() PlayerPreThink =
 		Setup_level_effects();
 
 	// Force player in car, give greetings message
-	if (!self.driving || (self.observer && deathmatch))
+	if (!self.driving || (self.observer && ragewar))
 	{
-		if (deathmatch)
+		if (ragewar)
 		{
 			if (race_status == RACE_NOTSTARTED || self.observer)
 			{
@@ -245,7 +245,7 @@ void() PlayerPreThink =
 				race_status = RACE_COUNTDOWN;
 				sound (self, CHAN_AUTO, "engine/start.wav", 1, ATTN_NORM);
 			}
-			if (deathmatch && self.observer) // Allow player to join in mid-game
+			if (ragewar && self.observer) // Allow player to join in mid-game
 			{
 				self.observer = FALSE; // important!
 				entity spawn_spot = SelectSpawnSpot();
@@ -425,7 +425,7 @@ void() PlayerPostThink =
 		self.forcejump = FALSE;
 	}
 
-	if (!deathmatch) // racing
+	if (!ragewar) // racing
 	{
 		if (self.ishuman && race_status == RACE_STARTED && self.driving) // Player snail trail waypoint
 		{
@@ -462,7 +462,7 @@ void() PlayerPostThink =
 			}
 		}
 	}
-	else // deathmatch
+	else // ragewar
 	{
 		if (self.health > 0)
 		{
@@ -550,7 +550,7 @@ void() PlayerPostThink =
 		self.waterlevel = 0;
 
 	// EF_BRIGHTFIELD effects handler
-	if (!deathmatch)
+	if (!ragewar)
 	{
 		if (self.waterlevel > 0)
 			self.effects |= EF_BRIGHTFIELD;
@@ -572,7 +572,7 @@ void() PlayerPostThink =
 			self.onfire_finished = time; // water removes napalm/fire
 	}
 
-	if (self.driving && deathmatch && self.health > 0 && self.invulnerable_finished < time && race_status == RACE_STARTED)
+	if (self.driving && ragewar && self.health > 0 && self.invulnerable_finished < time && race_status == RACE_STARTED)
 	{
 		if (self.button3)
 			CarAttack(0, FALSE);
@@ -751,7 +751,7 @@ entity() SelectSpawnSpot =
 	local	entity thing;
 	local	float  pcount;
 
-	if (!deathmatch)
+	if (!ragewar)
 	{
 		while (1)
 		{
@@ -877,25 +877,16 @@ void() PutClientInServer =
 
 	if (cvar("developer") != 1)
 	{
-		/*
-		if (race_status == RACE_NOTSTARTED)
-		{
-			if (!deathmatch)
-				centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________\n\n\nPress [^b^1FIRE^7^b] to start the race");
-		}
-		*/
-//		else
-
 		if (race_status != RACE_NOTSTARTED)
 		{
-			if (!deathmatch) // race is on, shove new player as observer
+			if (!ragewar) // race is on, shove new player as observer
 			{
 				if (clienttype(self) == CLIENTTYPE_REAL)
 					self.observer = TRUE;
 			}
 			else
 			{
-				if (!self.spawncar) // Joined mid-deathmatch game, TODO: Add vehicle selection stuff for players
+				if (!self.spawncar) // Joined mid-ragewar game, TODO: Add vehicle selection stuff for players
 				{
 					// Bots just randomly select whatever vehicle
 					if (clienttype(self) == CLIENTTYPE_BOT)
@@ -922,4 +913,7 @@ void() PutClientInServer =
 			}
 		}
 	}
+
+	// grab ragewar from server
+	ragewar = cvar("ragewar");
 };

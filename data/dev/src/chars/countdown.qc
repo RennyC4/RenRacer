@@ -8,20 +8,20 @@ void(float type) countdown_announce =
 	{
 		if (!type)
 		{
-			if (!deathmatch)
+			if (!ragewar)
 				centerprint (targ, "/PRACE STARTS IN\n\n[^1^b", f, "^b^7]\n");
 			else
 				centerprint (targ, "/PRAGE WAR STARTS IN\n\n[^1^b", f, "^b^7]\n");
 		}
 		else
 		{
-			if (!deathmatch)
+			if (!ragewar)
 				centerprint (targ, "^1! GO GO GO !\n");
 			else
 				centerprint (targ, "^1! KILL KILL KILL !\n");
 			if (!runonce)
 			{
-				if (!deathmatch)
+				if (!ragewar)
 					bprint ("Race Started!\n");
 				else
 					bprint ("Rage War Begins!\n");
@@ -45,7 +45,7 @@ void() countdown_think = // Race start countdown
 			entity oself = self;
 			self = targ;
 
-			if (human_players == 1 && !deathmatch && !self.bots_loaded)
+			if (human_players == 1 && !ragewar && !self.bots_loaded)
 			{
 				BotConnect();
 				self.bots_loaded = TRUE;
@@ -77,21 +77,21 @@ void() countdown_think = // Race start countdown
 		{
 			if (countdown_count == 3)
 			{
-				if (!deathmatch)
+				if (!ragewar)
 					sound (self, CHAN_AUTO, "3.wav", 1, ATTN_NONE);
 				else
 					sound (self, CHAN_AUTO, "combat/rw3.wav", 1, ATTN_NONE);
 			}
 			if (countdown_count == 2)
 			{
-				if (!deathmatch)
+				if (!ragewar)
 					sound (self, CHAN_AUTO, "2.wav", 1, ATTN_NONE);
 				else
 					sound (self, CHAN_AUTO, "combat/rw2.wav", 1, ATTN_NONE);
 			}
 			if (countdown_count == 1)
 			{
-				if (!deathmatch)
+				if (!ragewar)
 					sound (self, CHAN_AUTO, "1.wav", 1, ATTN_NONE);
 				else
 					sound (self, CHAN_AUTO, "combat/rw1.wav", 1, ATTN_NONE);
@@ -101,13 +101,13 @@ void() countdown_think = // Race start countdown
 		}
 		else
 		{
-			if (!deathmatch)
+			if (!ragewar)
 				sound (self, CHAN_AUTO, "gogo.wav", 1, ATTN_NONE);
 			else
 				sound (self, CHAN_AUTO, "combat/killkill.wav", 1, ATTN_NONE);				
 			countdown_announce(1);
 			race_status = RACE_STARTED;
-			if (deathmatch) // Start deathmatch music on round start
+			if (ragewar) // Start ragewar music on round start
 			{
 				if (world.model == "maps/dm1.bsp")
 					self.music = "sound/music/dm1.ogg";
