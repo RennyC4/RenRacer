@@ -1446,49 +1446,54 @@ void() SpecialWeapon_Wraith_GetTarget =
 
 void() SpecialWeapon_Wraith_Think =
 {
-	makevectors_mdl(self.angles);
-	if (self.removeme_finished < time)
-	{
-		CreateExplosion(self.origin);
-		Create2DExplosion(self.origin, 2);
-		remove(self);
-		return;
-	}
+    if (self.removeme_finished < time)
+    {
+        CreateExplosion(self.origin);
+        Create2DExplosion(self.origin, 2);
+        remove(self);
+        return;
+    }
 
-	if (self.cnt >= 20) // zig-zag
-	{
-		if (random() < 0.5)
-			self.angles_y = self.angles_y + random()*90;
-		else
-			self.angles_y = self.angles_y - random()*90;
+    if (self.cnt >= 20) // zig-zag
+    {
+		makevectors_mdl(self.angles);
 
-		if (random() < 0.2)
-			self.angles_x = self.angles_x + random()*15;
-		else
-			self.angles_x = 0;
+		vector newyaw = self.angles;
+		vector newheight = self.angles;
+		vector thespeed = v_forward * 1000;
 
-		self.velocity = aim(self, 1000);
-		self.velocity = self.velocity * 1000;
+		newyaw_y = ceil(45 + random()*315);
+        if (random() < 0.5)
+			newyaw_y = newyaw_y * -1;
 
-		self.think_finished = time + 0.121;
-		self.cnt = 0;
-	}
-	if (!self.enemy)
-		SpecialWeapon_Wraith_GetTarget();
+		newheight_x = ceil(90 + random()*90);
+        if (random() < 0.5)
+			newheight_x = newheight_x * -1;
 
-	pointparticles(PART_GROCKET, self.origin, '0 0 0', 1);
+		newheight = v_up * newheight_x;
 
-	if (self.enemy) // Home in on enemy
-	{
-		if (self.think_finished < time)
-		{
-			vector dir = normalize(self.enemy.origin - self.origin);
-			self.velocity = dir * 1000;
-			self.angles = vectoangles(self.velocity);
-		}
-	}
-	self.cnt = self.cnt + 1;
-	frameskip(0.01);
+		self.velocity = thespeed + newyaw + newheight;
+		self.angles = vectoangles(self.velocity);
+
+        self.think_finished = time + 0.121;
+        self.cnt = 0;
+    }
+    if (!self.enemy)
+        SpecialWeapon_Wraith_GetTarget();
+
+    pointparticles(PART_GROCKET, self.origin, '0 0 0', 1);
+
+    if (self.enemy) // Home in on enemy
+    {
+        if (self.think_finished < time)
+        {
+            vector dir = normalize(self.enemy.origin - self.origin);
+            self.velocity = dir * 1000;
+            self.angles = vectoangles(self.velocity);
+        }
+    }
+    self.cnt = self.cnt + 1;
+    frameskip(0.01);
 };
 
 void() SpecialWeapon_Wraith_Touch =
