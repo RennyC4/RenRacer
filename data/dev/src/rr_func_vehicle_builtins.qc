@@ -13,7 +13,7 @@ entity() hotrod =
 
 	obj = spawn();
 	obj.netname = "hotrod";
-	obj.physobj_mass = 1000;
+	obj.physobj_mass = 9000;
 	obj.physobj_impactevent = PushAndDamageTarget;
 
 	part = spawn();
@@ -531,7 +531,7 @@ entity() wraith =
 
 	obj = spawn();
 	obj.netname = "wraith";
-	obj.physobj_mass = 1000;
+	obj.physobj_mass = 9000;
 	obj.physobj_impactevent = PushAndDamageTarget;
 
 	part = spawn();
