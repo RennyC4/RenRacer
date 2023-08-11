@@ -191,9 +191,9 @@ void() worldspawn =
 	// new cvar stuff
 	registercvar("ragewar", "0"); // ragewar on/off
 
-	registercvar("sv_car_physics_steps", "1"); // func_vehicle physics steps, higher is more stable with perf hit
-	//if (substring(world.model, -3, 3) == "hmp") // thanks reki
-	//	cvar_set("sv_car_physics_steps", "1"); // fixes physics steps destroying FPS on heightmap levels
+	registercvar("sv_car_physics_steps", "3"); // func_vehicle physics steps, higher is more stable with perf hit
+	if (substring(world.model, -3, 3) == "hmp") // thanks reki
+		cvar_set("sv_car_physics_steps", "1"); // fixes physics steps destroying FPS on heightmap levels
 
 	if (!ragewar) // only 4 racers max in race mode
 		cvar_set("sv_playerslots", "4");
