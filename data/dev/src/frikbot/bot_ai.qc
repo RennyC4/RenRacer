@@ -296,19 +296,19 @@ void() BotAI =
 	makevectors(self.realang);
 	float test1, test2, test3;
 	float distance = 8;
-	vector start = self.origin + v_forward * 50;
+	vector start = self.origin + v_forward * 50 - v_up * 16;
 
 	// Center trace
 	vector end = start + (v_forward * distance);
 	traceline (start, end, TRUE, self);
 	if (trace_fraction < 1)	test1 = TRUE; // hit
-	else					test2 = FALSE;
+	else					test1 = FALSE;
 
 	// Right trace
 	end = start + (v_forward * distance) + v_right * 16;
 	traceline (start, end, TRUE, self);
 	if (trace_fraction < 1)	test2 = TRUE; // hit
-	else					test1 = FALSE;
+	else					test2 = FALSE;
 
 	// Left trace
 	end = start + (v_forward * distance) - v_right * 16;
@@ -328,7 +328,7 @@ void() BotAI =
 	if (self.ai_time > time)
 		return;
 
-	//self.ai_time = time + 0.025;
+	//self.ai_time = time + 0.05;
 	if (bot_count > 0)
 	{
 		if ((time - stagger_think) < (0.1 / bot_count))

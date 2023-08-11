@@ -792,7 +792,7 @@ void() Napalm_Think =
 		ph = ph * (1/25); // increase seceond number for less homing capability
 
 		self.velocity = normalize(vels + ph);
-		self.velocity = self.velocity * 350;
+		self.velocity = self.velocity * 550;
 	}
 
 	frameskip(0.01);

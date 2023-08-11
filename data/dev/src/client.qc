@@ -514,7 +514,7 @@ void() PlayerPostThink =
 					else
 					{
 						centerprint(self, "/P^1^b!!! YOU'RE DEAD !!!^7^b\n\n\nPress [^1^bFire^b^7] to Respawn\n");
-						if (self.button0 || self.button3 || self.button4)
+						if (self.button3 || self.button4)
 							RespawnPlayer();
 					}
 					self.deathcount_finished = time + 0.1;

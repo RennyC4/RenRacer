@@ -136,12 +136,12 @@ void() bot_ai_fight =
 				rangetest = range(self.enemy);
 				if (self.ammo_special > 0) // Car specific special Weapons
 				{
-					if (self.vehicle == VEH_HOTROD && rangetest == RANGE_CLOSE)
+					if (self.vehicle == VEH_HOTROD && rangetest == RANGE_CLOSE && !self.waterlevel)
 					{
 						self.weapon = WEP_SPECIAL;
 						self.button4 = TRUE;
 					}
-					if (self.vehicle == VEH_WRAITH)
+					if (self.vehicle == VEH_WRAITH && rangetest != RANGE_FAR)
 					{
 						self.weapon = WEP_SPECIAL;
 						self.button4 = TRUE;
