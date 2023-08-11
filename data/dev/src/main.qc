@@ -199,6 +199,9 @@ void() worldspawn =
 		cvar_set("sv_playerslots", "4");
 	else if (ragewar) // 8 in ragewar max
 		cvar_set("sv_playerslots", "8");
+	
+	// needed for ragewar items to spawn
+	ragewar = cvar("ragewar");
 };
 
 //
