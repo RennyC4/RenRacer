@@ -398,6 +398,7 @@ float	modelindex_player;
 // RenRacer
 float framecount;
 entity lastspawn;
+float ragewar;
 
 float race_status; // Other game modes also use this
 float RACE_NOTSTARTED = 0;

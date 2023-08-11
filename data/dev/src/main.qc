@@ -189,6 +189,9 @@ void() worldspawn =
 	CSEv_GrabCSQCValues(); //CSQC Setup
 
 	// new cvars
+	registercvar("ragewar", "0"); // ragewar on/off
+	ragewar = cvar("ragewar");
+
 	registercvar("sv_car_physics_steps", "5"); // func_vehicle physics steps, higher is more stable with perf hit
 	if (substring(world.model, -3, 3) == "hmp") // thanks reki
 		cvar_set("sv_car_physics_steps", "1"); // fixes physics steps destroying FPS on heightmap levels

@@ -161,11 +161,29 @@ void() ForceJump =
 	}
 };
 
+.float button4_held;
+void() AllowSwapCar =
+{
+	// Scroll through car list
+	if (self.button4)
+	{
+		if (!self.button4_held)
+		{
+			if (self.vehicle == VEH_HOTROD)
+				self.vehicle = VEH_WRAITH;
+			else if (self.vehicle == VEH_WRAITH)
+				self.vehicle = VEH_HOTROD;
+		}
+		self.button4_held = TRUE;
+	}
+	else
+		self.button4_held = FALSE;
+};
+
 void() spawn_car_countdown;
 entity() SelectSpawnSpot;
 .float turbo_fuel_finished;
 .float energy_finished;
-.float button4_held;
 void() PlayerPreThink = 
 {
 	if (cvar("developer") == 1) // Coord/Angle reporting, helps insert entities in hmp maps
@@ -204,22 +222,19 @@ void() PlayerPreThink =
 				if (self.vehicle == VEH_WRAITH)
 					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Wraith^7\n\nSpecial Weapon: Spectral Missile\nSpecial Power: Medium\nHealth: Medium\nSpeed: Fast\n\nPress [^b^4SPECIAL^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 			}
-
-			// Scroll through car list
-			if (self.button4)
+			AllowSwapCar();
+		}
+		else if (!self.observer)
+		{
+			if (race_status == RACE_NOTSTARTED)
 			{
-				if (!self.button4_held)
-				{
-					if (self.vehicle == VEH_HOTROD)
-						self.vehicle = VEH_WRAITH;
-					else if (self.vehicle == VEH_WRAITH)
-						self.vehicle = VEH_HOTROD;
-				}
-				self.button4_held = TRUE;
+				if (self.vehicle == VEH_HOTROD)
+					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1HotRod^7\n\nPress [^b^4SPECIAL^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
+				if (self.vehicle == VEH_WRAITH)
+					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1Wraith^7\n\nPress [^b^4SPECIAL^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
 			}
-			else
-				self.button4_held = FALSE;
-		}	
+			AllowSwapCar();
+		}
 		Car_CheckAttach(); // Shove the player in the car
 		if (framecount > 75 && (self.button0 || self.button3))
 		{
@@ -862,12 +877,16 @@ void() PutClientInServer =
 
 	if (cvar("developer") != 1)
 	{
+		/*
 		if (race_status == RACE_NOTSTARTED)
 		{
 			if (!deathmatch)
 				centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________\n\n\nPress [^b^1FIRE^7^b] to start the race");
 		}
-		else
+		*/
+//		else
+
+		if (race_status != RACE_NOTSTARTED)
 		{
 			if (!deathmatch) // race is on, shove new player as observer
 			{
