@@ -194,16 +194,6 @@ void() Car_ChassiThink =
 	}
 };
 
-#if defined(SMOOTH)
-void() DriverThink =
-{
-	self.angles = vectoangles2(self.lmat_forward, self.lmat_up);
-	setorigin(self, self.view_ofs);
-
-	self.nextthink = time + 0.1;
-};
-#endif
-
 vector() Car_SpringyOrigin;
 
 entity FindStaticOfName(string name, entity obj){
@@ -294,13 +284,6 @@ void(entity car) Car_InitVehicle =
 //				e.modelindex = 0;
 //			}
 //		}
-#if defined(SMOOTH)
-		else if (e.netname == "driver")
-		{
-			e.think = DriverThink;
-			e.nextthink = time;
-		}
-#endif
 		e = e.physobj_next;
 	}
 };
@@ -1145,7 +1128,6 @@ void() vehicle_hotrod =
 
 	precache_model("progs/HotRod_body.mdl");
 	precache_model("progs/HotRod_roof.mdl");
-	precache_model("progs/HotRod_player_driver.mdl");
 	precache_model("progs/HotRod_wheel_front_L.mdl");
 	precache_model("progs/HotRod_wheel_rear_L.mdl");
 	precache_model("progs/HotRod_wheel_front_R.mdl");

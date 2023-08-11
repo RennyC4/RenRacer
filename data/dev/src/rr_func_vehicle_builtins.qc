@@ -13,7 +13,7 @@ entity() hotrod =
 
 	obj = spawn();
 	obj.netname = "hotrod";
-	obj.physobj_mass = 9000;
+	obj.physobj_mass = 1000; // RennyC: This is used for car collision stuff, doesn't affect RenRacer
 	obj.physobj_impactevent = PushAndDamageTarget;
 
 	part = spawn();
@@ -39,19 +39,6 @@ entity() hotrod =
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
-
-	part = spawn();
-	part.physobj_next = obj.physobj_staticlist;
-	obj.physobj_staticlist = part;
-	part.owner = obj;
-	part.classname = "phys_static";
-	part.netname = "driver";
-	part.model = "progs/HotRod_player_driver.mdl";
-	part.relative_org = '0 0 0';
-	part.relative_forward = '1 0 0';
-	part.relative_left = '0 1 0';
-	part.relative_up = '0 0 1';
-	part.colormap = self.colormap; // RennyC
 
 	// frontleft
 	part = spawn();
@@ -531,7 +518,7 @@ entity() wraith =
 
 	obj = spawn();
 	obj.netname = "wraith";
-	obj.physobj_mass = 9000;
+	obj.physobj_mass = 1000; // RennyC: This is used for car collision stuff, doesn't affect RenRacer
 	obj.physobj_impactevent = PushAndDamageTarget;
 
 	part = spawn();

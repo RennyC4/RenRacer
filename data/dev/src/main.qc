@@ -116,7 +116,6 @@ void() worldspawn =
 	// hotrod
 	precache_model("progs/HotRod_body.mdl");
 	precache_model("progs/HotRod_roof.mdl");
-	precache_model("progs/HotRod_player_driver.mdl");
 	precache_model("progs/HotRod_wheel_front_L.mdl");
 	precache_model("progs/HotRod_wheel_rear_L.mdl");
 	precache_model("progs/HotRod_wheel_front_R.mdl");
