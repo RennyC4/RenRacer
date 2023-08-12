@@ -161,25 +161,6 @@ void() ForceJump =
 	}
 };
 
-.float button4_held;
-void() AllowSwapCar =
-{
-	// Scroll through car list
-	if (self.button4)
-	{
-		if (!self.button4_held)
-		{
-			if (self.vehicle == VEH_HOTROD)
-				self.vehicle = VEH_WRAITH;
-			else if (self.vehicle == VEH_WRAITH)
-				self.vehicle = VEH_HOTROD;
-		}
-		self.button4_held = TRUE;
-	}
-	else
-		self.button4_held = FALSE;
-};
-
 void() spawn_car_countdown;
 entity() SelectSpawnSpot;
 .float turbo_fuel_finished;
@@ -218,25 +199,23 @@ void() PlayerPreThink =
 			{
 				// Print welcome message
 				if (self.vehicle == VEH_HOTROD)
-					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1HotRod^7\n\nSpecial Weapon: Flame Thrower\nSpecial Power: High\nHealth: High\nSpeed: Slow\n\nPress [^b^4SPECIAL^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
+					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1HotRod^7\nSpecial Weapon: ^5Flame Thrower^7\n\nSpecial Power: [**** ]\nArmor: [**** ]\nSpeed: [**   ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 				if (self.vehicle == VEH_WRAITH)
-					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Wraith^7\n\nSpecial Weapon: Spectral Missile\nSpecial Power: Medium\nHealth: Medium\nSpeed: Fast\n\nPress [^b^4SPECIAL^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
+					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Wraith^7\nSpecial Weapon: ^5Spectral Missile^7\n\nSpecial Power: [**   ]\nArmor: [**   ]\nSpeed: [**** ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 			}
-			AllowSwapCar();
 		}
 		else if (!self.observer)
 		{
 			if (race_status == RACE_NOTSTARTED)
 			{
 				if (self.vehicle == VEH_HOTROD)
-					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1HotRod^7\n\nPress [^b^4SPECIAL^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
+					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1HotRod^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
 				if (self.vehicle == VEH_WRAITH)
-					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1Wraith^7\n\nPress [^b^4SPECIAL^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
+					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1Wraith^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
 			}
-			AllowSwapCar();
 		}
 		Car_CheckAttach(); // Shove the player in the car
-		if (framecount > 75 && (self.button0 || self.button3))
+		if (framecount > 75 && (self.button0 || self.button3 || self.button4))
 		{
 			centerprint(self, ""); // clear any centerprints
 			if (race_status == RACE_NOTSTARTED)

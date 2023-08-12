@@ -8,16 +8,54 @@
 +=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
 */
 
+void() CarSwap_Forward =
+{
+	if (self.vehicle == VEH_HOTROD)
+		self.vehicle = VEH_WRAITH;
+	else if (self.vehicle == VEH_WRAITH)
+		self.vehicle = VEH_HOTROD;
+};
+
+void() CarSwap_Backward =
+{
+	if (self.vehicle == VEH_WRAITH)
+		self.vehicle = VEH_HOTROD;
+	else if (self.vehicle == VEH_HOTROD)
+		self.vehicle = VEH_WRAITH;
+};
+
 void() CheckImpulses =
 {
 	if (self.impulse >= 1 && self.impulse <= 8)
 		ChangeWeapon();
 	if (self.impulse == 100)
 		headlights_toggle();
+
+	// Weapon / Car select cycle
 	if (self.impulse == 10)
-		CycleWeaponForward();
+	{
+		if (ragewar)
+		{
+			CycleWeaponForward();
+			if (race_status == RACE_NOTSTARTED || self.observer)
+				CarSwap_Forward();
+			else
+				CycleWeaponForward();
+		}
+	}
 	if (self.impulse == 11)
-		CycleWeaponBackward();
+	{
+		if (ragewar)
+		{
+			CycleWeaponBackward();
+			if (race_status == RACE_NOTSTARTED || self.observer)
+				CarSwap_Backward();
+			else
+				CycleWeaponForward();
+		}
+	}
+	//
+
 	if (self.impulse == 20)
 		BotConnect();
 	if (self.impulse == 21) // Remove bots
