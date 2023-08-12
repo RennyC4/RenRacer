@@ -47,7 +47,7 @@ s_al_use_reverb 0
 cl_lerp_driftfrac 1
 seta m_preset_chosen 1
 snd_ignoregamespeed 1
-//r_coronas_occlusion 1 // fix flicker corona effect
+r_coronas_occlusion 1 // fix flicker corona effect
 r_sprite_backfacing 1 // oriented sprite fix
 r_keepimages 1 // skybox fix
 cfg_save_auto 1 // fte auto saves configs after certain times
@@ -63,7 +63,7 @@ r_deluxemapping 0 // needs to be 0 with bumpscale base textures
 r_shadow_shadowmapping 1 // draw shadow maps (stencil is faster however)
 r_dynamic 0 // fixes odd ugly lighting
 r_shadows 2 // realtime shadows
-r_coronas 0 // turn off, looks silly with headlights
+r_coronas 1
 musicvolume 0.5
 sv_gravity 1200 // feels best
 sv_autooffload 0 // 1 = smoother performance? judderfest

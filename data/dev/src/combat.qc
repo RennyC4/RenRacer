@@ -1538,6 +1538,9 @@ void(float rear) SpecialWeapon_Wraith =
 	rocket.cnt = 0; // zig-zag counter
 	rocket.skin = 1; // white/ghosty skin
 	rocket.touch = SpecialWeapon_Wraith_Touch;
+	rocket.pflags = PFLAGS_FULLDYNAMIC | PFLAGS_CORONA;
+	rocket.color = [1, 1, 1];
+	rocket.light_lev = 250;
 
 	rocket.velocity = aim(self, 1000);
 	rocket.velocity = rocket.velocity * 1000;
