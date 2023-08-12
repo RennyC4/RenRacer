@@ -1574,6 +1574,8 @@ void(float rear) SpecialWeapon_Wraith =
 .float cmdspecial_rear_step_finished;
 .float cmdspecial_landmine_step;
 .float cmdspecial_landmine_step_finished;
+.float cmdspecial_freezeburst_step;
+.float cmdspecial_freezeburst_step_finished;
 
 void() CommandSpecials =
 {
@@ -1662,12 +1664,12 @@ void() CommandSpecials =
 	//
 	// Landmine: Right, Left, Down
 	//
-	if (self.moveprog4 == 1) // User pressed left
+	if (self.moveprog4 == 1) // User pressed Right
 	{
 		self.cmdspecial_landmine_step = 1;
 		self.cmdspecial_landmine_step_finished = time + 0.2;
 	}
-	if (self.cmdspecial_landmine_step == 1 && self.moveprog3 == 1) // User pressed right
+	if (self.cmdspecial_landmine_step == 1 && self.moveprog3 == 1) // User pressed left
 	{
 		self.cmdspecial_landmine_step = 2;
 		self.cmdspecial_landmine_step_finished = time + 0.2;
@@ -1686,6 +1688,36 @@ void() CommandSpecials =
 	{
 		if (self.cmdspecial_landmine_step_finished < time)
 			self.cmdspecial_landmine_step = 0;
+	}
+	//
+	
+	//
+	// Freeze Blast: Left, Right, Up
+	//
+	if (self.moveprog3 == 1) // User pressed left
+	{
+		self.cmdspecial_freezeburst_step = 1;
+		self.cmdspecial_freezeburst_step_finished = time + 0.2;
+	}
+	if (self.cmdspecial_freezeburst_step == 1 && self.moveprog4 == 1) // User pressed right
+	{
+		self.cmdspecial_freezeburst_step = 2;
+		self.cmdspecial_freezeburst_step_finished = time + 0.2;
+	}
+	if (self.cmdspecial_freezeburst_step == 2 && self.moveprog1 == 1 && self.energy >= 80) // Hit last step, user hit down
+	{
+		self.energy = self.energy - 80;
+		sprint (self, "^2Command: ");
+		sprint (self, "^7Freeze Blast\n");
+		Fire_Freeze(FALSE);
+		self.cmdspecial_freezeburst_step = 0;
+		self.commandspcl_finished = time + 1;
+		return;
+	}
+	if (self.cmdspecial_freezeburst_step > 0)
+	{
+		if (self.cmdspecial_freezeburst_step_finished < time)
+			self.cmdspecial_freezeburst_step = 0;
 	}
 	//
 };

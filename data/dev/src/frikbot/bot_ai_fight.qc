@@ -1,6 +1,7 @@
 .float bot_hunttarget_finished;
 .float bot_huntitem_finished;
 float(entity targ) range;
+void(float rear) Fire_Freeze;
 
 entity() BotGetClosestPlayer =
 {
@@ -129,11 +130,17 @@ void() bot_ai_fight =
 
 	if (self.goalentity || self.enemy)
 	{
-		if (visible(self.enemy) && self.enemy.cloak_finished < time && self.enemy.invulnerable_finished < time)
+		if (visible(self.enemy) && self.enemy.cloak_finished < time && self.enemy.invulnerable_finished < time && self.frozen_finished < time)
 		{
 			if (infront(self.enemy, 0.75))
 			{
 				rangetest = range(self.enemy);
+				// AI Special Command moves
+				if (self.energy >= 80 && (rangetest == RANGE_NEAR || rangetest == RANGE_CLOSE) && random() < 0.05)
+				{
+					Fire_Freeze(FALSE);
+					self.energy = self.energy - 80;
+				}
 				if (self.ammo_special > 0) // Car specific special Weapons
 				{
 					if (self.vehicle == VEH_HOTROD && rangetest == RANGE_CLOSE && !self.waterlevel)

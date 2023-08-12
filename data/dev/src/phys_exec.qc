@@ -129,7 +129,7 @@ void(entity targ) Phys_CheckStatus =
 			part.physobj_flags = part.physobj_flags - (part.physobj_flags & PHFLAGS_RESTING);
 		}
 
-		part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
+		part.hitcontentsmaski = CONTENTBIT_BODY|CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
 		part.dimension_hit = player_dimension_hit; // RennyC: Disable player collisions
 		part.dimension_solid = player_dimension_solid; // RennyC: Disable player collisions
 		//tracebox(part.origin, part.mins, part.maxs, part.origin, TRUE, part);
@@ -156,7 +156,7 @@ void(entity targ) Phys_CheckStatus =
 				{
 					if (stick.physobj_p2.relative_size >= stick.physobj_p1.relative_size)
 					{
-						stick.physobj_p2.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
+						stick.physobj_p2.hitcontentsmaski = CONTENTBIT_BODY|CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
 						stick.dimension_hit = player_dimension_hit; // RennyC: Disable player collisions
 						stick.dimension_solid = player_dimension_solid; // RennyC: Disable player collisions
 
@@ -179,7 +179,7 @@ void(entity targ) Phys_CheckStatus =
 				{
 					if (stick.physobj_p1.relative_size >= stick.physobj_p2.relative_size)
 					{
-						stick.physobj_p1.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
+						stick.physobj_p1.hitcontentsmaski = CONTENTBIT_BODY|CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
 						stick.dimension_hit = player_dimension_hit; // RennyC: Disable player collisions
 						stick.dimension_solid = player_dimension_solid; // RennyC: Disable player collisions
 						traceline(stick.physobj_p1.origin, stick.physobj_p2.origin, FALSE, stick.physobj_p1);
@@ -249,7 +249,7 @@ void(float ftime, float sv_gravity) Phys_Acceleration =
 	part = self.physobj_particlelist;
 	while(part)
 	{
-		part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
+		part.hitcontentsmaski = CONTENTBIT_BODY|CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
 		part.dimension_hit = player_dimension_hit; // RennyC: Disable player collisions
 		part.dimension_solid = player_dimension_solid; // RennyC: Disable player collisions
 		Particle_CheckOnGround(part);
@@ -437,7 +437,7 @@ void(entity part, float ftime) Particle_Friction =
 			part.velocity = part.velocity - part.lmat_up*vlen(part.velocity)*(normalize(part.velocity)*part.lmat_up)*part.physobj_friction_ground_z*2*ftime;//(1+dot)*ftime;
 		//print(ftos(vlen(part.lmat_up*vlen(part.velocity)*(normalize(part.velocity)*part.lmat_up)*part.physobj_friction_ground_z*(1+dot)*ftime)), "\n");
 	}
-	part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
+	part.hitcontentsmaski = CONTENTBIT_BODY|CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
 	part.dimension_hit = player_dimension_hit; // RennyC: Disable player collisions
 	part.dimension_solid = player_dimension_solid; // RennyC: Disable player collisions
 	traceline(part.origin, part.origin, TRUE, part);
@@ -505,7 +505,7 @@ void(float ftime) Phys_Move =
 		stuck = FALSE;
 		t = ftime;
 		test_org = part.origin;
-		part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
+		part.hitcontentsmaski = CONTENTBIT_BODY|CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
 		part.dimension_hit = player_dimension_hit; // RennyC: Disable player collisions
 		part.dimension_solid = player_dimension_solid; // RennyC: Disable player collisions
 		while (bump < 24)
@@ -534,7 +534,7 @@ void(float ftime) Phys_Move =
 				else
 					test_org = part.origin;
 			}
-			part.hitcontentsmaski = CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
+			part.hitcontentsmaski = CONTENTBIT_BODY|CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
 			part.dimension_hit = player_dimension_hit; // RennyC: Disable player collisions
 			part.dimension_solid = player_dimension_solid; // RennyC: Disable player collisions
 			traceline(test_org, test_org + part.velocity*t, part.physobj_movetype, part);

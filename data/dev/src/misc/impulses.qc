@@ -39,8 +39,11 @@ void() CheckImpulses =
 			CycleWeaponForward();
 			if (race_status == RACE_NOTSTARTED || self.observer)
 				CarSwap_Forward();
-			else
-				CycleWeaponForward();
+		}
+		else
+		{
+			if (race_status == RACE_NOTSTARTED || self.observer)
+				CarSwap_Forward();
 		}
 	}
 	if (self.impulse == 11)
@@ -50,8 +53,11 @@ void() CheckImpulses =
 			CycleWeaponBackward();
 			if (race_status == RACE_NOTSTARTED || self.observer)
 				CarSwap_Backward();
-			else
-				CycleWeaponForward();
+		}
+		else
+		{
+			if (race_status == RACE_NOTSTARTED || self.observer)
+				CarSwap_Backward();
 		}
 	}
 	//

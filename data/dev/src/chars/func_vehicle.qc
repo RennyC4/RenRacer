@@ -126,6 +126,7 @@ void() Car_ChassiThink =
 	entity hitmodel = self.realowner.physobj_hitmodel;
 	while (hitmodel)
 	{
+		hitmodel.hitcontentsmaski = CONTENTBIT_BODY|CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
 		hitmodel.dimension_hit = player_dimension_hit;
 		hitmodel.dimension_solid = player_dimension_solid;
 
@@ -142,6 +143,7 @@ void() Car_ChassiThink =
 	hitmodel = self.realowner.physobj_hitmodel;
 	while (hitmodel)
 	{
+		hitmodel.hitcontentsmaski = CONTENTBIT_BODY|CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
 		hitmodel.dimension_hit = player_dimension_hit;
 		hitmodel.dimension_solid = player_dimension_solid;
 		hitmodel.solid = SOLID_BSP;
@@ -155,6 +157,7 @@ void() Car_ChassiThink =
     {
 		local float plyralpha = car.driving.alpha;
 		local vector plyrcmod = car.driving.colormod;
+		e.hitcontentsmaski = CONTENTBIT_BODY|CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
 		e.dimension_hit = player_dimension_hit;
 		e.dimension_solid = player_dimension_solid;
 		e.pvsflags = PVSF_IGNOREPVS; // FIXME: Fix certain instances of cars disappearing inside geometry (needs testing)
