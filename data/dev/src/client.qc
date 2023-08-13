@@ -122,7 +122,7 @@ void() PushPlayers =
 
 			if (self.turbo)
 			{
-				float dmg = floor(self.realspeed / 8) + floor(self.max_health / 8);
+				float dmg = floor(self.realspeed / 16) + floor(self.max_health / 8);
 				//if (dmg > 16) dmg = 16; // cap
 				DoDamage(b, self, dmg, "ramming");
 			}
