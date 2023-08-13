@@ -1585,6 +1585,8 @@ void() CommandSpecials =
 		return;
 	if (self.commandspcl_finished > time)
 		return;
+	if (self.invulnerable_finished > time)
+		return;
 
 	//
 	// Cloak: Up, Up, Left

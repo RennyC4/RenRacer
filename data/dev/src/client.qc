@@ -122,9 +122,10 @@ void() PushPlayers =
 
 			if (self.turbo)
 			{
-				float dmg = floor(self.realspeed / 16) + floor(self.max_health / 8);
-				//if (dmg > 16) dmg = 16; // cap
+				float dmg = floor(self.realspeed / 32) + floor(self.max_health / 5);
 				DoDamage(b, self, dmg, "ramming");
+				dmg = floor(dmg / 4);
+				DoDamage(self, self, dmg, "ramming"); // self damage
 			}
 
 			// Fire stuff on car touch
@@ -395,8 +396,12 @@ void() PlayerPostThink =
 		return;
 	}
 
-	if (race_status == RACE_STARTED && !intermission_running && self.health > 0 && self.collide_finished < time)
-		PushPlayers();
+	if (race_status == RACE_STARTED && !intermission_running && self.health > 0 && self.driving)
+	{
+		if (self.collide_finished < time)
+			PushPlayers();
+		SpecialRegenerate();
+	}
 	if (self.forcejump)
 	{
 		ForceJump();
@@ -602,8 +607,7 @@ void() PlayerPostThink =
 			self.fire = world;
 		}
 	}
-	
-	
+
 	// in ice
 	if (self.frozen_finished > time)
 	{
@@ -709,7 +713,6 @@ void() PlayerPostThink =
 	*/
 	
 	CommandSpecials();
-	SpecialRegenerate();
 
 	//
 	// SPECIAL MOVE MOTIONS: Reset keys if timer is dropped
@@ -841,7 +844,7 @@ void() PutClientInServer =
 	self.energy = 100;
 
 	self.weapon = WEP_SPECIAL;
-	self.ammo_special = 1;
+	//self.ammo_special = 1;
 
 	if (clienttype(self) == CLIENTTYPE_REAL)
 		human_players = human_players + 1;
