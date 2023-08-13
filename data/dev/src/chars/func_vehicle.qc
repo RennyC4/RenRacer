@@ -376,7 +376,7 @@ void(float turn, float backwards) Car_Turn =
 	tright = car.frontright;
 	tright.physobj_flags = tright.physobj_flags - (tright.physobj_flags & PHFLAGS_RESTING);
 	tleft.physobj_flags = tleft.physobj_flags - (tleft.physobj_flags & PHFLAGS_RESTING);
-	f = 125;
+	f = self.handling;
 
 	if (backwards)
 	{

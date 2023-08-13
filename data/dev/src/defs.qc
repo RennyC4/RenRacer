@@ -473,6 +473,7 @@ string nextmap;
 .float spawncar;
 .float backward; // used when user is backing up the car, used for weapons also
 .float max_speed;
+.float handling;
 
 // Key flags
 .float keyflags;

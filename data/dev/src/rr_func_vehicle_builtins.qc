@@ -5,9 +5,10 @@
 entity() hotrod =
 {
 	self.vehicle = VEH_HOTROD;
-	self.health = self.max_health = 110;
+	self.health = self.max_health = 130; // max health is also armor
 	self.speed = 2000; // also acceleration
 	self.max_speed = 825;
+	self.handling = 40; // low handling
 
 	local entity obj, part;
 
@@ -510,9 +511,10 @@ entity() hotrod =
 entity() wraith =
 {
 	self.vehicle = VEH_WRAITH;
-	self.health = self.max_health = 90;
+	self.health = self.max_health = 90; // max health is also armor
 	self.speed = 4000; // also acceleration
 	self.max_speed = 1000;
+	self.handling = 135; // great handling
 
 	local entity obj, part;
 
@@ -520,6 +522,10 @@ entity() wraith =
 	obj.netname = "wraith";
 	obj.physobj_mass = 1000; // RennyC: This is used for car collision stuff, doesn't affect RenRacer
 	obj.physobj_impactevent = PushAndDamageTarget;
+
+	//
+	// body / chassis
+	//
 
 	part = spawn();
 	part.physobj_next = obj.physobj_staticlist;
@@ -532,6 +538,11 @@ entity() wraith =
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
+	//
+
+	//
+	// wheels
+	//
 
 	// frontleft
 	part = spawn();
@@ -566,6 +577,7 @@ entity() wraith =
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
+	//
 
 	// frontright
 	part = spawn();
@@ -600,6 +612,7 @@ entity() wraith =
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
+	//
 
 	// backleft
 	part = spawn();
@@ -609,7 +622,7 @@ entity() wraith =
 	part.classname = "phys_particle";
 	part.netname = "backleft";
 	part.relative_org = '-35 15 -15'; // RennyC
-	part.physobj_spring_length = 8; // RennyC
+	part.physobj_spring_length = 5; // RennyC
 	part.physobj_spring_force = '2 4 0'; // RennyC: Old default was '2 4 0'
 	part.relative_size = 12; // RennyC
 	part.relative_forward = '1 0 0';
@@ -634,6 +647,7 @@ entity() wraith =
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
+	//
 
 	// backright
 	part = spawn();
@@ -643,7 +657,7 @@ entity() wraith =
 	part.classname = "phys_particle";
 	part.netname = "backright";
 	part.relative_org = '-35 -15 -15'; // RennyC
-	part.physobj_spring_length = 8; // RennyC
+	part.physobj_spring_length = 5; // RennyC
 	part.physobj_spring_force = '2 4 0'; // RennyC: Old default was '2 4 0'
 	part.relative_size = 12; // RennyC
 	part.relative_forward = '1 0 0';
@@ -668,15 +682,20 @@ entity() wraith =
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
+	//
 
-	// all various points
+	//
+	// physics particles/sticks - all various points
+	//
+
+	// front/car hood: left side
 	part = spawn();
 	part.physobj_next = obj.physobj_particlelist;
 	obj.physobj_particlelist = part;
 	part.owner = obj;
 	part.classname = "phys_particle";
 	part.netname = "point";
-	part.relative_org = '54.4 7.4 11.6';
+	part.relative_org = '55 16 0';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
@@ -688,13 +707,14 @@ entity() wraith =
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
+	// front/car hood: right side
 	part = spawn();
 	part.physobj_next = obj.physobj_particlelist;
 	obj.physobj_particlelist = part;
 	part.owner = obj;
 	part.classname = "phys_particle";
 	part.netname = "point";
-	part.relative_org = '54.4 -7.4 11.6';
+	part.relative_org = '55 -16 0';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
@@ -706,13 +726,14 @@ entity() wraith =
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
+	// roof: top left
 	part = spawn();
 	part.physobj_next = obj.physobj_particlelist;
 	obj.physobj_particlelist = part;
 	part.owner = obj;
 	part.classname = "phys_particle";
 	part.netname = "point";
-	part.relative_org = '1.9 14.9 23.4';
+	part.relative_org = '8 12 23';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
@@ -724,13 +745,14 @@ entity() wraith =
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
+	// roof: top right
 	part = spawn();
 	part.physobj_next = obj.physobj_particlelist;
 	obj.physobj_particlelist = part;
 	part.owner = obj;
 	part.classname = "phys_particle";
 	part.netname = "point";
-	part.relative_org = '1.9 -14.9 23.4';
+	part.relative_org = '8 -12 23';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
@@ -742,13 +764,14 @@ entity() wraith =
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
+	// roof: bottom left
 	part = spawn();
 	part.physobj_next = obj.physobj_particlelist;
 	obj.physobj_particlelist = part;
 	part.owner = obj;
 	part.classname = "phys_particle";
 	part.netname = "point";
-	part.relative_org = '-30.3 16.7 23.9';
+	part.relative_org = '-25 12 23';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
@@ -760,13 +783,14 @@ entity() wraith =
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
+	// roof: bottom right
 	part = spawn();
 	part.physobj_next = obj.physobj_particlelist;
 	obj.physobj_particlelist = part;
 	part.owner = obj;
 	part.classname = "phys_particle";
 	part.netname = "point";
-	part.relative_org = '-30.3 -16.7 23.9';
+	part.relative_org = '-25 -12 23';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
@@ -778,13 +802,14 @@ entity() wraith =
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
+	// Rear particle (trunk)
 	part = spawn();
 	part.physobj_next = obj.physobj_particlelist;
 	obj.physobj_particlelist = part;
 	part.owner = obj;
 	part.classname = "phys_particle";
 	part.netname = "point";
-	part.relative_org = '-65.1 0 -10.9';
+	part.relative_org = '-52 0 -4';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
@@ -796,7 +821,10 @@ entity() wraith =
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
-	// hitmodels
+	//
+	// hitmodels - used for car/projectile collisions
+	//
+
 	part = spawn();
 	part.physobj_next = obj.physobj_hitmodel;
 	obj.physobj_hitmodel = part;

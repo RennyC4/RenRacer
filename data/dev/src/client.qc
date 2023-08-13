@@ -122,8 +122,8 @@ void() PushPlayers =
 
 			if (self.turbo)
 			{
-				float dmg = floor(self.realspeed / 8);
-				if (dmg > 16) dmg = 16; // cap
+				float dmg = floor(self.realspeed / 8) + floor(self.max_health / 8);
+				//if (dmg > 16) dmg = 16; // cap
 				DoDamage(b, self, dmg, "ramming");
 			}
 
@@ -199,9 +199,9 @@ void() PlayerPreThink =
 			{
 				// Print welcome message
 				if (self.vehicle == VEH_HOTROD)
-					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1HotRod^7\nSpecial Weapon: ^5Flame Thrower^7\n\nSpecial Power: [**** ]\nArmor: [**** ]\nSpeed: [**   ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
+					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1HotRod^7\nSpecial Weapon: ^5Flame Thrower^7\n\nSpecial: [**** ]\nSpeed: [**   ]\nHandling: [**   ]\nArmor: [***  ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 				if (self.vehicle == VEH_WRAITH)
-					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Wraith^7\nSpecial Weapon: ^5Spectral Missile^7\n\nSpecial Power: [**   ]\nArmor: [**   ]\nSpeed: [**** ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
+					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Wraith^7\nSpecial Weapon: ^5Spectral Missile^7\n\nSpecial: [***  ]\nSpeed: [**** ]\nHandling: [**** ]\nArmor: [*    ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 			}
 		}
 		else if (!self.observer)
