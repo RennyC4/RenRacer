@@ -374,8 +374,6 @@ void(float turn, float backwards) Car_Turn =
 	entity car = self.driving;
 	tleft = car.frontleft;
 	tright = car.frontright;
-	tright.physobj_flags = tright.physobj_flags - (tright.physobj_flags & PHFLAGS_RESTING);
-	tleft.physobj_flags = tleft.physobj_flags - (tleft.physobj_flags & PHFLAGS_RESTING);
 	f = self.handling;
 
 	if (backwards)
@@ -430,11 +428,9 @@ void(float speed, float maxspeed) Car_Accelerate =
 	float allowAccelerateRight = tright.velocity * tright.lmat_forward < maxspeed;
 	float allowAccelerateLeft = tleft.velocity * tleft.lmat_forward < maxspeed;
 	if (allowAccelerateRight && tright.flags & FL_ONGROUND){
-		tright.physobj_flags = tright.physobj_flags - (tright.physobj_flags & PHFLAGS_RESTING);
 		tright.velocity = tright.velocity + tright.lmat_forward *speed*frametime;
 	}
 	if (allowAccelerateLeft && tleft.flags & FL_ONGROUND){
-		tleft.physobj_flags = tleft.physobj_flags - (tleft.physobj_flags & PHFLAGS_RESTING);
 		tleft.velocity = tleft.velocity + tleft.lmat_forward *speed*frametime;
 	}
 };
@@ -453,11 +449,9 @@ void(float speed, float maxspeed) Car_Decelerate =
 	float allowDeccelerateLeft = tleft.velocity * tleft.lmat_forward > maxspeed;
 
 	if (allowDeccelerateRight && tright.flags & FL_ONGROUND){
-		tright.physobj_flags = tright.physobj_flags - (tright.physobj_flags & PHFLAGS_RESTING);
 		tright.velocity = tright.velocity - tright.lmat_forward *speed*frametime;
 	}
 	if (allowDeccelerateLeft && tleft.flags & FL_ONGROUND){
-		tleft.physobj_flags = tleft.physobj_flags - (tleft.physobj_flags & PHFLAGS_RESTING);
 		tleft.velocity = tleft.velocity - tleft.lmat_forward *speed*frametime;
 	}
 };
@@ -509,12 +503,6 @@ void(float speed, float maxspeed) Car_Roll =
 	float allowRollFront = (rel_fzvel) < maxspeed;
 	float allowRollBack = (rel_bzvel) < maxspeed;
 	if (allowRollFront && allowRollBack){
-
-		f_right.physobj_flags = f_right.physobj_flags - (f_right.physobj_flags & PHFLAGS_RESTING);
-		f_left.physobj_flags = f_left.physobj_flags - (f_left.physobj_flags & PHFLAGS_RESTING);
-		b_right.physobj_flags = b_right.physobj_flags - (b_right.physobj_flags & PHFLAGS_RESTING);
-		b_left.physobj_flags = b_left.physobj_flags - (b_left.physobj_flags & PHFLAGS_RESTING);
-
 		f_right.velocity = f_right.velocity + f_right.lmat_up *speed*frametime;
 		b_right.velocity = b_right.velocity + b_right.lmat_up *speed*frametime;
 		f_left.velocity = f_left.velocity - f_left.lmat_up *speed*frametime;	
@@ -597,6 +585,7 @@ void TryUpdateVehicle(){
 	}
 	if (!self.driving)
 		return;
+
 	// RennyC	
 	local entity f_right, f_left;
 	local entity b_right, b_left;
@@ -607,6 +596,7 @@ void TryUpdateVehicle(){
 	b_right = self.driving.backright;
 	//
 
+	self.driving.physobj_flags -= (self.driving.physobj_flags & PHFLAGS_RESTING);
 	setorigin(self, Car_SpringyOrigin());
 	if (race_status == RACE_STARTED && self.health > 0) // RennyC: Allow player to control the car
 	{

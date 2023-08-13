@@ -25,17 +25,17 @@ void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 
 	if (attackerclassname == "bullet") // machine gun
 	{
-		bprint(attacker.netname, " coldly gunned down ");
+		bprint(attacker.netname, " gunned down ");
 		bprint(targ.netname, "\n");
 	}
 	if (attackerclassname == "rocket") // fire rocket
 	{
 		bprint(targ.netname, " swallowed ");
-		bprint(attacker.netname, "'s rocket\n");
+		bprint(attacker.netname, "'s fire rocket\n");
 	}
 	if (attackerclassname == "rocket2") // homing rocket
 	{
-		bprint(attacker.netname, "'s rocket really loves ");
+		bprint(attacker.netname, "'s homing rocket really loves ");
 		bprint(targ.netname, "\n");
 	}
 	if (attackerclassname == "rocket3") // power rocket
@@ -71,7 +71,7 @@ void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 	if (attackerclassname == "ramming")
 	{
 		bprint(attacker.netname, " rammed ");
-		bprint(targ.netname, " raw\n");
+		bprint(targ.netname, "\n");
 	}
 	if (attackerclassname == "flame")
 	{

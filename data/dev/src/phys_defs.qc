@@ -68,3 +68,4 @@ float PHFLAGS_STABILIZERBAR = 256;
 
 // resulting matrix vectors from Matrix_ functions
 vector matrix_forward, matrix_left, matrix_up;
+float resting_allowed;

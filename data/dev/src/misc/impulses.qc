@@ -62,9 +62,9 @@ void() CheckImpulses =
 	}
 	//
 
-	if (self.impulse == 20)
+	if (self.impulse == 20) // Add bot
 		BotConnect();
-	if (self.impulse == 21) // Remove bots
+	if (self.impulse == 21) // Remove bot
 	{
 		float RunOnce = FALSE;
 		for (entity targ = world;(targ = find(targ, classname, "player"));)
