@@ -2615,6 +2615,9 @@ vector campos;
 vector camang;
 float g_width, g_height; /* Globals for screen width and height */
 
+float VEH_HOTROD = 0;
+float VEH_WRAITH = 1;
+
 float RACE_NOTSTARTED = 0;
 float RACE_COUNTDOWN = 1;
 float RACE_STARTED = 2;
@@ -2645,6 +2648,7 @@ float RACE_FINISHED = 4;
 #define STAT_PLAYERID 54
 #define STAT_AMMO_SPECIAL 55
 #define SERVER_RAGEWAR 56
+#define STAT_VEHICLE 57
 
 #define STAT_INTERMISSION 75
 

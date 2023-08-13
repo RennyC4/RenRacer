@@ -48,6 +48,7 @@ void() CSEv_GrabCSQCValues =
 	clientstat(STAT_PLAYERID, EV_FLOAT, player_id);
 	clientstat(STAT_AMMO_SPECIAL, EV_FLOAT, ammo_special);
 	globalstat(SERVER_RAGEWAR, EV_FLOAT, "ragewar");
+	clientstat(STAT_VEHICLE, EV_FLOAT, vehicle);
 };
 
 void() world_lights =
@@ -129,7 +130,6 @@ void() worldspawn =
 	// func_vehicle - end
 	//
 
-	precache_sound ("engine/engine.wav");
 	precache_sound ("engine/start.wav");
 	precache_sound ("land.wav");
 	precache_sound ("camera.wav");

@@ -74,7 +74,11 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 				float pitch = 120 + pitchadd;
 				if (pitch > 300) // cap pitch since it's tied to velocity
 					pitch = 300;
-				soundupdate(engine_sound, CHAN_BODY, "engine/engine.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
+				float vehicle_type = getstatf(STAT_VEHICLE);
+				if (vehicle_type == VEH_HOTROD)
+					soundupdate(engine_sound, CHAN_BODY, "engine/hotrod.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
+				if (vehicle_type == VEH_WRAITH)
+					soundupdate(engine_sound, CHAN_BODY, "engine/wraith.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);				
 			}
 			//
 		}
@@ -187,7 +191,8 @@ float(string strCommand) CSQC_ConsoleCommand =
 void() CSQC_WorldLoaded  =
 {
 	precache_model ("progs/v_speed.mdl");
-	precache_sound ("engine/engine.wav");
+	precache_sound ("engine/hotrod.wav");
+	precache_sound ("engine/wraith.wav");
 
 	engine_sound = spawn();
 	if (world.model != "maps/map4.hmp")
