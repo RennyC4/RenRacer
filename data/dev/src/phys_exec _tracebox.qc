@@ -440,11 +440,10 @@ void(entity part, float ftime) Particle_Friction =
 	part.hitcontentsmaski = CONTENTBIT_BODY|CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
 	part.dimension_hit = player_dimension_hit; // RennyC: Disable player collisions
 	part.dimension_solid = player_dimension_solid; // RennyC: Disable player collisions
-
-	/*
-	//traceline(part.origin, part.origin, TRUE, part);
+	traceline(part.origin, part.origin, TRUE, part);
 	//tracebox(part.origin, part.mins, part.maxs, part.origin, TRUE, part);
 
+	/*
 	// Water friction
 	//if (trace_inwater)
 	if (pointcontents(part.origin) < CONTENT_SOLID)

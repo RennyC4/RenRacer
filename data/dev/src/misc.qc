@@ -16,7 +16,7 @@ float(entity targ) range =
 	vector spot2 = targ.origin;
 
 	float r = vlen(spot1 - spot2);
-	if (r < 120)
+	if (r < 200)
 		return RANGE_CLOSE;
 	if (r < 500)
 		return RANGE_NEAR;

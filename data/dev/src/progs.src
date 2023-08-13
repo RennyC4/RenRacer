@@ -23,8 +23,8 @@ phys_defs.qc
 phys_matrix.qc
 
 // only uncomment one of these
-phys_exec.qc // traceline (recommended)
-//phys_exec_tracebox.qc // tracebox version of phys_exec.qc
+//phys_exec.qc // traceline
+phys_exec_tracebox.qc // tracebox
 //
 
 chars/func_vehicle.qc

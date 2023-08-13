@@ -296,7 +296,7 @@ void() BotAI =
 	makevectors(self.realang);
 	float test1, test2, test3;
 	float distance = 8;
-	vector start = self.origin + v_forward * 50 - v_up * 8;
+	vector start = self.origin + v_forward * 50;
 
 	// Center trace
 	vector end = start + (v_forward * distance);

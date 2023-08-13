@@ -608,31 +608,41 @@ void TryUpdateVehicle(){
 	//
 
 	setorigin(self, Car_SpringyOrigin());
-	if (race_status == RACE_STARTED && self.health > 0 && self.frozen_finished < time) // RennyC: Allow player to control the car
+	if (race_status == RACE_STARTED && self.health > 0) // RennyC: Allow player to control the car
 	{
 		makevectors(self.v_angle);
 
-		float forw = v_forward * self.velocity;
-		if (forw > 100){
-			self.keyflags = self.keyflags | KEY_UP; // RennyC
-			if (!ragewar)
-				Car_Accelerate(3000, 950);
-			else
-				Car_Accelerate(self.speed, self.max_speed);
-		}
-		else if (forw < -100){
-			self.keyflags = self.keyflags | KEY_DOWN; // RennyC
-			if (!ragewar)
-				Car_Decelerate(2500, 800);
-			else
-				Car_Decelerate(self.speed, self.max_speed / 2);
-		}
-		else
+		if (self.frozen_finished < time)
 		{
-			if (self.keyflags & KEY_UP)
-				self.keyflags = self.keyflags - KEY_UP;
-			if (self.keyflags & KEY_DOWN)
-				self.keyflags = self.keyflags - KEY_DOWN;
+			float forw = v_forward * self.velocity;
+			if (forw > 100){
+				self.keyflags = self.keyflags | KEY_UP; // RennyC
+				if (!ragewar)
+					Car_Accelerate(3000, 950);
+				else
+					Car_Accelerate(self.speed, self.max_speed);
+			}
+			else if (forw < -100){
+				self.keyflags = self.keyflags | KEY_DOWN; // RennyC
+				if (!ragewar)
+					Car_Decelerate(2500, 800);
+				else
+					Car_Decelerate(self.speed, self.max_speed / 2);
+			}
+			else
+			{
+				if (self.keyflags & KEY_UP)
+					self.keyflags = self.keyflags - KEY_UP;
+				if (self.keyflags & KEY_DOWN)
+					self.keyflags = self.keyflags - KEY_DOWN;
+			}
+		}
+		else // frozen status
+		{
+			f_right.physobj_stiction = 99999;
+			f_left.physobj_stiction = 99999;
+			b_right.physobj_stiction = 99999;
+			b_left.physobj_stiction = 99999;
 		}
 
 		// RennyC: Speed Booster
@@ -802,15 +812,18 @@ void TryUpdateVehicle(){
 			if (pitch < -180)
 				pitch = pitch + 360;
 		}
-		// RennyC: Race started, unlock tires
-		if (f_right.physobj_stiction != 10)
-			f_right.physobj_stiction = 10;
-		if (f_left.physobj_stiction != 10)
-			f_left.physobj_stiction = 10;
-		if (b_right.physobj_stiction != 10)
-			b_right.physobj_stiction = 10;
-		if (b_left.physobj_stiction != 10)
-			b_left.physobj_stiction = 10;
+		// RennyC: Game started & unfrozen , unlock tires
+		if (self.frozen_finished < time)
+		{
+			if (f_right.physobj_stiction != 10)
+				f_right.physobj_stiction = 10;
+			if (f_left.physobj_stiction != 10)
+				f_left.physobj_stiction = 10;
+			if (b_right.physobj_stiction != 10)
+				b_right.physobj_stiction = 10;
+			if (b_left.physobj_stiction != 10)
+				b_left.physobj_stiction = 10;
+		}
 	}
 	else // RennyC: Race not started, lock tires
 	{
