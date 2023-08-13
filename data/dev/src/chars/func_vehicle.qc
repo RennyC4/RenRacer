@@ -694,7 +694,10 @@ void TryUpdateVehicle(){
 					pointparticles(PART_BUBBLE, self.origin - v_up * 16 - v_forward * 32, '0 0 0', 1);
 
 				if (self.onfire_finished > time) // Remove being on fire faster!
-					self.onfire_finished = self.onfire_finished - 0.1;				
+					self.onfire_finished = self.onfire_finished - 0.1;
+				if (self.frozen_finished > time) // Remove being frozen faster!
+					self.frozen_finished = self.frozen_finished - 0.1;
+
 				if (self.turbo_fuel > 0)
 					self.turbo_fuel = self.turbo_fuel - 1;
 				else
