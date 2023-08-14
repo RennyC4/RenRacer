@@ -140,7 +140,7 @@ void() PushPlayers =
 				self.igniter = b.igniter;
 			}
 
-			// Stop player thats doing ramming
+			// Stop player thats doing the ramming
 			entity part = self.driving.physobj_particlelist;
 			while(part)
 			{
