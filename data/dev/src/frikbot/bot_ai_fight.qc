@@ -154,6 +154,11 @@ void() bot_ai_fight =
 						self.weapon = WEP_SPECIAL;
 						self.button4 = TRUE;
 					}
+					if (self.vehicle == VEH_ROADBASTARD && (rangetest == RANGE_NEAR || rangetest == RANGE_CLOSE))
+					{
+						self.weapon = WEP_SPECIAL;
+						self.button4 = TRUE;
+					}
 				} //
 				if (self.ammo_firerocket > 0)
 				{

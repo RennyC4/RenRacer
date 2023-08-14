@@ -104,6 +104,7 @@ void() worldspawn =
 	precache_model("progs/frzsmk2.spr");
 	precache_model("progs/frozen.mdl");
 	precache_model("progs/flame.spr");
+	precache_model("progs/boomerang.mdl");
 
 	//
 	// func_vehicle - start
@@ -187,6 +188,7 @@ void() worldspawn =
 	precache_sound ("combat/killkill.wav");
 	precache_sound ("combat/flamethr.wav");
 	precache_sound ("combat/ghstrckt.wav");
+	precache_sound ("combat/boomerang.wav");
 
 	world_lights();
 	load_waypoints(); // Load waypoints

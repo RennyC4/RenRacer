@@ -83,6 +83,11 @@ void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 		bprint(targ.netname, " was ghosted by ");
 		bprint(attacker.netname, "'s spectral missile\n");
 	}
+	if (attackerclassname == "boomerang")
+	{
+		bprint(targ.netname, " caught ");
+		bprint(attacker.netname, "'s boomerang\n");
+	}
 };
 
 // ---
@@ -1580,6 +1585,7 @@ void() SpecialWeapon_RoadBastard_Think =
 {
 	if (self.owner && self.cnt >= 90) // Come back to owner
 	{
+		pointparticles(PART_ROCKET1, self.origin, '0 0 0', 1); // Particle effect
 		vector vele, vels, ph;
 		vele = normalize(self.owner.origin - self.origin);
 		vels = normalize(self.velocity);
@@ -1593,7 +1599,10 @@ void() SpecialWeapon_RoadBastard_Think =
 		frameskip(0.01);
 		return;
 	}
-
+	
+	pointparticles(PART_ROCKET1, self.origin, '0 0 0', 1); // Particle effect
+	self.cnt2 = TRUE; // Do the increased damage
+	self.colormod = '.5 .5 .5';
 	self.angles_y += 2;
 	self.cnt += 1;
 	makevectors_mdl(self.angles);
@@ -1613,7 +1622,7 @@ void() SpecialWeapon_RoadBastard_Touch =
 
 	if (other.owner.driving) // other.owner.driving is other players
 	{
-		if (self.cnt >= 90) // Return trip damage
+		if (self.cnt2) // Return trip damage
 		{
 			DoDamage(other.owner.driving, self.owner, 40, self.classname);
 			other.owner.driving.forcejump_strength = 500;
@@ -1669,7 +1678,7 @@ void(float rear) SpecialWeapon_RoadBastard =
 	}
 	boomerang.angles = vectoangles(boomerang.velocity);
 
-	setmodel (boomerang, "progs/rocket.mdl");
+	setmodel (boomerang, "progs/boomerang.mdl");
 	setsize (boomerang, '0 0 0', '0 0 0');
 
 	setorigin (boomerang, self.origin + v_up * 8 + v_forward * (48 + self.realspeed));
@@ -1677,8 +1686,7 @@ void(float rear) SpecialWeapon_RoadBastard =
 	boomerang.think = SpecialWeapon_RoadBastard_Think;
 	boomerang.nextthink = time + 1;
 
-	sound (self, CHAN_WEAPON, "combat/rocket.wav", 1, ATTN_NORM);
-	//sound(self, CHAN_BODY, "combat/ghstrckt.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "combat/boomerang.wav", 1, ATTN_NORM);
 };
 
 //
