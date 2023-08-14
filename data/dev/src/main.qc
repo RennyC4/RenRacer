@@ -126,6 +126,10 @@ void() worldspawn =
 	precache_model("progs/Wraith_body.mdl");
 	precache_model("progs/wheel.mdl");
 
+	// wraith
+	precache_model("progs/Roadbstrd_body.mdl");
+	precache_model("progs/wheel2.mdl");
+
 	//
 	// func_vehicle - end
 	//
@@ -189,9 +193,11 @@ void() worldspawn =
 	CSEv_GrabCSQCValues(); //CSQC Setup
 
 	//
-	// new cvar stuff
+	// new console command & cvar stuff
 	//
-
+	registercommand("addbot", "Adds a bot to the game, will not spawn if server is full\n");
+	registercommand("removebot", "Removes a bot\n");
+	
 	//ragewar cvar setup
 	registercvar("ragewar", "0"); // ragewar on/off
 	ragewar = cvar("ragewar");

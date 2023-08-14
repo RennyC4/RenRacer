@@ -66,22 +66,6 @@ void() CheckImpulses =
 	}
 	//
 
-	if (self.impulse == 20) // Add bot
-		BotConnect();
-	if (self.impulse == 21) // Remove bot
-	{
-		float RunOnce = FALSE;
-		for (entity targ = world;(targ = find(targ, classname, "player"));)
-		{
-			if (clienttype(targ) == CLIENTTYPE_BOT && !RunOnce)
-			{
-				bot_count = bot_count - 1;
-				dropclient(targ);
-				RunOnce = TRUE;
-			}
-		}
-	}
-
 	// Functions not related to gameplay
 	if (self.impulse == 101) // WIP: Change car angles instantly
 		set_carangle(self, 90, 90);
@@ -108,4 +92,28 @@ void() CheckImpulses =
 	}
 
 	self.impulse = 0;
+};
+
+// Registered console commands (defined in main.qc)
+float(string cmd) ConsoleCmd =
+{
+	tokenize(cmd);
+	if (argv(0) == "addbot")
+		BotConnect();
+	if (argv(0) == "removebot")
+	{
+		float RunOnce = FALSE;
+		for (entity targ = world;(targ = find(targ, classname, "player"));)
+		{
+			if (clienttype(targ) == CLIENTTYPE_BOT && !RunOnce)
+			{
+				bot_count = bot_count - 1;
+				dropclient(targ);
+				RunOnce = TRUE;
+			}
+		}
+	}
+	else
+		return FALSE;
+	return TRUE;
 };

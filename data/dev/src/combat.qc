@@ -1506,12 +1506,10 @@ void() SpecialWeapon_Wraith_Think =
 
 void() SpecialWeapon_Wraith_Touch =
 {
-	makevectors_mdl(self.angles);
-
 	if (self.owner == other.owner.driving) // Hit self
 		return;
 
-	if (other.owner.driving) // other.owner.driving is the player
+	if (other.owner.driving) // other.owner.driving is other players
 	{
 		DoDamage(other.owner.driving, self.owner, 12, self.classname);
 		other.owner.driving.forcejump_strength = 250;
@@ -1572,6 +1570,115 @@ void(float rear) SpecialWeapon_Wraith =
 
 	sound (self, CHAN_WEAPON, "combat/rocket.wav", 1, ATTN_NORM);
 	sound(self, CHAN_BODY, "combat/ghstrckt.wav", 1, ATTN_NORM);
+};
+
+//
+// Special Weapon - Road Bastard (Boomerang)
+//
+
+void() SpecialWeapon_RoadBastard_Think =
+{
+	if (self.owner && self.cnt >= 90) // Come back to owner
+	{
+		vector vele, vels, ph;
+		vele = normalize(self.owner.origin - self.origin);
+		vels = normalize(self.velocity);
+		ph = vele + (vels * 4);
+		ph = ph * (1/1);
+
+		self.velocity = normalize(vels + ph);
+		self.velocity = self.velocity * 800;
+
+		self.angles = vectoangles(self.velocity);
+		frameskip(0.01);
+		return;
+	}
+
+	self.angles_y += 2;
+	self.cnt += 1;
+	makevectors_mdl(self.angles);
+	self.velocity = v_forward * 800;
+
+	frameskip(0.01);
+};
+
+void() SpecialWeapon_RoadBastard_Touch =
+{
+	if (self.owner == other.owner.driving) // Owner stuff
+	{
+		if (self.cnt >= 90)
+			remove(self);
+		return;
+	}
+
+	if (other.owner.driving) // other.owner.driving is other players
+	{
+		if (self.cnt >= 90) // Return trip damage
+		{
+			DoDamage(other.owner.driving, self.owner, 40, self.classname);
+			other.owner.driving.forcejump_strength = 500;
+			other.owner.driving.forcejump = TRUE;
+		}
+		else
+		{
+			DoDamage(other.owner.driving, self.owner, 10, self.classname);
+			other.owner.driving.forcejump_strength = 200;
+			other.owner.driving.forcejump = TRUE;
+		}
+	}
+	else if (other)
+		DoDamage(other, self.owner, 10, self.classname);
+
+	CreateExplosion(self.origin);
+	Create2DExplosion(self.origin, 2);
+	remove(self);
+};
+
+void(float rear) SpecialWeapon_RoadBastard =
+{
+	// Fire outwards
+	vector aimdir = self.realang;
+	aimdir_y -= 10;
+	makevectors (aimdir);
+
+	if (rear)
+	{
+		vector v = self.realang;
+		v_y = v_y + 170;
+		makevectors(v);
+	}
+
+	entity boomerang = spawn();
+	boomerang.movetype = MOVETYPE_NOCLIP;
+	boomerang.owner = self;
+	boomerang.solid = SOLID_TRIGGER;
+	boomerang.flags = FL_ITEM; // bigger hitbox
+	boomerang.classname = "boomerang";
+	boomerang.effects = EF_FULLBRIGHT;
+	boomerang.cnt = 0;
+	boomerang.touch = SpecialWeapon_RoadBastard_Touch;
+
+	boomerang.velocity = aim(self, 800);
+	boomerang.velocity = boomerang.velocity * 800;
+
+	// Players forward velocity is added to projectiles
+	if (!self.backward)
+	{
+		boomerang.velocity_x = boomerang.velocity_x + self.driving.velocity_x;
+		boomerang.velocity_y = boomerang.velocity_y + self.driving.velocity_y;
+	}
+	boomerang.angles = vectoangles(boomerang.velocity);
+
+	setmodel (boomerang, "progs/rocket.mdl");
+	setsize (boomerang, '0 0 0', '0 0 0');
+
+	setorigin (boomerang, self.origin + v_up * 8 + v_forward * (48 + self.realspeed));
+
+	boomerang.think = SpecialWeapon_RoadBastard_Think;
+	boomerang.nextthink = time + 1;
+
+	sound (self, CHAN_WEAPON, "combat/rocket.wav", 1, ATTN_NORM);
+	//sound(self, CHAN_BODY, "combat/ghstrckt.wav", 1, ATTN_NORM);
 };
 
 //
@@ -1951,6 +2058,13 @@ void(float type, float rear) CarAttack =
 						else
 							SpecialWeapon_Wraith(TRUE);
 					}
+					if (self.vehicle == VEH_ROADBASTARD) // RoadBastard special
+					{
+						if (!rear)
+							SpecialWeapon_RoadBastard(FALSE);
+						else
+							SpecialWeapon_RoadBastard(TRUE);
+					}
 					self.ammo_special = self.ammo_special - 1;
 				}
 				else
@@ -1960,6 +2074,7 @@ void(float type, float rear) CarAttack =
 				}
 				self.spcl_finished = time + 1;
 			}
+			
 			if (self.weapon == WEP_ROCKET)
 			{
 				if (self.ammo_firerocket > 0)

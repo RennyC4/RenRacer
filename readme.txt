@@ -105,13 +105,14 @@ and solely relying on checkpoints instead; it's a good practice to treat checkpo
 Credits: / Resources:
 --------   ---------
 
-shp/shpuld - Turbo boost code, peeking at how he does things
+shp/shpuld - Turbo boost code, borrowing some other code
 Urre - The amazing func_vehicle itself
 Chazz - GoldCup assets
+xAge - Ideas / general help / texturing / art
 QRally - Some assets
 spike - FTEQW / general help
-FrikaC - FrikBot X
-Electro - Func_vehicle car model
+FrikaC - FrikBot X, now gutted
+Electro - Func_vehicles HotRod car model
 https://www.naturalreaders.com/online/ - Announcer voice
 MANUEL / GAS GAS GAS - Race1.ogg
 The End By A-ONE ft Odyssey - Race2.ogg
@@ -123,3 +124,6 @@ https://freestocktextures.com/photos-ground/ - Some terrain textures
 kilomile - v_speed.mdl
 Coffee - TutorBot waypoint system; modified
 HUD for Quake (https://github.com/whipowill/quake-mod-hud) - Used & Modified scoreboard CSQC code
+Mr.M - Boomerang model
+SinisterSpud - Created RoadBastard
+SingleTrac - Dead company, created Twisted Metal 1/2, using their assets
