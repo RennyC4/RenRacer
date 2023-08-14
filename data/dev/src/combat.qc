@@ -1585,7 +1585,7 @@ void() SpecialWeapon_RoadBastard_Think =
 {
 	if (self.animation_finished < time)
 	{
-		if (self.frame < 8)
+		if (self.frame < 7)
 			self.frame += 1;
 		else
 		{
