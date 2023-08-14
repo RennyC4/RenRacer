@@ -75,10 +75,13 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 				if (pitch > 300) // cap pitch since it's tied to velocity
 					pitch = 300;
 				float vehicle_type = getstatf(STAT_VEHICLE);
+				// Engine noises
 				if (vehicle_type == VEH_HOTROD)
 					soundupdate(engine_sound, CHAN_BODY, "engine/hotrod.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
 				if (vehicle_type == VEH_WRAITH)
-					soundupdate(engine_sound, CHAN_BODY, "engine/wraith.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);				
+					soundupdate(engine_sound, CHAN_BODY, "engine/wraith.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
+				if (vehicle_type == VEH_ROADBASTARD)
+					soundupdate(engine_sound, CHAN_BODY, "engine/roadbstrd.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
 			}
 			//
 		}

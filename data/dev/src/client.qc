@@ -203,6 +203,8 @@ void() PlayerPreThink =
 					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1HotRod^7\nSpecial Weapon: ^5Flame Thrower^7\n\nSpecial: [**** ]\nSpeed: [**   ]\nHandling: [**   ]\nArmor: [***  ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 				if (self.vehicle == VEH_WRAITH)
 					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Wraith^7\nSpecial Weapon: ^5Spectral Missile^7\n\nSpecial: [***  ]\nSpeed: [**** ]\nHandling: [**** ]\nArmor: [*    ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
+				if (self.vehicle == VEH_ROADBASTARD)
+					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Road Bastard^7\nSpecial Weapon: ^5Boomerang^7\n\nSpecial: [***  ]\nSpeed: [***  ]\nHandling: [***  ]\nArmor: [***  ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 			}
 		}
 		else if (!self.observer)
@@ -213,6 +215,8 @@ void() PlayerPreThink =
 					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1HotRod^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
 				if (self.vehicle == VEH_WRAITH)
 					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1Wraith^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
+				if (self.vehicle == VEH_ROADBASTARD)
+					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1Road Bastard^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
 			}
 		}
 		Car_CheckAttach(); // Shove the player in the car
@@ -850,10 +854,12 @@ void() PutClientInServer =
 		human_players = human_players + 1;
 	else // Bots just randomly select whatever vehicle
 	{
-		if (random() < 0.5)
+		if (random() < 0.25)
 			self.vehicle = VEH_HOTROD;
-		else
+		else if (random() < 0.5) 
 			self.vehicle = VEH_WRAITH;
+		else
+			self.vehicle = VEH_ROADBASTARD;
 	}
 	self.player_id = human_players;
 
