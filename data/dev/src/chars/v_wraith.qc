@@ -8,7 +8,7 @@ entity() wraith =
 	self.health = self.max_health = 90; // max health is also armor
 	self.speed = 4000; // also acceleration
 	self.max_speed = 1000;
-	self.handling = 135; // great handling
+	self.handling = 115; // good handling
 
 	local entity obj, part;
 

@@ -33,6 +33,7 @@ chars/v_hotrod.qc
 chars/v_wraith.qc
 chars/v_roadbastard.qc
 chars/v_skyscraper.qc
+chars/v_redrage.qc
 
 //
 // func_vehicle

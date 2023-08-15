@@ -82,6 +82,10 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 					soundupdate(engine_sound, CHAN_BODY, "engine/wraith.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
 				if (vehicle_type == VEH_ROADBASTARD)
 					soundupdate(engine_sound, CHAN_BODY, "engine/roadbstrd.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
+				if (vehicle_type == VEH_SKYSCRAPER)
+					soundupdate(engine_sound, CHAN_BODY, "engine/skyscraper.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
+				if (vehicle_type == VEH_REDRAGE)
+					soundupdate(engine_sound, CHAN_BODY, "engine/redrage.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
 			}
 			//
 		}
@@ -196,6 +200,9 @@ void() CSQC_WorldLoaded  =
 	precache_model ("progs/v_speed.mdl");
 	precache_sound ("engine/hotrod.wav");
 	precache_sound ("engine/wraith.wav");
+	precache_sound ("engine/roadbstrd.wav");
+	precache_sound ("engine/skyscraper.wav");
+	precache_sound ("engine/redrage.wav");
 
 	engine_sound = spawn();
 	if (world.model != "maps/map4.hmp")

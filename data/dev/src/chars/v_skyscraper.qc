@@ -1,5 +1,5 @@
 //
-// skyscraper - default - car 4
+// skyscraper - car 4
 //
 
 entity() skyscraper =

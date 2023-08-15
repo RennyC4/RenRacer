@@ -107,8 +107,16 @@ void() PushPlayers =
 		{
 			if (self.realspeed >= 10 && self.realspeed > b.realspeed)
 			{
-				b.forcejump_strength = 240 + (self.realspeed * 2);
-				b.forcejump = TRUE;
+				if (self.vehicle != VEH_SKYSCRAPER)
+				{
+					b.forcejump_strength = 240 + (self.realspeed * 2);
+					b.forcejump = TRUE;
+				}
+				else if (self.turbo) // skyscraper jumps on turbo hit
+				{
+					self.forcejump_strength = 240 + (self.realspeed * 2);
+					self.forcejump = TRUE;
+				}
 				
 				if (random() < 0.25)
 					sound (self, CHAN_AUTO, "hit1.wav", 1, ATTN_NORM);
@@ -122,10 +130,25 @@ void() PushPlayers =
 
 			if (self.turbo)
 			{
+				// target damage
 				float dmg = floor(self.realspeed / 32) + floor(self.max_health / 5);
 				DoDamage(b, self, dmg, "ramming");
+
+				// self damage
 				dmg = floor(dmg / 4);
-				DoDamage(self, self, dmg, "ramming"); // self damage
+				if (self.vehicle != VEH_SKYSCRAPER)
+					DoDamage(self, self, dmg, "ramming");
+
+				if (self.vehicle == VEH_SKYSCRAPER && self.ammo_special > 0)
+				{
+					self.forcejump_strength = 240 + (self.realspeed * 2);
+					self.forcejump = TRUE;
+
+					dmg = 15; // extra 15 damage
+					sound (self, CHAN_AUTO, "combat/skyscraper.wav", 1, ATTN_NORM);
+					DoDamage(b, self, dmg, "skyscraper");
+					self.ammo_special -= 1;
+				}
 			}
 
 			// Fire stuff on car touch
@@ -218,6 +241,8 @@ void() PlayerPreThink =
 					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Road Bastard^7\nSpecial Weapon: ^5Boomerang^7\n\nSpecial: [***  ]\nSpeed: [***  ]\nHandling: [***  ]\nArmor: [***  ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 				if (self.vehicle == VEH_SKYSCRAPER)
 					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1SkyScraper^7\nSpecial Weapon: ^5Big Crush^7\n\nSpecial: [*****]\nSpeed: [*    ]\nHandling: [*    ]\nArmor: [**** ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
+				if (self.vehicle == VEH_REDRAGE)
+					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Red Rage^7\nSpecial Weapon: ^5Crimson Beam^7\n\nSpecial: [**   ]\nSpeed: [*****]\nHandling: [*****]\nArmor: [*     ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 			}
 		}
 		else if (!self.observer)
@@ -232,6 +257,8 @@ void() PlayerPreThink =
 					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1Road Bastard^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
 				if (self.vehicle == VEH_SKYSCRAPER)
 					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1SkyScraper^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
+				if (self.vehicle == VEH_REDRAGE)
+					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1Red Rage^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
 			}
 		}
 		Car_CheckAttach(); // Shove the player in the car
@@ -869,14 +896,17 @@ void() PutClientInServer =
 		human_players = human_players + 1;
 	else // Bots just randomly select whatever vehicle
 	{
-		if (random() < 0.25)
+		float tt = ceil(random() * 5);
+		if (tt == 1)
 			self.vehicle = VEH_HOTROD;
-		else if (random() < 0.5) 
+		else if (tt == 2)
 			self.vehicle = VEH_WRAITH;
-		else if (random() < 0.75) 
+		else if (tt == 3)
 			self.vehicle = VEH_ROADBASTARD;
-		else
+		else if (tt == 4)
 			self.vehicle = VEH_SKYSCRAPER;
+		else
+			self.vehicle = VEH_REDRAGE;
 	}
 	self.player_id = human_players;
 

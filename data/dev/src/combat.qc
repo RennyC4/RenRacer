@@ -88,7 +88,11 @@ void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 		bprint(targ.netname, " caught ");
 		bprint(attacker.netname, "'s boomerang\n");
 	}
-};
+	if (attackerclassname == "skyscraper")
+	{
+		bprint(targ.netname, " was pancaked by ");
+		bprint(attacker.netname, "\n");
+	}};
 
 // ---
 // Damage / Death / Effects
@@ -349,7 +353,14 @@ void() SpecialRegenerate =
 			self.special_regen_finished = time + 60; // regen time
 		}
 	}
-};
+	if (self.vehicle == VEH_REDRAGE)
+	{
+		if (self.ammo_special < 6) // max held
+		{
+			self.ammo_special = self.ammo_special + 1;
+			self.special_regen_finished = time + 10; // regen time
+		}
+	}};
 
 // ---
 // Machine Gun
@@ -1673,7 +1684,7 @@ void(float rear) SpecialWeapon_RoadBastard =
 	// Fire outwards
 	vector aimdir = self.realang;
 	aimdir_y -= 10;
-	makevectors (aimdir);
+	makevectors(aimdir);
 
 	if (rear)
 	{
@@ -1715,6 +1726,69 @@ void(float rear) SpecialWeapon_RoadBastard =
 	sound (self, CHAN_WEAPON, "combat/boomerang.wav", 1, ATTN_NORM);
 };
 
+void() SpecialWeapon_RedRage_touch =
+{
+	makevectors_mdl(self.angles);
+	if (!other.takedamage) // Hit wall
+	{
+		remove(self);
+		return;
+	}
+	if (self.owner == other.owner.driving) // Hit self
+		return;
+
+	if (other.owner.driving) // other.owner.driving is the player
+	{
+		Create2DExplosion(self.origin, 1);
+		DoDamage(other.owner.driving, self.owner, 11, self.classname);
+		other.owner.driving.forcejump_strength = 100;
+		other.owner.driving.forcejump = TRUE;
+	}
+	else if (other)
+		DoDamage(other, self.owner, 11, self.classname);
+
+	remove(self);
+};
+void(float rear) SpecialWeapon_RedRage =
+{
+	makevectors(self.realang);
+
+	if (rear)
+	{
+		vector v = self.realang;
+		v_y = v_y + 180;
+		makevectors(v);
+	}
+
+	entity beam = spawn();
+	beam.movetype = MOVETYPE_NOCLIP;
+	beam.owner = self;
+	beam.solid = SOLID_TRIGGER;
+	beam.classname = "redrage";
+	beam.effects = EF_FULLBRIGHT | EF_ADDITIVE;
+	beam.flags = FL_ITEM; // bigger hitbox
+	beam.alpha = 0.9;
+	beam.colormod = '1 .1 .1'; // colored red
+	beam.scale = 2; // bigger
+	beam.touch = SpecialWeapon_RedRage_touch;
+
+	beam.velocity = aim(self, 1500);
+	beam.velocity = beam.velocity * 1500;
+
+	// Players forward velocity is added to projectiles
+	if (!self.backward)
+	{
+		beam.velocity_x = beam.velocity_x + self.driving.velocity_x;
+		beam.velocity_y = beam.velocity_y + self.driving.velocity_y;
+	}
+	beam.angles = vectoangles(beam.velocity);
+
+	setmodel (beam, "progs/bullet.mdl");
+	setsize (beam, '0 0 0', '0 0 0');
+
+	setorigin (beam, self.origin + v_up * 8 + v_forward * (48 + self.realspeed));
+	sound (self, CHAN_WEAPON, "combat/redrage.wav", 1, ATTN_NORM);
+};
 //
 // Command Specials
 //
@@ -2099,14 +2173,25 @@ void(float type, float rear) CarAttack =
 						else
 							SpecialWeapon_RoadBastard(TRUE);
 					}
-					self.ammo_special = self.ammo_special - 1;
+					if (self.vehicle == VEH_REDRAGE) // RedRage special
+					{
+						if (!rear)
+							SpecialWeapon_RedRage(FALSE);
+						else
+							SpecialWeapon_RedRage(TRUE);
+						self.spcl_finished = time + 0.5; // fires faster
+					}
+					// Keep at bottom
+					if (self.vehicle != VEH_SKYSCRAPER) // Special exception
+						self.ammo_special = self.ammo_special - 1;
 				}
 				else
 				{
 					sprint(self, "Special weapon bay empty!\n");
 					stuffcmd (self, "play combat/empty.wav\n");
 				}
-				self.spcl_finished = time + 1;
+				if (self.spcl_finished < time)
+					self.spcl_finished = time + 1;
 			}
 			
 			if (self.weapon == WEP_ROCKET)

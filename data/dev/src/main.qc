@@ -127,9 +127,17 @@ void() worldspawn =
 	precache_model("progs/Wraith_body.mdl");
 	precache_model("progs/wheel.mdl");
 
-	// wraith
+	// road bastard
 	precache_model("progs/Roadbstrd_body.mdl");
 	precache_model("progs/wheel2.mdl");
+
+	// skyscraper
+	precache_model("progs/Skyscraper_body.mdl");
+	precache_model("progs/Skyscraper_wheel.mdl");
+
+	// redrage
+	precache_model("progs/Redrage_body.mdl");
+	precache_model("progs/Redrage_wheel.mdl");
 
 	//
 	// func_vehicle - end
@@ -190,6 +198,8 @@ void() worldspawn =
 	precache_sound ("combat/ghstrckt.wav");
 	precache_sound ("combat/boomerang.wav");
 	precache_sound ("combat/boomerang2.wav");
+	precache_sound ("combat/skyscraper.wav");
+	precache_sound ("combat/redrage.wav");
 
 	world_lights();
 	load_waypoints(); // Load waypoints

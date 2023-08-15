@@ -159,6 +159,13 @@ void() bot_ai_fight =
 						self.weapon = WEP_SPECIAL;
 						self.button4 = TRUE;
 					}
+					if (self.vehicle == VEH_SKYSCRAPER && (rangetest == RANGE_NEAR || rangetest == RANGE_CLOSE))
+						self.button0 = TRUE; // Turbo ram into player to activate special
+					if (self.vehicle == VEH_REDRAGE && rangetest != RANGE_FAR)
+					{
+						self.weapon = WEP_SPECIAL;
+						self.button4 = TRUE;
+					}
 				} //
 				if (self.ammo_firerocket > 0)
 				{
