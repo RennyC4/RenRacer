@@ -1740,7 +1740,7 @@ void() SpecialWeapon_RedRage_touch =
 	if (other.owner.driving) // other.owner.driving is the player
 	{
 		Create2DExplosion(self.origin, 1);
-		DoDamage(other.owner.driving, self.owner, 11, self.classname);
+		DoDamage(other.owner.driving, self.owner, 13, self.classname);
 		other.owner.driving.forcejump_strength = 100;
 		other.owner.driving.forcejump = TRUE;
 	}
@@ -1749,6 +1749,7 @@ void() SpecialWeapon_RedRage_touch =
 
 	remove(self);
 };
+
 void(float rear) SpecialWeapon_RedRage =
 {
 	makevectors(self.realang);
@@ -1771,6 +1772,10 @@ void(float rear) SpecialWeapon_RedRage =
 	beam.colormod = '1 .1 .1'; // colored red
 	beam.scale = 2; // bigger
 	beam.touch = SpecialWeapon_RedRage_touch;
+
+	beam.pflags = PFLAGS_FULLDYNAMIC | PFLAGS_CORONA;
+	beam.color = [2, 1, 1];
+	beam.light_lev = 100;
 
 	beam.velocity = aim(self, 1500);
 	beam.velocity = beam.velocity * 1500;
