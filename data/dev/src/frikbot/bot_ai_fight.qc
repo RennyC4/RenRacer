@@ -133,7 +133,7 @@ void() bot_ai_fight =
 	{
 		if (visible(self.enemy) && self.enemy.cloak_finished < time && self.enemy.invulnerable_finished < time && self.frozen_finished < time)
 		{
-			if (infront(self.enemy, 0.75))
+			if (infront(self.enemy, 0.75) && self.invulnerable_finished < time)
 			{
 				rangetest = range(self.enemy);
 				// AI Special Command moves
