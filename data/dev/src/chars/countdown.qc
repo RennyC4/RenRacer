@@ -61,6 +61,8 @@ void() countdown_think = // Race start countdown
 				car = skyscraper();
 			if (self.vehicle == VEH_REDRAGE)
 				car = redrage();
+			if (self.vehicle == VEH_LAWBREAKER)
+				car = lawbreaker();
 
 			makevectors(targ.angles);
 			car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);

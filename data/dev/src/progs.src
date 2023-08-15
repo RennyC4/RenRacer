@@ -24,7 +24,7 @@ phys_matrix.qc
 
 // only uncomment one of these
 phys_exec.qc // traceline
-//phys_exec_tracebox.qc // tracebox
+//phys_exec_tracebox.qc // tracebox (outdated)
 //
 
 // RenRacer vehicles
@@ -34,6 +34,7 @@ chars/v_wraith.qc
 chars/v_roadbastard.qc
 chars/v_skyscraper.qc
 chars/v_redrage.qc
+chars/v_lawbreaker.qc
 
 //
 // func_vehicle

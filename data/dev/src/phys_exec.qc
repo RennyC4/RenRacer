@@ -112,8 +112,7 @@ void(entity targ) Phys_CheckStatus =
 	hitmodel = self.physobj_hitmodel;
 	while (hitmodel)
 	{
-		hitmodel.solid = SOLID_TRIGGER;
-		setorigin(hitmodel, hitmodel.origin);
+		hitmodel.solid = SOLID_NOT;
 		hitmodel = hitmodel.physobj_next;
 	}
 	while(part)
@@ -247,8 +246,7 @@ void(float ftime, float sv_gravity) Phys_Acceleration =
 	hitmodel = self.physobj_hitmodel;
 	while (hitmodel)
 	{
-		hitmodel.solid = SOLID_TRIGGER;
-		setorigin(hitmodel, hitmodel.origin);
+		hitmodel.solid = SOLID_NOT;
 		hitmodel = hitmodel.physobj_next;
 	}
 
@@ -297,31 +295,29 @@ void(float ftime, float sv_gravity) Phys_Acceleration =
 	}
 };
 
-const float STABILITY_MULTIPLIER = 0.8;
+const float STABILITY_MULTIPLIER = 1; // lower values make the object more soft, but less prone to randomly exploding
 
 // Run constraints on all particles
 void(float ftime) Phys_Constraints =
 {
 	local float offsetlength, diff, lendiff;
-	local float inverse_frametime;
 	local vector offset;
-	local entity part, stick;
+	local entity stick;
 	local entity p1, p2;
 
-	inverse_frametime = 1 / ftime;
-	
 	// Marko 2023: we are running a single iteration because the entire update loop runs multiple times instead, XPBD style
 	stick = self.physobj_sticklist;
 	while(stick)
 	{
-		if (stick.physobj_flags & PHFLAGS_STABILIZERBAR){
-			p1 = stick.physobj_p1;
-			p2 = stick.physobj_p2;
+		p1 = stick.physobj_p1;
+		p2 = stick.physobj_p2;
 
+		if (stick.physobj_flags & PHFLAGS_STABILIZERBAR){
 			float p1_mult = p2.physobj_floor_frac - p1.physobj_floor_frac;
 			float p2_mult = p1.physobj_floor_frac - p2.physobj_floor_frac;
-			
+
 			float stabilizer = stick.owner.driving.car_stabilizer; // RennyC
+
 			if (p1_mult < 0)
 			{
 				p1.physobj_spring_mult = remap(p1_mult + 1, 0, 1, stabilizer, 1); // RennyC
@@ -337,25 +333,17 @@ void(float ftime) Phys_Constraints =
 			else
 				p2.physobj_spring_mult = 1;
 		}
-		p1 = stick.physobj_p1;
-		p2 = stick.physobj_p2;
+
 		offset = p1.destorigin - p2.destorigin;
 		offsetlength = vlen(offset);
 		lendiff = offsetlength-stick.stick_preferredlength;
 		if (resting_allowed)
-			if (fabs(lendiff) > 3)
-				resting_allowed = FALSE;
+		if (fabs(lendiff) > stick.stick_preferredlength * 0.05)
+			resting_allowed = FALSE;
 		diff = lendiff/(offsetlength*(p1.physobj_inversemass+p2.physobj_inversemass));
 		p1.destorigin = p1.destorigin - p1.physobj_inversemass*offset*diff*STABILITY_MULTIPLIER;
 		p2.destorigin = p2.destorigin + p2.physobj_inversemass*offset*diff*STABILITY_MULTIPLIER;
 		stick = stick.physobj_next;
-	}
-	// Convert back from future positions to velocities again
-	part = self.physobj_particlelist;
-	while (part)
-	{
-		part.velocity = (part.destorigin - part.origin) * inverse_frametime;
-		part = part.physobj_next;
 	}
 };
 
@@ -484,7 +472,7 @@ void(entity part, float ftime) Particle_Friction =
 void(float ftime) Phys_Move =
 {
 	local float bump, it;
-	local float t, f;
+	local float t, f, inverse_frametime;
 	local float dot;
 	local float stuck;
 	local vector test_org;
@@ -500,16 +488,20 @@ void(float ftime) Phys_Move =
 	hitmodel = self.physobj_hitmodel;
 	while (hitmodel)
 	{
-		hitmodel.solid = SOLID_TRIGGER;
-		setorigin(hitmodel, hitmodel.origin);
+		hitmodel.solid = SOLID_NOT;
 		hitmodel = hitmodel.physobj_next;
 	}
+
+	inverse_frametime = 1 / ftime;
 
 	part = self.physobj_particlelist;
 	if (!part)
 		part = self;
 	while(part)
 	{
+		// Convert back from future positions set by constraints to velocities again
+		part.velocity = (part.destorigin - part.origin) * inverse_frametime;
+
 		part.oldorigin = part.origin;
 		bump = 0;
 		it = 0;
@@ -1222,9 +1214,30 @@ void(entity part, entity object) Phys_ObjectRemoveParticle =
 	remove(part);
 };
 
-entity(entity p1, entity p2, entity obj) Phys_ObjectAddStick =
+const float STICK_SIMILARITY_THRESHOLD = 0.95; // raise to make less wobbly
+entity(entity p1, entity p2, entity obj, float force_add) Phys_ObjectAddStick =
 {
 	local entity e;
+	local vector v, v_other;
+
+	if (!force_add && obj && !(p1.physobj_spring_length && p2.physobj_spring_length))
+	{
+		v = normalize(p1.relative_org - p2.relative_org);
+		e = obj.physobj_sticklist;
+		while(e)
+		{
+			v_other = normalize(e.physobj_p1.relative_org - e.physobj_p2.relative_org);
+			if (fabs(v * v_other) > STICK_SIMILARITY_THRESHOLD) // similar direction, let's see if we share any particle
+			{
+				if (e.physobj_p1 == p1 ||
+					e.physobj_p1 == p2 ||
+					e.physobj_p2 == p1 ||
+					e.physobj_p2 == p2)
+				return world; // this stick doesn't contribute to stability enough
+			}
+			e = e.physobj_next;
+		}
+	}
 
 	e = spawn();
 	e.classname = "stick";
@@ -1274,7 +1287,7 @@ entity(vector org, entity object) Phys_AddParticleToObject =
 	{
 		save_rel = part.relative_org;
 		part.relative_org = part.origin;
-		stick = Phys_ObjectAddStick(e, part, world);
+		stick = Phys_ObjectAddStick(e, part, world, FALSE);
 		part.relative_org = save_rel;
 		stick.owner = object;
 		end.physobj_next = stick;
@@ -1286,26 +1299,27 @@ entity(vector org, entity object) Phys_AddParticleToObject =
 
 void() Phys_SpawnSticks =
 {
-	local float f, total;
+	local float f, total_particles, total_sticks;
 	local entity part1, part2;
 
-	total = 0;
+	total_particles = 0;
 	part1 = physobj_spawning.physobj_particlelist;
 	while (part1)
 	{
-		total = total + 1;
+		total_particles = total_particles + 1;
 		part1 = part1.physobj_next;
 	}
 	part1 = physobj_spawning.physobj_particlelist;
 	while (part1)
 	{
 		part2 = part1;
-		total = total - 1;
+		total_particles = total_particles - 1;
 		f = 0;
-		while (f < total)
+		while (f < total_particles)
 		{
 			part2 = part2.physobj_next;
-			Phys_ObjectAddStick(part1, part2, physobj_spawning);
+			if (Phys_ObjectAddStick(part1, part2, physobj_spawning, FALSE))
+				total_sticks++;
 			f = f + 1;
 		}
 		part1 = part1.physobj_next;
