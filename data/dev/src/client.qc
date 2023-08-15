@@ -141,11 +141,15 @@ void() PushPlayers =
 			}
 
 			// Stop player thats doing the ramming
-			entity part = self.driving.physobj_particlelist;
-			while(part)
+			// FIXME: Let this work in race mode, but fix the AI backing up stuff
+			if (ragewar)
 			{
-				part.velocity = part.velocity / 1000;
-				part = part.physobj_next;
+				entity part = self.driving.physobj_particlelist;
+				while(part)
+				{
+					part.velocity = part.velocity / 1000;
+					part = part.physobj_next;
+				}
 			}
 			self.collide_finished = time + 1;
 		}

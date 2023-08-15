@@ -374,7 +374,10 @@ void(float turn, float backwards) Car_Turn =
 	entity car = self.driving;
 	tleft = car.frontleft;
 	tright = car.frontright;
-	f = self.handling;
+	if (ragewar) // ragewar stat
+		f = self.handling;
+	else
+		f = 135;
 
 	if (backwards)
 	{
