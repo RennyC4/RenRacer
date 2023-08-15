@@ -8,7 +8,7 @@ entity() skyscraper =
 	self.health = self.max_health = 150; // max health is also armor
 	self.speed = 1250; // also acceleration
 	self.max_speed = 700;
-	self.handling = 25; // low handling
+	self.handling = 45; // low handling
 
 	local entity obj, part;
 

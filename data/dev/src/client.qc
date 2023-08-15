@@ -101,6 +101,9 @@ void() Setup_level_effects =
 
 void() PushPlayers =
 {
+	if (self.frozen_finished > time)
+		return;
+
 	for (entity b = world;(b = find(b, classname, "player"));)
 	{
 		if (vlen(b.origin - self.origin) <= 100 && b != self && b.driving && b.health > 0)

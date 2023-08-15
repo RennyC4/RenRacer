@@ -688,7 +688,8 @@ void TryUpdateVehicle(){
 					self.turbosfx = TRUE;
 				}
 				Car_Accelerate(3000, 950);
-				car_boost(2000);
+				if (self.frozen_finished < time)
+					car_boost(2000);
 				makevectors(self.realang);
 
 				if (!self.waterlevel)
@@ -699,7 +700,7 @@ void TryUpdateVehicle(){
 				if (self.onfire_finished > time) // Remove being on fire faster!
 					self.onfire_finished = self.onfire_finished - 0.1;
 				if (self.frozen_finished > time) // Remove being frozen faster!
-					self.frozen_finished = self.frozen_finished - 0.05;
+					self.frozen_finished = self.frozen_finished - 0.025;
 
 				if (self.turbo_fuel > 0)
 					self.turbo_fuel = self.turbo_fuel - 1;
