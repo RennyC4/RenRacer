@@ -101,12 +101,12 @@ void() Setup_level_effects =
 
 void() PushPlayers =
 {
-	if (self.frozen_finished > time)
+	if (self.frozen_finished > time || self.invulnerable_finished > time)
 		return;
 
 	for (entity b = world;(b = find(b, classname, "player"));)
 	{
-		if (vlen(b.origin - self.origin) <= 100 && b != self && b.driving && b.health > 0)
+		if (vlen(b.origin - self.origin) <= 100 && b != self && b.driving && b.health > 0 && b.invulnerable_finished < time)
 		{
 			if (self.realspeed >= 10 && self.realspeed > b.realspeed)
 			{
@@ -142,13 +142,13 @@ void() PushPlayers =
 				if (self.vehicle != VEH_SKYSCRAPER)
 					DoDamage(self, self, dmg, "ramming");
 
-				if (self.vehicle == VEH_SKYSCRAPER && self.ammo_special > 0)
+				if (self.vehicle == VEH_SKYSCRAPER && self.ammo_special > 0 && b.health > 0)
 				{
+					sound (self, CHAN_AUTO, "combat/skyscraper.wav", 1, ATTN_NORM);
+
 					self.forcejump_strength = 240 + (self.realspeed * 2);
 					self.forcejump = TRUE;
-
 					dmg = 15; // extra 15 damage
-					sound (self, CHAN_AUTO, "combat/skyscraper.wav", 1, ATTN_NORM);
 					DoDamage(b, self, dmg, "skyscraper");
 					self.ammo_special -= 1;
 				}
