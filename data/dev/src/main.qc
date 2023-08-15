@@ -125,7 +125,7 @@ void() worldspawn =
 
 	// wraith
 	precache_model("progs/Wraith_body.mdl");
-	precache_model("progs/wheel.mdl");
+	precache_model("progs/Wraith_wheel.mdl");
 
 	// road bastard
 	precache_model("progs/Roadbstrd_body.mdl");
@@ -138,6 +138,10 @@ void() worldspawn =
 	// redrage
 	precache_model("progs/Redrage_body.mdl");
 	precache_model("progs/Redrage_wheel.mdl");
+
+	// lawbreaker
+	precache_model("progs/Lawbreaker_body.mdl");
+	precache_model("progs/Lawbreaker_wheel.mdl");
 
 	//
 	// func_vehicle - end

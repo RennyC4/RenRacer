@@ -5,10 +5,10 @@
 entity() roadbastard =
 {
 	self.vehicle = VEH_ROADBASTARD;
-	self.health = self.max_health = 120; // max health is also armor
+	self.health = self.max_health = 110; // max health is also armor
 	self.speed = 3000; // also acceleration
 	self.max_speed = 915;
-	self.handling = 90; // average
+	self.handling = 60; // intermediate
 
 	local entity obj, part;
 

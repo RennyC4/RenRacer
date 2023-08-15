@@ -368,7 +368,16 @@ void() SpecialRegenerate =
 			self.ammo_special = self.ammo_special + 1;
 			self.special_regen_finished = time + 10; // regen time
 		}
-	}};
+	}
+	if (self.vehicle == VEH_LAWBREAKER)
+	{
+		if (self.ammo_special < 3) // max held
+		{
+			self.ammo_special = self.ammo_special + 1;
+			self.special_regen_finished = time + 55; // regen time
+		}
+	}
+};
 
 // ---
 // Machine Gun
@@ -1596,7 +1605,7 @@ void(float rear) SpecialWeapon_Wraith =
 
 	setorigin (rocket, self.origin + v_up * 8 + v_forward * (48 + self.realspeed));
 
-	rocket.removeme_finished = time + 6;
+	rocket.removeme_finished = time + 4;
 	rocket.think = SpecialWeapon_Wraith_Think;
 	rocket.nextthink = time;
 

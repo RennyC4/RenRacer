@@ -5,10 +5,10 @@
 entity() hotrod =
 {
 	self.vehicle = VEH_HOTROD;
-	self.health = self.max_health = 130; // max health is also armor
+	self.health = self.max_health = 120; // max health is also armor
 	self.speed = 2000; // also acceleration
 	self.max_speed = 825;
-	self.handling = 40; // low handling
+	self.handling = 45; // low handling
 
 	local entity obj, part;
 

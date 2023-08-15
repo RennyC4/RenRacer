@@ -86,6 +86,8 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 					soundupdate(engine_sound, CHAN_BODY, "engine/skyscraper.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
 				if (vehicle_type == VEH_REDRAGE)
 					soundupdate(engine_sound, CHAN_BODY, "engine/redrage.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
+				if (vehicle_type == VEH_LAWBREAKER)
+					soundupdate(engine_sound, CHAN_BODY, "engine/lawbreaker.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
 			}
 			//
 		}
@@ -203,6 +205,7 @@ void() CSQC_WorldLoaded  =
 	precache_sound ("engine/roadbstrd.wav");
 	precache_sound ("engine/skyscraper.wav");
 	precache_sound ("engine/redrage.wav");
+	precache_sound ("engine/lawbreaker.wav");
 
 	engine_sound = spawn();
 	if (world.model != "maps/map4.hmp")

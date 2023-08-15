@@ -8,7 +8,7 @@ entity() wraith =
 	self.health = self.max_health = 90; // max health is also armor
 	self.speed = 4000; // also acceleration
 	self.max_speed = 1000;
-	self.handling = 115; // good handling
+	self.handling = 90; // good handling
 
 	local entity obj, part;
 
@@ -66,7 +66,7 @@ entity() wraith =
 	part.owner = obj;
 	part.classname = "phys_static";
 	part.netname = "frontleft";
-	part.model = "progs/wheel.mdl";
+	part.model = "progs/Wraith_wheel.mdl";
 	part.relative_org = '30 15 -15';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
@@ -101,7 +101,7 @@ entity() wraith =
 	part.owner = obj;
 	part.classname = "phys_static";
 	part.netname = "frontright";
-	part.model = "progs/wheel.mdl";
+	part.model = "progs/Wraith_wheel.mdl";
 	part.relative_org = '30 -15 -15';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
@@ -136,7 +136,7 @@ entity() wraith =
 	part.owner = obj;
 	part.classname = "phys_static";
 	part.netname = "backleft";
-	part.model = "progs/wheel.mdl";
+	part.model = "progs/Wraith_wheel.mdl";
 	part.relative_org = '-35 15 -15';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
@@ -171,7 +171,7 @@ entity() wraith =
 	part.owner = obj;
 	part.classname = "phys_static";
 	part.netname = "backright";
-	part.model = "progs/wheel.mdl";
+	part.model = "progs/Wraith_wheel.mdl";
 	part.relative_org = '-35 -15 -15';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';

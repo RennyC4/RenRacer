@@ -243,11 +243,11 @@ void() PlayerPreThink =
 				if (self.vehicle == VEH_ROADBASTARD)
 					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Road Bastard^7\nSpecial Weapon: ^5Boomerang^7\n\nSpecial: [***  ]\nSpeed: [***  ]\nHandling: [***  ]\nArmor: [***  ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 				if (self.vehicle == VEH_SKYSCRAPER)
-					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Sky Scraper^7\nSpecial Weapon: ^5Big Crush^7\n\nSpecial: [*****]\nSpeed: [*    ]\nHandling: [*    ]\nArmor: [**** ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
+					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Sky Scraper^7\nSpecial Weapon: ^5Big Crush^7\n\nSpecial: [*****]\nSpeed: [*    ]\nHandling: [*    ]\nArmor: [*****]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 				if (self.vehicle == VEH_REDRAGE)
 					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Red Rage^7\nSpecial Weapon: ^5Crimson Beam^7\n\nSpecial: [**   ]\nSpeed: [*****]\nHandling: [*****]\nArmor: [*     ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 				if (self.vehicle == VEH_LAWBREAKER)
-					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Law Breaker^7\nSpecial Weapon: ^5Tazer Shock^7\n\nSpecial: [**   ]\nSpeed: [***  ]\nHandling: [**   ]\nArmor: [***   ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
+					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Law Breaker^7\nSpecial Weapon: ^5Tazer Shock^7\n\nSpecial: [***  ]\nSpeed: [**** ]\nHandling: [***  ]\nArmor: [**    ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 			}
 		}
 		else if (!self.observer)
