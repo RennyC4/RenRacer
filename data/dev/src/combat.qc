@@ -92,7 +92,15 @@ void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 	{
 		bprint(targ.netname, " was pancaked by ");
 		bprint(attacker.netname, "\n");
-	}};
+	}
+	if (attackerclassname == "redrage")
+	{
+		bprint(targ.netname, " felt ");
+		bprint(attacker.netname, "'s crimson fury\n");
+	}
+	
+	
+};
 
 // ---
 // Damage / Death / Effects
