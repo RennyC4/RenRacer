@@ -27,9 +27,12 @@ phys_exec.qc // traceline
 //phys_exec_tracebox.qc // tracebox
 //
 
+// RenRacer vehicles
 chars/func_vehicle.qc
-
-rr_func_vehicle_builtins.qc // RenRacer vehicles
+chars/v_hotrod.qc
+chars/v_wraith.qc
+chars/v_roadbastard.qc
+chars/v_skyscraper.qc
 
 //
 // func_vehicle

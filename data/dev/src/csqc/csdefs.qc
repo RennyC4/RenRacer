@@ -2618,6 +2618,8 @@ float g_width, g_height; /* Globals for screen width and height */
 float VEH_HOTROD = 0;
 float VEH_WRAITH = 1;
 float VEH_ROADBASTARD = 2;
+float VEH_SKYSCRAPER = 4;
+float VEH_REDRAGE = 8;
 
 float RACE_NOTSTARTED = 0;
 float RACE_COUNTDOWN = 1;

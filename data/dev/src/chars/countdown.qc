@@ -57,6 +57,8 @@ void() countdown_think = // Race start countdown
 				car = wraith();
 			if (self.vehicle == VEH_ROADBASTARD)
 				car = roadbastard();
+			if (self.vehicle == VEH_SKYSCRAPER)
+				car = skyscraper();
 
 			makevectors(targ.angles);
 			car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);

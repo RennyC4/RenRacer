@@ -341,6 +341,14 @@ void() SpecialRegenerate =
 			self.special_regen_finished = time + 35; // regen time
 		}
 	}
+	if (self.vehicle == VEH_SKYSCRAPER)
+	{
+		if (self.ammo_special < 5) // max held
+		{
+			self.ammo_special = self.ammo_special + 1;
+			self.special_regen_finished = time + 60; // regen time
+		}
+	}
 };
 
 // ---

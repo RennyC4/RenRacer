@@ -15,17 +15,21 @@ void() CarSwap_Forward =
 	else if (self.vehicle == VEH_WRAITH)
 		self.vehicle = VEH_ROADBASTARD;
 	else if (self.vehicle == VEH_ROADBASTARD)
+		self.vehicle = VEH_SKYSCRAPER;
+	else if (self.vehicle == VEH_SKYSCRAPER)
 		self.vehicle = VEH_HOTROD;
 };
 
 void() CarSwap_Backward =
 {
-	if (self.vehicle == VEH_ROADBASTARD)
+	if (self.vehicle == VEH_SKYSCRAPER)
+		self.vehicle = VEH_ROADBASTARD;
+	else if (self.vehicle == VEH_ROADBASTARD)
 		self.vehicle = VEH_WRAITH;
 	else if (self.vehicle == VEH_WRAITH)
 		self.vehicle = VEH_HOTROD;
 	else if (self.vehicle == VEH_HOTROD)
-		self.vehicle = VEH_ROADBASTARD;
+		self.vehicle = VEH_SKYSCRAPER;
 };
 
 void() CheckImpulses =

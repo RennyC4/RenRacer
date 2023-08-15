@@ -513,6 +513,8 @@ float WEP_SPECIAL = 64; // Weapon 1
 float VEH_HOTROD = 0;
 float VEH_WRAITH = 1;
 float VEH_ROADBASTARD = 2;
+float VEH_SKYSCRAPER = 4;
+float VEH_REDRAGE = 8;
 
 // Ammo
 .float ammo_firerocket, ammo_homingrocket, ammo_powerrocket, ammo_napalm, ammo_rico, ammo_remote, ammo_freeze, ammo_special;
