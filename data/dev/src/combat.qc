@@ -1961,7 +1961,7 @@ void() SpecialWeapon_Lawbreaker =
 	lit.enemy = world;
 	lit.radius = 250; // range of attack
 	lit.removeme_finished = time + 2;
-	setmodel (lit, "progs/s_debug.spr");
+	setmodel (lit, string_null);
 	setsize (lit, '0 0 0', '0 0 0');
 	setorigin (lit, self.origin + v_up * 24 - v_forward * 10);
 	lit.think = SpecialWeapon_Lawbreaker_Think;
