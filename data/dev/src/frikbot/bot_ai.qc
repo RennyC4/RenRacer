@@ -282,8 +282,7 @@ entity() Bot_FindClosestItem;
 void() bot_ai_race;
 void() bot_ai_fight;
 .float bot_hitwall;
-
-float stagger_think;
+//float stagger_think;
 .float ai_time;
 
 void() BotAI =
@@ -324,6 +323,8 @@ void() BotAI =
 			self.bot_hitwall = FALSE;
 	}
 
+	// RennyC: Disabled stagger, it makes them backup too much and act stupid
+	/*
 	// stagger the bot's AI out so they all don't think at the same time, causing game spikes
 	if (self.ai_time > time)
 		return;
@@ -335,7 +336,7 @@ void() BotAI =
 			self.ai_time = self.ai_time + 0.1 / (2 * bot_count);
 	}
 	stagger_think = time;
-
+	*/
 	if (!ragewar)
 	{
 		local vector x = getlight(self.origin);
