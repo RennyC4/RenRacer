@@ -151,7 +151,6 @@ void() bot_angle_set =
 	if (self.goalentity)
 	{
 		vector view = vectoangles(self.goalentity.origin - self.origin);
-		self.angles_y = view_y;
 		// Cap X angle: Bots check their X angle for incline vs goalentity crap
 		// at the same time don't allow straight up/down X, this will slow/stop their drive forward velocity
 		if (self.angles_x > 10)
@@ -318,12 +317,9 @@ void() BotAI =
 	if (test1 || test2 || test3)
 		self.bot_hitwall = TRUE;
 	else
-	{
-		if (!self.bot_hitwall)
-			self.bot_hitwall = FALSE;
-	}
+		self.bot_hitwall = FALSE;
 
-	// RennyC: Disabled stagger, it makes them backup too much and act stupid
+	// RennyC: Disabled stagger, for now
 	/*
 	// stagger the bot's AI out so they all don't think at the same time, causing game spikes
 	if (self.ai_time > time)
@@ -337,6 +333,13 @@ void() BotAI =
 	}
 	stagger_think = time;
 	*/
+
+	makevectors_mdl(self.v_angle);
+	if (self.keys == KEY_MOVEFORWARD)
+		self.velocity = v_forward * 9999; // Forward
+	if (self.keys == KEY_MOVEBACK)
+		self.velocity = v_forward * -9999; // Back
+
 	if (!ragewar)
 	{
 		local vector x = getlight(self.origin);

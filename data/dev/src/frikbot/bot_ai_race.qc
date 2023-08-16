@@ -138,7 +138,6 @@ void() bot_ai_race =
 		// Back up for randomly for a second, hit a wall/obstacle
 		if (self.goal_touched && /*self.bot_hitwall &&*/ (self.keys == KEY_MOVEFORWARD || (self.button0 && self.turbo_fuel > 0)) && self.realspeed <= 3)
 		{
-			self.velocity = v_forward * -9999;
 			self.keys = KEY_MOVEBACK;
 			self.bot_backup_finished = time + 0.3 + random()*0.3;
 		}
@@ -224,7 +223,6 @@ void() bot_ai_race =
 					else
 						self.button0 = FALSE;
 				}
-				self.velocity = v_forward * 9999; // Forward
 				self.keys = KEY_MOVEFORWARD;
 			}
 			else // Close to goal
@@ -234,40 +232,27 @@ void() bot_ai_race =
 					if (!goforgoal)
 					{
 						if (self.waypoint_speed != 999)
-						{
-							self.velocity = v_forward * -9999; // Back
 							self.keys = KEY_MOVEBACK; // Slow down, coming in too fast!
-						}
 						//bprint ("Moving in too hot!\n");
 					}
 					else
-					{
-						self.velocity = v_forward * 9999; // Forward
 						self.keys = KEY_MOVEFORWARD;
-					}
 				}
 				else
 				{
 					if (!self.goal_touched) // Go for goal point
 					{
 						self.button0 = TRUE;
-						self.velocity = v_forward * 9999; // Forward
 						self.keys = KEY_MOVEFORWARD;
 					}
 					else
 					{
 						if (self.realspeed < 50)
-						{
-							self.velocity = v_forward * 9999; // Forward
 							self.keys = KEY_MOVEFORWARD;
-						}
 						else
 						{
 							if (self.waypoint_speed != 999)
-							{
-								self.velocity = v_forward * -9999; // Back
 								self.keys = KEY_MOVEBACK;
-							}
 						}
 						self.button0 = FALSE;
 					}
@@ -277,22 +262,16 @@ void() bot_ai_race =
 				if (self.waypoint_speed > 0)
 				{
 					if (self.realspeed > self.waypoint_speed)
-					{
-						self.velocity = v_forward * -9999; // Back
 						self.keys = KEY_MOVEBACK;
-					}
 					else
-					{
-						self.velocity = v_forward * 9999; // Forward
 						self.keys = KEY_MOVEFORWARD;
-					}
+
 					// 999 Speed waypoint tells bot to turbo, but only if facing goal entity & visible
 					if (self.waypoint_speed == 999 && infront(self.goalentity, 0.992) && visible(self.goalentity))
 					{
 						if (self.turbo_fuel > 0)
 						{
 							self.button0 = TRUE;
-							self.velocity = v_forward * 9999; // Forward
 							self.keys = KEY_MOVEFORWARD;
 							//bprint ("Waypoint says to Turbo\n");
 						}
@@ -306,7 +285,6 @@ void() bot_ai_race =
 			float er = self.realang_x * -1;
 			if (self.goalentity.origin_z > self.origin_z && (er > 10 && er < 60) && infront(self.goalentity, 0.7))
 			{
-				self.velocity = v_forward * 9999; // Forward
 				self.keys = KEY_MOVEFORWARD;
 				if (self.turbo_fuel >= 0)
 					self.button0 = TRUE;
@@ -316,7 +294,6 @@ void() bot_ai_race =
 		else // backing up
 		{
 			self.button0 = FALSE;
-			self.velocity = v_forward * -9999; // Back
 			self.keys = KEY_MOVEBACK;
 		}
 

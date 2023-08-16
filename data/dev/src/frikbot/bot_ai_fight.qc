@@ -85,7 +85,7 @@ void() bot_ai_fight =
 
 		self.button0 = FALSE;
 		self.keys = KEY_MOVEBACK;
-		self.velocity = v_forward * -9999; // Backward
+		//self.velocity = v_forward * -9999; // Backward
 	}
 	else // forward
 	{
@@ -100,9 +100,9 @@ void() bot_ai_fight =
 			self.button0 = TRUE;
 		else
 			self.button0 = FALSE;
-		
+
 		self.keys = KEY_MOVEFORWARD;
-		self.velocity = v_forward * 9999; // Forward
+		//self.velocity = v_forward * 9999; // Forward
 	}
 
 	//

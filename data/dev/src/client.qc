@@ -110,15 +110,23 @@ void() PushPlayers =
 		{
 			if (self.realspeed >= 10 && self.realspeed > b.realspeed)
 			{
-				if (self.vehicle != VEH_SKYSCRAPER)
+				if (ragewar)
+				{
+					if (self.vehicle != VEH_SKYSCRAPER)
+					{
+						b.forcejump_strength = 240 + (self.realspeed * 2);
+						b.forcejump = TRUE;
+					}
+					else if (self.turbo) // skyscraper jumps on turbo hit
+					{
+						self.forcejump_strength = 240 + (self.realspeed * 2);
+						self.forcejump = TRUE;
+					}
+				}
+				else
 				{
 					b.forcejump_strength = 240 + (self.realspeed * 2);
 					b.forcejump = TRUE;
-				}
-				else if (self.turbo) // skyscraper jumps on turbo hit
-				{
-					self.forcejump_strength = 240 + (self.realspeed * 2);
-					self.forcejump = TRUE;
 				}
 				
 				if (random() < 0.25)
@@ -131,26 +139,29 @@ void() PushPlayers =
 					sound (self, CHAN_AUTO, "hit4.wav", 1, ATTN_NORM);
 			}
 
-			if (self.turbo)
+			if (ragewar)
 			{
-				// target damage
-				float dmg = floor(self.realspeed / 32) + floor(self.max_health / 5);
-				DoDamage(b, self, dmg, "ramming");
-
-				// self damage
-				dmg = floor(dmg / 4);
-				if (self.vehicle != VEH_SKYSCRAPER)
-					DoDamage(self, self, dmg, "ramming");
-
-				if (self.vehicle == VEH_SKYSCRAPER && self.ammo_special > 0 && b.health > 0)
+				if (self.turbo)
 				{
-					sound (self, CHAN_AUTO, "combat/skyscraper.wav", 1, ATTN_NORM);
+					// target damage
+					float dmg = floor(self.realspeed / 32) + floor(self.max_health / 5);
+					DoDamage(b, self, dmg, "ramming");
 
-					self.forcejump_strength = 240 + (self.realspeed * 2);
-					self.forcejump = TRUE;
-					dmg = 15; // extra 15 damage
-					DoDamage(b, self, dmg, "skyscraper");
-					self.ammo_special -= 1;
+					// self damage
+					dmg = floor(dmg / 4);
+					if (self.vehicle != VEH_SKYSCRAPER)
+						DoDamage(self, self, dmg, "ramming");
+
+					if (self.vehicle == VEH_SKYSCRAPER && self.ammo_special > 0 && b.health > 0)
+					{
+						sound (self, CHAN_AUTO, "combat/skyscraper.wav", 1, ATTN_NORM);
+
+						self.forcejump_strength = 240 + (self.realspeed * 2);
+						self.forcejump = TRUE;
+						dmg = 15; // extra 15 damage
+						DoDamage(b, self, dmg, "skyscraper");
+						self.ammo_special -= 1;
+					}
 				}
 			}
 
