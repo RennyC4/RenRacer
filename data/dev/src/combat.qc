@@ -1336,7 +1336,7 @@ void() SpecialWeapon_HotRod_Touch =
 			other.owner.driving.onfire_finished = time + 5;
 			other.owner.driving.igniter = self.owner;
 		}
-		self.hitobject_finished = time + 0.2; // how fast to damage, closer to target deals more damage
+		self.hitobject_finished = time + 0.18; // how fast to damage
 	}
 };
 
@@ -1774,6 +1774,19 @@ void() SpecialWeapon_RedRage_touch =
 	remove(self);
 };
 
+void() SpecialWeapon_RedRage_Think =
+{
+	if (!self.enemy)
+		GetTarget();
+	if (self.enemy)
+	{
+		vector dir = normalize(self.enemy.origin - self.origin);
+		self.velocity = dir * 1500;
+		self.angles = vectoangles(self.velocity);
+	}
+	//frameskip (0.01);
+};
+
 void(float rear) SpecialWeapon_RedRage =
 {
 	makevectors(self.realang);
@@ -1811,6 +1824,9 @@ void(float rear) SpecialWeapon_RedRage =
 		beam.velocity_y = beam.velocity_y + self.driving.velocity_y;
 	}
 	beam.angles = vectoangles(beam.velocity);
+
+	beam.think = SpecialWeapon_RedRage_Think;
+	beam.nextthink = time;
 
 	setmodel (beam, "progs/bullet.mdl");
 	setsize (beam, '0 0 0', '0 0 0');

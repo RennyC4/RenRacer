@@ -303,7 +303,8 @@ void() bot_ai_race =
 			}
 
 			// Fight inclines
-			if (self.goalentity.origin_z > self.origin_z && self.angles_x >= 5 && infront(self.goalentity, 0.7))
+			float er = self.realang_x * -1;
+			if (self.goalentity.origin_z > self.origin_z && (er > 10 && er < 60) && infront(self.goalentity, 0.7))
 			{
 				self.velocity = v_forward * 9999; // Forward
 				self.keys = KEY_MOVEFORWARD;

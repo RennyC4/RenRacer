@@ -700,7 +700,7 @@ void TryUpdateVehicle(){
 				if (self.onfire_finished > time) // Remove being on fire faster!
 					self.onfire_finished = self.onfire_finished - 0.1;
 				if (self.frozen_finished > time) // Remove being frozen faster!
-					self.frozen_finished = self.frozen_finished - 0.025;
+					self.frozen_finished = self.frozen_finished - 0.03;
 
 				if (self.turbo_fuel > 0)
 					self.turbo_fuel = self.turbo_fuel - 1;
