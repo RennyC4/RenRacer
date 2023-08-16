@@ -98,8 +98,11 @@ void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 		bprint(targ.netname, " felt ");
 		bprint(attacker.netname, "'s crimson fury\n");
 	}
-	
-	
+	if (attackerclassname == "lawbreaker")
+	{
+		bprint(attacker.netname, " showed ");
+		bprint(targ.netname, " the long tazer of the law\n");
+	}
 };
 
 // ---
@@ -1747,7 +1750,6 @@ void(float rear) SpecialWeapon_RoadBastard =
 // Special Weapon - Red Rage (Crimson Beam)
 //
 
-
 void() SpecialWeapon_RedRage_touch =
 {
 	makevectors_mdl(self.angles);
@@ -1817,9 +1819,139 @@ void(float rear) SpecialWeapon_RedRage =
 	sound (self, CHAN_WEAPON, "combat/redrage.wav", 1, ATTN_NORM);
 };
 
+//
+// Special Weapon - Law Breaker (Tazer Shock)
+//
+
+void() SpecialWeapon_Lawbreaker_VFXThink =
+{
+	self.avelocity = '800 800 800';
+	if (self.alpha > 0.1)
+		self.alpha = self.alpha - 0.005;
+	if (self.scale > 12)
+	{
+		remove(self);
+		return;
+	}
+	else
+		self.scale = self.scale + 0.1;
+
+	setorigin(self, self.enemy.origin);
+	frameskip(0.01);
+};
+
+void() SpecialWeapon_Lawbreaker_VFX =
+{
+	entity fx = spawn();
+	setmodel(fx, "progs/vfxring.mdl");
+	fx.movetype = MOVETYPE_NOCLIP;
+	fx.alpha = 1;
+	fx.effects = EF_FULLBRIGHT;
+	fx.solid = SOLID_NOT;
+	fx.enemy = self.enemy;
+	setorigin(fx, self.enemy.origin);
+	fx.think = SpecialWeapon_Lawbreaker_VFXThink;
+	fx.nextthink = time;
+	sound (fx, CHAN_AUTO, "combat/lawbreaker2.wav", 1, ATTN_NORM);
+};
+
+void() SpecialWeapon_Lawbreaker_Think =
+{
+	if (self.removeme_finished < time)
+	{
+		if (self.enemy.health > 0) // run second damage function before removal
+		{
+			SpecialWeapon_Lawbreaker_VFX();
+			DoDamage(self.enemy, self.owner, 10, self.classname);
+		}
+
+		remove(self);
+		return;
+	}
+
+	makevectors_mdl(self.angles);
+	vector start = self.origin;
+
+	for (entity targ = world;(targ = find(targ, classname, "player"));)
+	{
+		if (vlen(targ.origin - self.origin) <= (self.radius + 100) && targ != self.owner && !self.enemy && targ.health > 0 && targ.invulnerable_finished < time)
+		{
+			self.enemy = targ;
+			self.removeme_finished = time + 2; // add time on target found
+		}
+	}
+
+	if (!self.enemy)
+	{
+		self.angles_y += 5; // spin, keep above vector end stuff
+		vector end = start + (v_forward * self.radius);
+	}
+	else // found one
+	{
+		if (!self.cnt) // run first damage function once
+		{
+			SpecialWeapon_Lawbreaker_VFX();
+			self.enemy.forcejump_strength = 600;
+			self.enemy.forcejump = TRUE;
+			DoDamage(self.enemy, self.owner, 10, self.classname);
+			self.cnt = TRUE;
+		}
+		end = self.enemy.origin; // update beam end position
+	}
+
+	traceline (start, end, TRUE, self);
+
+	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST, TE_LIGHTNING2);
+	WriteEntity (MSG_BROADCAST, self);
+	WriteCoord (MSG_BROADCAST, start_x);
+	WriteCoord (MSG_BROADCAST, start_y);
+	WriteCoord (MSG_BROADCAST, start_z);
+	WriteCoord (MSG_BROADCAST, end_x);
+	WriteCoord (MSG_BROADCAST, end_y);
+	WriteCoord (MSG_BROADCAST, end_z);
+
+	makevectors_mdl(self.owner.realang);
+	setorigin (self, self.owner.origin + v_up * 24 - v_forward * 10);
+	
+	if (self.animation_finished < time)
+	{
+		if (!self.cnt2)
+			self.cnt2 = TRUE;
+		else
+			self.cnt2 = FALSE;
+		self.animation_finished = time + 0.1;
+	}
+	
+	if (!self.cnt2)
+		self.color = [1, 0, 0];
+	else
+		self.color = [0, 0, 1];
+	self.pflags = PFLAGS_FULLDYNAMIC | PFLAGS_CORONA;
+	self.light_lev = 250;
+
+	frameskip(0.01);
+};
+
 void() SpecialWeapon_Lawbreaker =
 {
-	vector start, end;
+	makevectors(self.realang);
+
+	entity lit = spawn();
+	lit.movetype = MOVETYPE_NOCLIP;
+	lit.owner = self;
+	lit.solid = SOLID_NOT;
+	lit.classname = "lawbreaker";
+	lit.enemy = world;
+	lit.radius = 250; // range of attack
+	lit.removeme_finished = time + 2;
+	setmodel (lit, "progs/s_debug.spr");
+	setsize (lit, '0 0 0', '0 0 0');
+	setorigin (lit, self.origin + v_up * 24 - v_forward * 10);
+	lit.think = SpecialWeapon_Lawbreaker_Think;
+	lit.nextthink = time;
+	
+	sound (lit, CHAN_WEAPON, "combat/lawbreaker.wav", 1, ATTN_NORM);
 };
 
 //
@@ -2190,6 +2322,7 @@ void(float type, float rear) CarAttack =
 								SpecialWeapon_HotRod(FALSE);
 							else
 								SpecialWeapon_HotRod(TRUE);
+							self.spcl_finished = time + 5; // fires slower
 						}
 					}
 					if (self.vehicle == VEH_WRAITH) // Wraith special
@@ -2199,14 +2332,14 @@ void(float type, float rear) CarAttack =
 						else
 							SpecialWeapon_Wraith(TRUE);
 					}
-					if (self.vehicle == VEH_ROADBASTARD) // RoadBastard special
+					if (self.vehicle == VEH_ROADBASTARD) // Road Bastard special
 					{
 						if (!rear)
 							SpecialWeapon_RoadBastard(FALSE);
 						else
 							SpecialWeapon_RoadBastard(TRUE);
 					}
-					if (self.vehicle == VEH_REDRAGE) // RedRage special
+					if (self.vehicle == VEH_REDRAGE) // Red Rage special
 					{
 						if (!rear)
 							SpecialWeapon_RedRage(FALSE);
@@ -2214,6 +2347,12 @@ void(float type, float rear) CarAttack =
 							SpecialWeapon_RedRage(TRUE);
 						self.spcl_finished = time + 0.5; // fires faster
 					}
+					if (self.vehicle == VEH_LAWBREAKER) // Law Breaker special
+					{
+						SpecialWeapon_Lawbreaker();
+						self.spcl_finished = time + 3; // fires slower
+					}
+					
 					// Keep at bottom
 					if (self.vehicle != VEH_SKYSCRAPER) // Special exception
 						self.ammo_special = self.ammo_special - 1;

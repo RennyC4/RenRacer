@@ -89,20 +89,20 @@ void() bot_ai_fight =
 	}
 	else // forward
 	{
+		//
+		// Turbo logic (hit player, remove napalm fire, etc)
+		//
+
+		float rangetest = range(self.goalentity);
+		if (self.goalentity.origin_z > self.origin_z && self.angles_x >= 5 && infront(self.goalentity, 0.7) || (self.onfire_finished > time || self.frozen_finished > time)
+		|| (infront(self.goalentity, 0.8) && visible(self.goalentity) && self.turbo_fuel > 0 && rangetest != RANGE_CLOSE))
+			self.button0 = TRUE;
+		else
+			self.button0 = FALSE;
+		
 		self.keys = KEY_MOVEFORWARD;
 		self.velocity = v_forward * 9999; // Forward
 	}
-
-	//
-	// Turbo logic (hit player, remove napalm fire, etc)
-	//
-
-	float rangetest = range(self.goalentity);
-	if (self.goalentity.origin_z > self.origin_z && self.angles_x >= 5 && infront(self.goalentity, 0.7) || (self.onfire_finished > time || self.frozen_finished > time)
-	|| (infront(self.goalentity, 0.8) && visible(self.goalentity) && self.turbo_fuel > 0 && rangetest != RANGE_CLOSE))
-		self.button0 = TRUE;
-	else
-		self.button0 = FALSE;
 
 	//
 	// Get player to hunt
@@ -142,8 +142,9 @@ void() bot_ai_fight =
 					Fire_Freeze(FALSE);
 					self.energy = self.energy - 80;
 				}
-				if (self.ammo_special > 0) // Car specific special Weapons
+				if (self.ammo_special > 0)
 				{
+					// Car specific special weapons logic
 					if (self.vehicle == VEH_HOTROD && rangetest == RANGE_CLOSE && !self.waterlevel)
 					{
 						self.weapon = WEP_SPECIAL;
@@ -166,7 +167,13 @@ void() bot_ai_fight =
 						self.weapon = WEP_SPECIAL;
 						self.button4 = TRUE;
 					}
-				} //
+					if (self.vehicle == VEH_LAWBREAKER && (rangetest == RANGE_NEAR || rangetest == RANGE_CLOSE))
+					{
+						self.weapon = WEP_SPECIAL;
+						self.button4 = TRUE;
+					}
+					//
+				}
 				if (self.ammo_firerocket > 0)
 				{
 					self.weapon = WEP_ROCKET;

@@ -105,6 +105,7 @@ void() worldspawn =
 	precache_model("progs/frozen.mdl");
 	precache_model("progs/flame.spr");
 	precache_model("progs/boomerang.mdl");
+	precache_model("progs/vfxring.mdl");
 
 	//
 	// func_vehicle - start
@@ -204,6 +205,8 @@ void() worldspawn =
 	precache_sound ("combat/boomerang2.wav");
 	precache_sound ("combat/skyscraper.wav");
 	precache_sound ("combat/redrage.wav");
+	precache_sound ("combat/lawbreaker.wav");
+	precache_sound ("combat/lawbreaker2.wav");
 
 	world_lights();
 	load_waypoints(); // Load waypoints
