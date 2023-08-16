@@ -1743,6 +1743,11 @@ void(float rear) SpecialWeapon_RoadBastard =
 	sound (self, CHAN_WEAPON, "combat/boomerang.wav", 1, ATTN_NORM);
 };
 
+//
+// Special Weapon - Red Rage (Crimson Beam)
+//
+
+
 void() SpecialWeapon_RedRage_touch =
 {
 	makevectors_mdl(self.angles);
@@ -1811,6 +1816,12 @@ void(float rear) SpecialWeapon_RedRage =
 	setorigin (beam, self.origin + v_up * 8 + v_forward * (48 + self.realspeed));
 	sound (self, CHAN_WEAPON, "combat/redrage.wav", 1, ATTN_NORM);
 };
+
+void() SpecialWeapon_Lawbreaker =
+{
+	vector start, end;
+};
+
 //
 // Command Specials
 //
