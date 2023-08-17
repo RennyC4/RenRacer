@@ -203,7 +203,7 @@ void(vector position, float size) Create2DFreezeExplosion =
 
 void(entity targ, entity attacker) Death =
 {
-	targ.forcejump_strength = 750;
+	targ.forcejump_strength = 700;
 	targ.forcejump = TRUE;
 	CreateExplosion(targ.origin + v_up * 32);
 };
@@ -824,13 +824,17 @@ void() Napalm_Touch = // Does 10 damage on direct player hit + fire damage is 4-
 
 void() Napalm_Think =
 {
-	//if (!self.cnt) // run once on projectile launch
-	//{
-		if (!self.enemy)
-			GetTarget();
-		//self.cnt = TRUE;
-	//}
-
+//	if (!self.enemy)
+		GetTarget();
+	if (self.enemy && !self.cnt)
+	{
+		vector dir = normalize(self.enemy.origin - self.origin);
+		self.velocity_x = dir_x * 550;
+		self.velocity_y = dir_y * 550;
+		
+		self.angles = vectoangles(self.velocity);
+		self.cnt = TRUE;
+	}
 	pointparticles(PART_NAPALM, self.origin, '0 0 0', 1);
 
 	if (self.velocity_z <= 0)
@@ -1784,7 +1788,6 @@ void() SpecialWeapon_RedRage_Think =
 		self.velocity = dir * 1500;
 		self.angles = vectoangles(self.velocity);
 	}
-	//frameskip (0.01);
 };
 
 void(float rear) SpecialWeapon_RedRage =
@@ -1839,6 +1842,7 @@ void(float rear) SpecialWeapon_RedRage =
 // Special Weapon - Law Breaker (Tazer Shock)
 //
 
+.float tazer_finished;
 void() SpecialWeapon_Lawbreaker_VFXThink =
 {
 	self.avelocity = '800 800 800';
@@ -1890,10 +1894,11 @@ void() SpecialWeapon_Lawbreaker_Think =
 
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
-		if (vlen(targ.origin - self.origin) <= (self.radius + 100) && targ != self.owner && !self.enemy && targ.health > 0 && targ.invulnerable_finished < time)
+		if (vlen(targ.origin - self.origin) <= (self.radius + 100) && targ != self.owner && !self.enemy && targ.health > 0 && targ.invulnerable_finished < time && targ.tazer_finished < time)
 		{
 			self.enemy = targ;
-			self.removeme_finished = time + 2; // add time on target found
+			targ.tazer_finished = time + 3;
+			self.removeme_finished = time + 1.25; // add time on target found
 		}
 	}
 
@@ -1917,16 +1922,42 @@ void() SpecialWeapon_Lawbreaker_Think =
 
 	traceline (start, end, TRUE, self);
 
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_LIGHTNING2);
-	WriteEntity (MSG_BROADCAST, self);
-	WriteCoord (MSG_BROADCAST, start_x);
-	WriteCoord (MSG_BROADCAST, start_y);
-	WriteCoord (MSG_BROADCAST, start_z);
-	WriteCoord (MSG_BROADCAST, end_x);
-	WriteCoord (MSG_BROADCAST, end_y);
-	WriteCoord (MSG_BROADCAST, end_z);
-
+	if (!self.frags) // Only show one search tazer
+	{
+		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+		WriteByte (MSG_BROADCAST, TE_LIGHTNING2);
+		WriteEntity (MSG_BROADCAST, self);
+		WriteCoord (MSG_BROADCAST, start_x);
+		WriteCoord (MSG_BROADCAST, start_y);
+		WriteCoord (MSG_BROADCAST, start_z);
+		if (self.enemy) // got an enemy
+		{
+			WriteCoord (MSG_BROADCAST, end_x);
+			WriteCoord (MSG_BROADCAST, end_y);
+			WriteCoord (MSG_BROADCAST, end_z);
+		}
+		else // hit walls
+		{
+			WriteCoord (MSG_BROADCAST, trace_endpos_x);
+			WriteCoord (MSG_BROADCAST, trace_endpos_y);
+			WriteCoord (MSG_BROADCAST, trace_endpos_z);
+		}
+	}
+	else // only show other search tazers after targets locked
+	{
+		if (self.enemy)
+		{
+			WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+			WriteByte (MSG_BROADCAST, TE_LIGHTNING2);
+			WriteEntity (MSG_BROADCAST, self);
+			WriteCoord (MSG_BROADCAST, start_x);
+			WriteCoord (MSG_BROADCAST, start_y);
+			WriteCoord (MSG_BROADCAST, start_z);
+			WriteCoord (MSG_BROADCAST, end_x);
+			WriteCoord (MSG_BROADCAST, end_y);
+			WriteCoord (MSG_BROADCAST, end_z);
+		}
+	}
 	makevectors_mdl(self.owner.realang);
 	setorigin (self, self.owner.origin + v_up * 24 - v_forward * 10);
 	
@@ -1953,21 +1984,26 @@ void() SpecialWeapon_Lawbreaker =
 {
 	makevectors(self.realang);
 
-	entity lit = spawn();
-	lit.movetype = MOVETYPE_NOCLIP;
-	lit.owner = self;
-	lit.solid = SOLID_NOT;
-	lit.classname = "lawbreaker";
-	lit.enemy = world;
-	lit.radius = 250; // range of attack
-	lit.removeme_finished = time + 2;
-	setmodel (lit, string_null);
-	setsize (lit, '0 0 0', '0 0 0');
-	setorigin (lit, self.origin + v_up * 24 - v_forward * 10);
-	lit.think = SpecialWeapon_Lawbreaker_Think;
-	lit.nextthink = time;
-	
-	sound (lit, CHAN_WEAPON, "combat/lawbreaker.wav", 1, ATTN_NORM);
+	float i;
+	for (i = 0; i < 3; i = i+1) // 3 tazers
+	{
+		entity lit = spawn();
+		lit.movetype = MOVETYPE_NOCLIP;
+		lit.owner = self;
+		lit.solid = SOLID_NOT;
+		lit.classname = "lawbreaker";
+		lit.enemy = world;
+		lit.angles_y = random()*360;
+		lit.radius = 300; // range of attack
+		lit.removeme_finished = time + 2;
+		lit.frags = i;
+		setmodel (lit, string_null);
+		setsize (lit, '0 0 0', '0 0 0');
+		setorigin (lit, self.origin + v_up * 24 - v_forward * 10);
+		lit.think = SpecialWeapon_Lawbreaker_Think;
+		lit.nextthink = time;
+	}
+	sound (self, CHAN_WEAPON, "combat/lawbreaker.wav", 1, ATTN_NORM);
 };
 
 //
@@ -2028,7 +2064,7 @@ void() CommandSpecials =
 	if (self.moveprog1 > 0 && self.moveprog2 > 1 && self.energy >= 10)
 	{
 		self.energy = self.energy - 10;
-		self.forcejump_strength = 1000;
+		self.forcejump_strength = 800;
 		ForceJump();
 		sound (self, CHAN_BODY, "combat/jump.wav", 1, ATTN_NORM);
 		sprint (self, "^2Command: ");

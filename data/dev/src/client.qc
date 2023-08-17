@@ -114,12 +114,12 @@ void() PushPlayers =
 				{
 					if (self.vehicle != VEH_SKYSCRAPER)
 					{
-						b.forcejump_strength = 240 + (self.realspeed * 2);
+						b.forcejump_strength = ceil(200 + (self.realspeed * 1.75));
 						b.forcejump = TRUE;
 					}
-					else if (self.turbo) // skyscraper jumps on turbo hit
+					else if (self.turbo) // only skyscraper jumps on turbo hit
 					{
-						self.forcejump_strength = 240 + (self.realspeed * 2);
+						self.forcejump_strength = ceil(200 + (self.realspeed * 1.75));
 						self.forcejump = TRUE;
 					}
 				}
@@ -155,9 +155,6 @@ void() PushPlayers =
 					if (self.vehicle == VEH_SKYSCRAPER && self.ammo_special > 0 && b.health > 0)
 					{
 						sound (self, CHAN_AUTO, "combat/skyscraper.wav", 1, ATTN_NORM);
-
-						self.forcejump_strength = 240 + (self.realspeed * 2);
-						self.forcejump = TRUE;
 						dmg = 15; // extra 15 damage
 						DoDamage(b, self, dmg, "skyscraper");
 						self.ammo_special -= 1;
@@ -776,7 +773,8 @@ void() PlayerPostThink =
 	bprint (" MP Right: ", s, "\n");
 	*/
 	
-	CommandSpecials();
+	if (clienttype(self) != CLIENTTYPE_BOT)
+		CommandSpecials();
 
 	//
 	// SPECIAL MOVE MOTIONS: Reset keys if timer is dropped

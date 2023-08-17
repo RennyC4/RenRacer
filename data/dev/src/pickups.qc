@@ -83,7 +83,7 @@ void() item_health =
 
 	setmodel (self, "progs/item_health.spr");
 	self.mdl = self.model; // can be restored on respawn
-	setsize (self, '0 0 0', '0 0 0');
+	setsize (self, VEC_HULL_MIN, VEC_HULL_MAX);
 
 	self.origin_z = self.origin_z + 8;
 	setorigin(self, self.origin);

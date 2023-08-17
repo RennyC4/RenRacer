@@ -62,7 +62,7 @@ void() bot_ai_fight =
 	if (race_status != RACE_STARTED)
 		return;
 
-	makevectors_mdl(self.v_angle);
+	makevectors(self.v_angle);
 
 	//
 	// Driving logic
@@ -138,7 +138,7 @@ void() bot_ai_fight =
 			{
 				rangetest = range(self.enemy);
 				// AI Special Command moves
-				if (self.energy >= 80 && (rangetest == RANGE_NEAR || rangetest == RANGE_CLOSE) && random() < 0.05)
+				if (self.energy >= 80 && (rangetest == RANGE_NEAR || rangetest == RANGE_CLOSE) && random() < 0.025)
 				{
 					Fire_Freeze(FALSE);
 					self.energy = self.energy - 80;

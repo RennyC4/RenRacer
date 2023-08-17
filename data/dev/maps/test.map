@@ -158,7 +158,7 @@
 // entity 2
 {
 "classname" "racer_spawnpoint"
-"origin" "-168 -88 72"
+"origin" "-168 -88 88"
 }
 // entity 3
 {
@@ -168,7 +168,7 @@
 // entity 4
 {
 "classname" "racer_spawnpoint"
-"origin" "-168 248 72"
+"origin" "-168 248 88"
 }
 // entity 5
 {
@@ -208,7 +208,7 @@
 // entity 11
 {
 "classname" "dm_spawnpoint"
-"origin" "-296 72 88"
+"origin" "-392 -104 88"
 }
 // entity 12
 {
@@ -234,4 +234,19 @@
 "origin" "48 240 144"
 "angle" "255"
 "targetname" "1"
+}
+// entity 16
+{
+"classname" "dm_spawnpoint"
+"origin" "-296 88 88"
+}
+// entity 17
+{
+"classname" "dm_spawnpoint"
+"origin" "-24 296 88"
+}
+// entity 18
+{
+"classname" "dm_spawnpoint"
+"origin" "-360 424 88"
 }
