@@ -346,74 +346,33 @@ void(entity targ, vector dest, float silent, float stop) car_teleport =
 };
 
 // directly set the car angles WIP
-void(entity ent, float distance, float angleDegrees) set_carangle =
+// this function sucks
+void(entity targ, vector newang) car_setangle =
 {
-    float angleRadians = angleDegrees * (M_PI / 180);
-    float deltaX = distance * cos(angleRadians);
-    float deltaY = distance * sin(angleRadians);
+	bprint ("car_setangle called\n");
 
-	entity part = self.driving.physobj_particlelist;
-    while(part)
-    {
-		vector originalPosition = part.origin;
-		vector new;
+	// remove car
+	remove_car(targ.driving);
 
-		new_x = originalPosition_x + deltaX;
-		new_y = originalPosition_y + deltaY;
-		new_z = 0;
-	
-		setorigin(part, new);
-		part = part.physobj_next;
-	}
-	self.angles_y = angleDegrees;
-	self.fixangle = TRUE;
+	// set angle
+	targ.angles = newang;
+	targ.fixangle = TRUE;
 
-/*	vector displacement = dir - targ.angles;
+	// Recreate car
+	if (targ.vehicle == VEH_HOTROD)
+		entity car = hotrod();
+	if (targ.vehicle == VEH_WRAITH)
+		car = wraith();
+	if (targ.vehicle == VEH_ROADBASTARD)
+		car = roadbastard();
+	if (targ.vehicle == VEH_SKYSCRAPER)
+		car = skyscraper();
+	if (targ.vehicle == VEH_REDRAGE)
+		car = redrage();
+	if (targ.vehicle == VEH_LAWBREAKER)
+		car = lawbreaker();
 
-	entity part = self.driving.physobj_particlelist;
-    while(part)
-    {
-		bprint ("1: ",ftos(part.angles_y),"\n");
-
-		vector v2 = part.angles;
-		v2 = v2 += displacement;
-		part.angles = v2;
-
-		bprint("2: ",ftos(part.angles_y),"\n");
-		bprint(part.classname, "\n");
-
-		part = part.physobj_next;
-	}
-
-
-	entity hitmodel = self.driving.physobj_hitmodel;
-	while (hitmodel)
-	{
-		bprint ("1: ",ftos(hitmodel.angles_y),"\n");
-
-		v2 = hitmodel.angles;
-		v2 = v2 += displacement;
-		hitmodel.angles = v2;
-
-		bprint("2: ",ftos(hitmodel.angles_y),"\n");
-		bprint(hitmodel.classname, "\n");
-
-		hitmodel = hitmodel.physobj_next;
-	}
-	
-	entity staticmodel = self.driving.physobj_staticlist;
-    while (staticmodel)
-    {
-		bprint ("1: ",ftos(staticmodel.angles_y),"\n");
-
-		v2 = staticmodel.angles;
-		v2 = v2 += displacement;
-		staticmodel.angles = v2;
-
-		bprint("2: ",ftos(staticmodel.angles_y),"\n");
-		bprint(staticmodel.classname, "\n");
-		
-		staticmodel = staticmodel.physobj_next;
-    }
-*/
+	makevectors(targ.angles);
+	car = Phys_ObjectCreate(car, targ.origin + v_up * 64, v_forward, -v_right, v_up, '0 0 1', 0);
+	Car_InitVehicle(car);
 };
