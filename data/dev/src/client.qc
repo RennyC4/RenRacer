@@ -960,6 +960,8 @@ void() PutClientInServer =
 					// Start music on player mid-game join
 					if (world.model == "maps/dm1.bsp")
 						self.music = "sound/music/dm1.ogg";
+					if (world.model == "maps/dm2.bsp")
+						self.music = "sound/music/dm2.ogg";
 					if (checkextension("DP_QC_SPRINTF"))
 						stuffcmd (self, sprintf("music %s\n", self.music));
 				}

@@ -57,3 +57,35 @@ void() trigger_teleport
 	InitTrigger ();
 	self.touch = trigger_teleport_touch;
 };
+
+//
+// trigger hurt
+//
+
+void() hurt_on =
+{
+	self.solid = SOLID_TRIGGER;
+	self.nextthink = -1;
+};
+
+.float dmg;
+void() trigger_hurt_touch =
+{
+	if (!other.owner.driving)
+		return;
+	if (other.owner.driving.health <= 0)
+		return;
+
+	entity toucher = other.owner.driving;
+
+	self.solid = SOLID_NOT;
+	DoDamage(toucher, self, self.dmg, "trigger");
+	self.think = hurt_on;
+	self.nextthink = time + 1;
+};
+
+void() trigger_hurt
+{
+	InitTrigger ();
+	self.touch = trigger_hurt_touch;
+}

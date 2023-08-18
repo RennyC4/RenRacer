@@ -62,7 +62,8 @@ Breakable brush
 
 void() func_breakable_death =
 {
-	local vector h = self.absmin + ((self.absmax - self.absmin) * 0.5);
+	//vector h = self.absmin + ((self.absmax - self.absmin) * 0.5);
+	vector h = self.absmin + ((self.absmax - self.absmin) * random()*1);
 	if (self.spawnflags & 1)
 	{
 	      ThrowScenery("progs/wood1.mdl", h);
@@ -90,7 +91,15 @@ void() func_breakable_death =
 	      ThrowScenery("progs/metal2.mdl", h);
 	      ThrowScenery("progs/metal3.mdl", h);
 	}
-
+	if (self.spawnflags & 8)
+	{
+	      ThrowScenery("progs/glasshrd.mdl", h);
+	      ThrowScenery("progs/glasshrd.mdl", h);
+	      ThrowScenery("progs/glasshrd.mdl", h);
+	      ThrowScenery("progs/glasshrd.mdl", h);
+	      ThrowScenery("progs/glasshrd.mdl", h);
+	      ThrowScenery("progs/glasshrd.mdl", h);
+	}
 	if (self.noise != "")
 		sound (self, CHAN_AUTO, self.noise, 1, ATTN_NORM);
 	if (self.noise1 != "")
@@ -125,7 +134,11 @@ void() func_breakable =
 		precache_model ("progs/metal3.mdl");
 		self.noise2 = "misc/metlbrk.wav";
 	}
-
+	if (self.spawnflags & 8)
+	{
+		precache_model ("progs/glasshrd.mdl");
+		self.noise = "misc/glassbrk.wav";
+	}
 	if (self.noise)
 		precache_sound(self.noise);
 	if (self.noise1)

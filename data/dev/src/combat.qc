@@ -17,9 +17,9 @@ void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 		bprint(targ.netname, " was killed by the karma gods\n");
 		return;
 	}
-	if (attacker == targ) // suicide
+	if (attacker == targ || attackerclassname == "trigger") // suicide
 	{
-		bprint(targ.netname, " stupidly commited vehicular suicide\n");
+		bprint(targ.netname, " commited vehicular suicide\n");
 		return;
 	}
 
@@ -243,6 +243,9 @@ void(entity targ, entity attacker, float damage, string attackerclassname) DoDam
 
 	if (targ.health <= 0)
 	{
+		if (attacker.classname == "trigger_hurt")
+			targ.frags = targ.frags - 1; // trigger death
+
 		if (targ.classname == "player")
 		{
 			if (attacker != targ)

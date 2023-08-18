@@ -119,6 +119,8 @@ void() countdown_think = // Race start countdown
 			{
 				if (world.model == "maps/dm1.bsp")
 					self.music = "sound/music/dm1.ogg";
+				if (world.model == "maps/dm2.bsp")
+					self.music = "sound/music/dm2.ogg";
 				
 				for (entity targ = world;(targ = find(targ, classname, "player"));)
 				{
