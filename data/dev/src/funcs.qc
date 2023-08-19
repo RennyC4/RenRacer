@@ -18,13 +18,14 @@ void() ThrowSceneryRemove =
 	frameskip(0.1);
 };
 
-void(string name, vector org) ThrowScenery =
+void(string name, float size, vector org) ThrowScenery =
 {
 	entity thing = spawn();
 	makevectors_mdl (thing.angles);
 
 	thing.movetype = MOVETYPE_BOUNCE;
 	thing.solid = SOLID_NOT;
+	thing.scale = size;
 	thing.angles_y = random() * 360;
 	thing.velocity = v_forward * random()*200;
 	thing.velocity_z = random()*300;
@@ -54,59 +55,66 @@ void(string name, vector org) ThrowScenery =
 /*
 Breakable brush
 "health":
-"cnt":
-0 (default) explode into wooden chunks
-1 explode into rock chunks
-2 explode into metal chunks
+"spawnflags":
+0 (default): nothing
+1: explode into wooden chunks
+2: explode into rock chunks
+4: explode into metal chunks
+8: explode into glass chunks
+16: spawn explosion
+32: die on touch
+
+cnt: how many scenery objects to throw (default 3)
+cnt2: scale of objects
 */
 
 void() func_breakable_death =
 {
-	//vector h = self.absmin + ((self.absmax - self.absmin) * 0.5);
-	vector h = self.absmin + ((self.absmax - self.absmin) * random()*1);
+	vector h = self.absmin + ((self.absmax - self.absmin) * 0.5);
+	float i;
+
 	if (self.spawnflags & 1)
 	{
-	      ThrowScenery("progs/wood1.mdl", h);
-	      ThrowScenery("progs/wood2.mdl", h);
-	      ThrowScenery("progs/wood3.mdl", h);
-	      ThrowScenery("progs/wood1.mdl", h);
-	      ThrowScenery("progs/wood2.mdl", h);
-	      ThrowScenery("progs/wood3.mdl", h);
+		for (i = 0; i < self.cnt; i = i+1)
+	      ThrowScenery("progs/wood1.mdl", self.cnt2, h);
 	}
 	if (self.spawnflags & 2)
 	{
-	      ThrowScenery("progs/rubble1.mdl", h);
-	      ThrowScenery("progs/rubble2.mdl", h);
-	      ThrowScenery("progs/rubble3.mdl", h);
-	      ThrowScenery("progs/rubble1.mdl", h);
-	      ThrowScenery("progs/rubble2.mdl", h);
-	      ThrowScenery("progs/rubble3.mdl", h);
+		for (i = 0; i < self.cnt; i = i+1)
+	      ThrowScenery("progs/rubble1.mdl", self.cnt2, h);
 	}
 	if (self.spawnflags & 4)
 	{
-	      ThrowScenery("progs/metal1.mdl", h);
-	      ThrowScenery("progs/metal2.mdl", h);
-	      ThrowScenery("progs/metal3.mdl", h);
-	      ThrowScenery("progs/metal1.mdl", h);
-	      ThrowScenery("progs/metal2.mdl", h);
-	      ThrowScenery("progs/metal3.mdl", h);
+		for (i = 0; i < self.cnt; i = i+1)
+	      ThrowScenery("progs/metal1.mdl", self.cnt2, h);
 	}
 	if (self.spawnflags & 8)
 	{
-	      ThrowScenery("progs/glasshrd.mdl", h);
-	      ThrowScenery("progs/glasshrd.mdl", h);
-	      ThrowScenery("progs/glasshrd.mdl", h);
-	      ThrowScenery("progs/glasshrd.mdl", h);
-	      ThrowScenery("progs/glasshrd.mdl", h);
-	      ThrowScenery("progs/glasshrd.mdl", h);
+		for (i = 0; i < self.cnt; i = i+1)
+	      ThrowScenery("progs/glasshrd.mdl", self.cnt2, h);
 	}
+	if (self.spawnflags & 16) // explosions
+	{
+		CreateExplosion(h);
+		Create2DExplosion(h, self.cnt2);
+		sound (self, CHAN_AUTO, "combat/xplode.wav", 1, ATTN_NONE);
+	}
+
 	if (self.noise != "")
-		sound (self, CHAN_AUTO, self.noise, 1, ATTN_NORM);
+		sound (self, CHAN_AUTO, self.noise, 1, ATTN_NONE);
 	if (self.noise1 != "")
-		sound (self, CHAN_AUTO, self.noise1, 1, ATTN_NORM);
+		sound (self, CHAN_AUTO, self.noise1, 1, ATTN_NONE);
 	if (self.noise2 != "")
-		sound (self, CHAN_AUTO, self.noise2, 1, ATTN_NORM);
+		sound (self, CHAN_AUTO, self.noise2, 1, ATTN_NONE);
+
 	remove(self);
+};
+
+void() func_breakable_touch =
+{
+	if (!other.owner.driving)
+		return;
+	self.th_die();
 };
 
 void() func_breakable =
@@ -139,6 +147,9 @@ void() func_breakable =
 		precache_model ("progs/glasshrd.mdl");
 		self.noise = "misc/glassbrk.wav";
 	}
+	// 16 is reserved for explosions
+	// 32 is touch
+
 	if (self.noise)
 		precache_sound(self.noise);
 	if (self.noise1)
@@ -146,9 +157,21 @@ void() func_breakable =
 	if (self.noise2)
 		precache_sound(self.noise2);
 
+	if (!self.cnt)
+		self.cnt = 3; // how many to scenery parts to throw (default: 3)
+	if (!self.cnt2)
+		self.cnt2 = 1; // scale, can't use .scale
+
 	self.takedamage = DAMAGE_YES;
 	self.solid = SOLID_BSP;
 	self.movetype = MOVETYPE_PUSH;
+
+	if (self.spawnflags & 32) // Dies on touch, no sense in blocking
+	{
+		self.solid = SOLID_TRIGGER;
+		self.touch = func_breakable_touch;
+	}
+
 	self.classname = "func_breakable";
 	self.th_die = func_breakable_death;
 	setmodel (self, self.model);

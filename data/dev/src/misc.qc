@@ -241,7 +241,7 @@ void() misc_model_think =
 * An entity for displaying models. A frame range can be given to animate the
 * model.
 *
-* mdl: The model to display. Can be of type mdl, bsp, or spr.
+* model: The model to display. Can be of type model, bsp, or spr.
 * frame: The frame to display. Can be used to offset the animation.
 * first_frame: The starting frame of the animation.
 * last_frame: The last frame of the animation.
@@ -255,9 +255,12 @@ void() misc_model =
     if (self.first_frame)
 		self.frame = self.first_frame;
 	
-    // Only animate if given a frame range
+    // Only animate if given a frame range, RennyC: MakeStatic 'em
     if (!self.last_frame)
+	{
+		makestatic(self);
         return;
+	}
 
 	// Randomize start from between first/last frame
 	if (self.spawnflags & 1)
