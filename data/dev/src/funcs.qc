@@ -66,6 +66,7 @@ Breakable brush
 
 cnt: how many scenery objects to throw (default 3)
 cnt2: scale of objects
+
 frags: what item to spawn into
 	1: fire rocket
 	2: homing rocket

@@ -254,9 +254,12 @@ void() misc_model =
 
     if (self.first_frame)
 		self.frame = self.first_frame;
-	
+
+	if (self.spawnflags & 1)
+		self.use = SUB_Remove;
+
     // Only animate if given a frame range, RennyC: MakeStatic 'em
-    if (!self.last_frame)
+    if (!self.last_frame && !self.spawnflags)
 	{
 		makestatic(self);
         return;
