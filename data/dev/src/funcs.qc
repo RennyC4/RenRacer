@@ -142,6 +142,7 @@ void() func_breakable_death =
 
 		item.nextthink = time;
 	}
+	SUB_UseTargets();
 	remove(self);
 };
 
