@@ -5382,24 +5382,32 @@
 "classname" "misc_model"
 "origin" "1748 251 -280"
 "model" "progs/s_tree.spr"
+"targetname" "tree2"
+"spawnflags" "1"
 }
 // entity 258
 {
 "classname" "misc_model"
 "origin" "1370 250 -280"
 "model" "progs/s_tree.spr"
+"targetname" "tree1"
+"spawnflags" "1"
 }
 // entity 259
 {
 "classname" "misc_model"
 "origin" "1370 -185 -280"
 "model" "progs/s_tree.spr"
+"spawnflags" "1"
+"targetname" "tree4"
 }
 // entity 260
 {
 "classname" "misc_model"
 "origin" "1749 -185 -280"
 "model" "progs/s_tree.spr"
+"targetname" "tree3"
+"spawnflags" "1"
 }
 // entity 261
 {
@@ -5927,6 +5935,8 @@
 "spawnflags" "18"
 "frags" "2"
 "cnt2" "2"
+"target" "tree1"
+"health" "15"
 // brush 0
 {
 ( 1342 283 -288 ) ( 1342 218 -288 ) ( 1342 218 -320 ) floor1 [ 0 -0.7323943661971841 0 41.1651 ] [ 0 0 -1.0000000000000002 -127.99536 ] 0 0.37499875 0.12500024
@@ -5960,6 +5970,8 @@
 "classname" "func_breakable"
 "spawnflags" "18"
 "cnt2" "2"
+"target" "tree2"
+"health" "15"
 // brush 0
 {
 ( 1720 283 -288 ) ( 1720 218 -288 ) ( 1720 218 -320 ) floor1 [ 0 -0.7323943661971841 0 41.1651 ] [ 0 0 -1.0000000000000002 -127.99536 ] 0 0.37499875 0.12500024
@@ -5994,6 +6006,8 @@
 "spawnflags" "18"
 "frags" "1"
 "cnt2" "2"
+"target" "tree3"
+"health" "15"
 // brush 0
 {
 ( 1720 -154 -288 ) ( 1720 -219 -288 ) ( 1720 -219 -320 ) floor1 [ 0 -0.7323943661971841 0 83.8288 ] [ 0 0 -1.0000000000000002 -127.99536 ] 0 0.37499875 0.12500024
@@ -6028,6 +6042,8 @@
 "spawnflags" "18"
 "frags" "3"
 "cnt2" "2"
+"target" "tree4"
+"health" "15"
 // brush 0
 {
 ( 1342 -154 -288 ) ( 1342 -219 -288 ) ( 1342 -219 -320 ) floor1 [ 0 -0.7323943661971841 0 83.8288 ] [ 0 0 -1.0000000000000002 -127.99536 ] 0 0.37499875 0.12500024
