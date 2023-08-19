@@ -66,6 +66,15 @@ Breakable brush
 
 cnt: how many scenery objects to throw (default 3)
 cnt2: scale of objects
+frags: what item to spawn into
+	1: fire rocket
+	2: homing rocket
+	3: power rocket
+	4: napalm
+	5: ricochet
+	6: remote bomb
+	7: freeze
+	8+: health
 */
 
 void() func_breakable_death =
@@ -97,7 +106,7 @@ void() func_breakable_death =
 	{
 		CreateExplosion(h);
 		Create2DExplosion(h, self.cnt2);
-		sound (self, CHAN_AUTO, "combat/xplode.wav", 1, ATTN_NONE);
+		sound (self, CHAN_BODY, "combat/xplode.wav", 1, ATTN_NONE);
 	}
 
 	if (self.noise != "")
@@ -107,6 +116,31 @@ void() func_breakable_death =
 	if (self.noise2 != "")
 		sound (self, CHAN_AUTO, self.noise2, 1, ATTN_NONE);
 
+	// spawn items
+	if (self.frags > 0)
+	{
+		entity item = spawn();
+		setorigin (item, h);
+
+		if (self.frags == 1)
+			item.think = item_firerocket;
+		else if (self.frags == 2)
+			item.think = item_homingrocket;
+		else if (self.frags == 3)
+			item.think = item_powerrocket;
+		else if (self.frags == 4)
+			item.think = item_napalm;
+		else if (self.frags == 5)
+			item.think = item_ricochet;
+		else if (self.frags == 6)
+			item.think = item_remote;
+		else if (self.frags == 7)
+			item.think = item_freeze;
+		else
+			item.think = item_health;
+
+		item.nextthink = time;
+	}
 	remove(self);
 };
 
