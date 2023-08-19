@@ -3,12 +3,12 @@
 fteextensions.qc
 defs.qc
 
-//frikbot x
-frikbot/bot.qc
-frikbot/bot_ai.qc
-frikbot/bot_ai_race.qc
-frikbot/bot_ai_fight.qc
-frikbot/bot_misc.qc
+//frikbot x - originally, its been gutted/rewritten
+bot/bot.qc
+bot/bot_ai.qc
+bot/bot_ai_race.qc
+bot/bot_ai_fight.qc
+bot/bot_misc.qc
 //frikbot x
 
 main.qc
