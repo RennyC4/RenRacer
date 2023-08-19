@@ -1675,7 +1675,10 @@ void() SpecialWeapon_RoadBastard_Touch =
 	if (self.owner == other.owner.driving) // Owner stuff
 	{
 		if (self.cnt >= 90)
+		{
+			other.owner.driving.ammo_special += 1; // give wasted shot back
 			remove(self);
+		}
 		return;
 	}
 
