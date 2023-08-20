@@ -28,6 +28,7 @@ entity() BotGetClosestPlayer =
 	return world;
 };
 
+// bots possibly only go for a health item if their at 1/4 health
 entity() Bot_FindClosestItem =
 {
 	float bestd = 9999999999999;
@@ -35,7 +36,7 @@ entity() Bot_FindClosestItem =
 
 	for (entity thing = world;(thing = find(thing, netname, "item"));)
 	{
-		if (thing.solid == SOLID_NOT)
+		if (thing.solid == SOLID_NOT || (thing.classname == "item_health" && self.health > self.max_health / 4))
 			continue; // skip
 			
 		vector heading = thing.origin - self.origin;
@@ -243,7 +244,7 @@ void() bot_ai_fight =
 	bot_angle_set();
 
 	// Debugging prints
-//	bprint (self.goalentity.classname, "\n");
+	bprint (self.goalentity.classname, "\n");
 //	local string d1 = ftos (self.goalentity.origin_x);
 //	local string d2 = ftos (self.goalentity.origin_y);
 //	local string d3 = ftos (self.goalentity.origin_z);
