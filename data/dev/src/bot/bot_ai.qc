@@ -68,8 +68,9 @@ returns 1 if the entity is in front (in sight) of self
 float(entity targ, float howmuch) infront =
 {
 	makevectors (self.realang);
-	local vector vec = normalize (targ.origin - self.origin);
-	local float dot = vec * v_forward;
+	vector vec = normalize(realorigin(targ) - self.origin);
+	
+	float dot = vec * v_forward;
 
 	if (dot > howmuch)
 		return TRUE;

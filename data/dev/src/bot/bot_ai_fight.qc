@@ -13,7 +13,8 @@ entity() BotGetClosestPlayer =
 		if (targ == self || targ.health < 1 || targ.invulnerable_finished > time || targ.observer)
 			continue; // skip
 
-		vector heading = targ.origin - self.origin;
+		//vector heading = targ.origin - self.origin;
+		vector heading = realorigin(targ) - self.origin;
 		float d = heading * heading;
 
 		if (d < bestd)
@@ -39,7 +40,8 @@ entity() Bot_FindClosestItem =
 		if (thing.solid == SOLID_NOT || (thing.classname == "item_health" && self.health > self.max_health / 4))
 			continue; // skip
 			
-		vector heading = thing.origin - self.origin;
+		//vector heading = thing.origin - self.origin;
+		vector heading = realorigin(thing) - self.origin;
 		float d = heading * heading;
 
 		if (d < bestd)
