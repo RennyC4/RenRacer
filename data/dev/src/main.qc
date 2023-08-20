@@ -144,6 +144,10 @@ void() worldspawn =
 	precache_model("progs/Lawbreaker_body.mdl");
 	precache_model("progs/Lawbreaker_wheel.mdl");
 
+	// razorback
+	precache_model("progs/Razorback_body.mdl");
+	precache_model("progs/Razorback_wheel.mdl");
+
 	//
 	// func_vehicle - end
 	//
@@ -207,6 +211,7 @@ void() worldspawn =
 	precache_sound ("combat/redrage.wav");
 	precache_sound ("combat/lawbreaker.wav");
 	precache_sound ("combat/lawbreaker2.wav");
+	precache_sound ("combat/razorback.wav");
 
 	world_lights();
 	load_waypoints(); // Load waypoints

@@ -377,6 +377,8 @@ void(entity targ, vector newang) car_setangle =
 		car = redrage();
 	if (targ.vehicle == VEH_LAWBREAKER)
 		car = lawbreaker();
+	if (targ.vehicle == VEH_RAZORBACK)
+		car = razorback();
 
 	makevectors(targ.angles);
 	car = Phys_ObjectCreate(car, targ.origin + v_up * 64, v_forward, -v_right, v_up, '0 0 1', 0);

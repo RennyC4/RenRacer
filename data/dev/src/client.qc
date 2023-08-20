@@ -256,6 +256,8 @@ void() PlayerPreThink =
 					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Red Rage^7\nSpecial Weapon: ^5Crimson Beam^7\n\nSpecial: [**   ]\nSpeed: [*****]\nHandling: [*****]\nArmor: [*     ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 				if (self.vehicle == VEH_LAWBREAKER)
 					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Law Breaker^7\nSpecial Weapon: ^5Tazer Shock^7\n\nSpecial: [***  ]\nSpeed: [**** ]\nHandling: [***  ]\nArmor: [**    ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
+				if (self.vehicle == VEH_RAZORBACK)
+					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Razorback^7\nSpecial Weapon: ^5Jingo Missiles^7\n\nSpecial: [***  ]\nSpeed: [**   ]\nHandling: [**   ]\nArmor: [****  ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 			}
 		}
 		else if (!self.observer)
@@ -274,6 +276,8 @@ void() PlayerPreThink =
 					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1Red Rage^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
 				if (self.vehicle == VEH_LAWBREAKER)
 					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1Law Breaker^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
+				if (self.vehicle == VEH_RAZORBACK)
+					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1Razorback^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
 			}
 		}
 		Car_CheckAttach(); // Shove the player in the car
@@ -912,7 +916,7 @@ void() PutClientInServer =
 		human_players = human_players + 1;
 	else // Bots just randomly select whatever vehicle
 	{
-		float tt = ceil(random() * 6);
+		float tt = ceil(random() * 7);
 		if (tt == 1)
 			self.vehicle = VEH_HOTROD;
 		else if (tt == 2)
@@ -923,8 +927,10 @@ void() PutClientInServer =
 			self.vehicle = VEH_SKYSCRAPER;
 		else if (tt == 5)
 			self.vehicle = VEH_REDRAGE;
-		else
+		else if (tt == 6)
 			self.vehicle = VEH_LAWBREAKER;
+		else
+			self.vehicle = VEH_RAZORBACK;
 	}
 	self.player_id = human_players;
 

@@ -176,6 +176,11 @@ void() bot_ai_fight =
 						self.weapon = WEP_SPECIAL;
 						self.button4 = TRUE;
 					}
+					if (self.vehicle == VEH_RAZORBACK && rangetest != RANGE_FAR)
+					{
+						self.weapon = WEP_SPECIAL;
+						self.button4 = TRUE;
+					}
 					//
 				}
 				if (self.ammo_firerocket > 0)
@@ -246,7 +251,7 @@ void() bot_ai_fight =
 	bot_angle_set();
 
 	// Debugging prints
-	bprint (self.goalentity.classname, "\n");
+//	bprint (self.goalentity.classname, "\n");
 //	local string d1 = ftos (self.goalentity.origin_x);
 //	local string d2 = ftos (self.goalentity.origin_y);
 //	local string d3 = ftos (self.goalentity.origin_z);

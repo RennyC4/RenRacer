@@ -383,6 +383,14 @@ void() SpecialRegenerate =
 			self.special_regen_finished = time + 55; // regen time
 		}
 	}
+	if (self.vehicle == VEH_RAZORBACK)
+	{
+		if (self.ammo_special < 5) // max held
+		{
+			self.ammo_special = self.ammo_special + 1;
+			self.special_regen_finished = time + 35; // regen time
+		}
+	}
 };
 
 // ---
@@ -569,7 +577,7 @@ void() Rocket_Think =
 		if (self.classname != "rocket3")
 			GetTarget();
 
-	if (self.classname == "rocket")
+	if (self.classname == "rocket" || self.classname == "rocket4")
 		pointparticles(PART_ROCKET1, self.origin, '0 0 0', 1);
 	if (self.classname == "rocket2")
 		pointparticles(PART_ROCKET2, self.origin, '0 0 0', 1);
@@ -583,7 +591,7 @@ void() Rocket_Think =
 		vels = normalize(self.velocity);
 		ph = vele + (vels * 4);
 
-		if (self.classname == "rocket")
+		if (self.classname == "rocket" || self.classname == "rocket4") // fire + razorback rockets
 			ph = ph * (1/33); // increase seceond number for less homing capability
 		if (self.classname == "rocket2")
 			ph = ph * (1/15);
@@ -593,6 +601,8 @@ void() Rocket_Think =
 			self.velocity = self.velocity * 1500;
 		if (self.classname == "rocket2")
 			self.velocity = self.velocity * 1000;
+		if (self.classname == "rocket4")
+			self.velocity = self.velocity * 1250;
 
 		self.angles = vectoangles(self.velocity);
 	}
@@ -646,18 +656,30 @@ void() Rocket_Touch =
 		else if (other)
 			DoDamage(other, self.owner, 15, self.classname);
 	}
-
+	if (self.classname == "rocket4")
+	{
+		if (other.owner.driving) // other.owner.driving is the player
+		{
+			if (self.hitobject_finished > time)
+				DoDamage(other.owner.driving, self.owner, 6, self.classname); // razorbacks rockets
+			else
+				DoDamage(other.owner.driving, self.owner, 2, self.classname); // distance razorbacks rockets
+			other.owner.driving.forcejump_strength = 450;
+			other.owner.driving.forcejump = TRUE;
+		}
+		else if (other)
+			DoDamage(other, self.owner, 15, self.classname);
+	}
 	CreateExplosion(self.origin);
 	Create2DExplosion(self.origin, 2);
 	remove(self);
 };
 
-void(float type, float rear) Fire_Rocket =
+void(float type, float rear, float rzrbck_pos) Fire_Rocket =
 {
 	local entity rocket = spawn();
 
 	makevectors (self.realang);
-	
 	if (rear)
 	{
 		vector v = self.realang;
@@ -676,10 +698,15 @@ void(float type, float rear) Fire_Rocket =
 		rocket.classname = "rocket2";
 		rocket.colormod = '10 1 10';
 	}
-	else // power
+	else if (type == 2) // power
 	{
 		rocket.classname = "rocket3";
 		rocket.colormod = '1 1 10';
+	}
+	else // razorback rockets
+	{
+		rocket.classname = "rocket4";
+		rocket.colormod = '1 1 1';
 	}
 
 	rocket.netname = "projectile";
@@ -698,10 +725,15 @@ void(float type, float rear) Fire_Rocket =
 			rocket.velocity = aim(self, 1000);
 			rocket.velocity = rocket.velocity * 1000; // homing
 		}
-		else
+		else if (type == 2)
 		{
 			rocket.velocity = aim(self, 2000);
 			rocket.velocity = rocket.velocity * 2000; // power
+		}
+		else // razorback
+		{
+			rocket.velocity = aim(self, 1250);
+			rocket.velocity = rocket.velocity * 1250; // razorback
 		}
 	}
 	// Players forward velocity is added to projectiles
@@ -714,11 +746,23 @@ void(float type, float rear) Fire_Rocket =
 
 	setmodel (rocket, "progs/rocket.mdl");
 	setsize (rocket, '0 0 0', '0 0 0');
-	setorigin (rocket, self.origin + v_up * 8 + v_forward * (48 + self.realspeed));
+
+	if (type != 3)
+		setorigin (rocket, self.origin + v_up * 8 + v_forward * (48 + self.realspeed));
+	else // razorback missile positions
+	{
+		if (!rzrbck_pos)
+			setorigin (rocket, self.origin + v_up * 32 + v_forward * (48 + self.realspeed));
+		else if (rzrbck_pos == 1)
+			setorigin (rocket, self.origin + v_up * 16 + v_forward * (48 + self.realspeed) + v_right * 32);
+		else
+			setorigin (rocket, self.origin + v_up * 16 + v_forward * (48 + self.realspeed) - v_right * 32);
+	}
 
 	sound (self, CHAN_WEAPON, "combat/rocket.wav", 1, ATTN_NORM);
 
 	rocket.removeme_finished = time + 3;
+	rocket.hitobject_finished = time + 2; // How long until razorbacks rockets do less damage
 	rocket.think = Rocket_Think;
 	rocket.nextthink = time;
 };
@@ -2410,7 +2454,19 @@ void(float type, float rear) CarAttack =
 						SpecialWeapon_Lawbreaker();
 						self.spcl_finished = time + 3; // fires slower
 					}
-					
+					if (self.vehicle == VEH_RAZORBACK) // Razorback special
+					{
+						float i;
+						for (i = 0; i < 3; i = i+1)
+						{
+							if (!rear)
+								Fire_Rocket(3, FALSE, i);
+							else
+								Fire_Rocket(3, TRUE, i);
+						}
+						sound (self, CHAN_AUTO, "combat/razorback.wav", 1, ATTN_NORM);
+					}
+
 					// Keep at bottom
 					if (self.vehicle != VEH_SKYSCRAPER) // Special exception
 						self.ammo_special = self.ammo_special - 1;
@@ -2429,9 +2485,9 @@ void(float type, float rear) CarAttack =
 				if (self.ammo_firerocket > 0)
 				{
 					if (!rear)
-						Fire_Rocket(0, FALSE);
+						Fire_Rocket(0, FALSE, 0);
 					else
-						Fire_Rocket(0, TRUE);
+						Fire_Rocket(0, TRUE, 0);
 					self.ammo_firerocket = self.ammo_firerocket - 1;
 				}
 				else
@@ -2446,9 +2502,9 @@ void(float type, float rear) CarAttack =
 				if (self.ammo_homingrocket > 0)
 				{
 					if (!rear)
-						Fire_Rocket(1, FALSE);
+						Fire_Rocket(1, FALSE, 0);
 					else
-						Fire_Rocket(1, TRUE);
+						Fire_Rocket(1, TRUE, 0);
 					self.ammo_homingrocket = self.ammo_homingrocket - 1;
 				}
 				else
@@ -2463,9 +2519,9 @@ void(float type, float rear) CarAttack =
 				if (self.ammo_powerrocket > 0)
 				{
 					if (!rear)
-						Fire_Rocket(2, FALSE);
+						Fire_Rocket(2, FALSE, 0);
 					else
-						Fire_Rocket(2, TRUE);					
+						Fire_Rocket(2, TRUE, 0);
 					self.ammo_powerrocket = self.ammo_powerrocket - 1;
 				}
 				else
