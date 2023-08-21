@@ -103,6 +103,11 @@ void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 		bprint(attacker.netname, " showed ");
 		bprint(targ.netname, " the long tazer of the law\n");
 	}
+	if (attackerclassname == "rocket4") // razorback
+	{
+		bprint(attacker.netname, " missiles pummeled ");
+		bprint(targ.netname, " into paste\n");
+	}
 };
 
 // ---
@@ -664,7 +669,7 @@ void() Rocket_Touch =
 				DoDamage(other.owner.driving, self.owner, 6, self.classname); // razorbacks rockets
 			else
 				DoDamage(other.owner.driving, self.owner, 2, self.classname); // distance razorbacks rockets
-			other.owner.driving.forcejump_strength = 450;
+			other.owner.driving.forcejump_strength = 125; // these add together on hit
 			other.owner.driving.forcejump = TRUE;
 		}
 		else if (other)
