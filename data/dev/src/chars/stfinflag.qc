@@ -153,7 +153,7 @@ void() rally_startfinish_flag =
 	self.origin_z = self.origin_z + 1;
 	droptofloor();
 	
-	local entity botpoint = spawn();
+	entity botpoint = spawn();
 	botpoint.classname = "bot_waypoint_goal";
 	setmodel (botpoint, string_null);
 	setorigin (botpoint, self.origin);
@@ -161,7 +161,7 @@ void() rally_startfinish_flag =
 
 	if (self.spawnflags & 1)
 	{
-		local entity goal = spawn();
+		entity goal = spawn();
 		setmodel (goal, string_null);
 		setorigin (goal, self.origin);
 		goal.origin_z = goal.origin_z + 1;
@@ -172,10 +172,12 @@ void() rally_startfinish_flag =
 		else
 			goal.checkpoint = self.checkpoint;
 
+/*
 		if (!self.lap)
 			goal.lap = 2;
 		else
-			goal.lap = self.lap;
+*/
+		goal.lap = self.lap;
 
 		if (self.music)
 			goal.music = self.music;
