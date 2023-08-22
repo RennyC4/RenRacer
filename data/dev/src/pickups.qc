@@ -85,7 +85,6 @@ void() item_health =
 	self.mdl = self.model; // can be restored on respawn
 	setsize (self, VEC_HULL_MIN, VEC_HULL_MAX);
 
-	self.origin_z = self.origin_z + 8;
 	setorigin(self, self.origin);
 
 	SetupItemDynamicLight(); // init dlights
@@ -334,7 +333,6 @@ void() item_ricochet =
 	self.mdl = self.model; // can be restored on respawn
 	setsize (self, '0 0 0', '0 0 0');
 
-	self.origin_z = self.origin_z + 8;
 	setorigin(self, self.origin);
 	
 	SetupItemDynamicLight(); // init dlights
@@ -387,7 +385,6 @@ void() item_remote =
 	self.mdl = self.model; // can be restored on respawn
 	setsize (self, '0 0 0', '0 0 0');
 
-	self.origin_z = self.origin_z + 8;
 	setorigin(self, self.origin);
 	
 	SetupItemDynamicLight(); // init dlights

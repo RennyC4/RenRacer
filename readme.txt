@@ -105,8 +105,8 @@ and solely relying on checkpoints instead; it's a good practice to treat checkpo
 Credits: / Resources:
 --------   ---------
 
-shp/shpuld - Turbo boost code, borrowing some other code
 Urre - The amazing func_vehicle itself
+shp/shpuld - Turbo boost code, borrowing some other code
 Chazz - GoldCup assets
 xAge - Ideas / general help / texturing / art
 QRally - Some assets
@@ -125,5 +125,5 @@ kilomile - v_speed.mdl
 Coffee - TutorBot waypoint system; modified
 HUD for Quake (https://github.com/whipowill/quake-mod-hud) - Used & Modified scoreboard CSQC code
 Mr.M - Boomerang model
-SinisterSpud - Created RoadBastard
+SinisterSpud - Created Wraith, Road Bastard, Law Breaker, Razorback models
 SingleTrac - Dead company, created Twisted Metal 1/2, using their assets
