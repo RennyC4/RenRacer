@@ -1302,17 +1302,22 @@
 {
 "origin" "1384 256 -80"
 "angle" "90"
-"classname" "info_player_deathmatch"
+"classname" "racer_spawnpoint"
 }
 // entity 58
 {
 "origin" "1496 256 -80"
 "angle" "90"
-"classname" "info_player_deathmatch"
+"classname" "racer_spawnpoint"
 }
 // entity 59
 {
 "origin" "1384 416 -80"
 "angle" "90"
 "classname" "racer_spawnpoint"
+}
+// entity 60
+{
+"classname" "info_player_start"
+"origin" "768 224 -87"
 }
