@@ -73,7 +73,7 @@ void() Setup_level_effects =
 	if (framecount > 10)
 		return;
 
-	if (world.model == "maps/map1.bsp" || world.model == "maps/map5.bsp")
+	if (world.model == "maps/map1.bsp" || world.model == "maps/map5.bsp" || world.model == "maps/dm3.bsp")
 	{
 		stuffcmd (self, "r_sun_colour 0.2 0.2 0.2\n");
 		stuffcmd (self, "r_sun_dir -1 0.5 0.8\n");
@@ -835,7 +835,7 @@ entity() SelectSpawnSpot =
 		while (1)
 		{
 			spot = find(spot, classname, "dm_spawnpoint");
-			if (spot != world)
+			if (spot)
 			{
 				if (spot == lastspawn)
 					return lastspawn;
@@ -852,6 +852,11 @@ entity() SelectSpawnSpot =
 					lastspawn = spot;
 					return spot;
 				}
+			}
+			else
+			{
+				spot = find(spot, classname, "info_player_start"); // last try
+				return spot;
 			}
 		}
 	}
@@ -968,6 +973,8 @@ void() PutClientInServer =
 						self.music = "sound/music/dm1.ogg";
 					if (world.model == "maps/dm2.bsp")
 						self.music = "sound/music/dm2.ogg";
+					if (world.model == "maps/dm3.bsp")
+						self.music = "sound/music/dm3.ogg";
 					if (checkextension("DP_QC_SPRINTF"))
 						stuffcmd (self, sprintf("music %s\n", self.music));
 				}
