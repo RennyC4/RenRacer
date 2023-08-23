@@ -4178,34 +4178,22 @@
 {
 "classname" "racer_spawnpoint"
 "angle" "45"
-"origin" "-1896 1451 -121"
+"origin" "-1832 1515 -121"
 }
 // entity 9
 {
 "classname" "racer_spawnpoint"
 "angle" "45"
-"origin" "-1820 1379 -121"
+"origin" "-1756 1443 -121"
 }
 // entity 10
-{
-"classname" "racer_spawnpoint"
-"angle" "45"
-"origin" "-2048 1304 -120"
-}
-// entity 11
-{
-"classname" "racer_spawnpoint"
-"angle" "45"
-"origin" "-1972 1232 -120"
-}
-// entity 12
 {
 "classname" "rally_marker"
 "angle" "182"
 "origin" "2264 2568 15"
 "checkpoint" "4"
 }
-// entity 13
+// entity 11
 {
 "classname" "rally_goal"
 "checkpoint" "8"
@@ -4222,7 +4210,7 @@
 ( -1514.1766235091372 1555.5492065111675 -64 ) ( -1491.5492065111675 1578.1766235091372 -64 ) ( -1491.5492065111675 1578.1766235091372 -192 ) sumaflaga -15.878906 0 0 0.70710677 1
 }
 }
-// entity 14
+// entity 12
 {
 "classname" "func_illusionary"
 // brush 0
@@ -4251,7 +4239,7 @@
 ( -325 3096 -144 ) ( -325 3096 -160 ) ( -319 3090 -144 ) DR01_1 0 0 0 1 1
 }
 }
-// entity 15
+// entity 13
 {
 "classname" "func_illusionary"
 // brush 0
@@ -4280,7 +4268,7 @@
 ( -195 2966 -144 ) ( -189 2960 -160 ) ( -189 2960 -144 ) DR01_1 0 0 0 1 1
 }
 }
-// entity 16
+// entity 14
 {
 "classname" "func_illusionary"
 // brush 0
@@ -4309,7 +4297,7 @@
 ( 88 3498 -144 ) ( 66 3475 -144 ) ( 66 3475 -112 ) DR01_1 0 0 0 1 1
 }
 }
-// entity 17
+// entity 15
 {
 "classname" "func_illusionary"
 // brush 0
@@ -4338,7 +4326,7 @@
 ( 218 3368 -112 ) ( 196 3345 -112 ) ( 196 3345 -96 ) DR01_1 0 0 0 1 1
 }
 }
-// entity 18
+// entity 16
 {
 "classname" "func_illusionary"
 // brush 0
@@ -4367,7 +4355,7 @@
 ( 450 3860 -112 ) ( 445 3865 -96 ) ( 445 3865 -112 ) DR01_1 0 0 0 1 1
 }
 }
-// entity 19
+// entity 17
 {
 "classname" "func_illusionary"
 // brush 0
@@ -4396,7 +4384,7 @@
 ( 580 3730 -112 ) ( 558 3707 -112 ) ( 558 3707 -96 ) DR01_1 0 0 0 1 1
 }
 }
-// entity 20
+// entity 18
 {
 "classname" "func_illusionary"
 // brush 0
@@ -4425,7 +4413,7 @@
 ( -234 3005 -72 ) ( -223 2994 -64 ) ( -234 3005 -64 ) DR01_1 0 0 0 1 1
 }
 }
-// entity 21
+// entity 19
 {
 "classname" "func_illusionary"
 // brush 0
@@ -4454,7 +4442,7 @@
 ( -664 2666 -64 ) ( -675 2677 -64 ) ( -664 2666 -72 ) DR01_1 0 0 0 1 1
 }
 }
-// entity 22
+// entity 20
 {
 "classname" "func_illusionary"
 // brush 0
@@ -4483,7 +4471,7 @@
 ( 173 3413 -72 ) ( 184 3401 -64 ) ( 173 3413 -64 ) DR01_1 0 0 0 1 1
 }
 }
-// entity 23
+// entity 21
 {
 "classname" "func_illusionary"
 // brush 0
@@ -4512,7 +4500,7 @@
 ( 535 3775 -72 ) ( 546 3764 -64 ) ( 535 3775 -64 ) DR01_1 0 0 0 1 1
 }
 }
-// entity 24
+// entity 22
 {
 "classname" "func_illusionary"
 // brush 0
@@ -4768,95 +4756,95 @@
 ( -3355 3397 -100 ) ( -3375 3275 -100 ) ( -3375 3275 -92 ) UWALL1_3 0 0 0 1 1
 }
 }
-// entity 25
+// entity 23
 {
 "origin" "-3456 3840 -92"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "225"
 }
-// entity 26
+// entity 24
 {
 "origin" "-3248 3952 -100"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "285"
 }
-// entity 27
+// entity 25
 {
 "origin" "-2696 3608 -100"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "105"
 }
-// entity 28
+// entity 26
 {
 "origin" "-3352 3872 -100"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "30"
 }
-// entity 29
+// entity 27
 {
 "origin" "-2920 3856 -96"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "165"
 }
-// entity 30
+// entity 28
 {
 "origin" "-3072 3952 -96"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "120"
 }
-// entity 31
+// entity 29
 {
 "classname" "rally_barricade"
 "angle" "103"
 "origin" "3443 -95 399"
 }
-// entity 32
+// entity 30
 {
 "classname" "rally_cone"
 "origin" "-3097 531 98"
 }
-// entity 33
+// entity 31
 {
 "classname" "rally_cone"
 "origin" "-3014 464 98"
 }
-// entity 34
+// entity 32
 {
 "classname" "rally_cone"
 "origin" "-2931 402 98"
 }
-// entity 35
+// entity 33
 {
 "classname" "rally_barricade"
 "angle" "103"
 "origin" "3592 -41 399"
 }
-// entity 36
+// entity 34
 {
 "classname" "rally_barricade"
 "angle" "103"
 "origin" "3518 -71 399"
 }
-// entity 37
+// entity 35
 {
 "classname" "rally_barricade"
 "angle" "103"
 "origin" "3360 -124 399"
 }
-// entity 38
+// entity 36
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
 "_tb_name" "Dirty Grass"
 "_tb_id" "25"
 }
-// entity 39
+// entity 37
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -4871,7 +4859,7 @@
 ( 944 65.40202025355529 360 ) ( 944 64.40202025355347 360 ) ( 944 64.40202025355347 400 ) skip 6.5981445 -8 0 1 1
 }
 }
-// entity 40
+// entity 38
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -4886,7 +4874,7 @@
 ( 939.0208152801715 79.29289321881379 400 ) ( 939.0208152801715 79.29289321881379 360 ) ( 910.7365440327094 51.00862197135166 360 ) {vines3 -0.72509766 -16 180 0.35355362 -0.5
 }
 }
-// entity 41
+// entity 39
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -4901,14 +4889,14 @@
 ( 939 51.50062554461101 360 ) ( 939 51.50062554461101 400 ) ( 910.7157287525351 79.78489679207314 400 ) {vines3 0.8955078 -16 180 0.35355324 -0.5
 }
 }
-// entity 42
+// entity 40
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
 "_tb_name" "Dirty Grass"
 "_tb_id" "26"
 }
-// entity 43
+// entity 41
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -4923,7 +4911,7 @@
 ( 1128 -62.59797974644471 384 ) ( 1128 -63.597979746446526 384 ) ( 1128 -63.597979746446526 424 ) skip 6.5981445 16 0 1 1
 }
 }
-// entity 44
+// entity 42
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -4938,7 +4926,7 @@
 ( 1123.0208152801715 -48.70710678118621 424 ) ( 1123.0208152801715 -48.70710678118621 384 ) ( 1094.7365440327094 -76.99137802864834 384 ) {vines3 -42.76355 32 180 0.35355362 -0.5
 }
 }
-// entity 45
+// entity 43
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -4953,14 +4941,14 @@
 ( 1123 -76.49937445538899 384 ) ( 1123 -76.49937445538899 424 ) ( 1094.7157287525351 -48.21510320792686 424 ) {vines3 41.32617 32 180 0.35355324 -0.5
 }
 }
-// entity 46
+// entity 44
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
 "_tb_name" "Dirty Grass"
 "_tb_id" "27"
 }
-// entity 47
+// entity 45
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -4975,7 +4963,7 @@
 ( 1096 137.4020202535553 344 ) ( 1096 136.40202025355347 344 ) ( 1096 136.40202025355347 384 ) skip -1.4018555 -24 0 1 1
 }
 }
-// entity 48
+// entity 46
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -4990,7 +4978,7 @@
 ( 1091.0208152801715 151.2928932188138 384 ) ( 1091.0208152801715 151.2928932188138 344 ) ( 1062.7365440327094 123.00862197135166 344 ) {vines3 42.92151 -48 180 0.35355362 -0.5
 }
 }
-// entity 49
+// entity 47
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5005,14 +4993,14 @@
 ( 1091 123.50062554461101 344 ) ( 1091 123.50062554461101 384 ) ( 1062.7157287525351 151.78489679207314 384 ) {vines3 30.81665 -48 180 0.35355324 -0.5
 }
 }
-// entity 50
+// entity 48
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
 "_tb_name" "Dirty Grass"
 "_tb_id" "28"
 }
-// entity 51
+// entity 49
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5027,7 +5015,7 @@
 ( 1304 81.40202025355529 368 ) ( 1304 80.40202025355347 368 ) ( 1304 80.40202025355347 408 ) skip -9.401855 0 0 1 1
 }
 }
-// entity 52
+// entity 50
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5042,7 +5030,7 @@
 ( 1299.0208152801715 95.29289321881379 408 ) ( 1299.0208152801715 95.29289321881379 368 ) ( 1270.7365440327094 67.00862197135166 368 ) {vines3 44.52971 0 180 0.35355362 -0.5
 }
 }
-// entity 53
+// entity 51
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5057,14 +5045,14 @@
 ( 1299 67.50062554461101 368 ) ( 1299 67.50062554461101 408 ) ( 1270.7157287525351 95.78489679207314 408 ) {vines3 59.12964 0 180 0.35355324 -0.5
 }
 }
-// entity 54
+// entity 52
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
 "_tb_name" "Dirty Grass"
 "_tb_id" "29"
 }
-// entity 55
+// entity 53
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5079,7 +5067,7 @@
 ( 1520 -86.59797974644471 384 ) ( 1520 -87.59797974644653 384 ) ( 1520 -87.59797974644653 424 ) skip 30.598145 16 0 1 1
 }
 }
-// entity 56
+// entity 54
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5094,7 +5082,7 @@
 ( 1515.0208152801715 -72.70710678118621 424 ) ( 1515.0208152801715 -72.70710678118621 384 ) ( 1486.7365440327094 -100.99137802864834 384 ) {vines3 -30.645752 32 180 0.35355362 -0.5
 }
 }
-// entity 57
+// entity 55
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5109,14 +5097,14 @@
 ( 1515 -100.49937445538899 384 ) ( 1515 -100.49937445538899 424 ) ( 1486.7157287525351 -72.21510320792686 424 ) {vines3 30.070068 32 180 0.35355324 -0.5
 }
 }
-// entity 58
+// entity 56
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
 "_tb_name" "Dirty Grass"
 "_tb_id" "30"
 }
-// entity 59
+// entity 57
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5131,7 +5119,7 @@
 ( 1816 -238.5979797464447 384 ) ( 1816 -239.59797974644653 384 ) ( 1816 -239.59797974644653 424 ) skip 22.598145 16 0 1 1
 }
 }
-// entity 60
+// entity 58
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5146,7 +5134,7 @@
 ( 1811.0208152801715 -224.7071067811862 424 ) ( 1811.0208152801715 -224.7071067811862 384 ) ( 1782.7365440327094 -252.99137802864834 384 ) {vines3 -60.566406 32 180 0.35355362 -0.5
 }
 }
-// entity 61
+// entity 59
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5161,14 +5149,14 @@
 ( 1811 -252.499374455389 384 ) ( 1811 -252.499374455389 424 ) ( 1782.7157287525351 -224.21510320792686 424 ) {vines3 67.28491 32 180 0.35355324 -0.5
 }
 }
-// entity 62
+// entity 60
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
 "_tb_name" "Dirty Grass"
 "_tb_id" "31"
 }
-// entity 63
+// entity 61
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5183,7 +5171,7 @@
 ( 1888 -366.5979797464447 384 ) ( 1888 -367.5979797464465 384 ) ( 1888 -367.5979797464465 424 ) skip 22.598145 16 0 1 1
 }
 }
-// entity 64
+// entity 62
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5198,7 +5186,7 @@
 ( 1883.0208152801715 -352.7071067811862 424 ) ( 1883.0208152801715 -352.7071067811862 384 ) ( 1854.7365440327094 -380.99137802864834 384 ) {vines3 -22.604858 32 180 0.35355362 -0.5
 }
 }
-// entity 65
+// entity 63
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5213,14 +5201,14 @@
 ( 1883 -380.499374455389 384 ) ( 1883 -380.499374455389 424 ) ( 1854.7157287525351 -352.21510320792686 424 ) {vines3 30.931885 32 180 0.35355324 -0.5
 }
 }
-// entity 66
+// entity 64
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
 "_tb_name" "Dirty Grass"
 "_tb_id" "32"
 }
-// entity 67
+// entity 65
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5235,7 +5223,7 @@
 ( 1752 -494.5979797464447 384 ) ( 1752 -495.5979797464465 384 ) ( 1752 -495.5979797464465 424 ) skip 22.598145 16 0 1 1
 }
 }
-// entity 68
+// entity 66
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5250,7 +5238,7 @@
 ( 1747.0208152801715 -480.7071067811862 424 ) ( 1747.0208152801715 -480.7071067811862 384 ) ( 1718.7365440327094 -508.99137802864834 384 ) {vines3 -64.64319 32 180 0.35355362 -0.5
 }
 }
-// entity 69
+// entity 67
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5265,14 +5253,14 @@
 ( 1747 -508.499374455389 384 ) ( 1747 -508.499374455389 424 ) ( 1718.7157287525351 -480.21510320792686 424 ) {vines3 46.26538 32 180 0.35355324 -0.5
 }
 }
-// entity 70
+// entity 68
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
 "_tb_name" "Dirty Grass"
 "_tb_id" "33"
 }
-// entity 71
+// entity 69
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5287,7 +5275,7 @@
 ( 1696 -134.5979797464447 384 ) ( 1696 -135.59797974644653 384 ) ( 1696 -135.59797974644653 424 ) skip 14.598145 16 0 1 1
 }
 }
-// entity 72
+// entity 70
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5302,7 +5290,7 @@
 ( 1691.0208152801715 -120.70710678118621 424 ) ( 1691.0208152801715 -120.70710678118621 384 ) ( 1662.7365440327094 -148.99137802864834 384 ) {vines3 -6.4101562 32 180 0.35355362 -0.5
 }
 }
-// entity 73
+// entity 71
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5317,14 +5305,14 @@
 ( 1691 -148.499374455389 384 ) ( 1691 -148.499374455389 424 ) ( 1662.7157287525351 -120.21510320792686 424 ) {vines3 47.87378 32 180 0.35355324 -0.5
 }
 }
-// entity 74
+// entity 72
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
 "_tb_name" "Dirty Grass"
 "_tb_id" "34"
 }
-// entity 75
+// entity 73
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5339,7 +5327,7 @@
 ( 1640 -278.5979797464447 384 ) ( 1640 -279.5979797464465 384 ) ( 1640 -279.5979797464465 424 ) skip 30.598145 16 0 1 1
 }
 }
-// entity 76
+// entity 74
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5354,7 +5342,7 @@
 ( 1635.0208152801715 -264.7071067811862 424 ) ( 1635.0208152801715 -264.7071067811862 384 ) ( 1606.7365440327094 -292.99137802864834 384 ) {vines3 -13.703369 32 180 0.35355362 -0.5
 }
 }
-// entity 77
+// entity 75
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5369,14 +5357,14 @@
 ( 1635 -292.499374455389 384 ) ( 1635 -292.499374455389 424 ) ( 1606.7157287525351 -264.21510320792686 424 ) {vines3 49.48169 32 180 0.35355324 -0.5
 }
 }
-// entity 78
+// entity 76
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
 "_tb_name" "Dirty Grass"
 "_tb_id" "35"
 }
-// entity 79
+// entity 77
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5391,7 +5379,7 @@
 ( 1864 -118.59797974644471 368 ) ( 1864 -119.59797974644653 368 ) ( 1864 -119.59797974644653 408 ) skip 30.598145 0 0 1 1
 }
 }
-// entity 80
+// entity 78
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5406,7 +5394,7 @@
 ( 1859.0208152801715 -104.70710678118621 408 ) ( 1859.0208152801715 -104.70710678118621 368 ) ( 1830.7365440327094 -132.99137802864834 368 ) {vines3 -41.155334 0 180 0.35355362 -0.5
 }
 }
-// entity 81
+// entity 79
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5421,14 +5409,14 @@
 ( 1859 -132.499374455389 368 ) ( 1859 -132.499374455389 408 ) ( 1830.7157287525351 -104.21510320792686 408 ) {vines3 43.049316 0 180 0.35355324 -0.5
 }
 }
-// entity 82
+// entity 80
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
 "_tb_name" "Dirty Grass"
 "_tb_id" "36"
 }
-// entity 83
+// entity 81
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5443,7 +5431,7 @@
 ( 2000 -190.5979797464447 360 ) ( 2000 -191.59797974644653 360 ) ( 2000 -191.59797974644653 400 ) skip 6.5981445 -8 0 1 1
 }
 }
-// entity 84
+// entity 82
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5458,7 +5446,7 @@
 ( 1995.0208152801715 -176.7071067811862 400 ) ( 1995.0208152801715 -176.7071067811862 360 ) ( 1966.7365440327094 -204.99137802864834 360 ) {vines3 -4.801941 -16 180 0.35355362 -0.5
 }
 }
-// entity 85
+// entity 83
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5473,14 +5461,14 @@
 ( 1995 -204.499374455389 360 ) ( 1995 -204.499374455389 400 ) ( 1966.7157287525351 -176.21510320792686 400 ) {vines3 27.715332 -16 180 0.35355324 -0.5
 }
 }
-// entity 86
+// entity 84
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
 "_tb_name" "Dirty Grass"
 "_tb_id" "37"
 }
-// entity 87
+// entity 85
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5495,7 +5483,7 @@
 ( 2144 -302.5979797464447 344 ) ( 2144 -303.5979797464465 344 ) ( 2144 -303.5979797464465 384 ) skip 22.598145 -24 0 1 1
 }
 }
-// entity 88
+// entity 86
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5510,7 +5498,7 @@
 ( 2139.0208152801715 -288.7071067811862 384 ) ( 2139.0208152801715 -288.7071067811862 344 ) ( 2110.7365440327094 -316.99137802864834 344 ) {vines3 -1.5855713 -48 180 0.35355362 -0.5
 }
 }
-// entity 89
+// entity 87
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5525,14 +5513,14 @@
 ( 2139 -316.499374455389 344 ) ( 2139 -316.499374455389 384 ) ( 2110.715728752535 -288.21510320792686 384 ) {vines3 35.009277 -48 180 0.35355324 -0.5
 }
 }
-// entity 90
+// entity 88
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
 "_tb_name" "Dirty Grass"
 "_tb_id" "38"
 }
-// entity 91
+// entity 89
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5547,7 +5535,7 @@
 ( 2048 -470.5979797464447 368 ) ( 2048 -471.5979797464465 368 ) ( 2048 -471.5979797464465 408 ) skip 30.598145 0 0 1 1
 }
 }
-// entity 92
+// entity 90
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5562,7 +5550,7 @@
 ( 2043.0208152801715 -456.7071067811862 408 ) ( 2043.0208152801715 -456.7071067811862 368 ) ( 2014.7365440327094 -484.99137802864834 368 ) {vines3 -76.76099 0 180 0.35355362 -0.5
 }
 }
-// entity 93
+// entity 91
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5577,14 +5565,14 @@
 ( 2043 -484.499374455389 368 ) ( 2043 -484.499374455389 408 ) ( 2014.7157287525351 -456.21510320792686 408 ) {vines3 3.4799805 0 180 0.35355324 -0.5
 }
 }
-// entity 94
+// entity 92
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
 "_tb_name" "Dirty Grass"
 "_tb_id" "39"
 }
-// entity 95
+// entity 93
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5599,7 +5587,7 @@
 ( 2064 -326.5979797464447 360 ) ( 2064 -327.5979797464465 360 ) ( 2064 -327.5979797464465 400 ) skip 14.598145 -8 0 1 1
 }
 }
-// entity 96
+// entity 94
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5614,7 +5602,7 @@
 ( 2059.0208152801715 -312.7071067811862 400 ) ( 2059.0208152801715 -312.7071067811862 360 ) ( 2030.7365440327094 -340.99137802864834 360 ) {vines3 -69.46777 -16 180 0.35355362 -0.5
 }
 }
-// entity 97
+// entity 95
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5629,14 +5617,14 @@
 ( 2059 -340.499374455389 360 ) ( 2059 -340.499374455389 400 ) ( 2030.7157287525351 -312.21510320792686 400 ) {vines3 48.734863 -16 180 0.35355324 -0.5
 }
 }
-// entity 98
+// entity 96
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
 "_tb_name" "Dirty Grass"
 "_tb_id" "40"
 }
-// entity 99
+// entity 97
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5651,7 +5639,7 @@
 ( 1832 -6.597979746444707 360 ) ( 1832 -7.597979746446526 360 ) ( 1832 -7.597979746446526 400 ) skip 14.598145 -8 0 1 1
 }
 }
-// entity 100
+// entity 98
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5666,7 +5654,7 @@
 ( 1827.0208152801715 7.292893218813788 400 ) ( 1827.0208152801715 7.292893218813788 360 ) ( 1798.7365440327094 -20.99137802864834 360 ) {vines3 -44.37172 -16 180 0.35355362 -0.5
 }
 }
-// entity 101
+// entity 99
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5681,14 +5669,14 @@
 ( 1827 -20.49937445538899 360 ) ( 1827 -20.49937445538899 400 ) ( 1798.7157287525351 7.784896792073141 400 ) {vines3 32.53955 -16 180 0.35355324 -0.5
 }
 }
-// entity 102
+// entity 100
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
 "_tb_name" "Dirty Grass"
 "_tb_id" "41"
 }
-// entity 103
+// entity 101
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5703,7 +5691,7 @@
 ( 1736 94.60850149012794 352 ) ( 1736 93.60850149012612 352 ) ( 1736 93.60850149012612 392 ) skip -22.608337 -16 0 1 1
 }
 }
-// entity 104
+// entity 102
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5718,7 +5706,7 @@
 ( 1731.0208152801715 108.49937445538643 392 ) ( 1731.0208152801715 108.49937445538643 352 ) ( 1702.7365440327094 80.2151032079243 352 ) {vines3 1.8832397 -32 180 0.35355362 -0.5
 }
 }
-// entity 105
+// entity 103
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5733,14 +5721,14 @@
 ( 1731 80.70710678118365 352 ) ( 1731 80.70710678118365 392 ) ( 1702.7157287525351 108.99137802864578 392 ) {vines3 1.0102539 -32 180 0.35355324 -0.5
 }
 }
-// entity 106
+// entity 104
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
 "_tb_name" "Dirty Grass"
 "_tb_id" "42"
 }
-// entity 107
+// entity 105
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5755,7 +5743,7 @@
 ( 1552 89.40202025355529 360 ) ( 1552 88.40202025355347 360 ) ( 1552 88.40202025355347 400 ) skip -17.401855 -8 0 1 1
 }
 }
-// entity 108
+// entity 106
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5770,7 +5758,7 @@
 ( 1547.0208152801715 103.29289321881379 400 ) ( 1547.0208152801715 103.29289321881379 360 ) ( 1518.7365440327094 75.00862197135166 360 ) {vines3 67.157104 -16 180 0.35355362 -0.5
 }
 }
-// entity 109
+// entity 107
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5785,14 +5773,14 @@
 ( 1547 75.50062554461101 360 ) ( 1547 75.50062554461101 400 ) ( 1518.7157287525351 103.78489679207314 400 ) {vines3 40.57959 -16 180 0.35355324 -0.5
 }
 }
-// entity 110
+// entity 108
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
 "_tb_name" "Dirty Grass"
 "_tb_id" "43"
 }
-// entity 111
+// entity 109
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5807,7 +5795,7 @@
 ( 1592 9.402020253555293 376 ) ( 1592 8.402020253553474 376 ) ( 1592 8.402020253553474 416 ) skip 30.598148 8 0 1 1
 }
 }
-// entity 112
+// entity 110
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5822,7 +5810,7 @@
 ( 1587.0208152801715 23.292893218813788 416 ) ( 1587.0208152801715 23.292893218813788 376 ) ( 1558.7365440327094 -4.991378028648342 376 ) {vines3 -79.11691 16 180 0.35355362 -0.5
 }
 }
-// entity 113
+// entity 111
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5837,14 +5825,14 @@
 ( 1587 -4.499374455388988 376 ) ( 1587 -4.499374455388988 416 ) ( 1558.7157287525351 23.78489679207314 416 ) {vines3 73.7168 16 180 0.35355324 -0.5
 }
 }
-// entity 114
+// entity 112
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
 "_tb_name" "Dirty Grass"
 "_tb_id" "44"
 }
-// entity 115
+// entity 113
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5859,7 +5847,7 @@
 ( 1592 169.4020202535553 328 ) ( 1592 168.40202025355347 328 ) ( 1592 168.40202025355347 368 ) skip -1.4018555 -8 0 1 1
 }
 }
-// entity 116
+// entity 114
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5874,7 +5862,7 @@
 ( 1587.0208152801715 183.2928932188138 368 ) ( 1587.0208152801715 183.2928932188138 328 ) ( 1558.7365440327094 155.00862197135166 328 ) {vines3 53.43112 0 180 0.35355362 -0.5
 }
 }
-// entity 117
+// entity 115
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5889,14 +5877,14 @@
 ( 1587 155.500625544611 328 ) ( 1587 155.500625544611 368 ) ( 1558.7157287525351 183.78489679207314 368 ) {vines3 73.7168 0 180 0.35355324 -0.5
 }
 }
-// entity 118
+// entity 116
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
 "_tb_name" "Dirty Grass"
 "_tb_id" "45"
 }
-// entity 119
+// entity 117
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5911,7 +5899,7 @@
 ( 1288 -102.59797974644471 384 ) ( 1288 -103.59797974644653 384 ) ( 1288 -103.59797974644653 424 ) skip 14.598145 16 0 1 1
 }
 }
-// entity 120
+// entity 118
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5926,7 +5914,7 @@
 ( 1283.0208152801715 -88.70710678118621 424 ) ( 1283.0208152801715 -88.70710678118621 384 ) ( 1254.7365440327094 -116.99137802864834 384 ) {vines3 -75.90054 32 180 0.35355362 -0.5
 }
 }
-// entity 121
+// entity 119
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5941,14 +5929,14 @@
 ( 1283 -116.49937445538899 384 ) ( 1283 -116.49937445538899 424 ) ( 1254.7157287525351 -88.21510320792686 424 ) {vines3 13.874756 32 180 0.35355324 -0.5
 }
 }
-// entity 122
+// entity 120
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
 "_tb_name" "Dirty Grass"
 "_tb_id" "46"
 }
-// entity 123
+// entity 121
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5963,7 +5951,7 @@
 ( 1408 17.402020253555293 376 ) ( 1408 16.402020253553474 376 ) ( 1408 16.402020253553474 416 ) skip 22.598148 8 0 1 1
 }
 }
-// entity 124
+// entity 122
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5978,7 +5966,7 @@
 ( 1403.0208152801715 31.292893218813788 416 ) ( 1403.0208152801715 31.292893218813788 376 ) ( 1374.7365440327094 3.0086219713516584 376 ) {vines3 -56.489502 16 180 0.35355362 -0.5
 }
 }
-// entity 125
+// entity 123
 {
 "classname" "func_illusionary"
 "_phong" "1"
@@ -5993,91 +5981,91 @@
 ( 1403 3.5006255446110117 376 ) ( 1403 3.5006255446110117 416 ) ( 1374.7157287525351 31.78489679207314 416 ) {vines3 33.286133 16 180 0.35355324 -0.5
 }
 }
-// entity 126
+// entity 124
 {
 "origin" "1856 -272 392"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "225"
 }
-// entity 127
+// entity 125
 {
 "origin" "1640 -40 392"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "225"
 }
-// entity 128
+// entity 126
 {
 "origin" "1744 -112 392"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "225"
 }
-// entity 129
+// entity 127
 {
 "origin" "1680 -272 392"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "225"
 }
-// entity 130
+// entity 128
 {
 "origin" "1752 -400 392"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "225"
 }
-// entity 131
+// entity 129
 {
 "origin" "1920 -432 392"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "225"
 }
-// entity 132
+// entity 130
 {
 "origin" "1912 -120 368"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "225"
 }
-// entity 133
+// entity 131
 {
 "origin" "1280 48 376"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "225"
 }
-// entity 134
+// entity 132
 {
 "origin" "1624 104 368"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "225"
 }
-// entity 135
+// entity 133
 {
 "origin" "-2720 1072 -160"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "285"
 }
-// entity 136
+// entity 134
 {
 "origin" "-2696 880 -168"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "345"
 }
-// entity 137
+// entity 135
 {
 "origin" "-2800 968 -156"
 "classname" "misc_model"
 "model" "progs/pinetree.mdl"
 "angle" "60"
 }
-// entity 138
+// entity 136
 {
 "classname" "func_illusionary"
 // brush 0
@@ -6091,7 +6079,7 @@
 ( -2795 2848 -9 ) ( -2688 2813 280 ) ( -2723 2947 280 ) SUMASHRUBB 0 24 0 1 1
 }
 }
-// entity 139
+// entity 137
 {
 "classname" "func_illusionary"
 // brush 0
@@ -6105,7 +6093,7 @@
 ( -2774 2696 19 ) ( -2774 2480 197 ) ( -2774 2551 346 ) SUMASHRUBB 0 40 0 1 1
 }
 }
-// entity 140
+// entity 138
 {
 "classname" "func_illusionary"
 // brush 0
@@ -6119,7 +6107,7 @@
 ( -2788 2655 147 ) ( -2686 2643 296 ) ( -2735 2758 296 ) SUMASHRUBB 0 40 0 1 1
 }
 }
-// entity 141
+// entity 139
 {
 "classname" "func_illusionary"
 // brush 0
@@ -6133,7 +6121,7 @@
 ( -2858 2467 21 ) ( -2753 2356 292 ) ( -2719 2521 292 ) SUMASHRUBB 0 48 0 1 1
 }
 }
-// entity 142
+// entity 140
 {
 "classname" "func_illusionary"
 // brush 0
@@ -6147,11 +6135,41 @@
 ( -2514 2590 65 ) ( -2368 2579 280 ) ( -2473 2688 280 ) WIZWOOD1_3 0 24 0 1 1
 }
 }
-// entity 143
+// entity 141
 {
 "classname" "rally_marker"
 "angle" "32"
 "origin" "-2624 1288 -128"
 "checkpoint" "8"
 "waypoint_speed" "40"
+}
+// entity 142
+{
+"classname" "racer_spawnpoint"
+"angle" "45"
+"origin" "-2060 1148 -119"
+}
+// entity 143
+{
+"classname" "racer_spawnpoint"
+"angle" "45"
+"origin" "-2136 1220 -119"
+}
+// entity 144
+{
+"classname" "racer_spawnpoint"
+"angle" "45"
+"origin" "-1984 1367 -120"
+}
+// entity 145
+{
+"classname" "racer_spawnpoint"
+"angle" "45"
+"origin" "-1908 1295 -120"
+}
+// entity 146
+{
+"classname" "info_player_start"
+"origin" "-1712 1572 0"
+"angle" "225"
 }
