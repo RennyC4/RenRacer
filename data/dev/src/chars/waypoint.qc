@@ -40,6 +40,25 @@ void(vector org, float which, optional float cnt) create_waypoint =
 	wp.waypoint = total_waypoints;
 };
 
+// Mapper placed entity
+void() bot_waypoint =
+{
+	self.classname = "bot_waypoint";
+	self.solid = SOLID_TRIGGER;
+	self.movetype = MOVETYPE_NONE;
+	self.flags = FL_ITEM; // bigger touch box
+	self.touch = waypoint_touch;
+
+	if (cvar("developer") == 2)
+		setmodel (self, "progs/s_debug.spr");
+	else
+		setmodel (self, "progs/null.spr");
+
+	setsize (self, '-128 -128 -128', '128 128 128'); // bigger touch box
+
+	total_waypoints = total_waypoints + 1;
+};
+
 void() load_waypoints =
 {
 	if (ragewar)
