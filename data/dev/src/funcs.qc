@@ -214,12 +214,9 @@ void() func_breakable =
 };
 
 //
-// func_illusionary
+// func_illusionary - Wall that has no clip properties
 //
 
-/*
-A simple entity that looks solid but lets you walk through it.
-*/
 void() func_illusionary =
 {
 	self.angles = '0 0 0';
@@ -227,4 +224,19 @@ void() func_illusionary =
 	self.solid = SOLID_NOT;
 	setmodel (self, self.model);
 	makestatic (self);
+};
+
+//
+// func_wall - Just a wall
+//
+
+void() func_wall_use = {self.frame = 1 - self.frame;};
+
+void() func_wall =
+{
+	self.angles = '0 0 0';
+	self.movetype = MOVETYPE_PUSH;
+	self.solid = SOLID_BSP;
+	self.use = func_wall_use;
+	setmodel (self, self.model);
 };
