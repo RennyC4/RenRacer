@@ -666,7 +666,7 @@ void() Rocket_Touch =
 				DoDamage(other.owner.driving, self.owner, 6, self.classname); // razorbacks rockets
 			else
 				DoDamage(other.owner.driving, self.owner, 2, self.classname); // distance razorbacks rockets
-			other.owner.driving.forcejump_strength = 125; // these add together on hit
+			other.owner.driving.forcejump_strength = 250;
 			other.owner.driving.forcejump = TRUE;
 		}
 		else if (other)
