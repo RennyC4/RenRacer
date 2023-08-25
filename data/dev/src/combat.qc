@@ -422,11 +422,8 @@ void() MachineGunBullet_Touch =
 		remove(self);
 		return;
 	}
-	if (self.owner == other.owner.driving) // Hit self
-	{
-		remove(self);
+	if (other.owner.driving == self.owner) // Hit self
 		return;
-	}
 
 	tt = ceil(random() * 3);
 	if (tt == 1)
