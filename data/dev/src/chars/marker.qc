@@ -11,7 +11,7 @@ void() marker_think =
 	{
 		if (vlen(targ.origin - self.origin) <= self.radius)
 		{
-			if (visible(targ) && cvar("developer") != 1)
+			if (/*visible(targ) &&*/ cvar("developer") != 1 && targ.origin_z >= self.origin_z)
 			{
 				if (targ.goal_touched && race_status == RACE_STARTED) // Player has to drive through the goals before markers are activated
 				{

@@ -67,7 +67,13 @@ void() countdown_think = // Race start countdown
 				car = razorback();
 
 			makevectors(targ.angles);
-			car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
+			if (self.vehicle != VEH_SKYSCRAPER)
+				car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
+			else // skyscraper is a big boy and needs the extra height on spawn
+			{
+				setorigin(self, self.origin + v_up * 32);
+				car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
+			}
 			Car_InitVehicle(car);
 			self = oself;
 			targ.spawncar = TRUE;

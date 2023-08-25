@@ -155,11 +155,11 @@ void() Car_ChassiThink =
 	local entity e = car.physobj_staticlist;
     while (e)
     {
-		local float plyralpha = car.driving.alpha;
-		local vector plyrcmod = car.driving.colormod;
+		float plyralpha = car.driving.alpha;
+		vector plyrcmod = car.driving.colormod;
 		e.hitcontentsmaski = CONTENTBIT_BODY|CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
-		e.dimension_hit = player_dimension_hit;
-		e.dimension_solid = player_dimension_solid;
+		e.dimension_hit = player_dimension_hit; // RennyC
+		e.dimension_solid = player_dimension_solid; // RennyC
 		e.pvsflags = PVSF_IGNOREPVS; // FIXME: Fix certain instances of cars disappearing inside geometry (needs testing)
 		if (plyralpha < 1)
 		{
@@ -598,9 +598,9 @@ void TryUpdateVehicle(){
 	b_left = self.driving.backleft;
 	b_right = self.driving.backright;
 	//
-
 	self.driving.physobj_flags -= (self.driving.physobj_flags & PHFLAGS_RESTING);
 	setorigin(self, Car_SpringyOrigin());
+
 	if (race_status == RACE_STARTED && self.health > 0) // RennyC: Allow player to control the car
 	{
 		makevectors(self.v_angle);
