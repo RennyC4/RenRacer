@@ -191,8 +191,12 @@ void() PushPlayers =
 };
 
 // Instances that can force the car to jump (example: being hit by a rocket)
+.float forcejump_finished;
 void() ForceJump =
 {
+	if (self.forcejump_finished > time)
+		return;
+
 	entity wheels[] = {
 		self.driving.frontleft,
 		self.driving.frontright,
@@ -205,6 +209,7 @@ void() ForceJump =
 		if (trace_fraction < 1)
 			Phys_Force(self.driving, self.driving.physobj_mass, '0 0 1' * self.forcejump_strength, trace_endpos, wheels[i].lmat_up);
 	}
+	self.forcejump_finished = time + 0.1;
 };
 
 void() spawn_car_countdown;
@@ -296,11 +301,21 @@ void() PlayerPreThink =
 				entity spawn_spot = SelectSpawnSpot();
 				self.origin = spawn_spot.origin;
 
-				// Put car in game
+				// Put cars in game
 				if (self.vehicle == VEH_HOTROD)
 					entity car = hotrod();
 				if (self.vehicle == VEH_WRAITH)
 					car = wraith();
+				if (self.vehicle == VEH_ROADBASTARD)
+					car = roadbastard();
+				if (self.vehicle == VEH_SKYSCRAPER)
+					car = skyscraper();
+				if (self.vehicle == VEH_REDRAGE)
+					car = redrage();
+				if (self.vehicle == VEH_LAWBREAKER)
+					car = lawbreaker();
+				if (self.vehicle == VEH_RAZORBACK)
+					car = razorback();
 
 				makevectors(self.angles);
 				car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);

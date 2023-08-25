@@ -1217,7 +1217,8 @@ void() Freeze_Touch =
 
 	if (other.owner.driving.onfire_finished > time) // remove fire
 		other.owner.driving.onfire_finished = time;
-	other.owner.driving.frozen_finished = time + 4;
+	if (other.owner.driving.shield_finished < time) // shield blocks freeze
+		other.owner.driving.frozen_finished = time + 4;
 	if (other.owner.driving.health > 0) // dont interfere with death colormod stuff
 		other.owner.driving.colormod = '1 1 6';
 	Create2DFreezeExplosion(self.origin, 3);
@@ -1688,6 +1689,7 @@ void() SpecialWeapon_RoadBastard_Think =
 	}
 	if (self.owner && self.cnt >= 90) // Come back to owner
 	{
+		setsize (self, '-16 -16 -1', '16 16 1'); // larger hitbox on return
 		pointparticles(PART_ROCKET1, self.origin, '0 0 0', 1); // Particle effect
 		vector vele, vels, ph;
 		vele = normalize(self.owner.origin - self.origin);
