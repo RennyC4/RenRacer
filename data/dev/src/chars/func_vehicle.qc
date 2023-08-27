@@ -512,6 +512,41 @@ void(float speed, float maxspeed) Car_Roll =
 	}
 }
 
+// SinisterSpud addition
+void(float speed, float maxspeed) Car_Pitch =
+{
+    local entity f_right, f_left;
+    local entity b_right, b_left;
+
+    if (!self.driving)
+        return;
+
+    f_left = self.driving.frontleft;
+    f_right = self.driving.frontright;
+    b_left = self.driving.backleft;
+    b_right = self.driving.backright;
+
+    if (f_right.flags & FL_ONGROUND && f_left.flags & FL_ONGROUND && b_right.flags & FL_ONGROUND && b_left.flags & FL_ONGROUND) // all tires touching ground, no rolling allowed
+        return;
+
+    float fright_lzvel = f_right.velocity * f_right.lmat_up;
+    float fleft_lzvel = f_left.velocity * f_left.lmat_up;
+    float bright_lzvel = b_right.velocity * b_right.lmat_up;
+    float bleft_lzvel = b_left.velocity * b_left.lmat_up;
+
+    float rel_bzvel = fabs(bright_lzvel - bleft_lzvel);
+    float rel_fzvel = fabs(fright_lzvel - fleft_lzvel);
+
+    float allowRollFront = (rel_fzvel) < maxspeed;
+    float allowRollBack = (rel_bzvel) < maxspeed;
+    if (allowRollFront && allowRollBack){
+        f_right.velocity = f_right.velocity - f_right.lmat_up *speed*frametime;
+        b_right.velocity = b_right.velocity + b_right.lmat_up *speed*frametime;
+        f_left.velocity = f_left.velocity - f_left.lmat_up *speed*frametime;    
+        b_left.velocity = b_left.velocity + b_left.lmat_up *speed*frametime;    
+    }
+}
+
 //
 // RennyC: Taken from Build-A-Delivery by shpuld
 //
@@ -568,13 +603,20 @@ void() car_drift =
 // RennyC - helps to keep the car balanced if it's tipping in a cheaty manner
 void() CarStabilizeCheat =
 {
-	if (self.realang_z > 30 && self.realang_z < 330)
-	{
-		if (self.realang_z > 180)
-			Car_Roll(-4000, 500);
-		else
-			Car_Roll(4000, 500);
-	}
+    if (self.realang_z > 30 && self.realang_z < 330)
+    {
+        if (self.realang_z > 180)
+            Car_Roll(-1000, 1000);
+        else
+            Car_Roll(1000, 1000);
+    }
+    if (self.realang_x < -30 && self.realang_x > -330)
+    {
+        if (self.realang_x < -180)
+            Car_Pitch(-1000, 1000);
+        else
+            Car_Pitch(1000, 1000);
+    }
 };
 //RennyC
 
