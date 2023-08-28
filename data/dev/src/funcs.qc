@@ -121,7 +121,7 @@ void() func_breakable_death =
 	if (self.frags > 0)
 	{
 		entity item = spawn();
-		setorigin (item, h);
+		setorigin (item, h - v_up * 16);
 
 		if (self.frags == 1)
 			item.think = item_firerocket;
