@@ -97,6 +97,9 @@ void() HUD_Ragewar =
 	float h = getstatf(STAT_HEALTH);
 	float hmax = getstatf(STAT_MAXHEALTH);
 
+	if (h < -999) h = -999; // caps
+	if (h > 999) h = 999;
+
 	string h1 = ftos(h);
 	string h2 = ftos(hmax);
 
@@ -106,8 +109,8 @@ void() HUD_Ragewar =
 	drawstring (pos + '37 1', h1, '8 8 0', '0 0 0', 1, DRAWFLAG_NORMAL); // text shadow
 	drawstring (pos + '36 0', h1, '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
 
-	drawstring (pos + '57 1', "/", '8 8 0', '0 0 0', 1, DRAWFLAG_NORMAL); // text shadow
-	drawstring (pos + '56 0', "/", '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+	drawstring (pos + '60 1', "/", '8 8 0', '0 0 0', 1, DRAWFLAG_NORMAL); // text shadow
+	drawstring (pos + '59 0', "/", '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
 
 	drawstring (pos + '67 1', h2, '8 8 0', '0 0 0', 1, DRAWFLAG_NORMAL); // text shadow
 	drawstring (pos + '66 0', h2, '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
