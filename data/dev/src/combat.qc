@@ -1116,7 +1116,6 @@ void() Fire_Remote =
 		remote.solid = SOLID_TRIGGER;
 		remote.movetype = MOVETYPE_TOSS;
 		remote.classname = "remotebomb";
-		remote.dimension_hit = remote.dimension_solid = 0;
 
 		setmodel (remote, "progs/remote.spr");
 		setsize (remote, '0 0 -16', '0 0 0');
