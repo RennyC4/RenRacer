@@ -103,8 +103,8 @@ void() HUD_Ragewar =
 	string h1 = ftos(h);
 	string h2 = ftos(hmax);
 
-	drawstring (pos + '1 1', "Health: ", '8 8 0', '0 0 0', 1, DRAWFLAG_NORMAL); // text shadow
-	drawstring (pos, "^1Health: ", '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+	drawstring (pos + '1 1', "Armor: ", '8 8 0', '0 0 0', 1, DRAWFLAG_NORMAL); // text shadow
+	drawstring (pos, "^1Armor: ", '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
 
 	drawstring (pos + '37 1', h1, '8 8 0', '0 0 0', 1, DRAWFLAG_NORMAL); // text shadow
 	drawstring (pos + '36 0', h1, '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
