@@ -55,7 +55,6 @@ s_al_disable 2 // sound fix (disable OpenAL) for non-mono sounds
 r_meshpitch 0 // don't fix mesh pitch (breaks func_vechicle)
 pr_droptofloorunits 9999 // match raisetoroof
 r_shadow_bumpscale_basetexture 1.75 // slight bump mapping with dlights
-r_shadows 0.75 // blob shadow
 r_hdr_framebuffer 1 // HDR on
 r_hdr_irisadaptation 1 // adapt to light/dark conditions
 r_hdr_irisadaptation_maxvalue 1.5 // adjustment value
@@ -69,14 +68,14 @@ sv_gravity 1200 // feels best
 sv_autooffload 0 // 1 = smoother performance? judderfest
 cl_lerp_smooth 1
 r_shadow_realtime_world 1
-r_renderscale 1 // Higher breaks god rays
+r_renderscale 1 // higher breaks god rays and other screen effects
 r_waterwarp 1
 v_cshift_water 0
 r_particledesc "classic high tsshaft"
 v_deathtilt 0
 sv_playerslots 4 // load bots on first run
 
-//mod_terrain_shadows 1 // Broken?
+//mod_terrain_shadows 1 // Broken
 mod_terrain_ambient 0
 
 // Fonts
