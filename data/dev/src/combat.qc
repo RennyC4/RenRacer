@@ -1089,7 +1089,18 @@ void() Remote_Think =
 		remove(self);
 		return;
 	}
-	frameskip(1);
+
+	// touched
+	for (entity targ = world;(targ = find(targ, classname, "player"));)
+	{
+		if (vlen(targ.origin - self.origin) <= 50 && targ != self.owner)
+		{
+			Remote_Detonate();
+			return;
+		}
+	}
+
+	frameskip(0.1);
 };
 
 void() RemoteSignal_Think =
@@ -1105,6 +1116,11 @@ void() RemoteSignal_Think =
 		return;
 	}
 	frameskip(0.1);
+};
+
+void() Remote_Touch =
+{
+
 };
 
 void() Fire_Remote =
