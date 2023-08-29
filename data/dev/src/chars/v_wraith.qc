@@ -32,6 +32,33 @@ entity() wraith =
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
+
+	//Guns for ragewar. uncomment to enable
+/*
+	part = spawn();
+	part.physobj_next = obj.physobj_staticlist;
+	obj.physobj_staticlist = part;
+	part.owner = obj;
+	part.classname = "phys_static";
+	part.netname = "GunLeft";
+	part.model = "progs/mountedgun.mdl";
+	part.relative_org = '0 24 5';
+	part.relative_forward = '1 0 0';
+	part.relative_left = '0 -1 0';
+	part.relative_up = '0 0 1';
+
+	part = spawn();
+	part.physobj_next = obj.physobj_staticlist;
+	obj.physobj_staticlist = part;
+	part.owner = obj;
+	part.classname = "phys_static";
+	part.netname = "GunRight";
+	part.model = "progs/mountedgun.mdl";
+	part.relative_org = '0 -24 5';
+	part.relative_forward = '1 0 0';
+	part.relative_left = '0 1 0';
+	part.relative_up = '0 0 1';
+*/
 	//
 
 	//
