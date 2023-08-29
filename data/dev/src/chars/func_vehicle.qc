@@ -606,11 +606,15 @@ void() CarStabilizeCheat =
     if (self.realang_z > 30 && self.realang_z < 330)
     {
         if (self.realang_z > 180)
-            Car_Roll(-4000, 1000);
+            Car_Roll(-1500, 1000); //turned down from 4000 to look smoother -Spud
         else
-            Car_Roll(4000, 1000);
+            Car_Roll(1500, 1000);
     }
 	//FIXME: Red Rage CAN act funky with pitch correction
+	//Red Rage in general gets funky. doesn't like any of my physics tinkering. -spud
+
+	//commenting out (for now?) since pitch stabilization is done with air firction. -spud
+/*
     if (self.realang_x < -30 && self.realang_x > -330 && self.vehicle != VEH_REDRAGE)
     {
         if (self.realang_x < -180)
@@ -618,6 +622,7 @@ void() CarStabilizeCheat =
         else
             Car_Pitch(1000, 1000);
     }
+*/
 };
 //RennyC
 

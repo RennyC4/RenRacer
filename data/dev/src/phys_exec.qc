@@ -456,7 +456,8 @@ void(entity part, float ftime) Particle_Friction =
 	}
 	// Marko 2023: disabled air friction because it's a bunch of calcs for probably unused feature, remove the comments if you need it
 	// Air friction
-	else if (!trace_startsolid)
+	*/
+	if (!trace_startsolid)
 	{
 		if (part.physobj_friction_air_x)
 			part.velocity = part.velocity - part.lmat_forward*vlen(part.velocity)*normalize(part.velocity)*part.lmat_forward*part.physobj_friction_air_x*ftime;
@@ -465,7 +466,6 @@ void(entity part, float ftime) Particle_Friction =
 		if (part.physobj_friction_air_z)
 			part.velocity = part.velocity - part.lmat_up*vlen(part.velocity)*normalize(part.velocity)*part.lmat_up*part.physobj_friction_air_z*ftime;
 	}
-	*/
 };
 
 // Velocity Verlet physics, meant to be used for all moving entities in the game
