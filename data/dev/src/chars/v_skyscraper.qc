@@ -34,6 +34,35 @@ entity() skyscraper =
 	part.relative_up = '0 0 1';
 	//
 
+	//Guns for ragewar
+	if (ragewar)
+	{
+		part = spawn();
+		part.physobj_next = obj.physobj_staticlist;
+		obj.physobj_staticlist = part;
+		part.owner = obj;
+		part.classname = "phys_static";
+		part.netname = "GunLeft";
+		part.model = "progs/mountedgun.mdl";
+		part.relative_org = '0 28 0';
+		part.relative_forward = '1 0 0';
+		part.relative_left = '0 -1 0';
+		part.relative_up = '0 0 1';
+
+		part = spawn();
+		part.physobj_next = obj.physobj_staticlist;
+		obj.physobj_staticlist = part;
+		part.owner = obj;
+		part.classname = "phys_static";
+		part.netname = "GunRight";
+		part.model = "progs/mountedgun.mdl";
+		part.relative_org = '0 -28 0';
+		part.relative_forward = '1 0 0';
+		part.relative_left = '0 1 0';
+		part.relative_up = '0 0 1';
+	}
+	//
+
 	//
 	// wheels
 	//
