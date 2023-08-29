@@ -606,11 +606,12 @@ void() CarStabilizeCheat =
     if (self.realang_z > 30 && self.realang_z < 330)
     {
         if (self.realang_z > 180)
-            Car_Roll(-1000, 1000);
+            Car_Roll(-4000, 1000);
         else
-            Car_Roll(1000, 1000);
+            Car_Roll(4000, 1000);
     }
-    if (self.realang_x < -30 && self.realang_x > -330)
+	//FIXME: Red Rage CAN act funky with pitch correction
+    if (self.realang_x < -30 && self.realang_x > -330 && self.vehicle != VEH_REDRAGE)
     {
         if (self.realang_x < -180)
             Car_Pitch(-1000, 1000);
