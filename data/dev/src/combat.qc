@@ -412,6 +412,9 @@ void() SpecialRegenerate =
 
 void() MachineGunBullet_Touch =
 {
+	if (other.owner == self.owner) // Projectile conflict fix
+		return;
+
 	if (!other.takedamage) // Hit wall
 	{
 		float tt = ceil(random() * 3);
@@ -1788,6 +1791,9 @@ void() SpecialWeapon_RoadBastard_Think =
 
 void() SpecialWeapon_RoadBastard_Touch =
 {
+	if (other.owner == self.owner) // Projectile conflict fix
+		return;
+
 	if (self.owner == other.owner.driving) // Owner stuff
 	{
 		if (self.cnt >= 90)
