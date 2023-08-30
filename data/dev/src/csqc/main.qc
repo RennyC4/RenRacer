@@ -90,7 +90,7 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 					soundupdate(engine_sound, CHAN_BODY, "engine/lawbreaker.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
 				if (vehicle_type == VEH_RAZORBACK)
 					soundupdate(engine_sound, CHAN_BODY, "engine/razorback.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
-				if (vehicle_type == 64) //doesn't recognize VEH_TACOLOCO and I have no clue why -Spud
+				if (vehicle_type == VEH_TACOLOCO)
 					soundupdate(engine_sound, CHAN_BODY, "engine/razorback.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
 			}
 			//
