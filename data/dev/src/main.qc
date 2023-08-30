@@ -148,6 +148,10 @@ void() worldspawn =
 	precache_model("progs/Razorback_body.mdl");
 	precache_model("progs/Razorback_wheel.mdl");
 
+	// taco loco
+	precache_model("progs/TacoLoco_body.mdl");
+	precache_model("progs/TacoLoco_wheel.mdl");
+
 	//
 	// func_vehicle - end
 	//

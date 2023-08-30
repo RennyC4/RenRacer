@@ -263,6 +263,9 @@ void() PlayerPreThink =
 					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Law Breaker^7\nSpecial Weapon: ^5Tazer Shock^7\n\nSpecial: [***  ]\nSpeed: [**** ]\nHandling: [***  ]\nArmor: [**    ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 				if (self.vehicle == VEH_RAZORBACK)
 					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Razorback^7\nSpecial Weapon: ^5Jingo Missiles^7\n\nSpecial: [***  ]\nSpeed: [**   ]\nHandling: [**   ]\nArmor: [****  ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
+				if (self.vehicle == VEH_TACOLOCO)
+					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1El Taco Loco^7\nSpecial Weapon: ^5Taco Diablo^7\n\nSpecial: [**** ]\nSpeed: [*    ]\nHandling: [*    ]\nArmor: [***** ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
+
 			}
 		}
 		else if (!self.observer)
@@ -283,6 +286,9 @@ void() PlayerPreThink =
 					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1Law Breaker^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
 				if (self.vehicle == VEH_RAZORBACK)
 					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1Razorback^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
+				if (self.vehicle == VEH_TACOLOCO)
+					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1El Taco Loco^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
+
 			}
 		}
 		Car_CheckAttach(); // Shove the player in the car
@@ -316,6 +322,8 @@ void() PlayerPreThink =
 					car = lawbreaker();
 				if (self.vehicle == VEH_RAZORBACK)
 					car = razorback();
+				if (self.vehicle == VEH_TACOLOCO)
+					car = tacoloco();
 
 				makevectors(self.angles);
 				car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
@@ -936,7 +944,7 @@ void() PutClientInServer =
 		human_players = human_players + 1;
 	else // Bots just randomly select whatever vehicle
 	{
-		float tt = ceil(random() * 7);
+		float tt = ceil(random() * 8);
 		if (tt == 1)
 			self.vehicle = VEH_HOTROD;
 		else if (tt == 2)
@@ -949,8 +957,10 @@ void() PutClientInServer =
 			self.vehicle = VEH_REDRAGE;
 		else if (tt == 6)
 			self.vehicle = VEH_LAWBREAKER;
-		else
+		else if (tt == 7)
 			self.vehicle = VEH_RAZORBACK;
+		else
+			self.vehicle = VEH_TACOLOCO;
 	}
 	self.player_id = human_players;
 

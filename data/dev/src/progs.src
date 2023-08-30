@@ -36,6 +36,7 @@ chars/v_skyscraper.qc
 chars/v_redrage.qc
 chars/v_lawbreaker.qc
 chars/v_razorback.qc
+chars/v_tacoloco.qc
 
 //
 // func_vehicle

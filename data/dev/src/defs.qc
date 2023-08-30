@@ -517,6 +517,7 @@ float VEH_SKYSCRAPER = 4;
 float VEH_REDRAGE = 8;
 float VEH_LAWBREAKER = 16;
 float VEH_RAZORBACK = 32;
+float VEH_TACOLOCO = 64;
 
 // Ammo
 .float ammo_firerocket, ammo_homingrocket, ammo_powerrocket, ammo_napalm, ammo_rico, ammo_remote, ammo_freeze, ammo_special;

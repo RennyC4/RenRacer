@@ -2485,6 +2485,14 @@ void(float type, float rear) CarAttack =
 						}
 						sound (self, CHAN_AUTO, "combat/razorback.wav", 1, ATTN_NORM);
 					}
+					if (self.vehicle == VEH_TACOLOCO) // Taco Loco special
+					{
+						if (!rear)
+							SpecialWeapon_RedRage(FALSE);
+						else
+							SpecialWeapon_RedRage(TRUE);
+						self.spcl_finished = time;
+					}
 
 					// Keep at bottom
 					if (self.vehicle != VEH_SKYSCRAPER) // Special exception

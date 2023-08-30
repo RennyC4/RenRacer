@@ -65,6 +65,8 @@ void() countdown_think = // Race start countdown
 				car = lawbreaker();
 			if (self.vehicle == VEH_RAZORBACK)
 				car = razorback();
+			if (self.vehicle == VEH_TACOLOCO)
+				car = tacoloco();
 
 			makevectors(targ.angles);
 			if (self.vehicle != VEH_SKYSCRAPER)
