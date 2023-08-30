@@ -440,9 +440,8 @@ void(entity part, float ftime) Particle_Friction =
 	part.dimension_solid = player_dimension_solid; // RennyC: Disable player collisions
 
 	/*
-	//traceline(part.origin, part.origin, TRUE, part);
 	//tracebox(part.origin, part.mins, part.maxs, part.origin, TRUE, part);
-
+	//traceline(part.origin, part.origin, TRUE, part);
 	// Water friction
 	//if (trace_inwater)
 	if (pointcontents(part.origin) < CONTENT_SOLID)
@@ -454,9 +453,9 @@ void(entity part, float ftime) Particle_Friction =
 		if (part.physobj_friction_water_z)
 			part.velocity = part.velocity - part.lmat_up*vlen(part.velocity)*normalize(part.velocity)*part.lmat_up*part.physobj_friction_water_z*ftime;
 	}
-	// Marko 2023: disabled air friction because it's a bunch of calcs for probably unused feature, remove the comments if you need it
-	// Air friction
 	*/
+	
+	traceline(part.origin, part.origin, TRUE, part); // air/water friction traceline
 	if (!trace_startsolid)
 	{
 		if (part.physobj_friction_air_x)
