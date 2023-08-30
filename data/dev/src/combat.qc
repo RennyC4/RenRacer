@@ -518,19 +518,59 @@ void() Fire_MachineGun =
 
 	setsize (mflash2, '0 0 0', '0 0 0');
 
+	// Machine Gun positions
+	// X = Forward/Back, Y = Side, Z = Height
+	vector newloc, newloc2;
+	if (self.vehicle == VEH_HOTROD)
+	{
+		newloc = '35 22.5 10.5'; // mgun 1 (right)
+		newloc2 = '35 22.5 10.5'; // mgun 2 (left)
+	}
+	else if (self.vehicle == VEH_WRAITH)
+	{
+		newloc = '36.5 24 -1.5';
+		newloc2 = '36.5 24 -1.5';
+	}
+	else if (self.vehicle == VEH_ROADBASTARD)
+	{
+		newloc = '37 24 -0.5';
+		newloc2 = '37 24 -0.5';
+	}
+	else if (self.vehicle == VEH_SKYSCRAPER)
+	{
+		newloc = '38 28 12';
+		newloc2 = '38 28 12';
+	}
+	else if (self.vehicle == VEH_REDRAGE)
+	{
+		newloc = '40 28 -3.5';
+		newloc2 = '40 28 -3.5';
+	}
+	else if (self.vehicle == VEH_LAWBREAKER)
+	{
+		newloc = '49.5 27.5 1.5';
+		newloc2 = '49.5 27.5 1.5';
+	}
+	else if (self.vehicle == VEH_RAZORBACK)
+	{
+		newloc = '57.5 29 5';
+		newloc2 = '57.5 29 5';
+	}
+	//
+
 	if (!self.mgun)
 	{
 		if (!self.backward)
 		{
-			setorigin (mflash1, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) + v_right * 27); // flat
-			setorigin (mflash2, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) + v_right * 27); // side
-			setorigin (bullet, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) + v_right * 27);
+			setorigin (mflash1, self.origin + v_up * newloc_z + v_forward * (newloc_x + self.realspeed) + v_right * newloc_y); // flat
+			setorigin (mflash2, self.origin + v_up * newloc_z + v_forward * (newloc_x + self.realspeed) + v_right * newloc_y); // side
+			setorigin (bullet, self.origin + v_up * newloc_z + v_forward * (newloc_x + self.realspeed) + v_right * newloc_y);
 		}
 		else
 		{
-			setorigin (mflash1, self.origin + v_up * 8 + v_forward * (14 - self.realspeed) + v_right * 27); // flat
-			setorigin (mflash2, self.origin + v_up * 8 + v_forward * (14 - self.realspeed) + v_right * 27); // side
-			setorigin (bullet, self.origin + v_up * 8 + v_forward * (14 - self.realspeed) + v_right * 27);
+			setorigin (mflash1, self.origin + v_up * newloc_z + v_forward * (newloc_x - self.realspeed) + v_right * newloc_y); // flat
+			setorigin (mflash2, self.origin + v_up * newloc_z + v_forward * (newloc_x - self.realspeed) + v_right * newloc_y); // side
+			setorigin (bullet, self.origin + v_up * newloc_z + v_forward * (newloc_x - self.realspeed) + v_right * newloc_y);
 		}
 		self.mgun = TRUE;
 	}
@@ -538,15 +578,15 @@ void() Fire_MachineGun =
 	{
 		if (!self.backward)
 		{
-			setorigin (mflash1, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) - v_right * 27); // flat
-			setorigin (mflash2, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) - v_right * 27); // side
-			setorigin (bullet, self.origin + v_up * 8 + v_forward * (14 + self.realspeed) - v_right * 27);
+			setorigin (mflash1, self.origin + v_up * newloc2_z + v_forward * (newloc2_x + self.realspeed) - v_right * newloc2_y); // flat
+			setorigin (mflash2, self.origin + v_up * newloc2_z + v_forward * (newloc2_x + self.realspeed) - v_right * newloc2_y); // side
+			setorigin (bullet, self.origin + v_up * newloc2_z + v_forward * (newloc2_x + self.realspeed) - v_right * newloc2_y);
 		}
 		else
 		{
-			setorigin (mflash1, self.origin + v_up * 8 + v_forward * (14 - self.realspeed) - v_right * 27); // flat
-			setorigin (mflash2, self.origin + v_up * 8 + v_forward * (14 - self.realspeed) - v_right * 27); // side
-			setorigin (bullet, self.origin + v_up * 8 + v_forward * (14 - self.realspeed) - v_right * 27);
+			setorigin (mflash1, self.origin + v_up * newloc2_z + v_forward * (newloc2_x - self.realspeed) - v_right * newloc2_y); // flat
+			setorigin (mflash2, self.origin + v_up * newloc2_z + v_forward * (newloc2_x - self.realspeed) - v_right * newloc2_y); // side
+			setorigin (bullet, self.origin + v_up * newloc2_z + v_forward * (newloc2_x - self.realspeed) - v_right * newloc2_y);
 		}
 		self.mgun = FALSE;
 	}
