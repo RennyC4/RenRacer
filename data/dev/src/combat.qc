@@ -1433,13 +1433,17 @@ void() Fire_Shield =
 	shield.effects = EF_ADDITIVE | EF_FULLBRIGHT;
 	shield.colormod = '1 3 1';
 
+	// Give off RT Light
+	shield.pflags = PFLAGS_FULLDYNAMIC;
+	shield.light_lev = 125;
+	shield.color = [1, 3, 1];
+
 	setmodel (shield, "progs/shield.mdl");
 	setsize (shield, '0 0 0', '0 0 0');
 	setorigin (shield, self.origin);
 
 	shield.nextthink = time;
 	shield.think = Shield_Think;
-	spawn_color_glow(1, 3, 1, 125, shield); // dynamic light
 };
 
 //
