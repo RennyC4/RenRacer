@@ -396,6 +396,14 @@ void() SpecialRegenerate =
 			self.special_regen_finished = time + 35; // regen time
 		}
 	}
+	if (self.vehicle == VEH_TACOLOCO)
+	{
+		if (self.ammo_special < 5) // max held
+		{
+			self.ammo_special = self.ammo_special + 1;
+			self.special_regen_finished = time + 18; // regen time
+		}
+	}
 };
 
 // ---
@@ -555,6 +563,11 @@ void() Fire_MachineGun =
 	{
 		newloc = '57.5 29 5';
 		newloc2 = '57.5 29 5';
+	}
+	else if (self.vehicle == VEH_TACOLOCO)
+	{
+		newloc = '67 29 10';
+		newloc2 = '67 29 10';
 	}
 	//
 
