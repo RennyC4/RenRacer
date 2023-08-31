@@ -226,12 +226,8 @@ entity() redrage =
 	part.part_mass = 0.52;
 	part.physobj_stiction = 50;
 	part.physobj_friction_ground = '8 8 8';
-<<<<<<< HEAD
-	part.physobj_friction_air = '0.25 0.25 0.5';
-=======
-	//part.physobj_friction_air = '0.25 0.25 5';
+	part.physobj_friction_air = '0.25 0.25 0.1';
 	part.physobj_friction_air = '0.25 0.25 0';
->>>>>>> 64a451b30a3be5a37eacb7881047003048806aec
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
@@ -251,12 +247,8 @@ entity() redrage =
 	part.part_mass = 0.875;
 	part.physobj_stiction = 50;
 	part.physobj_friction_ground = '8 8 8';
-<<<<<<< HEAD
-	part.physobj_friction_air = '0.25 0.25 0.5';
-=======
-	//part.physobj_friction_air = '0.25 0.25 5';
+	part.physobj_friction_air = '0.25 0.25 0.1';
 	part.physobj_friction_air = '0.25 0.25 0';
->>>>>>> 64a451b30a3be5a37eacb7881047003048806aec
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
@@ -276,12 +268,8 @@ entity() redrage =
 	part.part_mass = 0.575;
 	part.physobj_stiction = 50;
 	part.physobj_friction_ground = '8 8 8';
-<<<<<<< HEAD
-	part.physobj_friction_air = '0.25 0.25 0.5';
-=======
-	//part.physobj_friction_air = '0.25 0.25 5';
+	part.physobj_friction_air = '0.25 0.25 0.1';
 	part.physobj_friction_air = '0.25 0.25 0';
->>>>>>> 64a451b30a3be5a37eacb7881047003048806aec
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
