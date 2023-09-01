@@ -84,11 +84,11 @@ void Car_TirePlace(entity tire){
 				if (tire.frame > 0)
 					tire.frame -= 1;
 				else
-					tire.frame = 12;
+					tire.frame = 11;
 			}
 			else
 			{
-				if (tire.frame < 12)
+				if (tire.frame < 11)
 					tire.frame += 1;
 				else
 					tire.frame = 0;
