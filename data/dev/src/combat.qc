@@ -1934,7 +1934,7 @@ void(float rear) SpecialWeapon_RedRage =
 	}
 
 	entity beam = spawn();
-	beam.movetype = MOVETYPE_NOCLIP;
+	beam.movetype = MOVETYPE_FLYMISSILE;
 	beam.owner = self;
 	beam.solid = SOLID_TRIGGER;
 	beam.classname = "redrage";
