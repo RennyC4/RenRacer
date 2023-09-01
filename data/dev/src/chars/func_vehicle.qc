@@ -73,14 +73,61 @@ void Car_TirePlace(entity tire){
 	entity plyrent_tireowner = self.owner.driving; // RennyC
 
 	tire.angles = vectoangles(tireparticle.lmat_forward, tireparticle.lmat_up);
+	
+	// Animate tire spin
+	if (plyrent_tireowner.realspeed > 4)
+	{
+		if (tire.animation_finished < time)
+		{
+			if (!plyrent_tireowner.backward)
+			{
+				if (tire.frame > 0)
+					tire.frame -= 1;
+				else
+					tire.frame = 12;
+			}
+			else
+			{
+				if (tire.frame < 12)
+					tire.frame += 1;
+				else
+					tire.frame = 0;
+			}
+			// Animate speed
+			if (plyrent_tireowner.realspeed < 12)
+				tire.animation_finished = time + 0.1;
+			else if (plyrent_tireowner.realspeed < 24)
+				tire.animation_finished = time + 0.09;
+			else if (plyrent_tireowner.realspeed < 36)
+				tire.animation_finished = time + 0.08;
+			else if (plyrent_tireowner.realspeed < 48)
+				tire.animation_finished = time + 0.07;
+			else if (plyrent_tireowner.realspeed < 60)
+				tire.animation_finished = time + 0.06;
+			else if (plyrent_tireowner.realspeed < 72)
+				tire.animation_finished = time + 0.05;
+			else if (plyrent_tireowner.realspeed < 84)
+				tire.animation_finished = time + 0.04;
+			else if (plyrent_tireowner.realspeed < 96)
+				tire.animation_finished = time + 0.03;
+			else if (plyrent_tireowner.realspeed < 108)
+				tire.animation_finished = time + 0.02;
+			else if (plyrent_tireowner.realspeed < 120)
+				tire.animation_finished = time + 0.01;
+			else
+				tire.animation_finished = time + 0.01;
+		}
+	}
 
-	// Spin Tires - RennyC
+	/*
+	// Spin Tires - RennyC: Disabled due to choppy/ghosty/weird angle stuff
 	tire.angles_z = 0; // Fix wacky tires on slopes (TODO: Needs to match Z of car chassis)
 	makevectors(tire.angles);
 	vector forward = normalize(v_forward);
 	float pitch = -dotproduct(tire.angles, forward) * 360.0;
 	if (plyrent_tireowner.realspeed >= 4)
 		tire.angles_x += pitch * 0.1;
+	*/
 
 	traceline(tireparticle.origin, tireparticle.origin + tireparticle.lmat_up * -tire.frags, TRUE, tire);
 	float tracelen = fabs(tireparticle.physobj_spring_length);
