@@ -162,7 +162,13 @@ void(vector position, float size) Create2DExplosion =
 
 	xplode.think = Create2DExplosion_think;
 	xplode.nextthink = time;
-	spawn_color_glow(3, 1.25, 1, 75, xplode); // dynamic light
+
+	// Give off RT Light
+	xplode.pflags = PFLAGS_FULLDYNAMIC;
+	xplode.light_lev = 75;
+	xplode.color = [3, 1.25, 1];
+
+	//spawn_color_glow(3, 1.25, 1, 75, xplode); // dynamic light
 };
 
 void() Create2DFreezeExplosion_think =
@@ -203,7 +209,13 @@ void(vector position, float size) Create2DFreezeExplosion =
 
 	xplode.think = Create2DFreezeExplosion_think;
 	xplode.nextthink = time;
-	spawn_color_glow(1, 1, 3, 75, xplode); // dynamic light
+
+	// Give off RT Light
+	xplode.pflags = PFLAGS_FULLDYNAMIC;
+	xplode.light_lev = 75;
+	xplode.color = [1, 1, 3];
+
+	//spawn_color_glow(1, 1, 3, 75, xplode); // dynamic light
 };
 
 void(entity targ, entity attacker) Death =
@@ -884,7 +896,13 @@ void() CreateNapalmFire =
 	nf.onfire_finished = time + 5;
 	nf.think = napalmfire_think;
 	nf.nextthink = time;
-	spawn_color_glow(3, 1.25, 1, 150, nf); // dynamic light
+	
+	// Give off RT Light
+	nf.pflags = PFLAGS_FULLDYNAMIC;
+	nf.light_lev = 150;
+	nf.color = [3, 1.25, 1];
+	
+	//spawn_color_glow(3, 1.25, 1, 150, nf); // dynamic light
 };
 
 void() NapalmTouch_Think =
@@ -1342,7 +1360,13 @@ void(float rear) Fire_Freeze =
 	freeze.removeme_finished = time + 2;
 	freeze.think = Freeze_Think;
 	freeze.nextthink = time;
-	spawn_color_glow(1, 1, 3, 150, freeze); // dynamic light
+
+	// Give off RT Light
+	freeze.pflags = PFLAGS_FULLDYNAMIC;
+	freeze.light_lev = 150;
+	freeze.color = [1, 1, 3];
+
+	//spawn_color_glow(1, 1, 3, 150, freeze); // dynamic light
 };
 
 //

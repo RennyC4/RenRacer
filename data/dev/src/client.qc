@@ -684,7 +684,13 @@ void() PlayerPostThink =
 			setsize (fire1, '0 0 0', '0 0 0');
 			fire1.think = fire_think;
 			fire1.nextthink = time;
-			spawn_color_glow(3, 1.25, 1, 100, fire1); // dynamic light
+
+			// Give off RT Light
+			fire1.pflags = PFLAGS_FULLDYNAMIC;
+			fire1.light_lev = 100;
+			fire1.color = [3, 1.25, 1];
+
+			//spawn_color_glow(3, 1.25, 1, 100, fire1); // dynamic light
 		}
 	}
 	else
@@ -720,7 +726,13 @@ void() PlayerPostThink =
 			setsize (freeze1, '0 0 0', '0 0 0');
 			freeze1.think = freeze_think;
 			freeze1.nextthink = time;
-			spawn_color_glow(1, 1, 3, 100, freeze1); // dynamic light
+
+			// Give off RT Light
+			freeze1.pflags = PFLAGS_FULLDYNAMIC;
+			freeze1.light_lev = 100;
+			freeze1.color = [1, 1, 3];
+			//spawn_color_glow(1, 1, 3, 100, freeze1); // dynamic light
+
 			sound (freeze1, CHAN_AUTO, "combat/frozen.wav", 1, ATTN_NORM);
 		}
 	}
