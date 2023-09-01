@@ -69,9 +69,9 @@ void() countdown_think = // Race start countdown
 				car = tacoloco();
 
 			makevectors(targ.angles);
-			if (self.vehicle != VEH_SKYSCRAPER)
+			if (self.vehicle != VEH_SKYSCRAPER && self.vehicle != VEH_TACOLOCO)
 				car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
-			else // skyscraper is a big boy and needs the extra height on spawn
+			else // skyscraper+tacoloco are big boys and needs the extra height on spawn
 			{
 				setorigin(self, self.origin + v_up * 32);
 				car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
