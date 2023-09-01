@@ -75,7 +75,7 @@ void Car_TirePlace(entity tire){
 	tire.angles = vectoangles(tireparticle.lmat_forward, tireparticle.lmat_up);
 	
 	// Animate tire spin
-	if (plyrent_tireowner.realspeed > 4)
+	if (plyrent_tireowner.realspeed > 2)
 	{
 		if (tire.animation_finished < time)
 		{
@@ -100,22 +100,9 @@ void Car_TirePlace(entity tire){
 				tire.animation_finished = time + 0.03;
 			else if (plyrent_tireowner.realspeed < 36)
 				tire.animation_finished = time + 0.02;
-			else if (plyrent_tireowner.realspeed < 48)
-				tire.animation_finished = time + 0.01;
-			else if (plyrent_tireowner.realspeed < 60)
-				tire.animation_finished = time + 0.008;
-			else if (plyrent_tireowner.realspeed < 72)
-				tire.animation_finished = time + 0.007;
-			else if (plyrent_tireowner.realspeed < 84)
-				tire.animation_finished = time + 0.006;
-			else if (plyrent_tireowner.realspeed < 96)
-				tire.animation_finished = time + 0.005;
-			else if (plyrent_tireowner.realspeed < 108)
-				tire.animation_finished = time + 0.004;
-			else if (plyrent_tireowner.realspeed < 120)
-				tire.animation_finished = time + 0.003;
 			else
 				tire.animation_finished = time + 0.001;
+
 		}
 	}
 
