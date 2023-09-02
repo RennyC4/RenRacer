@@ -11,6 +11,26 @@
 void() SetupItemDynamicLight =
 {
 	if (self.classname == "item_health")
+		self.color = [1, 1, 1];
+	if (self.classname == "item_frckt")
+		self.color = [1.67, 1.33, 0];
+	if (self.classname == "item_hrckt")
+		self.color = [1.5, 1, 1.5];
+	if (self.classname == "item_prckt")
+		self.color = [1, 1, 2];
+	if (self.classname == "item_napalm")
+		self.color = [2, .75, .75];
+	if (self.classname == "item_ricochet")
+		self.color = [1, 2, 1];
+	if (self.classname == "item_remote")
+		self.color = [1, 2.36, 2.59];
+	if (self.classname == "item_freeze")
+		self.color = [.1, .1, 3];
+
+	self.pflags = PFLAGS_FULLDYNAMIC;
+	self.light_lev = 100;
+/*
+	if (self.classname == "item_health")
 		spawn_color_glow(1, 1, 1, 100, self);
 	if (self.classname == "item_frckt")
 		spawn_color_glow(1.67, 1.33, 0, 100, self);
@@ -26,6 +46,7 @@ void() SetupItemDynamicLight =
 		spawn_color_glow(1, 2.36, 2.59, 100, self);
 	if (self.classname == "item_freeze")
 		spawn_color_glow(0.1, 0.1, 3, 100, self);
+*/
 };
 
 void() SUB_Respawn =
@@ -56,6 +77,8 @@ void() item_health_touch =
 	sound(self, CHAN_AUTO, "combat/item.wav", 1, ATTN_NORM);
 
 	// Remove item and setup for respawn
+	self.light_lev = 0;
+	self.pflags = 0;
 	self.solid = SOLID_NOT;
 	setmodel (self, string_null);
 	self.think = SUB_Respawn;
@@ -109,6 +132,8 @@ void() item_firerocket_touch =
 	sound(self, CHAN_AUTO, "combat/item.wav", 1, ATTN_NORM);
 
 	// Remove item and setup for respawn
+	self.light_lev = 0;
+	self.pflags = 0;
 	self.solid = SOLID_NOT;
 	setmodel (self, string_null);
 	self.think = SUB_Respawn;
@@ -158,6 +183,8 @@ void() item_homingrocket_touch =
 	sound(self, CHAN_AUTO, "combat/item.wav", 1, ATTN_NORM);
 
 	// Remove item and setup for respawn
+	self.light_lev = 0;
+	self.pflags = 0;
 	self.solid = SOLID_NOT;
 	setmodel (self, string_null);
 	self.think = SUB_Respawn;
@@ -207,6 +234,8 @@ void() item_powerrocket_touch =
 	sound(self, CHAN_AUTO, "combat/item.wav", 1, ATTN_NORM);
 
 	// Remove item and setup for respawn
+	self.light_lev = 0;
+	self.pflags = 0;
 	self.solid = SOLID_NOT;
 	setmodel (self, string_null);
 	self.think = SUB_Respawn;
@@ -256,6 +285,8 @@ void() item_napalm_touch =
 	sound(self, CHAN_AUTO, "combat/item.wav", 1, ATTN_NORM);
 
 	// Remove item and setup for respawn
+	self.light_lev = 0;
+	self.pflags = 0;
 	self.solid = SOLID_NOT;
 	setmodel (self, string_null);
 	self.think = SUB_Respawn;
@@ -305,6 +336,8 @@ void() item_ricochet_touch =
 	sound(self, CHAN_AUTO, "combat/item.wav", 1, ATTN_NORM);
 
 	// Remove item and setup for respawn
+	self.light_lev = 0;
+	self.pflags = 0;
 	self.solid = SOLID_NOT;
 	setmodel (self, string_null);
 	self.think = SUB_Respawn;
@@ -357,6 +390,8 @@ void() item_remote_touch =
 	sound(self, CHAN_AUTO, "combat/item.wav", 1, ATTN_NORM);
 
 	// Remove item and setup for respawn
+	self.light_lev = 0;
+	self.pflags = 0;
 	self.solid = SOLID_NOT;
 	setmodel (self, string_null);
 	self.think = SUB_Respawn;
@@ -409,6 +444,8 @@ void() item_freeze_touch =
 	sound(self, CHAN_AUTO, "combat/item.wav", 1, ATTN_NORM);
 
 	// Remove item and setup for respawn
+	self.light_lev = 0;
+	self.pflags = 0;
 	self.solid = SOLID_NOT;
 	setmodel (self, string_null);
 	self.think = SUB_Respawn;

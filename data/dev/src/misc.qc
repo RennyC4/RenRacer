@@ -173,7 +173,7 @@ void() InitTrigger =
 };
 
 //
-// Spawns a dynamic light for colored light glowing
+// Spawns a dynamic light for colored light glowing, only use if needed
 //
 
 void() spawn_color_glow_think =
