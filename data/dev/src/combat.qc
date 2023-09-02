@@ -584,6 +584,11 @@ void() Fire_MachineGun =
 		newloc = '67 29 10';
 		newloc2 = '67 29 10';
 	}
+	else if (self.vehicle == VEH_STREETKING)
+	{
+		newloc = '30.5 26 -1.5';
+		newloc2 = '30.5 26 -1.5';
+	}
 	//
 
 	if (!self.mgun)

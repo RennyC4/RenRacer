@@ -25,12 +25,16 @@ void() CarSwap_Forward =
 	else if (self.vehicle == VEH_RAZORBACK)
 		self.vehicle = VEH_TACOLOCO;
 	else if (self.vehicle == VEH_TACOLOCO)
+		self.vehicle = VEH_STREETKING;
+	else if (self.vehicle == VEH_STREETKING)
 		self.vehicle = VEH_HOTROD;
 };
 
 void() CarSwap_Backward =
 {
-	if (self.vehicle == VEH_TACOLOCO)
+	if (self.vehicle == VEH_STREETKING)
+		self.vehicle = VEH_TACOLOCO;
+	else if (self.vehicle == VEH_TACOLOCO)
 		self.vehicle = VEH_RAZORBACK;
 	else if (self.vehicle == VEH_RAZORBACK)
 		self.vehicle = VEH_LAWBREAKER;
@@ -45,7 +49,7 @@ void() CarSwap_Backward =
 	else if (self.vehicle == VEH_WRAITH)
 		self.vehicle = VEH_HOTROD;
 	else if (self.vehicle == VEH_HOTROD)
-		self.vehicle = VEH_TACOLOCO;
+		self.vehicle = VEH_STREETKING;
 };
 
 void() CheckImpulses =

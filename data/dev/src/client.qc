@@ -265,6 +265,9 @@ void() PlayerPreThink =
 					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Razorback^7\nSpecial Weapon: ^5Jingo Missiles^7\n\nSpecial: [***  ]\nSpeed: [**   ]\nHandling: [**   ]\nArmor: [****  ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 				if (self.vehicle == VEH_TACOLOCO)
 					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Mince Meat^7\nSpecial Weapon: ^5Meat Missile^7\n\nSpecial: [**** ]\nSpeed: [*    ]\nHandling: [*    ]\nArmor: [***** ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
+				if (self.vehicle == VEH_STREETKING)
+					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Street King^7\nSpecial Weapon: ^5no idea^7\n\nSpecial: [**** ]\nSpeed: [*    ]\nHandling: [*    ]\nArmor: [***** ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
+
 
 			}
 		}
@@ -288,6 +291,9 @@ void() PlayerPreThink =
 					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1Razorback^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
 				if (self.vehicle == VEH_TACOLOCO)
 					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1Mince Meat^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
+				if (self.vehicle == VEH_STREETKING)
+					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1Street King^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
+
 
 			}
 		}
@@ -324,6 +330,8 @@ void() PlayerPreThink =
 					car = razorback();
 				if (self.vehicle == VEH_TACOLOCO)
 					car = tacoloco();
+				if (self.vehicle == VEH_STREETKING)
+					car = streetking();
 
 				makevectors(self.angles);
 				car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
@@ -931,7 +939,8 @@ void() PutClientInServer =
 	//func_vehicle
 	
 	setsize (self, VEC_HULL_MIN, VEC_HULL_MAX);
-
+	
+	//self.view_ofs = '0 0 4'; // Used for photo shots for cars. doesn't seem to mess up checkpoint detection anymore. can we have a cvar for this? -Spud
 	self.view_ofs = '0 0 42'; // Best height for no CSQC chasecam
 	self.velocity = '0 0 0';
 	self.modelindex = 0;
@@ -971,8 +980,9 @@ void() PutClientInServer =
 			self.vehicle = VEH_LAWBREAKER;
 		else if (tt == 7)
 			self.vehicle = VEH_RAZORBACK;
-		else
+		else if (tt == 8)
 			self.vehicle = VEH_TACOLOCO;
+		else self.vehicle = VEH_STREETKING;
 	}
 	self.player_id = human_players;
 

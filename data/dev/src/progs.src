@@ -37,6 +37,7 @@ chars/v_redrage.qc
 chars/v_lawbreaker.qc
 chars/v_razorback.qc
 chars/v_tacoloco.qc
+chars/v_streetking.qc
 
 //
 // func_vehicle
