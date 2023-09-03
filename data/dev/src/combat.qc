@@ -1172,7 +1172,7 @@ void() Remote_Think =
 	// touched
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
-		if (vlen(targ.origin - self.origin) <= 50 && targ != self.owner)
+		if (vlen(targ.origin - self.origin) <= 10 && targ != self.owner)
 		{
 			Remote_Detonate();
 			return;
@@ -2164,7 +2164,8 @@ void() SpecialWeapon_Lawbreaker =
 		lit.think = SpecialWeapon_Lawbreaker_Think;
 		lit.nextthink = time;
 	}
-	sound (self, CHAN_WEAPON, "combat/lawbreaker.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "combat/lawbreaker.wav", 0.75, ATTN_NORM);
+	stuffcmd (self, "play combat/lawbreaker.wav\n"); // ew
 };
 
 //
