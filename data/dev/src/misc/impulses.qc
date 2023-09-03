@@ -23,8 +23,8 @@ void() CarSwap_Forward =
 	else if (self.vehicle == VEH_LAWBREAKER)
 		self.vehicle = VEH_RAZORBACK;
 	else if (self.vehicle == VEH_RAZORBACK)
-		self.vehicle = VEH_TACOLOCO;
-	else if (self.vehicle == VEH_TACOLOCO)
+		self.vehicle = VEH_MINCEMEAT;
+	else if (self.vehicle == VEH_MINCEMEAT)
 		self.vehicle = VEH_STREETKING;
 	else if (self.vehicle == VEH_STREETKING)
 		self.vehicle = VEH_HOTROD;
@@ -33,8 +33,8 @@ void() CarSwap_Forward =
 void() CarSwap_Backward =
 {
 	if (self.vehicle == VEH_STREETKING)
-		self.vehicle = VEH_TACOLOCO;
-	else if (self.vehicle == VEH_TACOLOCO)
+		self.vehicle = VEH_MINCEMEAT;
+	else if (self.vehicle == VEH_MINCEMEAT)
 		self.vehicle = VEH_RAZORBACK;
 	else if (self.vehicle == VEH_RAZORBACK)
 		self.vehicle = VEH_LAWBREAKER;

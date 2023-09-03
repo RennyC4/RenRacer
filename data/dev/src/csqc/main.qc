@@ -90,7 +90,7 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 					soundupdate(engine_sound, CHAN_BODY, "engine/lawbreaker.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
 				if (vehicle_type == VEH_RAZORBACK)
 					soundupdate(engine_sound, CHAN_BODY, "engine/razorback.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
-				if (vehicle_type == VEH_TACOLOCO)
+				if (vehicle_type == VEH_MINCEMEAT)
 					soundupdate(engine_sound, CHAN_BODY, "engine/razorback.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
 				if (vehicle_type == VEH_STREETKING)
 					soundupdate(engine_sound, CHAN_BODY, "engine/streetking.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);

@@ -408,7 +408,7 @@ void() SpecialRegenerate =
 			self.special_regen_finished = time + 35; // regen time
 		}
 	}
-	if (self.vehicle == VEH_TACOLOCO)
+	if (self.vehicle == VEH_MINCEMEAT)
 	{
 		if (self.ammo_special < 5) // max held
 		{
@@ -579,7 +579,7 @@ void() Fire_MachineGun =
 		newloc = '57.5 29 5';
 		newloc2 = '57.5 29 5';
 	}
-	else if (self.vehicle == VEH_TACOLOCO)
+	else if (self.vehicle == VEH_MINCEMEAT)
 	{
 		newloc = '67 29 10';
 		newloc2 = '67 29 10';
@@ -2577,7 +2577,7 @@ void(float type, float rear) CarAttack =
 						}
 						sound (self, CHAN_AUTO, "combat/razorback.wav", 1, ATTN_NORM);
 					}
-					if (self.vehicle == VEH_TACOLOCO) // Taco Loco special
+					if (self.vehicle == VEH_MINCEMEAT) // Taco Loco special
 					{
 						if (!rear)
 							SpecialWeapon_RedRage(FALSE);
