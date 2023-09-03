@@ -1,8 +1,8 @@
 //
-// el taco loco - car 8
+// mince meat - car 8
 //
 
-entity() tacoloco =
+entity() mincemeat =
 {
 	self.vehicle = VEH_MINCEMEAT;
 	self.health = self.max_health = 120; // max health is also armor
@@ -13,7 +13,7 @@ entity() tacoloco =
 	local entity obj, part;
 
 	obj = spawn();
-	obj.netname = "tacoloco";
+	obj.netname = "mincemeat";
 	obj.physobj_mass = 1000; // RennyC: This is used for car collision stuff, doesn't affect RenRacer
 	obj.physobj_impactevent = PushAndDamageTarget;
 

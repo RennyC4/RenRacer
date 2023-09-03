@@ -329,7 +329,7 @@ void() PlayerPreThink =
 				if (self.vehicle == VEH_RAZORBACK)
 					car = razorback();
 				if (self.vehicle == VEH_MINCEMEAT)
-					car = tacoloco();
+					car = mincemeat();
 				if (self.vehicle == VEH_STREETKING)
 					car = streetking();
 

@@ -66,14 +66,14 @@ void() countdown_think = // Race start countdown
 			if (self.vehicle == VEH_RAZORBACK)
 				car = razorback();
 			if (self.vehicle == VEH_MINCEMEAT)
-				car = tacoloco();
+				car = mincemeat();
 			if (self.vehicle == VEH_STREETKING)
 				car = streetking();
 
 			makevectors(targ.angles);
 			if (self.vehicle != VEH_SKYSCRAPER && self.vehicle != VEH_MINCEMEAT)
 				car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
-			else // skyscraper+tacoloco are big boys and needs the extra height on spawn
+			else // skyscraper+mincemeat are big boys and needs the extra height on spawn
 			{
 				setorigin(self, self.origin + v_up * 32);
 				car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
