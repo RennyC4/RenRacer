@@ -233,4 +233,9 @@ void() CSQC_WorldLoaded  =
 	// Ask SSQC for values to send
 	sendevent("GrabCSQCValues", "");
 	registercommand("+showscores", "Show scoreboard");
+	
+	registercvar("cam_height","0");
+	registercvar("cam_dist","0");
+	
+
 };
