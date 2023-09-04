@@ -106,10 +106,11 @@ void() PushPlayers =
 
 	for (entity b = world;(b = find(b, classname, "player"));)
 	{
-		if (vlen(b.origin - self.origin) <= 100 && b != self && b.driving && b.health > 0 && b.invulnerable_finished < time)
+		if (vlen(b.origin - self.origin) <= 100 && b != self && b.driving && b.invulnerable_finished < time)
 		{
-			if (self.realspeed >= 10 && self.realspeed > b.realspeed)
+			if (self.realspeed > b.realspeed)
 			{
+			/*
 				if (ragewar)
 				{
 					if (self.vehicle != VEH_SKYSCRAPER)
@@ -125,23 +126,28 @@ void() PushPlayers =
 				}
 				else
 				{
-					b.forcejump_strength = 240 + (self.realspeed * 2);
+					b.forcejump_strength = 240 + (self.realspeed);
 					b.forcejump = TRUE;
 				}
+				*/
 				
-				if (random() < 0.25)
-					sound (self, CHAN_AUTO, "hit1.wav", 1, ATTN_NORM);
-				else if (random() < 0.5)
-					sound (self, CHAN_AUTO, "hit2.wav", 1, ATTN_NORM);
-				else if (random() < 0.75)
-					sound (self, CHAN_AUTO, "hit3.wav", 1, ATTN_NORM);
-				else
-					sound (self, CHAN_AUTO, "hit4.wav", 1, ATTN_NORM);
+				if (self.collide_finished < time)
+				{
+				
+					if (random() < 0.25)
+						sound (self, CHAN_AUTO, "hit1.wav", 1, ATTN_NORM);
+					else if (random() < 0.5)
+						sound (self, CHAN_AUTO, "hit2.wav", 1, ATTN_NORM);
+					else if (random() < 0.75)
+						sound (self, CHAN_AUTO, "hit3.wav", 1, ATTN_NORM);
+					else
+						sound (self, CHAN_AUTO, "hit4.wav", 1, ATTN_NORM);
+				}
 			}
 
 			if (ragewar)
 			{
-				if (self.turbo)
+				if (self.turbo && self.collide_finished < time )
 				{
 					// target damage
 					float dmg = floor(self.realspeed / 32) + floor(self.max_health / 5);
@@ -176,15 +182,19 @@ void() PushPlayers =
 
 			// Stop player thats doing the ramming
 			// FIXME: Let this work in race mode, but fix the AI backing up stuff
-			if (ragewar)
-			{
+			//if (ragewar)
+			//{
 				entity part = self.driving.physobj_particlelist;
 				while(part)
 				{
-					part.velocity = part.velocity / 1000;
+					if (self.realspeed >= 80) part.velocity *= 0.5f;
+					else if (self.realspeed >= 50) part.velocity *= 0.8f;
+
+					if (self.realspeed < b.realspeed) part.velocity -= (b.origin - self.origin) * 2;
+					else part.velocity -= (b.origin - self.origin) * 1.25;
 					part = part.physobj_next;
 				}
-			}
+			//}
 			self.collide_finished = time + 1;
 		}
 	}
@@ -494,8 +504,8 @@ void() PlayerPostThink =
 
 	if (race_status == RACE_STARTED && !intermission_running && self.health > 0 && self.driving)
 	{
+		PushPlayers();
 		if (self.collide_finished < time)
-			PushPlayers();
 		SpecialRegenerate();
 	}
 	if (self.forcejump)
