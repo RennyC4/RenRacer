@@ -83,6 +83,10 @@ con_textfont "fonts/font"
 gl_font "fonts/font"
 vid_conautoscale 3
 
+//camera settings
+seta cam_height "24"
+seta cam_dist "150"
+
 //
 // bind regular quake stuff
 //
