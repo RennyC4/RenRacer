@@ -8,7 +8,7 @@ void() GameCamera =
     camang = getproperty(VF_ANGLES);
     makevectors(camang);
 
-    campos = getproperty(VF_ORIGIN) - v_forward * 150 + v_up * 24;
+    campos = getproperty(VF_ORIGIN) - v_forward * cvar("cam_dist") + v_up * cvar("cam_height");
     plyr_pos = getproperty(VF_ORIGIN);
 
     tracebox(plyr_pos, '-16 -16 -16', '16 16 16', campos, TRUE, self);
