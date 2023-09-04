@@ -2578,7 +2578,7 @@ void(float type, float rear) CarAttack =
 						}
 						sound (self, CHAN_AUTO, "combat/razorback.wav", 1, ATTN_NORM);
 					}
-					if (self.vehicle == VEH_MINCEMEAT) // Taco Loco special
+					if (self.vehicle == VEH_MINCEMEAT) // Mince Meat special
 					{
 						if (!rear)
 							SpecialWeapon_RedRage(FALSE);

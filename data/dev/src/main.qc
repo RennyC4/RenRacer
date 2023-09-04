@@ -149,7 +149,7 @@ void() worldspawn =
 	precache_model("progs/Razorback_body.mdl");
 	precache_model("progs/Razorback_wheel.mdl");
 
-	// taco loco
+	// mince meat
 	precache_model("progs/Mincemeat_body.mdl");
 	precache_model("progs/Mincemeat_wheel.mdl");
 
