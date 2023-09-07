@@ -283,7 +283,10 @@ void() PlayerPreThink =
 				if (self.vehicle == VEH_MINCEMEAT)
 					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Mince Meat^7\nSpecial Weapon: ^5Meat Missile^7\n\nSpecial: [**** ]\nSpeed: [*    ]\nHandling: [*    ]\nArmor: [***** ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 				if (self.vehicle == VEH_STREETKING)
-					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Street King^7\nSpecial Weapon: ^5no idea^7\n\nSpecial: [**** ]\nSpeed: [*    ]\nHandling: [*    ]\nArmor: [***** ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
+					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Street King^7\nSpecial Weapon: ^5no idea^7\n\nSpecial: [***  ]\nSpeed: [**** ]\nHandling: [***  ]\nArmor: [***   ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
+				if (self.vehicle == VEH_SANDROAMER)
+					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Sand Roamer^7\nSpecial Weapon: ^5Air Time^7\n\nSpecial: [**   ]\nSpeed: [**** ]\nHandling: [***  ]\nArmor: [**    ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
+
 
 
 			}
@@ -310,6 +313,9 @@ void() PlayerPreThink =
 					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1Mince Meat^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
 				if (self.vehicle == VEH_STREETKING)
 					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1Street King^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
+				if (self.vehicle == VEH_SANDROAMER)
+					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1Sand Roamer^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
+
 
 
 			}
@@ -349,6 +355,8 @@ void() PlayerPreThink =
 					car = mincemeat();
 				if (self.vehicle == VEH_STREETKING)
 					car = streetking();
+				if (self.vehicle == VEH_SANDROAMER)
+					car = sandroamer();
 
 				makevectors(self.angles);
 				car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
@@ -982,7 +990,7 @@ void() PutClientInServer =
 		human_players = human_players + 1;
 	else // Bots just randomly select whatever vehicle
 	{
-		float tt = ceil(random() * 8);
+		float tt = ceil(random() * 9);
 		if (tt == 1)
 			self.vehicle = VEH_HOTROD;
 		else if (tt == 2)
@@ -999,7 +1007,8 @@ void() PutClientInServer =
 			self.vehicle = VEH_RAZORBACK;
 		else if (tt == 8)
 			self.vehicle = VEH_MINCEMEAT;
-		else self.vehicle = VEH_STREETKING;
+		else if(tt == 9) self.vehicle = VEH_STREETKING; 
+		else self.vehicle = VEH_SANDROAMER;
 	}
 	self.player_id = human_players;
 

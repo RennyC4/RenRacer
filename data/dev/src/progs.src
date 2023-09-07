@@ -38,6 +38,7 @@ chars/v_lawbreaker.qc
 chars/v_razorback.qc
 chars/v_mincemeat.qc
 chars/v_streetking.qc
+chars/v_sandroamer.qc
 
 //
 // func_vehicle
