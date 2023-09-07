@@ -71,6 +71,8 @@ void() countdown_think = // Race start countdown
 				car = streetking();
 			if (self.vehicle == VEH_SANDROAMER)
 				car = sandroamer();
+			if (self.vehicle == VEH_THOROGOOD)
+				car = thorogood();
 
 			makevectors(targ.angles);
 			if (self.vehicle != VEH_SKYSCRAPER && self.vehicle != VEH_MINCEMEAT)

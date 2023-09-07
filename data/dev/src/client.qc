@@ -286,6 +286,9 @@ void() PlayerPreThink =
 					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Street King^7\nSpecial Weapon: ^5no idea^7\n\nSpecial: [***  ]\nSpeed: [**** ]\nHandling: [***  ]\nArmor: [***   ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 				if (self.vehicle == VEH_SANDROAMER)
 					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Sand Roamer^7\nSpecial Weapon: ^5Air Time^7\n\nSpecial: [**   ]\nSpeed: [**** ]\nHandling: [***  ]\nArmor: [**    ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
+				if (self.vehicle == VEH_THOROGOOD)
+					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Thorogood^7\nSpecial Weapon: ^5No Clue^7\n\nSpecial: [**   ]\nSpeed: [**** ]\nHandling: [***  ]\nArmor: [**    ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
+
 
 
 
@@ -315,6 +318,9 @@ void() PlayerPreThink =
 					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1Street King^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
 				if (self.vehicle == VEH_SANDROAMER)
 					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1Sand Roamer^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
+				if (self.vehicle == VEH_THOROGOOD)
+					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1Thorogood^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
+
 
 
 
@@ -1007,8 +1013,11 @@ void() PutClientInServer =
 			self.vehicle = VEH_RAZORBACK;
 		else if (tt == 8)
 			self.vehicle = VEH_MINCEMEAT;
-		else if(tt == 9) self.vehicle = VEH_STREETKING; 
+		else if(tt == 9) 
+			self.vehicle = VEH_STREETKING; 
+		//else if (tt == 10)
 		else self.vehicle = VEH_SANDROAMER;
+//		else self.vehicle = VEH_THOROGOOD;
 	}
 	self.player_id = human_players;
 
