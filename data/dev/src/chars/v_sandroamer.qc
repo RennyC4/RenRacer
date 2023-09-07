@@ -204,7 +204,7 @@ entity() sandroamer =
 	part.owner = obj;
 	part.classname = "phys_particle";
 	part.netname = "point";
-	part.relative_org = '60 0 6';
+	part.relative_org = '62 0 2.5';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
@@ -224,7 +224,7 @@ entity() sandroamer =
 	part.owner = obj;
 	part.classname = "phys_particle";
 	part.netname = "point";
-	part.relative_org = '-8 0 13';
+	part.relative_org = '0 0 15';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
@@ -237,8 +237,6 @@ entity() sandroamer =
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
 
-/*
-
 	// rear particle (trunk)
 	part = spawn();
 	part.physobj_next = obj.physobj_particlelist;
@@ -246,7 +244,7 @@ entity() sandroamer =
 	part.owner = obj;
 	part.classname = "phys_particle";
 	part.netname = "point";
-	part.relative_org = '-50 0 20';
+	part.relative_org = '-48 0 0';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
@@ -258,7 +256,6 @@ entity() sandroamer =
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
-*/
 
 	//
 	// hitmodels - used for car/projectile collisions
