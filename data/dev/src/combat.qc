@@ -1090,8 +1090,12 @@ void() Rico_Think =
 			DoDamage(targ, self.owner, 7+damage, self.classname); // base damage 7, bounce x 2, total: 27
 			if (self.cnt > 0)
 			{
-				targ.forcejump_strength = 750;
-				targ.forcejump = TRUE;
+				entity part = targ.driving.physobj_particlelist;
+				while(part)
+				{
+					part.velocity -= (self.origin + '0 0 1' - targ.origin) * 13;
+					part = part.physobj_next;
+				}
 			}
 			CreateExplosion(self.origin + v_up * 48);
 			Create2DExplosion(self.origin + v_up * 48, 4);
