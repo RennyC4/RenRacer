@@ -426,6 +426,7 @@ float gameover; // match is over (dm)
 .float goal_touched; // client touched the beginning / end goal to start/end race
 .float airborne_cnt; // car airborne counter
 .float turbo;
+.float turbo_held;
 .float turbo_fuel;
 .float drift;
 .float clearcprint_finished;

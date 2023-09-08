@@ -763,17 +763,30 @@ void TryUpdateVehicle(){
 		// RennyC
 		// Taken from Build-A-Delivery by shpuld
 		if (!self.drift)
-			self.turbo = self.button0;
+		{
+			if (self.button0)
+			{
+				self.turbo_held = TRUE;
+				if (self.turbo_fuel >= 15 && self.turbo_held)
+					self.turbo = TRUE;
+			}
+			else
+			{
+				self.turbo_held = FALSE;
+				self.turbo = FALSE;
+			}
+			//self.turbo = self.button0;
+		}
 		if (self.turbo)
 		{
 			if (self.turbo_fuel > 0)
 			{
-				if (self.turbo_fuel <= 10 && !self.turbo_warning)
+				if (self.turbo_fuel <= 15 && !self.turbo_warning)
 				{
 					stuffcmd (self, "play warning.wav\n"); // FIXME: Ugly
 					self.turbo_warning = TRUE;
 				}
-				if (self.turbo_fuel > 10)
+				if (self.turbo_fuel > 15)
 					self.turbo_warning = FALSE;
 
 				if (!self.turbosfx)
@@ -799,12 +812,12 @@ void TryUpdateVehicle(){
 				if (self.turbo_fuel > 0)
 					self.turbo_fuel = self.turbo_fuel - 1;
 				else
-					self.turbo_fuel = 0; // prevent overflow
+					self.turbo_fuel = 0; // prevent underflow
 			}
 		}
 		else
 		{
-			if (self.turbo_fuel > 0) // Stop sound spam
+			if (self.turbo_fuel > 0) // stop sound spam
 				self.turbosfx = FALSE;
 		}
 
