@@ -814,6 +814,8 @@ void TryUpdateVehicle(){
 				else
 					self.turbo_fuel = 0; // prevent underflow
 			}
+			else
+				self.turbo = self.turbo_held = FALSE;
 		}
 		else
 		{
