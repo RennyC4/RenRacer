@@ -466,6 +466,16 @@ void() MachineGunBullet_Touch =
 	remove(self);
 };
 
+// Turn bullets collision back on; fixes conflict with players bounding box
+// this fixes reversing while firing
+void() MachineGunBullet_Think
+{
+	self.dimension_hit = 255;
+	self.think = SUB_Remove;
+	self.nextthink = time + 1.5;
+
+};
+
 .float mgun;
 void() Fire_MachineGun =
 {
@@ -489,6 +499,8 @@ void() Fire_MachineGun =
 	bullet.netname = "projectile";
 	bullet.effects = EF_FULLBRIGHT | EF_MUZZLEFLASH;
 	bullet.touch = MachineGunBullet_Touch;
+
+	bullet.dimension_hit = 0; // Turn off initial collision
 
 	bullet.velocity = aim(self, 1000);
 	bullet.velocity = bullet.velocity * 1000;
@@ -599,8 +611,8 @@ void() Fire_MachineGun =
 	}
 	else if (self.vehicle == VEH_THOROGOOD)
 	{
-		newloc = '55 0 2.5';
-		newloc2 = '55 12 2.5';
+		newloc = '51 0 2.5';
+		newloc2 = '51 12 2.5';
 	}
 	//
 
@@ -643,8 +655,8 @@ void() Fire_MachineGun =
 	mflash1.nextthink = time + 0.1;
 	mflash2.think = SUB_Remove;
 	mflash2.nextthink = time + 0.1;
-	bullet.think = SUB_Remove;
-	bullet.nextthink = time + 1.5;
+	bullet.think = MachineGunBullet_Think; // Reactivate collision
+	bullet.nextthink = time + 0.05;
 };
 
 // ---
