@@ -637,16 +637,29 @@ void() car_drift =
 // RennyC - helps to keep the car balanced if it's tipping in a cheaty manner
 void() CarStabilizeCheat =
 {
-    if (self.realang_z > 30 && self.realang_z < 330)
-    {
-        if (self.realang_z > 180)
-            Car_Roll(-4000, 120);
-        else
-            Car_Roll(4000, 120);
-    }
+	if (self.vehicle == VEH_THOROGOOD) // Motorcycle needs special condition, feel free to tweak this
+	{
+		if (self.realang_z > 10 && self.realang_z < 350)
+		{
+			if (self.realang_z > 180)
+				Car_Roll(-5000, 5000);
+			else
+				Car_Roll(5000, 5000);
+		}
+	}
+	else
+	{
+		if (self.realang_z > 30 && self.realang_z < 330)
+		{
+			if (self.realang_z > 180)
+				Car_Roll(-4000, 120);
+			else
+				Car_Roll(4000, 120);
+		}
+	}
+
 	//FIXME: Red Rage CAN act funky with pitch correction
 	//Red Rage in general gets funky. doesn't like any of my physics tinkering. -spud
-
 	//commenting out (for now?) since pitch stabilization is done with air firction. -spud
 /*
     if (self.realang_x < -30 && self.realang_x > -330 && self.vehicle != VEH_REDRAGE)
