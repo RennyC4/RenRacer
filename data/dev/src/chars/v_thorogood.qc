@@ -1,11 +1,11 @@
 //
-// Streetking - car 9
+// Thorogood - car (heh..) 11
 //
 
 entity() thorogood =
 {
 	self.vehicle = VEH_THOROGOOD;
-	self.health = self.max_health = 80; // max health is also armor
+	self.health = self.max_health = 60; // max health is also armor
 	self.speed = 3000; // also acceleration
 	self.max_speed = 1000;
 	self.handling = 100; // good handling
@@ -32,8 +32,8 @@ entity() thorogood =
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
-	
-		part = spawn();
+
+	part = spawn();
 	part.physobj_next = obj.physobj_staticlist;
 	obj.physobj_staticlist = part;
 	part.owner = obj;
@@ -44,7 +44,6 @@ entity() thorogood =
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
-
 
 	//Guns for ragewar
 	if (ragewar)
@@ -114,14 +113,14 @@ entity() thorogood =
 	part.relative_up = '0 0 1';
 	//
 
-	// frontright
+	// frontright (invisible)
 	part = spawn();
 	part.physobj_next = obj.physobj_particlelist;
 	obj.physobj_particlelist = part;
 	part.owner = obj;
 	part.classname = "phys_particle";
 	part.netname = "frontright";
-	part.relative_org = '22 -20 -10';
+	part.relative_org = '22 -15 -10';
 	part.physobj_spring_length = 0;
 	part.physobj_spring_force = '1 4 0';
 	part.relative_size = 0;
@@ -130,7 +129,7 @@ entity() thorogood =
 	part.relative_up = '0 0 1';
 	part.physobj_stepup = 18;
 	part.part_mass = 1;
-	part.physobj_stiction = 10;
+	part.physobj_stiction = 0;
 	part.physobj_friction_ground = '0.225 4.4 8';
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
@@ -184,14 +183,14 @@ entity() thorogood =
 	part.relative_up = '0 0 1';
 	//
 
-	// backright
+	// backright (invisible)
 	part = spawn();
 	part.physobj_next = obj.physobj_particlelist;
 	obj.physobj_particlelist = part;
 	part.owner = obj;
 	part.classname = "phys_particle";
 	part.netname = "backright";
-	part.relative_org = '-23 -20 -10';
+	part.relative_org = '-23 -15 -10';
 	part.physobj_spring_length = 0;
 	part.physobj_spring_force = '1 4 0';
 	part.relative_size = 0;
@@ -200,7 +199,7 @@ entity() thorogood =
 	part.relative_up = '0 0 1';
 	part.physobj_stepup = 18;
 	part.part_mass = 1;
-	part.physobj_stiction = 10;
+	part.physobj_stiction = 0;
 	part.physobj_friction_ground = '0.225 3.3 8';
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
