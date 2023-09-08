@@ -14,7 +14,11 @@ void(entity targ, entity attacker, float damage, string attackerclassname) DoDam
 void() CommandSpecials;
 void() SpecialRegenerate;
 
-void() ClientKill = {};
+void() ClientKill =
+{
+	if (ragewar)
+		DoDamage(self, self, self.health, self.classname);
+};
 
 void() ClientConnect =
 {
@@ -873,7 +877,7 @@ entity() SelectSpawnSpot =
 	local	entity thing;
 	local	float  pcount;
 
-	if (!ragewar)
+	if (!ragewar) // racing
 	{
 		while (1)
 		{
@@ -898,7 +902,7 @@ entity() SelectSpawnSpot =
 			}
 			else
 			{
-				spot = find(spot, classname, "info_player_start");
+				spot = find(spot, classname, "info_player_start"); // last try
 				return spot;
 			}
 		}
@@ -921,7 +925,7 @@ entity() SelectSpawnSpot =
 						pcount = pcount + 1;
 					thing = thing.chain;
 				}
-				if (pcount == 0)
+				if (!pcount)
 				{
 					lastspawn = spot;
 					return spot;
