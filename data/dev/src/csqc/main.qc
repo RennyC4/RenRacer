@@ -15,12 +15,13 @@ void(float is_new) CSQC_Ent_Update =
 
 entity sky;
 entity engine_sound;
+float blindness_fade;
 void(float width, float height, float menushown) CSQC_UpdateView =
 {
 	g_width = width;
 	g_height = height;
 
-	local vector virtsize;
+	vector virtsize;
 	virtsize_x = width;
 	virtsize_y = height;
 	virtsize_z = 0;
@@ -64,11 +65,32 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 				HUD_Ragewar(); // Draw ammo, etc
 			DrawSpeed(); // Draw Speed Stats
 
-			// Engine sounds (taken from build a delivery, optimized (thanks spike))
-			local float speed = getstatf(STAT_SPEED);
-			local float incar = getstatf(STAT_DRIVING);
+			float speed = getstatf(STAT_SPEED);
+			float incar = getstatf(STAT_DRIVING);
+			float blind = getstatf(STAT_BLIND);
 			if (incar)
 			{
+				// Blind status
+				if (blind > time)
+				{
+					blindness_fade = min(1,blindness_fade + frametime*7.5);
+					print ("1\n");
+				}
+				else if (blindness_fade > 0)
+				{
+					blindness_fade = max(0,blindness_fade - frametime*3);
+					print ("2\n");
+				}
+
+				if (blindness_fade > 0)
+				{
+					//vector draw = [getstatf(STAT_ORIGINX), getstatf(STAT_ORIGINY), getstatf(STAT_ORIGINZ)];
+					vector draw = getproperty(VF_ORIGIN);
+					DrawBlindness(draw, '320 270' + ('640 640'*(1-blindness_fade)), width, height, blindness_fade);
+					print ("3\n");
+				}
+
+				// Engine sounds (taken from build a delivery, optimized (thanks spike))
 				float vol = min(1, 0.25 + (speed / 4));
 				float pitchadd = min(1000, speed);
 				float pitch = 120 + pitchadd;
@@ -239,8 +261,6 @@ void() CSQC_WorldLoaded  =
 	sendevent("GrabCSQCValues", "");
 	registercommand("+showscores", "Show scoreboard");
 	
-	registercvar("cam_height","0");
-	registercvar("cam_dist","0");
-	
-
+	registercvar("cam_height", "0");
+	registercvar("cam_dist", "0");
 };

@@ -173,12 +173,12 @@ void() PushPlayers =
 			}
 
 			// Fire stuff on car touch
-			if (self.onfire_finished > time)
+			if (self.onfire_finished > time && self.health > 0)
 			{
 				b.onfire_finished = time + 2.5;
 				b.igniter = self.igniter;
 			}
-			if (b.onfire_finished > time)
+			if (b.onfire_finished > time && b.health > 0)
 			{
 				self.onfire_finished = time + 2.5;
 				self.igniter = b.igniter;
@@ -854,6 +854,9 @@ void() PlayerPostThink =
 	//
 
 	CheckImpulses();
+	
+	// Debugging stuff
+	//self.blind_finished = time + 3;
 };
 
 //----

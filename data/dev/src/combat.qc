@@ -108,6 +108,11 @@ void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 		bprint(attacker.netname, " missiles pummeled ");
 		bprint(targ.netname, " into paste\n");
 	}
+	if (attackerclassname == "hotdog") // mince meat
+	{
+		bprint(targ.netname, " blew up on ");
+		bprint(attacker.netname, "'s famous weiner\n");
+	}
 };
 
 // ---

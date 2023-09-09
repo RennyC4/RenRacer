@@ -49,6 +49,7 @@ void() CSEv_GrabCSQCValues =
 	clientstat(STAT_AMMO_SPECIAL, EV_FLOAT, ammo_special);
 	globalstat(SERVER_RAGEWAR, EV_FLOAT, "ragewar");
 	clientstat(STAT_VEHICLE, EV_FLOAT, vehicle);
+	clientstat(STAT_BLIND, EV_FLOAT, blind_finished);
 };
 
 void() world_lights =

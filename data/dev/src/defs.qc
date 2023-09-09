@@ -475,6 +475,7 @@ string nextmap;
 .float backward; // used when user is backing up the car, used for weapons also
 .float max_speed;
 .float handling;
+.float blind_finished;
 
 // Key flags
 .float keyflags;
@@ -590,6 +591,7 @@ var float PART_HOTDOGSPLAT;
 #define STAT_AMMO_SPECIAL 55
 #define SERVER_RAGEWAR 56
 #define STAT_VEHICLE 57
+#define STAT_BLIND 58
 
 #define STAT_INTERMISSION 75
 

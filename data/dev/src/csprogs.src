@@ -12,4 +12,5 @@ csqc/speedline.qc
 csqc/scoreboard.qc
 csqc/hud_dm.qc
 csqc/enums.qc
+csqc/blind.qc
 csqc/main.qc
