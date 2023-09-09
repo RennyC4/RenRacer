@@ -2242,7 +2242,7 @@ void() SpecialWeapon_MinceMeat_Touch =
 	if (other.solid == SOLID_BSP && !other.owner || other.owner.driving.invulnerable_finished > time) // Hit wall / invunerable player
 	{
 		sound (self, CHAN_AUTO, "combat/splat.wav", 1, ATTN_NORM);
-		// TODO: Spawn brown meat particles
+		pointparticles(PART_HOTDOGSPLAT, self.origin, '0 0 0', 1);
 		Create2DExplosion(self.origin - v_forward * 32, 3);
 		remove(self);
 		return;
@@ -2255,7 +2255,7 @@ void() SpecialWeapon_MinceMeat_Touch =
 	DoDamage(other.owner.driving, self.owner, 15, self.classname);
 	sound (other.owner.driving, CHAN_AUTO, "combat/splat.wav", 1, ATTN_NORM);
 
-	// TODO: Spawn brown meat particles
+	pointparticles(PART_HOTDOGSPLAT, self.origin, '0 0 0', 1);
 	Create2DExplosion(self.origin, 3);
 	remove(self);
 };

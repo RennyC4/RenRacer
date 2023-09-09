@@ -85,6 +85,7 @@ void() worldspawn =
 	PART_FREEZEBLAST = particleeffectnum("freezeblast");
 	PART_FLAME = particleeffectnum("flamethrower");
 	PART_GROCKET = particleeffectnum("ghostrocket");
+	PART_HOTDOGSPLAT = particleeffectnum("hotdogsplat");
 
 	precache_model("progs/null.spr");
 	precache_model("progs/s_debug.spr");
