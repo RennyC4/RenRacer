@@ -2197,6 +2197,119 @@ void() SpecialWeapon_Lawbreaker =
 	stuffcmd (self, "play combat/lawbreaker.wav\n"); // ew
 };
 
+
+//
+// Special Weapon - Splatter Dog (Mince Meat)
+//
+
+void() SpecialWeapon_MinceMeat_Think =
+{
+	if (self.removeme_finished < time)
+	{
+		Create2DExplosion(self.origin, 3);
+		remove(self);
+		return;
+	}
+
+	pointparticles(PART_ROCKET1, self.origin, '0 0 0', 1);
+
+	if (!self.enemy)
+		GetTarget();
+
+	if (self.enemy) // Home in on enemy
+	{
+		local vector vele, vels, ph;
+		vele = normalize(self.enemy.origin - self.origin);
+		vels = normalize(self.velocity);
+		ph = vele + (vels * 4);
+		ph = ph * (1/7);
+
+		self.velocity = normalize(vels + ph);
+		self.velocity = self.velocity * 800;
+		self.angles = vectoangles(self.velocity);
+	}
+
+	makevectors_mdl(self.angles);
+	self.velocity_z = sin(time*12)*200;
+	self.angles_x = sin(time*12)*45;
+
+	frameskip(0.01);
+};
+
+void() SpecialWeapon_MinceMeat_Touch =
+{
+	makevectors_mdl(self.angles);
+	if (other.solid == SOLID_BSP && !other.owner || other.owner.driving.invulnerable_finished > time) // Hit wall / invunerable player
+	{
+		Create2DExplosion(self.origin - v_forward * 32, 3);
+		remove(self);
+		return;
+	}
+	if (other.owner.driving.classname != "player")
+		return;
+	if (self.owner == other.owner.driving)
+		return;
+
+	DoDamage(other.owner.driving, self.owner, 15, self.classname);
+
+	Create2DExplosion(self.origin, 3);
+	remove(self);
+};
+
+void(float rear) SpecialWeapon_MinceMeat =
+{
+	entity hotdog = spawn();
+
+	makevectors (self.realang);
+	
+	if (rear)
+	{
+		vector v = self.realang;
+		v_y = v_y + 180;
+		makevectors(v);
+	}
+
+	hotdog.movetype = MOVETYPE_FLYMISSILE;
+	hotdog.owner = self;
+	hotdog.solid = SOLID_TRIGGER;
+
+	hotdog.classname = "hotdog";
+	hotdog.colormod = '1 1 3';
+	hotdog.netname = "projectile";
+	hotdog.flags = FL_ITEM; // bigger hitbox
+	hotdog.touch = SpecialWeapon_MinceMeat_Touch;
+
+	hotdog.velocity = aim(self, 800);
+	hotdog.velocity = hotdog.velocity * 800;
+
+	// Players forward velocity is added to projectiles
+	if (!self.backward)
+	{
+		hotdog.velocity_x = hotdog.velocity_x + self.driving.velocity_x;
+		hotdog.velocity_y = hotdog.velocity_y + self.driving.velocity_y;
+	}
+	hotdog.angles = vectoangles(hotdog.velocity);
+
+	setmodel (hotdog, "progs/hotdog_proj.mdl");
+	setsize (hotdog, '0 0 0', '0 0 0');
+	setorigin (hotdog, self.origin + v_up * 8 + v_forward * (40 + self.realspeed));
+
+	sound (self, CHAN_VOICE, "combat/mincemeat.wav", 1, ATTN_NORM);
+	sound (self, CHAN_WEAPON, "combat/rocket.wav", 1, ATTN_NORM);
+
+	hotdog.removeme_finished = time + 3;
+	hotdog.think = SpecialWeapon_MinceMeat_Think;
+	hotdog.nextthink = time;
+
+	// Give off RT Light
+	//hotdog.pflags = PFLAGS_FULLDYNAMIC;
+	//hotdog.light_lev = 150;
+	//hotdog.color = [1, 1, 3];
+
+	//spawn_color_glow(1, 1, 3, 150, hotdog); // dynamic light
+};
+
+
 //
 // Command Specials
 //
@@ -2610,10 +2723,9 @@ void(float type, float rear) CarAttack =
 					if (self.vehicle == VEH_MINCEMEAT) // Mince Meat special
 					{
 						if (!rear)
-							SpecialWeapon_RedRage(FALSE);
+							SpecialWeapon_MinceMeat(FALSE);
 						else
-							SpecialWeapon_RedRage(TRUE);
-						self.spcl_finished = time;
+							SpecialWeapon_MinceMeat(TRUE);
 					}
 
 					// Keep at bottom

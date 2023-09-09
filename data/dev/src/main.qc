@@ -152,6 +152,8 @@ void() worldspawn =
 	// mince meat
 	precache_model("progs/Mincemeat_body.mdl");
 	precache_model("progs/Mincemeat_wheel.mdl");
+	precache_model("progs/Mincemeat_hotdog.mdl");
+	precache_model("progs/hotdog_proj.mdl");
 
 	//
 	// func_vehicle - end
@@ -217,6 +219,7 @@ void() worldspawn =
 	precache_sound ("combat/lawbreaker.wav");
 	precache_sound ("combat/lawbreaker2.wav");
 	precache_sound ("combat/razorback.wav");
+	precache_sound ("combat/mincemeat.wav");
 
 	world_lights();
 	load_waypoints(); // Load waypoints
