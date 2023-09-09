@@ -421,6 +421,14 @@ void() SpecialRegenerate =
 			self.special_regen_finished = time + 18; // regen time
 		}
 	}
+	if (self.vehicle == VEH_STREETKING)
+	{
+		if (self.ammo_special < 3) // max held
+		{
+			self.ammo_special = self.ammo_special + 1;
+			self.special_regen_finished = time + 30; // regen time
+		}
+	}
 };
 
 // ---
@@ -2322,6 +2330,46 @@ void(float rear) SpecialWeapon_MinceMeat =
 
 
 //
+// Special Weapon - King Turret (Street King)
+//
+
+
+void() SpecialWeapon_StreetKing =
+{
+	entity base, head;
+
+	head = spawn ();
+	head.owner = head;
+	head.movetype = MOVETYPE_NONE;
+	head.solid = SOLID_BBOX;
+	head.takedamage = DAMAGE_AIM;
+	makevectors (self.angles);
+	head.classname = "turret";
+//	head.think = TurretThink;
+	head.nextthink = time + 0.1;
+	head.health = 25;
+	//head.th_die = TurretDie;
+	//sound (head, CHAN_BODY, "turret/built.wav", 1, ATTN_NORM);
+	setmodel (head, "progs/turret_h.mdl");
+	setsize (head, VEC_HULL_MIN, VEC_HULL_MAX);
+	setorigin (head, self.origin + v_up * 10);
+
+	base = spawn ();
+	base.owner = head;
+	base.movetype = MOVETYPE_NONE;
+	base.solid = SOLID_NOT;
+	base.takedamage = DAMAGE_NO;
+	makevectors (self.angles);
+	base.classname = "turret";
+//	base.think = base_think;
+	base.nextthink = time + 0.1;
+	//base.th_die = SUB_Remove;
+	setmodel (base, "progs/turret_b.mdl");
+	setsize (base, '0 0 0', '0 0 0');
+	setorigin (base, self.origin);
+};
+
+//
 // Command Specials
 //
 
@@ -2737,6 +2785,11 @@ void(float type, float rear) CarAttack =
 							SpecialWeapon_MinceMeat(FALSE);
 						else
 							SpecialWeapon_MinceMeat(TRUE);
+					}
+					if (self.vehicle == VEH_STREETKING)
+					{
+						SpecialWeapon_StreetKing();
+						self.spcl_finished = time + 5; // fires slower
 					}
 
 					// Keep at bottom

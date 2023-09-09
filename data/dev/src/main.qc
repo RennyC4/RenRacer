@@ -112,6 +112,8 @@ void() worldspawn =
 	precache_model("progs/boomerang.mdl");
 	precache_model("progs/vfxring.mdl");
 	precache_model("progs/mountedgun.mdl");
+	precache_model("progs/turret_h.mdl");
+	precache_model("progs/turret_b.mdl");
 
 	//
 	// func_vehicle - start
