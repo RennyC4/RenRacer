@@ -2257,9 +2257,9 @@ void() SpecialWeapon_MinceMeat_Touch =
 	if (self.owner == other.owner.driving)
 		return;
 
+	other.owner.driving.blind_finished = time + 3; // Blind players for 3 seconds
 	DoDamage(other.owner.driving, self.owner, 15, self.classname);
 	sound (other.owner.driving, CHAN_AUTO, "combat/splat.wav", 1, ATTN_NORM);
-
 	pointparticles(PART_HOTDOGSPLAT, self.origin, '0 0 0', 1);
 	Create2DExplosion(self.origin, 3);
 	remove(self);

@@ -72,23 +72,15 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 			{
 				// Blind status
 				if (blind > time)
-				{
 					blindness_fade = min(1,blindness_fade + frametime*7.5);
-					print ("1\n");
-				}
 				else if (blindness_fade > 0)
-				{
 					blindness_fade = max(0,blindness_fade - frametime*3);
-					print ("2\n");
-				}
-
 				if (blindness_fade > 0)
 				{
-					//vector draw = [getstatf(STAT_ORIGINX), getstatf(STAT_ORIGINY), getstatf(STAT_ORIGINZ)];
-					vector draw = getproperty(VF_ORIGIN);
+					vector draw = [getstatf(STAT_ORIGINX), getstatf(STAT_ORIGINY), getstatf(STAT_ORIGINZ)];
 					DrawBlindness(draw, '320 270' + ('640 640'*(1-blindness_fade)), width, height, blindness_fade);
-					print ("3\n");
 				}
+				//
 
 				// Engine sounds (taken from build a delivery, optimized (thanks spike))
 				float vol = min(1, 0.25 + (speed / 4));

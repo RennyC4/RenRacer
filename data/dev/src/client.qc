@@ -855,7 +855,7 @@ void() PlayerPostThink =
 
 	CheckImpulses();
 	
-	// Debugging stuff
+	// Debug status effects
 	//self.blind_finished = time + 3;
 };
 

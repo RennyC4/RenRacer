@@ -592,6 +592,9 @@ var float PART_HOTDOGSPLAT;
 #define SERVER_RAGEWAR 56
 #define STAT_VEHICLE 57
 #define STAT_BLIND 58
+#define STAT_ORIGINX 59 // Player origin X
+#define STAT_ORIGINY 60 // Player origin Y
+#define STAT_ORIGINZ 61 // Player origin Z
 
 #define STAT_INTERMISSION 75
 
