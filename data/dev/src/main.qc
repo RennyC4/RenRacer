@@ -220,6 +220,7 @@ void() worldspawn =
 	precache_sound ("combat/lawbreaker2.wav");
 	precache_sound ("combat/razorback.wav");
 	precache_sound ("combat/mincemeat.wav");
+	precache_sound ("combat/splat.wav");
 
 	world_lights();
 	load_waypoints(); // Load waypoints

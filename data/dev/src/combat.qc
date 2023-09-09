@@ -2231,7 +2231,7 @@ void() SpecialWeapon_MinceMeat_Think =
 
 	makevectors_mdl(self.angles);
 	self.velocity_z = sin(time*12)*200;
-	self.angles_x = sin(time*12)*45;
+	self.angles_x = sin(time*12)*30;
 
 	frameskip(0.01);
 };
@@ -2241,6 +2241,8 @@ void() SpecialWeapon_MinceMeat_Touch =
 	makevectors_mdl(self.angles);
 	if (other.solid == SOLID_BSP && !other.owner || other.owner.driving.invulnerable_finished > time) // Hit wall / invunerable player
 	{
+		sound (self, CHAN_AUTO, "combat/splat.wav", 1, ATTN_NORM);
+		// TODO: Spawn brown meat particles
 		Create2DExplosion(self.origin - v_forward * 32, 3);
 		remove(self);
 		return;
@@ -2251,7 +2253,9 @@ void() SpecialWeapon_MinceMeat_Touch =
 		return;
 
 	DoDamage(other.owner.driving, self.owner, 15, self.classname);
+	sound (other.owner.driving, CHAN_AUTO, "combat/splat.wav", 1, ATTN_NORM);
 
+	// TODO: Spawn brown meat particles
 	Create2DExplosion(self.origin, 3);
 	remove(self);
 };
@@ -2278,6 +2282,8 @@ void(float rear) SpecialWeapon_MinceMeat =
 	hotdog.netname = "projectile";
 	hotdog.flags = FL_ITEM; // bigger hitbox
 	hotdog.touch = SpecialWeapon_MinceMeat_Touch;
+	hotdog.effects = EF_FULLBRIGHT;
+	hotdog.scale = 2;
 
 	hotdog.velocity = aim(self, 800);
 	hotdog.velocity = hotdog.velocity * 800;
