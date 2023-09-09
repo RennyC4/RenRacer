@@ -110,7 +110,7 @@ void() PushPlayers =
 
 	for (entity b = world;(b = find(b, classname, "player"));)
 	{
-		if (vlen(b.origin - self.origin) <= 100 && b != self && self.driving && b.invulnerable_finished < time)
+		if (vlen(b.origin - self.origin) <= 100 && b != self && b.invulnerable_finished < time)
 		{
 			if (self.realspeed > b.realspeed)
 			{
@@ -191,22 +191,13 @@ void() PushPlayers =
 				entity part = self.driving.physobj_particlelist;
 				while(part)
 				{
-					if (ragewar) //racewar collisions
-					{
-						part.velocity -= (b.origin - self.origin) * (b.realspeed*0.15);
-						b.velocity -= (self.origin - b.origin) * (self.realspeed*0.2);
-						part.velocity *= 0.5;
-					}
-					else  //racing collisions
-					{
-						part.velocity -= (b.origin - self.origin) * (b.realspeed*0.05);
-						b.velocity -= (self.origin - b.origin) * (self.realspeed*0.06);
-						part.velocity *= 0.9;
-					}
+						part.velocity *= 0.8;
+						part.velocity -= (b.origin - self.origin) * (101 - vlen(b.origin - self.origin)) * 0.15;
+						//if(ragewar)part.velocity *= 0.5;
 					part = part.physobj_next;
 				}
 			//}
-			self.collide_finished = time + 0.1;
+			self.collide_finished = time + 1;
 		}
 	}
 };
