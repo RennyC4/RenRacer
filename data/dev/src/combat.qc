@@ -433,7 +433,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 3) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			self.special_regen_finished = time + 30; // regen time
+			self.special_regen_finished = time + 15; // regen time
 		}
 	}
 };
