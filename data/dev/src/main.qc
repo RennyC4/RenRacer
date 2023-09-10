@@ -162,6 +162,17 @@ void() worldspawn =
 	precache_model("progs/Mincemeat_hotdog.mdl");
 	precache_model("progs/hotdog_proj.mdl");
 
+	// street king
+	precache_model("progs/Streetking_body.mdl");
+
+	// sand roamer
+	precache_model("progs/SandRoamer_body.mdl");
+
+	// thorogood
+	precache_model("progs/Thorogood_Body.mdl");
+	precache_model("progs/Thorogood_Driver.mdl");
+	precache_model("progs/Thorogood_Wheel.mdl");
+
 	//
 	// func_vehicle - end
 	//
