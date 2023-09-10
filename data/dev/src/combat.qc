@@ -117,7 +117,7 @@ void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 	}
 	if (attackerclassname == "bullet2") // king turret machine gun
 	{
-		bprint(attacker.netname, "'s turrets took care of ");
+		bprint(attacker.netname, "'s turret took care of ");
 		bprint(targ.netname, "\n");
 	}
 };

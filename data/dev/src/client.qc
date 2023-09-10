@@ -507,6 +507,8 @@ void() PlayerPostThink =
 	{
 		if (self.movetype != MOVETYPE_NOCLIP)
 			self.movetype = MOVETYPE_NOCLIP;
+		if (ragewar)
+			CheckImpulses(); // Allow car selection in observer mode
 		return;
 	}
 
