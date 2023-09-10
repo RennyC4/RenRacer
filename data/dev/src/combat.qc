@@ -2390,6 +2390,9 @@ void() SpecialWeapon_StreetKing_TurretHead_Fire =
 
 void() SpecialWeapon_StreetKing_Turret_Die =
 {
+	if (self.classname == "turret")
+		self.owner.turrets -= 1;
+
 	for (float i = 0; i < 4; i = i+1)
 		ThrowScenery("progs/metal1.mdl", 1, self.origin);
 	sound (self, CHAN_AUTO, "misc/metlbrk.wav", 1, ATTN_NORM);
@@ -2479,6 +2482,8 @@ void() SpecialWeapon_StreetKing_TurretBase_Think =
 
 void() SpecialWeapon_StreetKing =
 {
+	self.turrets += 1;
+
 	entity base, head;
 	makevectors_mdl (self.angles);
 
@@ -2945,7 +2950,16 @@ void(float type, float rear) CarAttack =
 	
 						// all tires touching ground
 						if (f_right.flags & FL_ONGROUND && f_left.flags & FL_ONGROUND && b_right.flags & FL_ONGROUND && b_left.flags & FL_ONGROUND)
-							SpecialWeapon_StreetKing();
+						{
+							if (self.turrets < 6)
+								SpecialWeapon_StreetKing();
+							else
+							{
+								sprint (self, "Only 6 turrets can be deployed\n");
+								self.spcl_finished = time + 1;
+								return;
+							}
+						}
 						else
 						{
 							sprint(self, "King Turret can only be deployed on the ground\n");
