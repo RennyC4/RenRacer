@@ -135,7 +135,7 @@ void() bot_ai_fight =
 
 	if (self.goalentity || self.enemy)
 	{
-		if (visible(self.enemy) && self.enemy.cloak_finished < time && self.enemy.invulnerable_finished < time && self.frozen_finished < time)
+		if (visible(self.enemy) && self.enemy.cloak_finished < time && self.enemy.invulnerable_finished < time && self.frozen_finished < time && self.blind_finished < time)
 		{
 			if (infront(self.enemy, 0.75) && self.invulnerable_finished < time)
 			{
