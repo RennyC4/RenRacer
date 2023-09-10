@@ -26,6 +26,8 @@ map map1
 // set RenRacer defaults
 //
 
+sv_sound_land ""
+sv_sound_watersplash ""
 scr_conspeed 9999
 crosshair 0
 cl_bob 0
