@@ -201,6 +201,8 @@ void() worldspawn =
 	precache_sound ("hit4.wav");
 	precache_sound ("spdboost.wav");
 
+	precache_sound ("misc/metlbrk.wav");
+
 	precache_sound ("combat/mgun.wav");
 	precache_sound ("combat/fire.wav");
 	precache_sound ("combat/rocket.wav");
@@ -239,6 +241,9 @@ void() worldspawn =
 	precache_sound ("combat/razorback.wav");
 	precache_sound ("combat/mincemeat.wav");
 	precache_sound ("combat/splat.wav");
+	precache_sound ("combat/tur_deploy.wav");
+	precache_sound ("combat/tur_spin.wav");
+	precache_sound ("combat/tur_sight.wav");
 
 	world_lights();
 	load_waypoints(); // Load waypoints

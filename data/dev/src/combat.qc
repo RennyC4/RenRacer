@@ -6,6 +6,8 @@
 //| Weapons and combat functions are done here								   |
 //+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
 
+void(string name, float size, vector org) ThrowScenery;
+
 // ---
 // Obituary
 // ---
@@ -112,6 +114,11 @@ void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 	{
 		bprint(targ.netname, " blew up on ");
 		bprint(attacker.netname, "'s famous weiner\n");
+	}
+	if (attackerclassname == "bullet2") // king turret machine gun
+	{
+		bprint(attacker.netname, "'s turrets took care of ");
+		bprint(targ.netname, "\n");
 	}
 };
 
@@ -437,7 +444,8 @@ void() SpecialRegenerate =
 
 void() MachineGunBullet_Touch =
 {
-	if (other.owner == self.owner) // Projectile conflict fix
+	// Projectile conflict fix with boomerang return arc hitbox change
+	if (other.owner == self.owner && other.classname != "turret")
 		return;
 
 	if (!other.takedamage) // Hit wall
@@ -471,7 +479,7 @@ void() MachineGunBullet_Touch =
 
 	if (other.owner.driving) // other.owner.driving is the player
 		DoDamage(other.owner.driving, self.owner, 2, self.classname);
-	else if (other)
+	if (other.health > 0)
 		DoDamage(other, self.owner, 2, self.classname);
 
 	pointparticles(PART_MGUNSMOKE, self.origin, '0 0 0', 1);
@@ -492,7 +500,7 @@ void() MachineGunBullet_Think
 .float mgun;
 void() Fire_MachineGun =
 {
-	local entity bullet = spawn();
+	entity bullet = spawn();
 
 	// machine gun slight tilt
 	vector v = self.realang;
@@ -725,6 +733,16 @@ void() Rocket_Think =
 
 void() Rocket_Touch =
 {
+	float dmg; // damage values
+	if (self.classname == "rocket")
+		dmg = 7;
+	if (self.classname == "rocket2")
+		dmg = 10;
+	if (self.classname == "rocket3")
+		dmg = 15;
+	if (self.classname == "rocket4")
+		dmg = 6;
+
 	makevectors_mdl(self.angles);
 	if (!other.takedamage) // Hit wall
 	{
@@ -740,49 +758,54 @@ void() Rocket_Touch =
 	{
 		if (other.owner.driving) // other.owner.driving is the player
 		{
-			DoDamage(other.owner.driving, self.owner, 7, self.classname); // fire
+			DoDamage(other.owner.driving, self.owner, dmg, self.classname); // fire
 			other.owner.driving.forcejump_strength = 250;
 			other.owner.driving.forcejump = TRUE;
 		}
-		else if (other)
-			DoDamage(other, self.owner, 7, self.classname);
+		else
+			DoDamage(other, self.owner, dmg, self.classname);
 	}
 	if (self.classname == "rocket2")
 	{
 		if (other.owner.driving) // other.owner.driving is the player
 		{
-			DoDamage(other.owner.driving, self.owner, 10, self.classname); // homing
+			DoDamage(other.owner.driving, self.owner, dmg, self.classname); // homing
 			other.owner.driving.forcejump_strength = 350;
 			other.owner.driving.forcejump = TRUE;
 		}
-		else if (other)
-			DoDamage(other, self.owner, 10, self.classname);
+		else
+			DoDamage(other, self.owner, dmg, self.classname);
 	}
 	if (self.classname == "rocket3")
 	{
 		if (other.owner.driving) // other.owner.driving is the player
 		{
-			DoDamage(other.owner.driving, self.owner, 15, self.classname); // power
+			DoDamage(other.owner.driving, self.owner, dmg, self.classname); // power
 			other.owner.driving.forcejump_strength = 450;
 			other.owner.driving.forcejump = TRUE;
 		}
-		else if (other)
-			DoDamage(other, self.owner, 15, self.classname);
+		else
+			DoDamage(other, self.owner, dmg, self.classname);
 	}
 	if (self.classname == "rocket4")
 	{
 		if (other.owner.driving) // other.owner.driving is the player
 		{
 			if (self.hitobject_finished > time)
-				DoDamage(other.owner.driving, self.owner, 6, self.classname); // razorbacks rockets
+				DoDamage(other.owner.driving, self.owner, dmg, self.classname); // razorbacks rockets
 			else
-				DoDamage(other.owner.driving, self.owner, 2, self.classname); // distance razorbacks rockets
+				DoDamage(other.owner.driving, self.owner, floor(dmg/2), self.classname); // distance razorbacks rockets
 			other.owner.driving.forcejump_strength = 250;
 			other.owner.driving.forcejump = TRUE;
 		}
-		else if (other)
-			DoDamage(other, self.owner, 15, self.classname);
+		else
+			DoDamage(other, self.owner, floor(dmg/2), self.classname);
 	}
+
+	// requires special case due to owner stuff
+	if (other.classname == "turret")
+		DoDamage(other, self.owner, dmg, self.classname); // damage turrets
+
 	CreateExplosion(self.origin);
 	Create2DExplosion(self.origin, 2);
 	remove(self);
@@ -923,7 +946,7 @@ void() CreateNapalmFire =
 	fix_z = 0;
 	makevectors_mdl(fix);
 
-	local entity nf = spawn();
+	entity nf = spawn();
 	nf.owner = self.owner;
 	nf.classname = "napalmfire";
 	nf.scale = 6;
@@ -939,13 +962,11 @@ void() CreateNapalmFire =
 	nf.onfire_finished = time + 5;
 	nf.think = napalmfire_think;
 	nf.nextthink = time;
-	
+
 	// Give off RT Light
 	nf.pflags = PFLAGS_FULLDYNAMIC;
 	nf.light_lev = 150;
 	nf.color = [3, 1.25, 1];
-	
-	//spawn_color_glow(3, 1.25, 1, 150, nf); // dynamic light
 };
 
 void() NapalmTouch_Think =
@@ -990,8 +1011,9 @@ void() Napalm_Touch = // Does 10 damage on direct player hit + fire damage is 4-
 
 void() Napalm_Think =
 {
-//	if (!self.enemy)
+	if (!self.enemy)
 		GetTarget();
+
 	if (self.enemy && !self.cnt)
 	{
 		vector dir = normalize(self.enemy.origin - self.origin);
@@ -1003,7 +1025,7 @@ void() Napalm_Think =
 	}
 	pointparticles(PART_NAPALM, self.origin, '0 0 0', 1);
 
-	if (self.velocity_z <= 0)
+	if (self.velocity_z < 0)
 		self.gravity = 1.75;
 	if (self.enemy && self.velocity_z <= 0) // Home in on enemy
 	{
@@ -1022,7 +1044,7 @@ void() Napalm_Think =
 
 void(float rear) Fire_Napalm =
 {
-	local entity napalm = spawn();
+	entity napalm = spawn();
 	napalm.owner = self;
 	napalm.solid = SOLID_SLIDEBOX;
 	napalm.movetype = MOVETYPE_TOSS;
@@ -1044,7 +1066,7 @@ void(float rear) Fire_Napalm =
 	napalm.effects = EF_FULLBRIGHT | EF_DIMLIGHT | EF_ADDITIVE;
 	napalm.alpha = 0.9;
 	napalm.avelocity = '-500 200 0';
-	napalm.hitcontentsmaski = CONTENTBIT_SOLID|0x00000002i|CONTENTBIT_BODY|CONTENTBIT_PLAYERCLIP|CONTENTBIT_WATER| CONTENTBIT_SLIME|CONTENTBIT_LAVA;
+	napalm.hitcontentsmaski = CONTENTBIT_SOLID|0x00000002i|CONTENTBIT_BODY|CONTENTBIT_PLAYERCLIP|CONTENTBIT_WATER|CONTENTBIT_SLIME|CONTENTBIT_LAVA;
 
 	// Players forward velocity is added to projectiles
 	if (!self.backward)
@@ -1344,19 +1366,23 @@ void() Freeze_Touch =
 		remove(self);
 		return;
 	}
-	if (other.owner.driving.classname != "player")
-		return;
 	if (self.owner == other.owner.driving)
 		return;
 
-	DoDamage(other.owner.driving, self.owner, 7, self.classname);
+	if (other.takedamage)
+		DoDamage(other, self.owner, 7, self.classname);
 
-	if (other.owner.driving.onfire_finished > time) // remove fire
-		other.owner.driving.onfire_finished = time;
-	if (other.owner.driving.shield_finished < time) // shield blocks freeze
-		other.owner.driving.frozen_finished = time + 4;
-	if (other.owner.driving.health > 0) // dont interfere with death colormod stuff
-		other.owner.driving.colormod = '1 1 6';
+	if (other.owner.driving)
+	{
+		if (other.owner.driving.onfire_finished > time) // remove fire
+			other.owner.driving.onfire_finished = time;
+		if (other.owner.driving.shield_finished < time) // shield blocks freeze
+			other.owner.driving.frozen_finished = time + 4;
+		if (other.owner.driving.health > 0) // dont interfere with death colormod stuff
+			other.owner.driving.colormod = '1 1 6';
+		DoDamage(other.owner.driving, self.owner, 7, self.classname);
+	}
+
 	Create2DFreezeExplosion(self.origin, 3);
 	remove(self);
 };
@@ -2321,38 +2347,157 @@ void(float rear) SpecialWeapon_MinceMeat =
 	hotdog.nextthink = time;
 
 	// Give off RT Light
-	//hotdog.pflags = PFLAGS_FULLDYNAMIC;
-	//hotdog.light_lev = 150;
-	//hotdog.color = [1, 1, 3];
-
-	//spawn_color_glow(1, 1, 3, 150, hotdog); // dynamic light
+	hotdog.pflags = PFLAGS_FULLDYNAMIC;
+	hotdog.light_lev = 150;
+	hotdog.color = [2.5, 2, 1];
 };
-
 
 //
 // Special Weapon - King Turret (Street King)
 //
 
+void() SpecialWeapon_StreetKing_TurretHead_Fire =
+{
+	entity bullet = spawn();
+
+	makevectors_mdl(self.angles);
+
+	bullet.owner = self.owner;
+	bullet.movetype = MOVETYPE_FLYMISSILE;
+	bullet.solid = SOLID_TRIGGER;
+	bullet.classname = "bullet2";
+	bullet.netname = "projectile";
+	bullet.effects = EF_FULLBRIGHT | EF_MUZZLEFLASH;
+	bullet.touch = MachineGunBullet_Touch;
+
+	bullet.dimension_hit = 0; // Turn off initial collision
+
+	bullet.velocity = aim(self, 1000);
+	bullet.velocity = bullet.velocity * 1000;
+	bullet.angles = vectoangles(bullet.velocity);
+
+	setmodel (bullet, "progs/bullet.mdl");
+	setsize (bullet, '0 0 0', '0 0 0');
+
+	setorigin (bullet, self.origin + v_forward * 12 + v_up * 12);
+	sound (self, CHAN_AUTO, "combat/mgun.wav", 1, ATTN_NORM);
+
+	bullet.think = MachineGunBullet_Think; // Reactivate collision
+	bullet.nextthink = time + 0.05;
+
+	self.mgun -= 1; // deplete ammo
+};
+
+void() SpecialWeapon_StreetKing_Turret_Die =
+{
+	for (float i = 0; i < 4; i = i+1)
+		ThrowScenery("progs/metal1.mdl", 1, self.origin);
+	sound (self, CHAN_AUTO, "misc/metlbrk.wav", 1, ATTN_NORM);
+	self.health = 0;
+	Create2DExplosion(self.origin, 2.5);
+	remove(self);
+};
+
+void() SpecialWeapon_StreetKing_TurretHead_Think =
+{
+	makevectors_mdl(self.angles);
+
+	// King Turret when deployed can be driven through, then goes solid
+	if (!self.cnt)
+	{
+		self.movetype = MOVETYPE_STEP;
+		float j = walkmove(0,0);
+		if (!j)
+			self.dimension_solid = 0;
+		else
+		{
+			self.cnt = TRUE;
+			self.dimension_solid = 255;
+			self.movetype = MOVETYPE_NONE; // Don't allow car pushing
+		}
+		setorigin(self, self.pos1); // setup proper turret head position again
+	}
+
+	if (!self.enemy)
+	{
+		for (entity head = world;(head = find(head, classname, "player"));)
+		{
+			if (vlen(head.origin - self.origin) <= 500 && head.classname == "player" && head.health > 0 && visible(head) && head != self.owner && infront3(head, 0.5))
+			{
+				sound (self, CHAN_BODY, "combat/tur_sight.wav", 1, ATTN_NORM);
+				self.enemy = head;
+			}
+		}
+		if (self.sound_finished < time)
+		{
+			sound (self, CHAN_BODY, "combat/tur_spin.wav", 1, ATTN_NORM);
+			self.sound_finished = time + 1;
+		}
+		self.angles_y = self.angles_y + 20;
+		self.angles_x = 0;
+		self.frame = 0;
+	}
+	else
+	{
+		if (self.enemy.deadflag || !visible(self.enemy))
+			self.enemy = world;
+
+		vector view = vectoangles(self.enemy.origin - self.origin);
+		self.angles_y = view_y;
+		self.angles_x = view_x;
+			
+		if (self.hitobject_finished < time)
+		{
+			if (!self.frame)
+				self.frame = 1;
+			if (self.frame < 4)
+				self.frame += 1;
+			else
+				self.frame = 1;
+
+			if (self.mgun > 0)
+				SpecialWeapon_StreetKing_TurretHead_Fire();
+			else
+			{
+				self.th_die();
+				return;
+			}
+
+			self.effects = EF_MUZZLEFLASH;
+			self.hitobject_finished = time + 0.1;
+		}
+	}
+	frameskip(0.1);
+};
+
+void() SpecialWeapon_StreetKing_TurretBase_Think =
+{
+	if (self.owner.health < 1)
+		self.th_die();
+	frameskip(0.1);
+};
 
 void() SpecialWeapon_StreetKing =
 {
 	entity base, head;
+	makevectors_mdl (self.angles);
 
 	head = spawn ();
-	head.owner = head;
+	head.owner = self;
 	head.movetype = MOVETYPE_NONE;
-	head.solid = SOLID_BBOX;
-	head.takedamage = DAMAGE_AIM;
-	makevectors (self.angles);
+	head.solid = SOLID_SLIDEBOX;
+	head.takedamage = DAMAGE_YES;
+
 	head.classname = "turret";
-//	head.think = TurretThink;
-	head.nextthink = time + 0.1;
-	head.health = 25;
-	//head.th_die = TurretDie;
-	//sound (head, CHAN_BODY, "turret/built.wav", 1, ATTN_NORM);
+	head.think = SpecialWeapon_StreetKing_TurretHead_Think;
+	head.nextthink = time;
+	head.health = 20;
+	head.mgun = 40; // how many shots before exploding
+	head.th_die = SpecialWeapon_StreetKing_Turret_Die;
 	setmodel (head, "progs/turret_h.mdl");
 	setsize (head, VEC_HULL_MIN, VEC_HULL_MAX);
 	setorigin (head, self.origin + v_up * 10);
+	head.pos1 = head.origin;
 
 	base = spawn ();
 	base.owner = head;
@@ -2360,13 +2505,16 @@ void() SpecialWeapon_StreetKing =
 	base.solid = SOLID_NOT;
 	base.takedamage = DAMAGE_NO;
 	makevectors (self.angles);
-	base.classname = "turret";
-//	base.think = base_think;
+	base.classname = "turret_base";
+	base.think = SpecialWeapon_StreetKing_TurretBase_Think;
 	base.nextthink = time + 0.1;
-	//base.th_die = SUB_Remove;
+	base.th_die = SpecialWeapon_StreetKing_Turret_Die;
 	setmodel (base, "progs/turret_b.mdl");
 	setsize (base, '0 0 0', '0 0 0');
 	setorigin (base, self.origin);
+
+	head.sound_finished = time + 1;
+	sound (head, CHAN_BODY, "combat/tur_deploy.wav", 1, ATTN_NORM);
 };
 
 //
@@ -2788,8 +2936,22 @@ void(float type, float rear) CarAttack =
 					}
 					if (self.vehicle == VEH_STREETKING)
 					{
-						SpecialWeapon_StreetKing();
-						self.spcl_finished = time + 5; // fires slower
+						entity f_right, f_left, b_right, b_left;
+
+						f_left = self.driving.frontleft;
+						f_right = self.driving.frontright;
+						b_left = self.driving.backleft;
+						b_right = self.driving.backright;
+	
+						// all tires touching ground
+						if (f_right.flags & FL_ONGROUND && f_left.flags & FL_ONGROUND && b_right.flags & FL_ONGROUND && b_left.flags & FL_ONGROUND)
+							SpecialWeapon_StreetKing();
+						else
+						{
+							sprint(self, "King Turret can only be deployed on the ground\n");
+							self.spcl_finished = time + 1;
+							return;
+						}
 					}
 
 					// Keep at bottom
