@@ -29,24 +29,6 @@ void() SetupItemDynamicLight =
 
 	self.pflags = PFLAGS_FULLDYNAMIC;
 	self.light_lev = 100;
-/*
-	if (self.classname == "item_health")
-		spawn_color_glow(1, 1, 1, 100, self);
-	if (self.classname == "item_frckt")
-		spawn_color_glow(1.67, 1.33, 0, 100, self);
-	if (self.classname == "item_hrckt")
-		spawn_color_glow(1.5, 1, 1.5, 100, self);
-	if (self.classname == "item_prckt")
-		spawn_color_glow(1, 1, 2, 100, self);
-	if (self.classname == "item_napalm")
-		spawn_color_glow(2, .75, .75, 100, self);
-	if (self.classname == "item_ricochet")
-		spawn_color_glow(1, 2, 1, 100, self);
-	if (self.classname == "item_remote")
-		spawn_color_glow(1, 2.36, 2.59, 100, self);
-	if (self.classname == "item_freeze")
-		spawn_color_glow(0.1, 0.1, 3, 100, self);
-*/
 };
 
 void() SUB_Respawn =
@@ -459,7 +441,7 @@ void() item_freeze =
 		remove(self);
 		return;
 	}
-	precache_model ("progs/frzsmk.spr");
+	precache_model ("progs/item_freeze.spr");
 
 	self.movetype = MOVETYPE_NONE;
 	self.solid = SOLID_TRIGGER;
@@ -471,7 +453,7 @@ void() item_freeze =
 	self.colormod = '1 1 3';
 	self.scale = 1.5;
 
-	setmodel (self, "progs/frzsmk.spr");
+	setmodel (self, "progs/item_freeze.spr");
 	self.mdl = self.model; // can be restored on respawn
 	setsize (self, '0 0 0', '0 0 0');
 	
