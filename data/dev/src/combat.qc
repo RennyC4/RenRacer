@@ -369,7 +369,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 5) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			self.special_regen_finished = time + 80; // regen time
+			self.special_regen_finished = time + 60; // regen time
 		}
 	}
 	if (self.vehicle == VEH_WRAITH)
@@ -433,7 +433,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 3) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			self.special_regen_finished = time + 15; // regen time
+			self.special_regen_finished = time + 20; // regen time
 		}
 	}
 };
@@ -1562,7 +1562,7 @@ void() SpecialWeapon_HotRod_Touch =
 			other.owner.driving.onfire_finished = time + 5;
 			other.owner.driving.igniter = self.owner;
 		}
-		self.hitobject_finished = time + 0.18; // how fast to damage
+		self.hitobject_finished = time + 0.16; // how fast to damage
 	}
 };
 
@@ -2372,8 +2372,8 @@ void() SpecialWeapon_StreetKing_TurretHead_Fire =
 
 	bullet.dimension_hit = 0; // Turn off initial collision
 
-	bullet.velocity = aim(self, 1000);
-	bullet.velocity = bullet.velocity * 1000;
+	bullet.velocity = aim(self, 2000);
+	bullet.velocity = bullet.velocity * 2000;
 	bullet.angles = vectoangles(bullet.velocity);
 
 	setmodel (bullet, "progs/bullet.mdl");
@@ -2496,8 +2496,8 @@ void() SpecialWeapon_StreetKing =
 	head.classname = "turret";
 	head.think = SpecialWeapon_StreetKing_TurretHead_Think;
 	head.nextthink = time;
-	head.health = 20;
-	head.mgun = 40; // how many shots before exploding
+	head.health = 40;
+	head.mgun = 80; // how many shots before exploding
 	head.th_die = SpecialWeapon_StreetKing_Turret_Die;
 	setmodel (head, "progs/turret_h.mdl");
 	setsize (head, VEC_HULL_MIN, VEC_HULL_MAX);
@@ -2951,11 +2951,11 @@ void(float type, float rear) CarAttack =
 						// all tires touching ground
 						if (f_right.flags & FL_ONGROUND && f_left.flags & FL_ONGROUND && b_right.flags & FL_ONGROUND && b_left.flags & FL_ONGROUND)
 						{
-							if (self.turrets < 6)
+							if (self.turrets < 3)
 								SpecialWeapon_StreetKing();
 							else
 							{
-								sprint (self, "Only 6 turrets can be deployed\n");
+								sprint (self, "Only 3 turrets can be deployed\n");
 								self.spcl_finished = time + 1;
 								return;
 							}
