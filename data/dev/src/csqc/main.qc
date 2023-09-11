@@ -57,14 +57,6 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 	{
 		if (rs >= RACE_COUNTDOWN)
 		{
-			DrawTurbo(); // Draw Turbo Stats
-			DrawDrift(); // Draw Drift Stats
-			if (!ragewar)
-				DrawTime();  // Draw Lap Time Stats
-			else
-				HUD_Ragewar(); // Draw ammo, etc
-			DrawSpeed(); // Draw Speed Stats
-
 			float speed = getstatf(STAT_SPEED);
 			float incar = getstatf(STAT_DRIVING);
 			float blind = getstatf(STAT_BLIND);
@@ -113,6 +105,14 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 				if (vehicle_type == VEH_THOROGOOD)
 					soundupdate(engine_sound, CHAN_BODY, "engine/hotrod.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
 			}
+
+			DrawTurbo(); // Draw Turbo Stats
+			DrawDrift(); // Draw Drift Stats
+			if (!ragewar)
+				DrawTime();  // Draw Lap Time Stats
+			else
+				HUD_Ragewar(); // Draw ammo, etc
+			DrawSpeed(); // Draw Speed Stats
 
 			//
 		}

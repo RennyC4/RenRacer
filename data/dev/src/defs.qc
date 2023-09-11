@@ -596,6 +596,8 @@ var float PART_HOTDOGSPLAT;
 #define STAT_ORIGINX 59 // Player origin X
 #define STAT_ORIGINY 60 // Player origin Y
 #define STAT_ORIGINZ 61 // Player origin Z
+#define STAT_FIRE 62
+#define STAT_FROZE 63
 
 #define STAT_INTERMISSION 75
 

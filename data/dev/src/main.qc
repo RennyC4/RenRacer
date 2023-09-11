@@ -53,6 +53,8 @@ void() CSEv_GrabCSQCValues =
 	clientstat(STAT_ORIGINX, EV_FLOAT, origin_x);
 	clientstat(STAT_ORIGINY, EV_FLOAT, origin_y);
 	clientstat(STAT_ORIGINZ, EV_FLOAT, origin_z);
+	clientstat(STAT_FIRE, EV_FLOAT, onfire_finished);
+	clientstat(STAT_FROZE, EV_FLOAT, frozen_finished);
 };
 
 void() world_lights =
