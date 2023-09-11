@@ -6,9 +6,9 @@ entity() thorogood =
 {
 	self.vehicle = VEH_THOROGOOD;
 	self.health = self.max_health = 60; // max health is also armor
-	self.speed = 3000; // also acceleration
+	self.speed = 4000; // also acceleration
 	self.max_speed = 1000;
-	self.handling = 100; // good handling
+	self.handling = 150; // amazing handling
 
 	local entity obj, part;
 

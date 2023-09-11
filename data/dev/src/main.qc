@@ -114,6 +114,7 @@ void() worldspawn =
 	precache_model("progs/mountedgun.mdl");
 	precache_model("progs/turret_h.mdl");
 	precache_model("progs/turret_b.mdl");
+	precache_model("progs/demon.spr");
 
 	//
 	// func_vehicle - start
@@ -244,6 +245,7 @@ void() worldspawn =
 	precache_sound ("combat/tur_deploy.wav");
 	precache_sound ("combat/tur_spin.wav");
 	precache_sound ("combat/tur_sight.wav");
+	precache_sound ("combat/thorogood.wav");
 
 	world_lights();
 	load_waypoints(); // Load waypoints

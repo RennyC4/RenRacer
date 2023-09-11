@@ -436,6 +436,22 @@ void() SpecialRegenerate =
 			self.special_regen_finished = time + 20; // regen time
 		}
 	}
+	if (self.vehicle == VEH_SANDROAMER)
+	{
+		if (self.ammo_special < 1) // max held
+		{
+			self.ammo_special = self.ammo_special + 1;
+			self.special_regen_finished = time + 1; // regen time
+		}
+	}
+	if (self.vehicle == VEH_THOROGOOD)
+	{
+		if (self.ammo_special < 3) // max held
+		{
+			self.ammo_special = self.ammo_special + 1;
+			self.special_regen_finished = time + 70; // regen time
+		}
+	}
 };
 
 // ---
@@ -2522,6 +2538,85 @@ void() SpecialWeapon_StreetKing =
 	sound (head, CHAN_BODY, "combat/tur_deploy.wav", 1, ATTN_NORM);
 };
 
+
+//
+// Special Weapon - Thorogood (Hell Spawn)
+//
+
+void() SpecialWeapon_Thorogood_touch =
+{
+	makevectors_mdl(self.angles);
+	if (!other.takedamage) // Hit wall
+	{
+		remove(self);
+		return;
+	}
+	if (self.owner == other.owner.driving) // Hit self
+		return;
+
+	if (other.owner.driving) // other.owner.driving is the player
+	{
+		Create2DExplosion(self.origin, 4);
+		DoDamage(other.owner.driving, self.owner, 40, self.classname);
+		other.owner.driving.forcejump_strength = 400;
+		other.owner.driving.forcejump = TRUE;
+	}
+	else if (other)
+		DoDamage(other, self.owner, 40, self.classname);
+
+	remove(self);
+};
+
+void() SpecialWeapon_Thorogood_Think =
+{
+	if (self.frame < 3)
+		self.frame += 1;
+	else
+		self.frame = 0;
+	frameskip(0.1);
+};
+
+void(float rear) SpecialWeapon_Thorogood =
+{
+	makevectors(self.realang);
+
+	if (rear)
+	{
+		vector v = self.realang;
+		v_y = v_y + 180;
+		makevectors(v);
+	}
+
+	entity hellspawn = spawn();
+	hellspawn.movetype = MOVETYPE_FLYMISSILE;
+	hellspawn.owner = self;
+	hellspawn.solid = SOLID_TRIGGER;
+	hellspawn.classname = "hellspawn";
+	hellspawn.effects = EF_FULLBRIGHT;
+	hellspawn.flags = FL_ITEM; // bigger hitbox
+	hellspawn.touch = SpecialWeapon_Thorogood_touch;
+
+	hellspawn.velocity = aim(self, 2000);
+	hellspawn.velocity = hellspawn.velocity * 2000;
+
+	// Players forward velocity is added to projectiles
+	if (!self.backward)
+	{
+		hellspawn.velocity_x = hellspawn.velocity_x + self.driving.velocity_x;
+		hellspawn.velocity_y = hellspawn.velocity_y + self.driving.velocity_y;
+	}
+	hellspawn.angles = vectoangles(hellspawn.velocity);
+
+	hellspawn.think = SpecialWeapon_Thorogood_Think;
+	hellspawn.nextthink = time;
+
+	setmodel (hellspawn, "progs/demon.spr");
+	setsize (hellspawn, '0 0 0', '0 0 0');
+
+	setorigin (hellspawn, self.origin + v_up * 8 + v_forward * (48 + self.realspeed));
+	sound (self, CHAN_WEAPON, "combat/thorogood.wav", 1, ATTN_NORM);
+};
+
 //
 // Command Specials
 //
@@ -2971,7 +3066,7 @@ void(float type, float rear) CarAttack =
 						else
 							SpecialWeapon_MinceMeat(TRUE);
 					}
-					if (self.vehicle == VEH_STREETKING)
+					if (self.vehicle == VEH_STREETKING) // Street King special
 					{
 						entity f_right, f_left, b_right, b_left;
 
@@ -2998,6 +3093,13 @@ void(float type, float rear) CarAttack =
 							self.spcl_finished = time + 1;
 							return;
 						}
+					}
+					if (self.vehicle == VEH_THOROGOOD) // Thorogood special
+					{
+						if (!rear)
+							SpecialWeapon_Thorogood(FALSE);
+						else
+							SpecialWeapon_Thorogood(TRUE);
 					}
 
 					// Keep at bottom
