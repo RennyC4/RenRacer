@@ -287,7 +287,7 @@ void() PlayerPreThink =
 					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Thorogood^7\nSpecial Weapon: ^5Hell Spawn^7\n\nSpecial: [*****]\nSpeed: [**** ]\nHandling: [*****]\nArmor: [*     ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 			}
 		}
-		else if (!self.observer)
+		else if (!self.observer && !self.ready)
 		{
 			if (race_status == RACE_NOTSTARTED)
 			{
@@ -321,15 +321,41 @@ void() PlayerPreThink =
 			centerprint(self, ""); // clear any centerprints
 			if (race_status == RACE_NOTSTARTED)
 			{
-				spawn_car_countdown(); // Start countdown
-				race_status = RACE_COUNTDOWN;
-				sound (self, CHAN_AUTO, "engine/start.wav", 1, ATTN_NORM);
+				if (!self.ready)
+				{
+					self.ready = TRUE; // important!
+					if (!ragewar)
+					{
+						human_players_ready += 1;
+						bprint(self.netname, " is ready!\n");
+					}
+				}
+				self.observer = FALSE; // important!
+				if (!ragewar)
+				{
+					if (human_players_ready == human_players)
+					{
+						spawn_car_countdown(); // Start countdown
+						race_status = RACE_COUNTDOWN;
+						sound (self, CHAN_AUTO, "engine/start.wav", 1, ATTN_NORM);
+					}
+				}
+				else
+				{
+					spawn_car_countdown(); // Start countdown
+					race_status = RACE_COUNTDOWN;
+					sound (self, CHAN_AUTO, "engine/start.wav", 1, ATTN_NORM);
+				}
 			}
 			if (ragewar && self.observer) // Allow player to join in mid-game
 			{
+				self.ready = TRUE; // important!
 				self.observer = FALSE; // important!
 				entity spawn_spot = SelectSpawnSpot();
+				self.invulnerable_finished = time + 5;
+				self.angles = spawn_spot.angles;
 				self.origin = spawn_spot.origin;
+				sound (self, CHAN_AUTO, "engine/start.wav", 1, ATTN_NORM);
 
 				// Put cars in game
 				if (self.vehicle == VEH_HOTROD)
@@ -352,13 +378,14 @@ void() PlayerPreThink =
 					car = streetking();
 				if (self.vehicle == VEH_SANDROAMER)
 					car = sandroamer();
+				if (self.vehicle == VEH_THOROGOOD)
+					car = thorogood();
 
 				makevectors(self.angles);
 				car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
 				Car_InitVehicle(car);
 				self.spawncar = TRUE;
 				Spawn_RadarBlip(self);
-
 			}
 		}
 	}
@@ -445,6 +472,7 @@ void() RespawnPlayer =
 	self.invulnerable_finished = time + 5; // disallow damage / firing
 	centerprint(self, "");
 	self.clearcprint_finished = time + 0.1;
+	sound (self, CHAN_AUTO, "engine/start.wav", 1, ATTN_NORM);
 };
 
 void() fire_think =
@@ -514,10 +542,10 @@ void() PlayerPostThink =
 		return;
 	}
 
-	if (race_status == RACE_STARTED && !intermission_running && self.health > 0 && self.driving)
+	if (race_status == RACE_STARTED && !intermission_running && self.health > 0 && self.driving && !self.observer)
 	{
+		//if (self.collide_finished < time)
 		PushPlayers();
-		if (self.collide_finished < time)
 		SpecialRegenerate();
 	}
 	if (self.forcejump)
@@ -997,7 +1025,7 @@ void() PutClientInServer =
 		human_players = human_players + 1;
 	else // Bots just randomly select whatever vehicle
 	{
-		float tt = ceil(random() * 9);
+		float tt = ceil(random() * 11);
 		if (tt == 1)
 			self.vehicle = VEH_HOTROD;
 		else if (tt == 2)
@@ -1016,9 +1044,10 @@ void() PutClientInServer =
 			self.vehicle = VEH_MINCEMEAT;
 		else if(tt == 9) 
 			self.vehicle = VEH_STREETKING; 
-		//else if (tt == 10)
-		else self.vehicle = VEH_SANDROAMER;
-//		else self.vehicle = VEH_THOROGOOD;
+		else if (tt == 10)
+			self.vehicle = VEH_SANDROAMER;
+		else
+			self.vehicle = VEH_THOROGOOD;
 	}
 	self.player_id = human_players;
 
@@ -1064,7 +1093,15 @@ void() PutClientInServer =
 			}
 		}
 	}
+	
+	if (clienttype(self) == CLIENTTYPE_BOT)
+		self.ready = TRUE;
 
 	// grab ragewar from server
 	ragewar = cvar("ragewar");
+	if (ragewar)
+	{
+		if (clienttype(self) == CLIENTTYPE_REAL)
+			self.observer = TRUE; // Keep menu on
+	}
 };

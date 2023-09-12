@@ -440,6 +440,7 @@ float gameover; // match is over (dm)
 .vector spawn_loc;
 .vector spawn_loc_angles;
 float human_players; // human players in-game
+float human_players_ready; // ready human players in-game
 .float player_id;
 .float collide_finished;
 float total_waypoints;
@@ -479,6 +480,7 @@ string nextmap;
 .float turrets; // max # of deployable king turrets
 .float car_reset_finished;
 .float car_reset;
+.float ready;
 
 // Key flags
 .float keyflags;

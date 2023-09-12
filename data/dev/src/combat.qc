@@ -1581,7 +1581,7 @@ void() SpecialWeapon_HotRod_Touch =
 			other.owner.driving.onfire_finished = time + 5;
 			other.owner.driving.igniter = self.owner;
 		}
-		self.hitobject_finished = time + 0.16; // how fast to damage
+		self.hitobject_finished = time + 0.12; // how fast to damage
 	}
 };
 
