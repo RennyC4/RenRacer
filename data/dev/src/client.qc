@@ -105,12 +105,12 @@ void() Setup_level_effects =
 
 void() PushPlayers =
 {
-	if (self.frozen_finished > time || self.invulnerable_finished > time)
+	if (self.frozen_finished > time || self.invulnerable_finished > time || self.observer)
 		return;
 
 	for (entity b = world;(b = find(b, classname, "player"));)
 	{
-		if (vlen(b.origin - self.origin) <= 100 && b != self && b.invulnerable_finished < time)
+		if (vlen(b.origin - self.origin) <= 100 && b != self && b.invulnerable_finished < time && !b.observer)
 		{
 			if (self.realspeed > b.realspeed)
 			{
@@ -542,7 +542,7 @@ void() PlayerPostThink =
 		return;
 	}
 
-	if (race_status == RACE_STARTED && !intermission_running && self.health > 0 && self.driving && !self.observer)
+	if (race_status == RACE_STARTED && !intermission_running && self.health > 0 && self.driving)
 	{
 		//if (self.collide_finished < time)
 		PushPlayers();
