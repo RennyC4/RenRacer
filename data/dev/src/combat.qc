@@ -483,7 +483,10 @@ void() MachineGunBullet_Touch =
 		return;
 	}
 	if (other.owner.driving == self.owner) // Hit self
+	{
+		remove(self);
 		return;
+	}
 
 	tt = ceil(random() * 3);
 	if (tt == 1)
@@ -2395,7 +2398,7 @@ void() SpecialWeapon_StreetKing_TurretHead_Fire =
 	setmodel (bullet, "progs/bullet.mdl");
 	setsize (bullet, '0 0 0', '0 0 0');
 
-	setorigin (bullet, self.origin + v_forward * 12 + v_up * 12);
+	setorigin (bullet, self.origin + v_forward * 12 + v_up * 6);
 	sound (self, CHAN_AUTO, "combat/mgun.wav", 1, ATTN_NORM);
 
 	bullet.think = MachineGunBullet_Think; // Reactivate collision
@@ -2441,7 +2444,7 @@ void() SpecialWeapon_StreetKing_TurretHead_Think =
 	{
 		for (entity head = world;(head = find(head, classname, "player"));)
 		{
-			if (vlen(head.origin - self.origin) <= 500 && head.classname == "player" && head.health > 0 && visible(head) && head != self.owner && infront3(head, 0.5))
+			if (vlen(head.origin - self.origin) <= 500 && head.health > 0 && head != self.owner && infront3(head, 0.5) && head.invulnerable_finished < time && fisible(head))
 			{
 				sound (self, CHAN_BODY, "combat/tur_sight.wav", 1, ATTN_NORM);
 				self.enemy = head;
@@ -2458,7 +2461,7 @@ void() SpecialWeapon_StreetKing_TurretHead_Think =
 	}
 	else
 	{
-		if (self.enemy.deadflag || !visible(self.enemy))
+		if (self.enemy.deadflag || !fisible(self.enemy))
 			self.enemy = world;
 
 		vector view = vectoangles(self.enemy.origin - self.origin);
