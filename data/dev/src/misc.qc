@@ -47,16 +47,18 @@ void() ThrowBloodRemove =
 	frameskip(0.1);
 };
 
-void(vector org, float size) ThrowBlood =
+void(vector org, vector dir, float size) ThrowBlood =
 {
 	entity thing = spawn();
 	makevectors_mdl (thing.angles);
 
+	thing.owner = self;
 	thing.movetype = MOVETYPE_TOSS;
 	thing.solid = SOLID_NOT;
 	thing.scale = size;
-	thing.angles_y = random() * 360;
-	thing.velocity = v_forward * random()*200;
+	thing.velocity = dir;
+	//thing.angles_y = random() * 360;
+	//thing.velocity = v_forward * random()*200;
 	thing.velocity_z = 300 + random()*300;
 	thing.alpha = 1;
 

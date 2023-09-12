@@ -6,7 +6,7 @@
 //| Pedestrians to run down													   |
 //+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-+
 
-void(vector org, float size) ThrowBlood;
+void(vector org, vector dir, float size) ThrowBlood;
 
 void() pedestrian_fly_die =
 {
@@ -33,8 +33,6 @@ void() pedestrian_die =
 		sound(self, CHAN_AUTO, "combat/death4.wav", 1, ATTN_NORM);
 
 	float i;
-	for (i = 0; i < 4; i = i+1)
-		ThrowBlood(self.origin, 0.75);
 
 	sound (self, CHAN_AUTO, "combat/hitped.wav", 1, ATTN_NORM); // TODO: needs new sound
 
@@ -51,6 +49,9 @@ void() pedestrian_die =
 	self.velocity_z = 250;
 	self.think = pedestrian_fly_die;
 	self.nextthink = time + 0.2;
+
+	for (i = 0; i < 4; i = i+1)
+		ThrowBlood(self.origin, other.velocity, 0.75);
 };
 
 // Death
