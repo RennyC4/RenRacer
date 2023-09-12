@@ -223,6 +223,7 @@ void() worldspawn =
 	precache_sound ("combat/death2.wav");
 	precache_sound ("combat/death3.wav");
 	precache_sound ("combat/death4.wav");
+	precache_sound ("combat/hitped.wav");
 	precache_sound ("combat/jump.wav");
 	precache_sound ("combat/landmine.wav");
 	precache_sound ("combat/shield.wav");

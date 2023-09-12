@@ -36,7 +36,7 @@ void() pedestrian_die =
 	for (i = 0; i < 4; i = i+1)
 		ThrowBlood(self.origin, 0.75);
 
-	sound (self, CHAN_AUTO, "combat/splat.wav", 1, ATTN_NORM); // TODO: needs new sound
+	sound (self, CHAN_AUTO, "combat/hitped.wav", 1, ATTN_NORM); // TODO: needs new sound
 
 	if (!self.spawnflags)
 	{
