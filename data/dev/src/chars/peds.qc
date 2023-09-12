@@ -32,8 +32,6 @@ void() pedestrian_die =
 	else
 		sound(self, CHAN_AUTO, "combat/death4.wav", 1, ATTN_NORM);
 
-	float i;
-
 	sound (self, CHAN_AUTO, "combat/hitped.wav", 1, ATTN_NORM); // TODO: needs new sound
 
 	if (!self.spawnflags)
@@ -50,7 +48,7 @@ void() pedestrian_die =
 	self.think = pedestrian_fly_die;
 	self.nextthink = time + 0.2;
 
-	for (i = 0; i < 4; i = i+1)
+	for (float i = 0; i < 4; i = i+1)
 		ThrowBlood(self.origin, other.velocity, 0.75);
 };
 

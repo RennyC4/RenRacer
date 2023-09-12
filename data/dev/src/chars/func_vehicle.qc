@@ -341,23 +341,14 @@ float modelindex_null;
 
 void(entity ply, entity car) Car_AttachToVehicle =
 {
-	entity oself;
-	if (ply.driving){ // already sitting in car
+	if (ply.driving) // already sitting in car
+	{
 		ply.driving = world;
 		ply.solid = SOLID_SLIDEBOX;
 		ply.movetype = MOVETYPE_WALK;
 		ply.modelindex = modelindex_player;
 		stuffcmd(ply, "chase_active 0\n");
 		stuffcmd(ply, "crosshair 1\n");
-		oself = self;
-		self = ply;
-		if (!TryPlacePlayer(FindStaticOfName("rightdoor", car)))
-			if (!TryPlacePlayer(FindStaticOfName("leftdoor", car)))
-				if (!TryPlacePlayer(FindStaticOfName("topexit", car)))
-					if (!TryPlacePlayer(FindStaticOfName("botexit", car)))
-						if (!TryPlacePlayer(FindStaticOfName("backexit", car)))
-							TryPlacePlayer(FindStaticOfName("frontexit", car));
-		self = oself;
 		car.driving = world;
 	}
 	else {

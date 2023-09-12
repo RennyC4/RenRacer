@@ -477,6 +477,8 @@ string nextmap;
 .float handling;
 .float blind_finished;
 .float turrets; // max # of deployable king turrets
+.float car_reset_finished;
+.float car_reset;
 
 // Key flags
 .float keyflags;

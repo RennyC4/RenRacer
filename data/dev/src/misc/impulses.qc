@@ -66,6 +66,8 @@ void() CheckImpulses =
 		ChangeWeapon();
 	if (self.impulse == 100)
 		headlights_toggle();
+	if (self.impulse == 255)
+		CarReset();
 
 	// Weapon / Car select cycle
 	if (self.impulse == 10)

@@ -396,6 +396,42 @@ void(entity targ, vector dest, float silent, float stop) car_teleport =
 	}
 };
 
+// Resets car: may be needed if stuck or physics explode hopefully this can be removed someday
+void() CarReset =
+{
+	if (!self.driving)
+		return;
+	if (self.car_reset_finished > time)
+	{
+		sprint(self, "You must wait, ^1");
+		sprint(self, ftos(ceil(self.car_reset_finished-time)), "^7 to reset your car again\n");
+		return;
+	}
+
+	remove_car(self.driving);
+
+	// Recreate car
+	if (self.vehicle == VEH_HOTROD)
+		entity car = hotrod();
+	if (self.vehicle == VEH_WRAITH)
+		car = wraith();
+	if (self.vehicle == VEH_ROADBASTARD)
+		car = roadbastard();
+	if (self.vehicle == VEH_SKYSCRAPER)
+		car = skyscraper();
+	if (self.vehicle == VEH_REDRAGE)
+		car = redrage();
+	if (self.vehicle == VEH_LAWBREAKER)
+		car = lawbreaker();
+	if (self.vehicle == VEH_RAZORBACK)
+		car = razorback();
+
+	makevectors(self.angles);
+	car = Phys_ObjectCreate(car, self.origin + v_up * 64, v_forward, -v_right, v_up, '0 0 1', 0);
+	Car_InitVehicle(car);
+	self.car_reset_finished = time + 60;
+};
+
 // directly set the car angles WIP
 // this function sucks
 void(entity targ, vector newang) car_setangle =
