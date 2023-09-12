@@ -1,4 +1,4 @@
-// Game: Quake
+// Game: RenRacer
 // Format: Valve
 // entity 0
 {
@@ -249,4 +249,9 @@
 {
 "classname" "dm_spawnpoint"
 "origin" "-360 424 88"
+}
+// entity 19
+{
+"classname" "pedestrian"
+"origin" "352 -144 88"
 }

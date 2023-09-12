@@ -40,6 +40,9 @@ chars/v_mincemeat.qc
 chars/v_streetking.qc
 chars/v_sandroamer.qc
 chars/v_thorogood.qc
+//
+
+chars/peds.qc // Pedestrian
 
 //
 // func_vehicle
