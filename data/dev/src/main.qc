@@ -117,6 +117,7 @@ void() worldspawn =
 	precache_model("progs/turret_h.mdl");
 	precache_model("progs/turret_b.mdl");
 	precache_model("progs/demon.spr");
+	precache_model("progs/blood.spr");
 
 	//
 	// func_vehicle - start

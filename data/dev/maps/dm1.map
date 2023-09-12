@@ -5608,3 +5608,28 @@
 ( 8 -664 160 ) ( 8 -664 144 ) ( 8 -680 144 ) clip [ 0 -1 0 -7.999939 ] [ 0 0 -1 16 ] 180 1 1
 }
 }
+// entity 45
+{
+"classname" "pedestrian"
+"origin" "-3272 -24 44"
+}
+// entity 46
+{
+"classname" "pedestrian"
+"origin" "-3528 664 44"
+}
+// entity 47
+{
+"classname" "pedestrian"
+"origin" "2216 -488 44"
+}
+// entity 48
+{
+"classname" "pedestrian"
+"origin" "2216 -248 44"
+}
+// entity 49
+{
+"classname" "pedestrian"
+"origin" "3320 920 44"
+}

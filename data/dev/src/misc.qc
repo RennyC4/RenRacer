@@ -26,6 +26,49 @@ float(entity targ) range =
 };
 
 //
+// Blood effects
+//
+
+void() ThrowBloodRemove =
+{
+	if (self.alpha > 0.1)
+		self.alpha = self.alpha - 0.1;
+	else
+	{
+		remove(self);
+		return;
+	}
+	if (self.animation_finished < time)
+	{
+		if (self.frame < 3)
+			self.frame += 1;
+		self.animation_finished = time + 0.1;
+	}
+	frameskip(0.1);
+};
+
+void(vector org, float size) ThrowBlood =
+{
+	entity thing = spawn();
+	makevectors_mdl (thing.angles);
+
+	thing.movetype = MOVETYPE_TOSS;
+	thing.solid = SOLID_NOT;
+	thing.scale = size;
+	thing.angles_y = random() * 360;
+	thing.velocity = v_forward * random()*200;
+	thing.velocity_z = 300 + random()*300;
+	thing.alpha = 1;
+
+	thing.think = ThrowBloodRemove;
+	thing.nextthink = time + 1;
+
+	setmodel (thing, "progs/blood.spr");
+	setsize (thing, '0 0 0', '0 0 0');     
+	setorigin (thing, org);
+};
+
+//
 // Intermission / Next map
 //
 
