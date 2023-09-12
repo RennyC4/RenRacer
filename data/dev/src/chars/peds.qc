@@ -99,7 +99,7 @@ void() pedestrian_think =
 
 void() spawn_pedestrian1 =
 {
-	if (self.cnt < 3)
+	if (self.cnt < 2)
 	{
 		entity ped = spawn();
 
@@ -123,7 +123,7 @@ void() spawn_pedestrian1 =
 
 		self.cnt += 1; // 3 peds max per spawner
 	}
-	self.nextthink = time + 20 + random()*10; // spawn timer
+	self.nextthink = time + 60 + random()*30; // spawn timer
 };
 
 void() pedestrian =
@@ -133,7 +133,7 @@ void() pedestrian =
 		remove(self);
 		return;
 	}
-	
+
 	precache_model ("progs/ped1.spr");
 	precache_model ("progs/ped1_d.spr");
 	precache_sound ("misc/splat.wav");
