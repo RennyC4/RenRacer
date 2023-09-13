@@ -425,6 +425,14 @@ void() CarReset =
 		car = lawbreaker();
 	if (self.vehicle == VEH_RAZORBACK)
 		car = razorback();
+	if (self.vehicle == VEH_MINCEMEAT)
+		car = mincemeat();
+	if (self.vehicle == VEH_STREETKING)
+		car = streetking();
+	if (self.vehicle == VEH_SANDROAMER)
+		car = sandroamer();
+	if (self.vehicle == VEH_THOROGOOD)
+		car = thorogood();
 
 	makevectors(self.angles);
 	car = Phys_ObjectCreate(car, self.origin + v_up * 64, v_forward, -v_right, v_up, '0 0 1', 0);
