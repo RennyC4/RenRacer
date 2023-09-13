@@ -61,6 +61,7 @@ void(vector org, vector dir, float size) ThrowBlood =
 	//thing.velocity = v_forward * random()*200;
 	thing.velocity_z = 300 + random()*300;
 	thing.alpha = 1;
+	thing.modelflags = 32; // blood
 
 	thing.think = ThrowBloodRemove;
 	thing.nextthink = time + 1;

@@ -36,6 +36,7 @@ void() pedestrian_die =
 
 	if (!self.spawnflags)
 	{
+		self.modelflags = 32; // More blood
 		self.frame = 0;
 		setmodel(self, "progs/ped1_d.spr"); // death sprite
 	}
