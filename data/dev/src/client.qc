@@ -327,7 +327,7 @@ void() PlayerPreThink =
 				if (!self.ready)
 				{
 					self.ready = TRUE; // important!
-					if (!ragewar)
+					if (!ragewar && clienttype(self) == CLIENTTYPE_REAL)
 					{
 						human_players_ready += 1;
 						bprint(self.netname, " is ready!\n");
@@ -357,19 +357,15 @@ void() PlayerPreThink =
 				self.ready = TRUE; // important!
 				self.observer = FALSE; // important!
 
-				// You can fly around while selecting your car in ragewar, so set the player
-				// position back
+				// You can fly around while selecting your car in ragewar, so set the player position back
 				if (ragewar)
 				{
 					entity spawn_spot = SelectSpawnSpot();
 					self.angles = spawn_spot.angles;
-					//self.origin = spawn_spot.origin;
 					setorigin(self, spawn_spot.origin);
 					self.fixangle = TRUE;
 					self.invulnerable_finished = time + 5;
 				}
-				//else
-				//	setorigin(self, self.spawn_loc);
 
 				sound (self, CHAN_AUTO, "engine/start.wav", 1, ATTN_NORM);
 
@@ -709,19 +705,19 @@ void() PlayerPostThink =
 	{
 		if (self.invulnerable_finished > time)
 		{
+			self.effects |= EF_BRIGHTFIELD;
 			if (self.onfire_finished > time)
 				self.onfire_finished = time; // water removes napalm/fire
 			if (self.frozen_finished > time)
 				self.frozen_finished = time;
 			if (self.blind_finished > time)
 				self.blind_finished = time;
-			self.effects |= EF_BRIGHTFIELD;
 		}
 		else
 			self.effects &= ~(EF_BRIGHTFIELD);
 
 		if (self.onfire_finished > time && self.waterlevel > 0)
-			self.onfire_finished = time; // water removes napalm/fire
+			self.onfire_finished = time; // water removes fire
 	}
 
 	if (self.driving && ragewar && self.health > 0 && self.invulnerable_finished < time && race_status == RACE_STARTED)
