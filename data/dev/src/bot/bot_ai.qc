@@ -283,11 +283,41 @@ void() bot_ai_fight;
 .float bot_hitwall;
 float stagger_think;
 .float ai_time;
+.float bot_select_vehicle;
 
 void() BotAI =
 {
 	if (cvar("developer") == 2)
 		return;
+
+	// Bot vehicle selection
+	if (!self.bot_select_vehicle)
+	{
+		float tt = ceil(random() * 11);
+		if (tt == 1)
+			self.vehicle = VEH_HOTROD;
+		else if (tt == 2)
+			self.vehicle = VEH_WRAITH;
+		else if (tt == 3)
+			self.vehicle = VEH_ROADBASTARD;
+		else if (tt == 4)
+			self.vehicle = VEH_SKYSCRAPER;
+		else if (tt == 5)
+			self.vehicle = VEH_REDRAGE;
+		else if (tt == 6)
+			self.vehicle = VEH_LAWBREAKER;
+		else if (tt == 7)
+			self.vehicle = VEH_RAZORBACK;
+		else if (tt == 8)
+			self.vehicle = VEH_MINCEMEAT;
+		else if(tt == 9) 
+			self.vehicle = VEH_STREETKING; 
+		else if (tt == 10)
+			self.vehicle = VEH_SANDROAMER;
+		else
+			self.vehicle = VEH_THOROGOOD;
+		self.bot_select_vehicle = TRUE;
+	}
 
 	// Traceline: Bot hit/close to wall
 	// RennyC: Needs improvement for being accurate
@@ -340,7 +370,7 @@ void() BotAI =
 
 	if (!ragewar)
 	{
-		local vector x = getlight(self.origin);
+		vector x = getlight(self.origin);
 		if (world.model == "maps/map4.hmp")
 		{
 			if (!self.headlights)
@@ -360,39 +390,8 @@ void() BotAI =
 	}
 	else // rage war stuff here
 	{
-		if (!self.ready)
-		{
-			if (race_status != RACE_NOTSTARTED)
-			{
-				// Bot vehicle selection
-				float tt = ceil(random() * 11);
-				if (tt == 1)
-					self.vehicle = VEH_HOTROD;
-				else if (tt == 2)
-					self.vehicle = VEH_WRAITH;
-				else if (tt == 3)
-					self.vehicle = VEH_ROADBASTARD;
-				else if (tt == 4)
-					self.vehicle = VEH_SKYSCRAPER;
-				else if (tt == 5)
-					self.vehicle = VEH_REDRAGE;
-				else if (tt == 6)
-					self.vehicle = VEH_LAWBREAKER;
-				else if (tt == 7)
-					self.vehicle = VEH_RAZORBACK;
-				else if (tt == 8)
-					self.vehicle = VEH_MINCEMEAT;
-				else if(tt == 9) 
-					self.vehicle = VEH_STREETKING; 
-				else if (tt == 10)
-					self.vehicle = VEH_SANDROAMER;
-				else
-					self.vehicle = VEH_THOROGOOD;
-
-				self.ready = TRUE;
-				self.button0 = TRUE;
-			}
-		}
+		if (self.observer) // Bot join
+			self.button0 = TRUE;
 
 		// bots can start/end matches on empty dedicated servers
 		if (framecount >= 100 && !human_players && ragewar && race_status != RACE_STARTED)
@@ -403,7 +402,7 @@ void() BotAI =
 				self.button0 = TRUE;
 			}
 		}
-		
+
 		// am I dead? Fire randomly until I respawn
 		// health < 1 is used because fractional healths show up as 0 on normal player
 		// status bars, and the mod probably already compensated for that - FrikaC

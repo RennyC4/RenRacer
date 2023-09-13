@@ -53,9 +53,15 @@ void() countdown_think = // Race start countdown
 				BotConnect();
 				self.bots_loaded = TRUE;
 			}
-			entity spawn_spot = SelectSpawnSpot();
-			self.angles = spawn_spot.angles;
-			self.origin = spawn_spot.origin;
+
+			// Observers can fly around, so return to a spawnpoint before car spawns
+			if (ragewar)
+			{
+				entity spawn_spot = SelectSpawnSpot();
+				self.angles = spawn_spot.angles;
+				self.origin = spawn_spot.origin;
+				self.fixangle = TRUE;
+			}
 
 			// Put cars in game
 			if (self.vehicle == VEH_HOTROD)

@@ -68,6 +68,7 @@ void() ClientDisconnect =
 	self.spawncar = FALSE;
 	self.deadflag = FALSE;
 	self.deathcount = 0;
+	self.weapon = WEP_SPECIAL;
 	self.ammo_firerocket = self.ammo_homingrocket = self.ammo_powerrocket = self.ammo_napalm = self.ammo_rico = self.ammo_remote = self.ammo_freeze = 0;
 };
 
@@ -316,6 +317,7 @@ void() PlayerPreThink =
 			}
 		}
 		Car_CheckAttach(); // Shove the player in the car
+
 		if (framecount > 75 && (self.button0 || self.button3 || self.button4))
 		{
 			centerprint(self, ""); // clear any centerprints
@@ -355,6 +357,7 @@ void() PlayerPreThink =
 				entity spawn_spot = SelectSpawnSpot();
 				self.angles = spawn_spot.angles;
 				self.origin = spawn_spot.origin;
+				self.fixangle = TRUE;
 				sound (self, CHAN_AUTO, "engine/start.wav", 1, ATTN_NORM);
 
 				// Put cars in game
@@ -636,7 +639,7 @@ void() PlayerPostThink =
 						Create2DExplosion(self.origin + v_up * 64, 10);
 						self.onfire_finished = time + 9999; // cars on fire
 					}
-					self.colormod = '0.05 0.05 0.05'; // car is cooked/black on death
+					self.colormod = '0.01 0.01 0.01'; // car is cooked/black on death
 					if (self.deathcount == 3 || self.deathcount == 6 || self.deathcount == 9 || self.deathcount == 12)
 						CreateExplosion(self.origin);
 					if (self.deathcount < 30)
@@ -679,6 +682,8 @@ void() PlayerPostThink =
 	else
 		self.waterlevel = 0;
 
+	sprint(self, ftos(self.effects), "\n");
+
 	// EF_BRIGHTFIELD effects handler
 	if (!ragewar)
 	{
@@ -693,6 +698,10 @@ void() PlayerPostThink =
 		{
 			if (self.onfire_finished > time)
 				self.onfire_finished = time; // water removes napalm/fire
+			if (self.frozen_finished > time)
+				self.frozen_finished = time;
+			if (self.blind_finished > time)
+				self.blind_finished = time;
 			self.effects |= EF_BRIGHTFIELD;
 		}
 		else
@@ -715,7 +724,7 @@ void() PlayerPostThink =
 	{
 		if (self.health > 0)
 		{
-			centerprint (self, "You're on fire!\n");
+			//centerprint (self, "You're on fire!\n");
 			if (self.onfire_tic < time)
 			{
 				float firedmg = ceil(random()*3 + 3);
@@ -896,11 +905,12 @@ void() PlayerPostThink =
 
 void() racer_spawnpoint = {};
 void() dm_spawnpoint = {};
+
 entity() SelectSpawnSpot =
 {
-	local	entity spot = lastspawn;
-	local	entity thing;
-	local	float  pcount;
+	entity spot = lastspawn;
+	entity thing;
+	float pcount;
 
 	if (!ragewar) // racing
 	{
@@ -911,30 +921,14 @@ entity() SelectSpawnSpot =
 			{
 				if (spot == lastspawn)
 					return lastspawn;
-				pcount = 0;
-				thing = findradius(spot.origin, 64);
-				while(thing)
-				{
-					if (thing.classname == "player")
-						pcount = pcount + 1;
-					thing = thing.chain;
-				}
-				if (!pcount)
-				{
-					lastspawn = spot;
-					return spot;
-				}
-			}
-			else
-			{
-				spot = find(spot, classname, "info_player_start"); // last try
+
+				lastspawn = spot;
 				return spot;
 			}
 		}
 	}
 	else
 	{
-		spot = lastspawn;
 		while (1)
 		{
 			spot = find(spot, classname, "dm_spawnpoint");
@@ -942,30 +936,19 @@ entity() SelectSpawnSpot =
 			{
 				if (spot == lastspawn)
 					return lastspawn;
-				pcount = 0;
-				thing = findradius(spot.origin, 64);
-				while(thing)
-				{
-					if (thing.classname == "player")
-						pcount = pcount + 1;
-					thing = thing.chain;
-				}
-				if (!pcount)
-				{
-					lastspawn = spot;
-					return spot;
-				}
-			}
-			else
-			{
-				spot = find(spot, classname, "info_player_start"); // last try
+
+				lastspawn = spot;
 				return spot;
 			}
 		}
 	}
 
 	if (!spot)
-		error ("Cannot find spawnpoint on map");
+	{
+		spot = find(spot, classname, "info_player_start"); // last try
+		return spot;
+		//error ("Cannot find spawnpoint on map");
+	}
 
 	return spot;
 };
@@ -992,10 +975,11 @@ void() PutClientInServer =
 
 	self.flags = FL_CLIENT;
 	self.origin = spawn_spot.origin;
-	
-	setmodel (self, "progs/null.spr");
+	self.angles = spawn_spot.angles;
+	self.fixangle = TRUE;
+
 	modelindex_null = self.modelindex;
-	
+	setmodel (self, "progs/null.spr");
 	setsize (self, VEC_HULL_MIN, VEC_HULL_MAX);
 	
 	self.view_ofs = '0 0 42'; // Best height for no CSQC chasecam
@@ -1003,8 +987,6 @@ void() PutClientInServer =
 	self.modelindex = 0;
 
 	self.flags = FL_FINDABLE_NONSOLID; // Needed for findradius to find me
-	self.angles = spawn_spot.angles;
-	self.fixangle = TRUE;
 	self.checkpoint = 0;
 	self.clearcprint = TRUE;
 	self.car_stabilizer = -1;
@@ -1018,35 +1000,21 @@ void() PutClientInServer =
 
 	if (clienttype(self) == CLIENTTYPE_REAL)
 		human_players = human_players + 1;
-
 	self.player_id = human_players;
 
 	if (cvar("developer") != 1)
 	{
-		if (race_status != RACE_NOTSTARTED)
+		if (ragewar && race_status != RACE_NOTSTARTED)
 		{
-			if (!ragewar) // race is on, shove new player as observer
-			{
-				if (clienttype(self) == CLIENTTYPE_REAL)
-					self.observer = TRUE;
-			}
-			else
-			{
-				if (!self.spawncar) // Joined mid-ragewar game
-				{
-					self.observer = TRUE;
-
-					// Start music on player mid-game join
-					if (world.model == "maps/dm1.bsp")
-						self.music = "sound/music/dm1.ogg";
-					if (world.model == "maps/dm2.bsp")
-						self.music = "sound/music/dm2.ogg";
-					if (world.model == "maps/dm3.bsp")
-						self.music = "sound/music/dm3.ogg";
-					if (checkextension("DP_QC_SPRINTF"))
-						stuffcmd (self, sprintf("music %s\n", self.music));
-				}
-			}
+			// Start music on player mid-game join
+			if (world.model == "maps/dm1.bsp")
+				self.music = "sound/music/dm1.ogg";
+			if (world.model == "maps/dm2.bsp")
+				self.music = "sound/music/dm2.ogg";
+			if (world.model == "maps/dm3.bsp")
+				self.music = "sound/music/dm3.ogg";
+			if (checkextension("DP_QC_SPRINTF"))
+				stuffcmd (self, sprintf("music %s\n", self.music));
 		}
 	}
 
@@ -1057,16 +1025,6 @@ void() PutClientInServer =
 		if (clienttype(self) == CLIENTTYPE_BOT)
 			self.ready = TRUE;
 	}
-/*
-	if (ragewar)
-	{
-		if (clienttype(self) == CLIENTTYPE_REAL)
-			self.observer = TRUE; // Keep menu on
-	}
 	else
-	{
-		if (clienttype(self) == CLIENTTYPE_BOT)
-			self.ready = TRUE;
-	}
-*/
+		self.observer = TRUE; // important now
 };
