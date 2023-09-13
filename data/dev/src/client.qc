@@ -354,8 +354,6 @@ void() PlayerPreThink =
 
 			if (!self.spawncar)
 			{
-				bprint (self.netname, "\n");
-
 				self.ready = TRUE; // important!
 				self.observer = FALSE; // important!
 
