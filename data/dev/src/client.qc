@@ -68,7 +68,6 @@ void() ClientDisconnect =
 	self.spawncar = FALSE;
 	self.deadflag = FALSE;
 	self.deathcount = 0;
-	self.spawncar = FALSE;
 	self.weapon = WEP_SPECIAL;
 	self.ammo_firerocket = self.ammo_homingrocket = self.ammo_powerrocket = self.ammo_napalm = self.ammo_rico = self.ammo_remote = self.ammo_freeze = 0;
 };
@@ -107,7 +106,7 @@ void() Setup_level_effects =
 
 void() PushPlayers =
 {
-	if (self.frozen_finished > time || self.invulnerable_finished > time || (self.observer || !self.ready))
+	if (self.frozen_finished > time || self.invulnerable_finished > time)
 		return;
 
 	for (entity b = world;(b = find(b, classname, "player"));)
@@ -319,7 +318,8 @@ void() PlayerPreThink =
 		}
 		Car_CheckAttach(); // Shove the player in the car
 
-		if (framecount > 75 && (self.button0 || self.button3 || self.button4))
+		// framecount + CLIENTTYPE_BOT needs to be here, otherwise stuff breaks with bot spawning
+		if (framecount > 75 && ((self.button0 || self.button3 || self.button4) || clienttype(self) == CLIENTTYPE_BOT))
 		{
 			centerprint(self, ""); // clear any centerprints
 			if (race_status == RACE_NOTSTARTED)
@@ -334,6 +334,7 @@ void() PlayerPreThink =
 					}
 				}
 				self.observer = FALSE; // important!
+
 				if (!ragewar)
 				{
 					if (human_players_ready == human_players)
@@ -353,13 +354,25 @@ void() PlayerPreThink =
 
 			if (!self.spawncar)
 			{
+				bprint (self.netname, "\n");
+
 				self.ready = TRUE; // important!
 				self.observer = FALSE; // important!
-				self.invulnerable_finished = time + 5;
-				entity spawn_spot = SelectSpawnSpot();
-				self.angles = spawn_spot.angles;
-				self.origin = spawn_spot.origin;
-				self.fixangle = TRUE;
+
+				// You can fly around while selecting your car in ragewar, so set the player
+				// position back
+				if (ragewar)
+				{
+					entity spawn_spot = SelectSpawnSpot();
+					self.angles = spawn_spot.angles;
+					//self.origin = spawn_spot.origin;
+					setorigin(self, spawn_spot.origin);
+					self.fixangle = TRUE;
+					self.invulnerable_finished = time + 5;
+				}
+				//else
+				//	setorigin(self, self.spawn_loc);
+
 				sound (self, CHAN_AUTO, "engine/start.wav", 1, ATTN_NORM);
 
 				// Put cars in game
@@ -534,6 +547,8 @@ void() PlayerPostThink =
 	if (intermission_running)
 	{
 		self.onfire_finished = time;
+		self.blind_finished = time;
+		self.frozen_finished = time;
 		centerprint(self, "");
 		IntermissionThink ();
 		return;
@@ -549,8 +564,8 @@ void() PlayerPostThink =
 
 	if (race_status == RACE_STARTED && !intermission_running && self.health > 0 && self.driving)
 	{
-		//if (self.collide_finished < time)
-		PushPlayers();
+		if (!self.observer)
+			PushPlayers();
 		SpecialRegenerate();
 	}
 	if (self.forcejump)
@@ -1019,11 +1034,19 @@ void() PutClientInServer =
 
 	// grab ragewar from server
 	ragewar = cvar("ragewar");
+
+	/*
 	if (!ragewar)
 	{
 		if (clienttype(self) == CLIENTTYPE_BOT)
+		{
 			self.ready = TRUE;
+			self.observer = FALSE;
+		}
 	}
 	else
+	*/
+
+	if (ragewar)
 		self.observer = TRUE; // important now
 };

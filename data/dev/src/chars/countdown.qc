@@ -34,26 +34,28 @@ void(float type) countdown_announce =
 	}
 };
 
-.float bots_loaded;
+float bots_loaded;
 void() countdown_think = // Race start countdown
 {
 	//
-	// Spawn bots, players/bots cars, spawn radar blip
+	// Spawn bots for racing
 	//
-	
+
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
-		if (!targ.spawncar && targ.ready)
+		if (!bots_loaded)
 		{
 			entity oself = self;
 			self = targ;
 
-			if (human_players == 1 && !ragewar && !self.bots_loaded)
+			if (human_players == 1 && !ragewar)
 			{
-				BotConnect();
-				self.bots_loaded = TRUE;
+				float g = cvar("sv_playerslots");
+				for (float i = 0; i < g-1; i = i+1)
+					BotConnect();
 			}
 			self = oself;
+			bots_loaded = TRUE;
 		}
 	}
 	//
@@ -64,7 +66,7 @@ void() countdown_think = // Race start countdown
 
 	if (countdown_finished < time && countdown_count > -1)
 	{
-		local string f = ftos(countdown_count);
+		string f = ftos(countdown_count);
 		if (countdown_count > 0)
 		{
 			if (countdown_count == 3)
