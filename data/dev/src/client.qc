@@ -934,6 +934,11 @@ entity() SelectSpawnSpot =
 				lastspawn = spot;
 				return spot;
 			}
+			else // last shot attempt
+			{
+				spot = find(spot, classname, "info_player_start");
+				return spot;
+			}
 		}
 	}
 	else
@@ -949,17 +954,25 @@ entity() SelectSpawnSpot =
 				lastspawn = spot;
 				return spot;
 			}
+			else // last shot attempt
+			{
+				spot = find(spot, classname, "info_player_start");
+				return spot;
+			}
 		}
 	}
 
+	/*
 	if (!spot)
 	{
 		spot = find(spot, classname, "info_player_start"); // last try
 		return spot;
 		//error ("Cannot find spawnpoint on map");
 	}
+	*/
 
-	return spot;
+	bprint ("SelectSpawnSpot failed!\n");
+	return world;
 };
 
 //----
