@@ -354,6 +354,8 @@ void() PlayerPreThink =
 
 			if (!self.spawncar)
 			{
+				if (clienttype(self) == CLIENTTYPE_BOT)
+					Bot_SelectVehicle();
 				self.ready = TRUE; // important!
 				self.observer = FALSE; // important!
 
@@ -707,7 +709,7 @@ void() PlayerPostThink =
 		{
 			self.effects |= EF_BRIGHTFIELD;
 			if (self.onfire_finished > time)
-				self.onfire_finished = time; // water removes napalm/fire
+				self.onfire_finished = time;
 			if (self.frozen_finished > time)
 				self.frozen_finished = time;
 			if (self.blind_finished > time)

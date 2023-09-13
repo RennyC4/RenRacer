@@ -265,31 +265,9 @@ void() GetWayPoint =
 	}
 };
 
-/*
--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-BotAI
-
-This is the main ai loop. Though called every
-frame, the ai_time limits it's actual updating
-
--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-*/
-
-entity() BotGetClosestPlayer;
-entity() Bot_FindClosestItem;
-void() bot_ai_race;
-void() bot_ai_fight;
-.float bot_hitwall;
-float stagger_think;
-.float ai_time;
 .float bot_select_vehicle;
-
-void() BotAI =
+void() Bot_SelectVehicle =
 {
-	if (cvar("developer") == 2)
-		return;
-
 	// Bot vehicle selection
 	if (!self.bot_select_vehicle)
 	{
@@ -317,7 +295,33 @@ void() BotAI =
 		else
 			self.vehicle = VEH_THOROGOOD;
 		self.bot_select_vehicle = TRUE;
+		bprint ("Bot selected random vehicle\n");
 	}
+};
+
+/*
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+BotAI
+
+This is the main ai loop. Though called every
+frame, the ai_time limits it's actual updating
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+*/
+
+entity() BotGetClosestPlayer;
+entity() Bot_FindClosestItem;
+void() bot_ai_race;
+void() bot_ai_fight;
+.float bot_hitwall;
+float stagger_think;
+.float ai_time;
+
+void() BotAI =
+{
+	if (cvar("developer") == 2)
+		return;
 
 	// Traceline: Bot hit/close to wall
 	// RennyC: Needs improvement for being accurate
