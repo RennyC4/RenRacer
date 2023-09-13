@@ -1658,6 +1658,10 @@ void() SpecialWeapon_HotRod_Think =
 		//else
 			setorigin(self, end);			
 	}
+	
+	float contents = pointcontents(self.origin);
+	if (contents >= CONTENT_LAVA && contents <= CONTENT_WATER)
+		self.animation_finished = time; // remove myself, I hit water
 
 	frameskip(0.01);
 };
@@ -2794,6 +2798,12 @@ void() CommandSpecials =
 	}
 	if (self.cmdspecial_napalm_step == 2 && self.moveprog1 == 1 && self.energy >= 40) // Hit last step, user hit up
 	{
+		if (self.waterlevel > 0)
+		{
+			self.commandspcl_finished = time + 1;
+			sprint(self, "Can't fire napalm in water!\n");
+			return;
+		}
 		self.energy = self.energy - 40;
 		sprint (self, "^2Command: ");
 		sprint (self, "^7Napalm\n");
