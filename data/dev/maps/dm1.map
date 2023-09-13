@@ -6011,3 +6011,39 @@
 ( -1904 817 212 ) ( -1904 816 20 ) ( -1904 816 212 ) skip [ 0 -1.0000000000000002 0 28 ] [ 0 0 -1.0000000000000002 44 ] 0 1 -1
 }
 }
+// entity 82
+{
+"classname" "light"
+"origin" "-1968 128 24"
+"light" "200"
+}
+// entity 83
+{
+"classname" "light"
+"origin" "-1968 -560 24"
+"light" "200"
+}
+// entity 84
+{
+"classname" "light"
+"origin" "-1968 816 24"
+"light" "200"
+}
+// entity 85
+{
+"classname" "light"
+"origin" "1984 816 24"
+"light" "200"
+}
+// entity 86
+{
+"classname" "light"
+"origin" "1984 128 24"
+"light" "200"
+}
+// entity 87
+{
+"classname" "light"
+"origin" "1984 -560 24"
+"light" "200"
+}
