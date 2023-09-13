@@ -2610,6 +2610,7 @@ float ragewar; /* ssqc global */
 
 // RenRacer
 float framecount;
+float pauseframe;
 float showscores;
 vector campos;
 vector camang;
