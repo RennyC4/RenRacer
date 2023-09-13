@@ -2444,7 +2444,7 @@ void() SpecialWeapon_StreetKing_TurretHead_Think =
 	{
 		for (entity head = world;(head = find(head, classname, "player"));)
 		{
-			if (vlen(head.origin - self.origin) <= 500 && head.health > 0 && head != self.owner && infront3(head, 0.5) && head.invulnerable_finished < time && fisible(head))
+			if (vlen(head.origin - self.origin) <= 800 && head.health > 0 && head != self.owner && infront3(head, 0.5) && head.invulnerable_finished < time && fisible(head))
 			{
 				sound (self, CHAN_BODY, "combat/tur_sight.wav", 1, ATTN_NORM);
 				self.enemy = head;
@@ -2455,7 +2455,7 @@ void() SpecialWeapon_StreetKing_TurretHead_Think =
 			sound (self, CHAN_BODY, "combat/tur_spin.wav", 1, ATTN_NORM);
 			self.sound_finished = time + 1;
 		}
-		self.angles_y = self.angles_y + 20;
+		self.angles_y = self.angles_y + 15;
 		self.angles_x = 0;
 		self.frame = 0;
 	}
@@ -2489,7 +2489,7 @@ void() SpecialWeapon_StreetKing_TurretHead_Think =
 			self.hitobject_finished = time + 0.1;
 		}
 	}
-	frameskip(0.1);
+	frameskip(0.05);
 };
 
 void() SpecialWeapon_StreetKing_TurretBase_Think =

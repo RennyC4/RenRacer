@@ -68,6 +68,7 @@ void() ClientDisconnect =
 	self.spawncar = FALSE;
 	self.deadflag = FALSE;
 	self.deathcount = 0;
+	self.spawncar = FALSE;
 	self.weapon = WEP_SPECIAL;
 	self.ammo_firerocket = self.ammo_homingrocket = self.ammo_powerrocket = self.ammo_napalm = self.ammo_rico = self.ammo_remote = self.ammo_freeze = 0;
 };
@@ -349,7 +350,8 @@ void() PlayerPreThink =
 					sound (self, CHAN_AUTO, "engine/start.wav", 1, ATTN_NORM);
 				}
 			}
-			if (ragewar && self.observer) // Allow player to join in mid-game
+
+			if (!self.spawncar)
 			{
 				self.ready = TRUE; // important!
 				self.observer = FALSE; // important!
@@ -993,6 +995,7 @@ void() PutClientInServer =
 	self.alpha = 1;
 	self.energy = 100;
 	self.weapon = WEP_SPECIAL;
+	self.spawncar = FALSE;
 
 	if (clienttype(self) == CLIENTTYPE_REAL)
 		human_players = human_players + 1;

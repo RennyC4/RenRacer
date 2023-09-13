@@ -390,8 +390,6 @@ void() BotAI =
 	}
 	else // rage war stuff here
 	{
-		if (self.observer) // Bot join
-			self.button0 = TRUE;
 
 		// bots can start/end matches on empty dedicated servers
 		if (framecount >= 100 && !human_players && ragewar && race_status != RACE_STARTED)

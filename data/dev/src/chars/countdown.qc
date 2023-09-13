@@ -53,52 +53,7 @@ void() countdown_think = // Race start countdown
 				BotConnect();
 				self.bots_loaded = TRUE;
 			}
-
-			// Observers can fly around, so return to a spawnpoint before car spawns
-			if (ragewar)
-			{
-				entity spawn_spot = SelectSpawnSpot();
-				self.angles = spawn_spot.angles;
-				self.origin = spawn_spot.origin;
-				self.fixangle = TRUE;
-			}
-
-			// Put cars in game
-			if (self.vehicle == VEH_HOTROD)
-				entity car = hotrod();
-			if (self.vehicle == VEH_WRAITH)
-				car = wraith();
-			if (self.vehicle == VEH_ROADBASTARD)
-				car = roadbastard();
-			if (self.vehicle == VEH_SKYSCRAPER)
-				car = skyscraper();
-			if (self.vehicle == VEH_REDRAGE)
-				car = redrage();
-			if (self.vehicle == VEH_LAWBREAKER)
-				car = lawbreaker();
-			if (self.vehicle == VEH_RAZORBACK)
-				car = razorback();
-			if (self.vehicle == VEH_MINCEMEAT)
-				car = mincemeat();
-			if (self.vehicle == VEH_STREETKING)
-				car = streetking();
-			if (self.vehicle == VEH_SANDROAMER)
-				car = sandroamer();
-			if (self.vehicle == VEH_THOROGOOD)
-				car = thorogood();
-
-			makevectors(self.angles);
-			if (self.vehicle != VEH_SKYSCRAPER && self.vehicle != VEH_MINCEMEAT)
-				car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
-			else // skyscraper+mincemeat are big boys and needs the extra height on spawn
-			{
-				setorigin(self, self.origin + v_up * 32);
-				car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
-			}
-			Car_InitVehicle(car);
 			self = oself;
-			targ.spawncar = TRUE;
-			Spawn_RadarBlip(targ);
 		}
 	}
 	//
