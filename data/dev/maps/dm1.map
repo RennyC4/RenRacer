@@ -5633,3 +5633,15 @@
 "classname" "pedestrian"
 "origin" "3320 920 44"
 }
+// entity 50
+{
+"classname" "pedestrian"
+"origin" "968 56 40"
+"spawnflags" "1"
+}
+// entity 51
+{
+"classname" "pedestrian"
+"origin" "-936 -1528 40"
+"spawnflags" "1"
+}

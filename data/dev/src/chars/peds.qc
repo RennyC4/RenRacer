@@ -34,11 +34,16 @@ void() pedestrian_die =
 
 	sound (self, CHAN_AUTO, "combat/hitped.wav", 1, ATTN_NORM); // TODO: needs new sound
 
-	if (!self.spawnflags)
+	if (!self.owner.spawnflags)
 	{
-		self.modelflags = 32; // More blood
+		self.modelflags = 32; // blood
 		self.frame = 0;
 		setmodel(self, "progs/ped1_d.spr"); // death sprite
+	}
+	if (self.owner.spawnflags & 1) // Jumping flag dude
+	{
+		self.modelflags = 32; // blood
+		self.frame = 0;
 	}
 
 	self.movetype = MOVETYPE_NOCLIP;
@@ -62,6 +67,8 @@ void() pedestrian_touch =
 		return;
 	if (!other.owner.driving)
 		return;
+	if (other.owner.driving.realspeed <= 5)
+		return;
 
 	if (self.owner.cnt > 0)
 		self.owner.cnt -= 1;
@@ -70,7 +77,11 @@ void() pedestrian_touch =
 	self.th_die();
 };
 
-void() pedestrian_think =
+//
+// Pedestrian: Business man
+//
+
+void() pedestrian1_think =
 {
 	if (self.alpha < 1)
 		self.alpha += 0.1;
@@ -118,13 +129,63 @@ void() spawn_pedestrian1 =
 		setsize(ped, '8 8 -22', '8 8 8');
 		setorigin(ped, self.origin);
 
-		ped.think = pedestrian_think;
+		ped.think = pedestrian1_think;
 		ped.nextthink = time;
 
 		self.cnt += 1; // 3 peds max per spawner
 	}
 	self.nextthink = time + 60 + random()*30; // spawn timer
 };
+
+void() pedestrian2_think =
+{
+	if (self.alpha < 1)
+		self.alpha += 0.1;
+	if (self.animation_finished < time)
+	{
+		if (self.frame < 1)
+			self.frame += 1;
+		else
+			self.frame = 0;
+		self.animation_finished = time + 0.25;
+	}
+	
+	frameskip(0.1);
+};
+
+void() spawn_pedestrian2 =
+{
+	if (self.cnt < 1)
+	{
+		entity ped = spawn();
+
+		ped.movetype = MOVETYPE_STEP;
+		ped.takedamage = DAMAGE_YES;
+		ped.solid = SOLID_TRIGGER;
+		ped.touch = pedestrian_touch;
+		ped.scale = 0.75;
+		ped.owner = self;
+		ped.classname = "pedestrian";
+		ped.alpha = 0;
+		ped.health = 1;
+		ped.th_die = pedestrian_die;
+
+		setmodel(ped, "progs/ped2.spr");
+		setsize(ped, '8 8 -22', '8 8 8');
+		setorigin(ped, self.origin);
+
+		ped.think = pedestrian2_think;
+		ped.nextthink = time;
+
+		self.cnt += 1; // 3 peds max per spawner
+	}
+	self.nextthink = time + 60 + random()*30; // spawn timer
+};
+
+
+//
+// Pedestrian: Jumping flag dude
+//
 
 void() pedestrian =
 {
@@ -134,10 +195,6 @@ void() pedestrian =
 		return;
 	}
 
-	precache_model ("progs/ped1.spr");
-	precache_model ("progs/ped1_d.spr");
-	precache_sound ("misc/splat.wav");
-
 	self.classname = "pedestrian_spawner";
 	setmodel(self, string_null);
 	self.movetype = MOVETYPE_NOCLIP;
@@ -145,7 +202,18 @@ void() pedestrian =
 
 	if (!self.spawnflags) // Business man
 	{
+		precache_model ("progs/ped1.spr");
+		precache_model ("progs/ped1_d.spr");
+
 		self.think = spawn_pedestrian1;
+		self.nextthink = time + 0.2;
+	}
+
+	if (self.spawnflags & 1) // Jumping flag dude
+	{
+		precache_model ("progs/ped2.spr");
+
+		self.think = spawn_pedestrian2;
 		self.nextthink = time + 0.2;
 	}
 };
