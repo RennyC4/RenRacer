@@ -319,7 +319,7 @@ void() PlayerPreThink =
 		Car_CheckAttach(); // Shove the player in the car
 
 		// framecount + CLIENTTYPE_BOT needs to be here, otherwise stuff breaks with bot spawning
-		if (framecount > 75 && ((self.button0 || self.button3 || self.button4) || clienttype(self) == CLIENTTYPE_BOT))
+		if (framecount > 75 && ((self.button0 || self.button3 || self.button4) || (clienttype(self) == CLIENTTYPE_BOT && race_status > RACE_NOTSTARTED)))
 		{
 			centerprint(self, ""); // clear any centerprints
 			if (race_status == RACE_NOTSTARTED)

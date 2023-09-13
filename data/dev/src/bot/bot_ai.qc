@@ -295,7 +295,6 @@ void() Bot_SelectVehicle =
 		else
 			self.vehicle = VEH_THOROGOOD;
 		self.bot_select_vehicle = TRUE;
-		bprint ("Bot selected random vehicle\n");
 	}
 };
 
