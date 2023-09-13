@@ -682,8 +682,6 @@ void() PlayerPostThink =
 	else
 		self.waterlevel = 0;
 
-	sprint(self, ftos(self.effects), "\n");
-
 	// EF_BRIGHTFIELD effects handler
 	if (!ragewar)
 	{
@@ -909,8 +907,6 @@ void() dm_spawnpoint = {};
 entity() SelectSpawnSpot =
 {
 	entity spot = lastspawn;
-	entity thing;
-	float pcount;
 
 	if (!ragewar) // racing
 	{
