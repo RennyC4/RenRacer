@@ -2664,6 +2664,7 @@ float RACE_FINISHED = 4;
 #define STAT_ORIGINZ 61 // Player origin Z
 #define STAT_FIRE 62
 #define STAT_FROZE 63
+#define STAT_OBSERVE 64
 
 #define STAT_INTERMISSION 75
 

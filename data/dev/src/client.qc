@@ -105,7 +105,7 @@ void() Setup_level_effects =
 
 void() PushPlayers =
 {
-	if (self.frozen_finished > time || self.invulnerable_finished > time || self.observer)
+	if (self.frozen_finished > time || self.invulnerable_finished > time || (self.observer || !self.ready))
 		return;
 
 	for (entity b = world;(b = find(b, classname, "player"));)
@@ -351,8 +351,8 @@ void() PlayerPreThink =
 			{
 				self.ready = TRUE; // important!
 				self.observer = FALSE; // important!
-				entity spawn_spot = SelectSpawnSpot();
 				self.invulnerable_finished = time + 5;
+				entity spawn_spot = SelectSpawnSpot();
 				self.angles = spawn_spot.angles;
 				self.origin = spawn_spot.origin;
 				sound (self, CHAN_AUTO, "engine/start.wav", 1, ATTN_NORM);
@@ -993,14 +993,11 @@ void() PutClientInServer =
 	self.flags = FL_CLIENT;
 	self.origin = spawn_spot.origin;
 	
-	//func_vehicle
 	setmodel (self, "progs/null.spr");
 	modelindex_null = self.modelindex;
-	//func_vehicle
 	
 	setsize (self, VEC_HULL_MIN, VEC_HULL_MAX);
 	
-	//self.view_ofs = '0 0 4'; // Used for photo shots for cars. doesn't seem to mess up checkpoint detection anymore. can we have a cvar for this? -Spud
 	self.view_ofs = '0 0 42'; // Best height for no CSQC chasecam
 	self.velocity = '0 0 0';
 	self.modelindex = 0;
@@ -1017,38 +1014,11 @@ void() PutClientInServer =
 	self.spawn_loc_angles = self.angles; // Stash it
 	self.alpha = 1;
 	self.energy = 100;
-
 	self.weapon = WEP_SPECIAL;
-	//self.ammo_special = 1;
 
 	if (clienttype(self) == CLIENTTYPE_REAL)
 		human_players = human_players + 1;
-	else // Bots just randomly select whatever vehicle
-	{
-		float tt = ceil(random() * 11);
-		if (tt == 1)
-			self.vehicle = VEH_HOTROD;
-		else if (tt == 2)
-			self.vehicle = VEH_WRAITH;
-		else if (tt == 3)
-			self.vehicle = VEH_ROADBASTARD;
-		else if (tt == 4)
-			self.vehicle = VEH_SKYSCRAPER;
-		else if (tt == 5)
-			self.vehicle = VEH_REDRAGE;
-		else if (tt == 6)
-			self.vehicle = VEH_LAWBREAKER;
-		else if (tt == 7)
-			self.vehicle = VEH_RAZORBACK;
-		else if (tt == 8)
-			self.vehicle = VEH_MINCEMEAT;
-		else if(tt == 9) 
-			self.vehicle = VEH_STREETKING; 
-		else if (tt == 10)
-			self.vehicle = VEH_SANDROAMER;
-		else
-			self.vehicle = VEH_THOROGOOD;
-	}
+
 	self.player_id = human_players;
 
 	if (cvar("developer") != 1)
@@ -1062,24 +1032,10 @@ void() PutClientInServer =
 			}
 			else
 			{
-				if (!self.spawncar) // Joined mid-ragewar game, TODO: Add vehicle selection stuff for players
+				if (!self.spawncar) // Joined mid-ragewar game
 				{
-					// Bots just randomly select whatever vehicle
-					if (clienttype(self) == CLIENTTYPE_BOT)
-					{
-						if (random() < 0.5)
-							entity car = hotrod();
-						else
-							car = wraith();
-						makevectors(self.angles);
-						car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
-						Car_InitVehicle(car);
-						self.spawncar = TRUE;
-						Spawn_RadarBlip(self);
-					}
-					else // Present player with the menu
-						self.observer = TRUE;
-					
+					self.observer = TRUE;
+
 					// Start music on player mid-game join
 					if (world.model == "maps/dm1.bsp")
 						self.music = "sound/music/dm1.ogg";
@@ -1093,15 +1049,24 @@ void() PutClientInServer =
 			}
 		}
 	}
-	
-	if (clienttype(self) == CLIENTTYPE_BOT)
-		self.ready = TRUE;
 
 	// grab ragewar from server
 	ragewar = cvar("ragewar");
+	if (!ragewar)
+	{
+		if (clienttype(self) == CLIENTTYPE_BOT)
+			self.ready = TRUE;
+	}
+/*
 	if (ragewar)
 	{
 		if (clienttype(self) == CLIENTTYPE_REAL)
 			self.observer = TRUE; // Keep menu on
 	}
+	else
+	{
+		if (clienttype(self) == CLIENTTYPE_BOT)
+			self.ready = TRUE;
+	}
+*/
 };

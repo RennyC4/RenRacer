@@ -29,7 +29,8 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 	framecount = framecount + 1;
 	float intermiss = getstatf(STAT_INTERMISSION);
 	ragewar = getstatf(SERVER_RAGEWAR);
-	local float rs = getstatf(STAT_RACESTATUS); // Game status
+	float rs = getstatf(STAT_RACESTATUS); // Game status
+	float obs = getstatf(STAT_OBSERVE);
 
 	clearscene(); // wipe entity lists, reset view properties to their defaults
 	setproperty(VF_DRAWENGINESBAR, 0); // turn off status bar
@@ -46,7 +47,7 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 
 	if (cvar("developer") != 1)
 	{
-		if (!intermiss)
+		if (!intermiss && !obs)
 			GameCamera(); // Camera
 		setproperty(VF_DRAWCROSSHAIR, 0); // Turn off crosshair
 	}
@@ -106,14 +107,22 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 					soundupdate(engine_sound, CHAN_BODY, "engine/hotrod.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
 			}
 
-			DrawTurbo(); // Draw Turbo Stats
-			DrawDrift(); // Draw Drift Stats
-			if (!ragewar)
-				DrawTime();  // Draw Lap Time Stats
+			if (!obs)
+			{
+				DrawTurbo(); // Draw Turbo Stats
+				DrawDrift(); // Draw Drift Stats
+				if (!ragewar)
+					DrawTime();  // Draw Lap Time Stats
+				else
+					HUD_Ragewar(); // Draw ammo, etc
+				DrawSpeed(); // Draw Speed Stats
+			}
 			else
-				HUD_Ragewar(); // Draw ammo, etc
-			DrawSpeed(); // Draw Speed Stats
-
+			{
+				vector pos = [(g_width - stringwidth("", TRUE, '18 18 0'))/12-24, (g_height - 46)];
+				drawstring (pos + '1 1', "Observer", '8 8 0', '0 0 0', 1, DRAWFLAG_NORMAL); // text shadow
+				drawstring (pos, "Observer", '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+			}
 			//
 		}
 	}

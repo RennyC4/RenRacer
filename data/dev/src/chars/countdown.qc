@@ -53,6 +53,10 @@ void() countdown_think = // Race start countdown
 				BotConnect();
 				self.bots_loaded = TRUE;
 			}
+			entity spawn_spot = SelectSpawnSpot();
+			self.angles = spawn_spot.angles;
+			self.origin = spawn_spot.origin;
+
 			// Put cars in game
 			if (self.vehicle == VEH_HOTROD)
 				entity car = hotrod();
@@ -77,7 +81,7 @@ void() countdown_think = // Race start countdown
 			if (self.vehicle == VEH_THOROGOOD)
 				car = thorogood();
 
-			makevectors(targ.angles);
+			makevectors(self.angles);
 			if (self.vehicle != VEH_SKYSCRAPER && self.vehicle != VEH_MINCEMEAT)
 				car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
 			else // skyscraper+mincemeat are big boys and needs the extra height on spawn

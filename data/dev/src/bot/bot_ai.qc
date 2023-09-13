@@ -332,7 +332,6 @@ void() BotAI =
 	}
 	stagger_think = time;
 
-
 	makevectors(self.v_angle);
 	if (self.keys == KEY_MOVEFORWARD)
 		self.velocity = v_forward * 9999; // Forward
@@ -359,15 +358,49 @@ void() BotAI =
 		}
 		bot_ai_race();
 	}
-	else
+	else // rage war stuff here
 	{
+		if (!self.ready)
+		{
+			if (race_status != RACE_NOTSTARTED)
+			{
+				// Bot vehicle selection
+				float tt = ceil(random() * 11);
+				if (tt == 1)
+					self.vehicle = VEH_HOTROD;
+				else if (tt == 2)
+					self.vehicle = VEH_WRAITH;
+				else if (tt == 3)
+					self.vehicle = VEH_ROADBASTARD;
+				else if (tt == 4)
+					self.vehicle = VEH_SKYSCRAPER;
+				else if (tt == 5)
+					self.vehicle = VEH_REDRAGE;
+				else if (tt == 6)
+					self.vehicle = VEH_LAWBREAKER;
+				else if (tt == 7)
+					self.vehicle = VEH_RAZORBACK;
+				else if (tt == 8)
+					self.vehicle = VEH_MINCEMEAT;
+				else if(tt == 9) 
+					self.vehicle = VEH_STREETKING; 
+				else if (tt == 10)
+					self.vehicle = VEH_SANDROAMER;
+				else
+					self.vehicle = VEH_THOROGOOD;
+
+				self.ready = TRUE;
+				self.button0 = TRUE;
+			}
+		}
+
 		// bots can start/end matches on empty dedicated servers
 		if (framecount >= 100 && !human_players && ragewar && race_status != RACE_STARTED)
 		{
 			if (!self.button0) // don't spam console
 			{
 				bprint ("AI started match\n");
-				self.button0 = 1;
+				self.button0 = TRUE;
 			}
 		}
 		
