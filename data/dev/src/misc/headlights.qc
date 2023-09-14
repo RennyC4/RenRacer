@@ -38,7 +38,7 @@ void() headlights_on =
 	myflash.hitcontentsmaski = 0;
 	myflash.movetype = MOVETYPE_NOCLIP;
 	myflash.solid = SOLID_NOT;
-	setmodel (myflash, "progs/null.spr");
+	setmodel (myflash, "progs/*null");
 	setsize (myflash, '0 0 0', '0 0 0');
 
 	myflash.owner = self; // link entities
@@ -58,7 +58,7 @@ void() headlights_on =
 	myflash2.hitcontentsmaski = 0;
 	myflash2.movetype = MOVETYPE_NOCLIP;
 	myflash2.solid = SOLID_NOT;
-	setmodel (myflash2, "progs/null.spr");
+	setmodel (myflash2, "progs/*null");
 	setsize (myflash2, '0 0 0', '0 0 0');
 
 	myflash2.owner = self; // link entities

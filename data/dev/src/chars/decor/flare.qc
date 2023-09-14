@@ -25,7 +25,7 @@ void() flare =
 	
 		makevectors(self.angles);
 		local entity lit = spawn();
-		setmodel(lit, "progs/null.spr");
+		setmodel(lit, "progs/*null");
 		setorigin(lit, self.origin + v_up * 100);
 		lit.think = flare_lightup;
 		lit.nextthink = time + 1;

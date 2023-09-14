@@ -314,12 +314,6 @@ void(entity car) Car_InitVehicle =
 			e.think = Car_ChassiThink;
 			e.nextthink = time;
 		}
-//		else if (e.netname == "roof")
-//		{
-//			if (car.spawnflags & VEHICLE_NO_ROOF){ // hide
-//				e.modelindex = 0;
-//			}
-//		}
 		e = e.physobj_next;
 	}
 };
@@ -337,8 +331,6 @@ float TryPlacePlayer(entity exit){
 	return TRUE;
 }
 
-float modelindex_null;
-
 void(entity ply, entity car) Car_AttachToVehicle =
 {
 	if (ply.driving) // already sitting in car
@@ -346,18 +338,15 @@ void(entity ply, entity car) Car_AttachToVehicle =
 		ply.driving = world;
 		ply.solid = SOLID_SLIDEBOX;
 		ply.movetype = MOVETYPE_WALK;
-		ply.modelindex = modelindex_player;
 		stuffcmd(ply, "chase_active 0\n");
 		stuffcmd(ply, "crosshair 1\n");
 		car.driving = world;
 	}
 	else {
-		//ply.view_ofs = '0 0 16';
 		ply.driving = car;
 		ply.solid = SOLID_NOT;
 		ply.movetype = MOVETYPE_NOCLIP;
 		//ply.flags |= FL_FLY;
-		ply.modelindex = modelindex_null;
 		stuffcmd(ply, "chase_active 1\n");
 		stuffcmd(ply, "crosshair 0\n");
 		setorigin(ply, car.origin);
@@ -965,7 +954,6 @@ void TryUpdateVehicle(){
 	Car_Turn(move, backwards);
 	
 	self.velocity = '0 0 0';
-	self.modelindex = modelindex_null;
 	self.frame = 0;
 };
 
@@ -1088,7 +1076,7 @@ void() func_vehicle =
 		precache_model("progs/debug/org.mdl");
 		precache_model("progs/debug/orgbig.mdl");
 	}
-	precache_model("progs/null.spr");
+	precache_model("progs/*null");
 
 	self.think = StartFuncVehicle;
 	self.nextthink = 0.2;
@@ -1238,7 +1226,7 @@ void() vehicle_hotrod =
 		precache_model("progs/debug/org.mdl");
 		precache_model("progs/debug/orgbig.mdl");
 	}
-	precache_model("progs/null.spr");
+	precache_model("progs/*null");
 
 	precache_model("progs/HotRod_body.mdl");
 	precache_model("progs/HotRod_roof.mdl");

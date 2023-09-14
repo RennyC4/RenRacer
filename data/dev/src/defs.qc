@@ -393,7 +393,7 @@ void() SUB_Remove = {remove(self);};
 // End
 
 // func_vehicle
-float	modelindex_player;
+//float	modelindex_player;
 
 // RenRacer
 float framecount;

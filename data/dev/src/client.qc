@@ -588,7 +588,7 @@ void() PlayerPostThink =
 					trail1.colormod = '1 10 10';
 				}
 				else
-					setmodel (trail1, "progs/null.spr");
+					setmodel (trail1, "progs/*null");
 
 				setsize (trail1, '0 0 0', '0 0 0');
 
@@ -1000,13 +1000,11 @@ void() PutClientInServer =
 	self.angles = spawn_spot.angles;
 	self.fixangle = TRUE;
 
-	modelindex_null = self.modelindex;
 	setmodel (self, "progs/null.spr");
 	setsize (self, VEC_HULL_MIN, VEC_HULL_MAX);
 	
 	self.view_ofs = '0 0 42'; // Best height for no CSQC chasecam
 	self.velocity = '0 0 0';
-	self.modelindex = 0;
 
 	self.flags = FL_FINDABLE_NONSOLID; // Needed for findradius to find me
 	self.checkpoint = 0;
@@ -1043,19 +1041,6 @@ void() PutClientInServer =
 
 	// grab ragewar from server
 	ragewar = cvar("ragewar");
-
-	/*
-	if (!ragewar)
-	{
-		if (clienttype(self) == CLIENTTYPE_BOT)
-		{
-			self.ready = TRUE;
-			self.observer = FALSE;
-		}
-	}
-	else
-	*/
-
 	if (ragewar)
 		self.observer = TRUE; // important now
 };
