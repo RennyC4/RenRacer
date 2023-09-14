@@ -101,7 +101,7 @@ void() Setup_level_effects =
 };
 
 //
-// RennyC: Fake push other cars/players out of the way, includes turbo ramming damage
+// RennyC: Fake push other cars/players out of the way, includes turbo/drifting ramming damage
 //
 
 void() PushPlayers =
@@ -123,7 +123,7 @@ void() PushPlayers =
 						b.forcejump_strength = ceil(200 + (self.realspeed * 1.75));
 						b.forcejump = TRUE;
 					}
-					else if (self.turbo) // only skyscraper jumps on turbo hit
+					else if (self.turbo || self.drift) // only skyscraper jumps on turbo/drift hit
 					{
 						self.forcejump_strength = ceil(200 + (self.realspeed * 1.75));
 						self.forcejump = TRUE;
@@ -152,7 +152,7 @@ void() PushPlayers =
 
 			if (ragewar)
 			{
-				if (self.turbo && self.collide_finished < time )
+				if ((self.turbo || self.drift) && self.collide_finished < time)
 				{
 					// target damage
 					float dmg = floor(self.realspeed / 32) + floor(self.max_health / 5);
