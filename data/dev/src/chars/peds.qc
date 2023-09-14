@@ -66,6 +66,11 @@ void() pedestrian_die =
 		self.modelflags = 32; // blood
 		self.frame = 4;
 	}
+	if (self.owner.spawnflags & 4) // Lazy chair lad
+	{
+		self.modelflags = 32; // blood
+		self.frame = 1;
+	}
 
 	self.movetype = MOVETYPE_NOCLIP;
 	self.velocity = '0 0 0';
@@ -251,6 +256,45 @@ void() spawn_pedestrian3 =
 	self.nextthink = time + 60 + random()*30; // spawn timer
 };
 
+//
+// Pedestrian: Lazy chair lad
+//
+
+void() pedestrian4_think =
+{
+	if (self.alpha < 1)
+		self.alpha += 0.1;	
+	frameskip(0.1);
+};
+
+void() spawn_pedestrian4 =
+{
+	if (self.cnt < 1)
+	{
+		entity ped = spawn();
+
+		ped.movetype = MOVETYPE_STEP;
+		ped.takedamage = DAMAGE_YES;
+		ped.solid = SOLID_TRIGGER;
+		ped.touch = pedestrian_touch;
+		ped.scale = 0.75;
+		ped.owner = self;
+		ped.classname = "pedestrian";
+		ped.alpha = 0;
+		ped.health = 1;
+		ped.th_die = pedestrian_die;
+		ped.think = pedestrian4_think;
+		ped.nextthink = time;
+
+		setmodel(ped, "progs/ped4.spr");
+		setsize(ped, '8 8 -22', '8 8 8');
+		setorigin(ped, self.origin);
+
+		self.cnt += 1; // 3 peds max per spawner
+	}
+	self.nextthink = time + 60 + random()*30; // spawn timer
+};
+
 void() pedestrian =
 {
 	if (!ragewar)
@@ -268,7 +312,6 @@ void() pedestrian =
 	{
 		precache_model ("progs/ped1.spr");
 		precache_model ("progs/ped1_d.spr");
-
 		self.think = spawn_pedestrian1;
 		self.nextthink = time + 0.2;
 	}
@@ -276,7 +319,6 @@ void() pedestrian =
 	if (self.spawnflags & 1) // Jumping flag dude
 	{
 		precache_model ("progs/ped2.spr");
-
 		self.think = spawn_pedestrian2;
 		self.nextthink = time + 0.2;
 	}
@@ -284,8 +326,14 @@ void() pedestrian =
 	if (self.spawnflags & 2) // Jiving guy
 	{
 		precache_model ("progs/ped3.spr");
-
 		self.think = spawn_pedestrian3;
+		self.nextthink = time + 0.2;
+	}
+
+	if (self.spawnflags & 4) // Lazy chair lad
+	{
+		precache_model ("progs/ped4.spr");
+		self.think = spawn_pedestrian4;
 		self.nextthink = time + 0.2;
 	}
 };
