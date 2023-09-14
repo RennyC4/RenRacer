@@ -15,12 +15,11 @@ void() waypoint_touch =
 
 	if (cvar("developer") == 2)
 		sprint (other.owner.driving, "Waypoint_touch: ", ftos(self.waypoint), " / ", ftos(total_waypoints), "\n");
-	//bprint (other.owner.driving.classname, "\n");
 };
 
 void(vector org, float which, optional float cnt) create_waypoint =
 {
-	local entity wp = spawn();
+	entity wp = spawn();
 	wp.classname = "bot_waypoint";
 	wp.solid = SOLID_TRIGGER;
 	wp.movetype = MOVETYPE_NONE;
@@ -43,6 +42,11 @@ void(vector org, float which, optional float cnt) create_waypoint =
 // Mapper placed entity
 void() bot_waypoint =
 {
+	if (ragewar)
+	{
+		remove(self);
+		return;
+	}
 	self.classname = "bot_waypoint";
 	self.solid = SOLID_TRIGGER;
 	self.movetype = MOVETYPE_NONE;
