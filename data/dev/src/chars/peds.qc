@@ -8,6 +8,21 @@
 
 void(vector org, vector dir, float size) ThrowBlood;
 
+void(float speed) pedestrian_move =
+{
+	if (self.think_finished < time || self.cnt2 > 2)
+	{
+		self.cnt2 = 0;
+		self.angles_y = random()*360;
+		self.think_finished = time + 1 + random()*4;
+	}
+	if (self.oldorigin == self.origin)
+		self.cnt2 += 1;
+
+	self.oldorigin = self.origin;
+	walkmove(self.angles_y, speed);
+};
+
 void() pedestrian_fly_die =
 {
 	if (self.alpha > 0.1)
@@ -34,9 +49,10 @@ void() pedestrian_die =
 
 	sound (self, CHAN_AUTO, "combat/hitped.wav", 1, ATTN_NORM); // TODO: needs new sound
 
+	self.modelflags = 32; // blood
+
 	if (!self.owner.spawnflags)
 	{
-		self.modelflags = 32; // blood
 		self.frame = 0;
 		setmodel(self, "progs/ped1_d.spr"); // death sprite
 	}
@@ -44,6 +60,11 @@ void() pedestrian_die =
 	{
 		self.modelflags = 32; // blood
 		self.frame = 0;
+	}
+	if (self.owner.spawnflags & 2) // Jiving weirdo
+	{
+		self.modelflags = 32; // blood
+		self.frame = 4;
 	}
 
 	self.movetype = MOVETYPE_NOCLIP;
@@ -93,18 +114,7 @@ void() pedestrian1_think =
 			self.frame = 0;
 		self.animation_finished = time + 0.25;
 	}
-	if (self.think_finished < time || self.cnt2 > 2)
-	{
-		self.cnt2 = 0;
-		self.angles_y = random()*360;
-		self.think_finished = time + 1 + random()*4;
-	}
-	if (self.oldorigin == self.origin)
-		self.cnt2 += 1;
-
-	self.oldorigin = self.origin;
-	walkmove(self.angles_y, 5);
-	
+	pedestrian_move(5);
 	frameskip(0.1);
 };
 
@@ -136,6 +146,10 @@ void() spawn_pedestrian1 =
 	}
 	self.nextthink = time + 60 + random()*30; // spawn timer
 };
+
+//
+// Pedestrian: Jumping flag dude
+//
 
 void() pedestrian2_think =
 {
@@ -182,10 +196,60 @@ void() spawn_pedestrian2 =
 	self.nextthink = time + 60 + random()*30; // spawn timer
 };
 
+//
+// Pedestrian: Jiving guy
+//
 
-//
-// Pedestrian: Jumping flag dude
-//
+void() pedestrian3_think =
+{
+	if (self.alpha < 1)
+		self.alpha += 0.1;
+	if (self.animation_finished < time)
+	{
+		if (!self.frags)
+			self.frame += 1;
+		else
+			self.frame -= 1;
+		
+		if (self.frame > 2)
+			self.frags = TRUE;
+		else if (self.frame < 1)
+			self.frags = FALSE;
+
+		self.animation_finished = time + 0.25;
+	}
+	pedestrian_move(3);
+	frameskip(0.1);
+};
+
+void() spawn_pedestrian3 =
+{
+	if (self.cnt < 2)
+	{
+		entity ped = spawn();
+
+		ped.movetype = MOVETYPE_STEP;
+		ped.takedamage = DAMAGE_YES;
+		ped.solid = SOLID_TRIGGER;
+		ped.touch = pedestrian_touch;
+		ped.scale = 0.75;
+		ped.owner = self;
+		ped.classname = "pedestrian";
+		ped.alpha = 0;
+		ped.health = 1;
+		ped.th_die = pedestrian_die;
+
+		setmodel(ped, "progs/ped3.spr");
+		setsize(ped, '8 8 -22', '8 8 8');
+		setorigin(ped, self.origin);
+
+		ped.think = pedestrian3_think;
+		ped.nextthink = time;
+
+		self.cnt += 1; // 3 peds max per spawner
+	}
+	self.nextthink = time + 60 + random()*30; // spawn timer
+};
 
 void() pedestrian =
 {
@@ -214,6 +278,14 @@ void() pedestrian =
 		precache_model ("progs/ped2.spr");
 
 		self.think = spawn_pedestrian2;
+		self.nextthink = time + 0.2;
+	}
+
+	if (self.spawnflags & 2) // Jiving guy
+	{
+		precache_model ("progs/ped3.spr");
+
+		self.think = spawn_pedestrian3;
 		self.nextthink = time + 0.2;
 	}
 };

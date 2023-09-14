@@ -254,4 +254,5 @@
 {
 "classname" "pedestrian"
 "origin" "352 -144 88"
+"spawnflags" "3"
 }

@@ -6279,3 +6279,15 @@
 ( 1952 -560 212 ) ( 1952 -559 212 ) ( 1952 -559 20 ) skip [ 0 1 0 12 ] [ 0 0 -1 44 ] 0 1 -1
 }
 }
+// entity 112
+{
+"classname" "pedestrian"
+"origin" "-2872 360 44"
+"spawnflags" "2"
+}
+// entity 113
+{
+"classname" "pedestrian"
+"origin" "2504 280 44"
+"spawnflags" "2"
+}
