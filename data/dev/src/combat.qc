@@ -369,7 +369,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 5) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			if(ragewar)stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
 			self.special_regen_finished = time + 60; // regen time
 		}
 	}
@@ -378,7 +378,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 4) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			if(ragewar)stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
 			self.special_regen_finished = time + 35; // regen time
 		}
 	}
@@ -387,7 +387,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 5) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			if(ragewar)stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
 			self.special_regen_finished = time + 35; // regen time
 		}
 	}
@@ -396,7 +396,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 5) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			if(ragewar)stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
 			self.special_regen_finished = time + 60; // regen time
 		}
 	}
@@ -405,7 +405,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 6) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			if(ragewar)stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
 			self.special_regen_finished = time + 10; // regen time
 		}
 	}
@@ -414,7 +414,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 3) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			if(ragewar)stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
 			self.special_regen_finished = time + 55; // regen time
 		}
 	}
@@ -423,7 +423,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 5) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			if(ragewar)stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
 			self.special_regen_finished = time + 35; // regen time
 		}
 	}
@@ -432,7 +432,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 5) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			if(ragewar)stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
 			self.special_regen_finished = time + 18; // regen time
 		}
 	}
@@ -441,7 +441,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 3) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			if(ragewar)stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
 			self.special_regen_finished = time + 35; // regen time
 		}
 	}
@@ -450,7 +450,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 1) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			if(ragewar)stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
 			self.special_regen_finished = time + 1; // regen time
 		}
 	}
@@ -459,7 +459,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 3) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			if(ragewar)stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
 			self.special_regen_finished = time + 70; // regen time
 		}
 	}
