@@ -8,7 +8,7 @@ entity() hotrod =
 	self.health = self.max_health = 120; // max health is also armor
 	self.speed = 2000; // also acceleration
 	self.max_speed = 825;
-	self.handling = 45; // low handling
+	self.handling = 50; // lowish handling
 
 	local entity obj, part;
 

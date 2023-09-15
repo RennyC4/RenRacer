@@ -5,10 +5,10 @@
 entity() sandroamer =
 {
 	self.vehicle = VEH_SANDROAMER;
-	self.health = self.max_health = 80; // max health is also armor
+	self.health = self.max_health = 100; // max health is also armor
 	self.speed = 1750; // also acceleration
-	self.max_speed = 825;
-	self.handling = 75; // goof handling
+	self.max_speed = 955;
+	self.handling = 45; // low handling
 
 	local entity obj, part;
 
