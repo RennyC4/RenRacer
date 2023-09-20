@@ -528,6 +528,7 @@ float VEH_MINCEMEAT = 64;
 float VEH_STREETKING = 128;
 float VEH_SANDROAMER = 256;
 float VEH_THOROGOOD = 512;
+float VEH_TRUCKCAB = 1024;
 // Ammo
 .float ammo_firerocket, ammo_homingrocket, ammo_powerrocket, ammo_napalm, ammo_rico, ammo_remote, ammo_freeze, ammo_special;
 
