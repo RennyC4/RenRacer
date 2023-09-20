@@ -142,7 +142,7 @@ void() spawn_pedestrian1 =
 		ped.th_die = pedestrian_die;
 
 		setmodel(ped, "progs/ped1.spr");
-		setsize(ped, '8 8 -22', '8 8 8');
+		setsize(ped, '-16 -16 -22', '16 16 8');
 		setorigin(ped, self.origin);
 
 		ped.think = pedestrian1_think;
@@ -191,7 +191,7 @@ void() spawn_pedestrian2 =
 		ped.th_die = pedestrian_die;
 
 		setmodel(ped, "progs/ped2.spr");
-		setsize(ped, '8 8 -22', '8 8 8');
+		setsize(ped, '-16 -16 -22', '16 16 8');
 		setorigin(ped, self.origin);
 
 		ped.think = pedestrian2_think;
@@ -246,7 +246,7 @@ void() spawn_pedestrian3 =
 		ped.th_die = pedestrian_die;
 
 		setmodel(ped, "progs/ped3.spr");
-		setsize(ped, '8 8 -22', '8 8 8');
+		setsize(ped, '-16 -16 -22', '16 16 8');
 		setorigin(ped, self.origin);
 
 		ped.think = pedestrian3_think;
@@ -288,7 +288,7 @@ void() spawn_pedestrian4 =
 		ped.nextthink = time;
 
 		setmodel(ped, "progs/ped4.spr");
-		setsize(ped, '8 8 -22', '8 8 8');
+		setsize(ped, '-16 -16 -22', '16 16 8');
 		setorigin(ped, self.origin);
 
 		self.cnt += 1; // 3 peds max per spawner
