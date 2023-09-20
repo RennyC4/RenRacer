@@ -77,6 +77,7 @@ void() pedestrian_die =
 	self.velocity_x = other.velocity_x;
 	self.velocity_y = other.velocity_y;
 	self.velocity_z = 250;
+	self.effects = EF_ADDITIVE;
 	self.think = pedestrian_fly_die;
 	self.nextthink = time + 0.2;
 
