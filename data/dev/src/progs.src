@@ -38,7 +38,7 @@ chars/v_mincemeat.qc
 chars/v_streetking.qc
 chars/v_sandroamer.qc
 chars/v_thorogood.qc
-chars/v_truckcab.qc
+chars/v_nightshade.qc
 //
 
 chars/peds.qc // Pedestrian

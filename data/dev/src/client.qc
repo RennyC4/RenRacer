@@ -271,7 +271,7 @@ void() PlayerPreThink =
 				if (self.vehicle == VEH_ROADBASTARD)
 					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Road Bastard^7\nSpecial Weapon: ^5Boomerang^7\n\nSpecial: [***  ]\nSpeed: [***  ]\nHandling: [***  ]\nArmor: [***  ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 				if (self.vehicle == VEH_SKYSCRAPER)
-					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Sky Scraper^7\nSpecial Weapon: ^5Big Crush^7\n\nSpecial: [**** ]\nSpeed: [*    ]\nHandling: [*    ]\nArmor: [*****]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
+					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Sky Scraper^7\nSpecial Weapon: ^5Big Crush^7\n\nSpecial: [**** ]\nSpeed: [*    ]\nHandling: [*    ]\nArmor: [**** ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 				if (self.vehicle == VEH_REDRAGE)
 					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Red Rage^7\nSpecial Weapon: ^5Crimson Beam^7\n\nSpecial: [*    ]\nSpeed: [*****]\nHandling: [*****]\nArmor: [*     ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 				if (self.vehicle == VEH_LAWBREAKER)
@@ -286,8 +286,8 @@ void() PlayerPreThink =
 					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Sand Roamer^7\nSpecial Weapon: ^5Sand Storm^7\n\nSpecial: [**** ]\nSpeed: [***  ]\nHandling: [**   ]\nArmor: [***  ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 				if (self.vehicle == VEH_THOROGOOD)
 					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Thorogood^7\nSpecial Weapon: ^5Hell Spawn^7\n\nSpecial: [*****]\nSpeed: [**** ]\nHandling: [*****]\nArmor: [*     ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
-				if (self.vehicle == VEH_TRUCKCAB)
-					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Truck Cab^7\nSpecial Weapon: ^5Something cool I hope^7\n\nSpecial: [**** ]\nSpeed: [*    ]\nHandling: [*   ]\nArmor: [*****]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
+				if (self.vehicle == VEH_NIGHTSHADE)
+					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Nightshade^7\nSpecial Weapon: ^5Something cool I hope^7\n\nSpecial: [*   ]\nSpeed: [*    ]\nHandling: [*   ]\nArmor: [*****]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 
 
 			}
@@ -318,7 +318,7 @@ void() PlayerPreThink =
 					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1Sand Roamer^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
 				if (self.vehicle == VEH_THOROGOOD)
 					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1Thorogood^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
-				if (self.vehicle == VEH_TRUCKCAB)
+				if (self.vehicle == VEH_NIGHTSHADE)
 					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1Truck Cab^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
 
 
@@ -402,8 +402,8 @@ void() PlayerPreThink =
 					car = sandroamer();
 				if (self.vehicle == VEH_THOROGOOD)
 					car = thorogood();
-				if (self.vehicle == VEH_TRUCKCAB)
-					car = truckcab();
+				if (self.vehicle == VEH_NIGHTSHADE)
+					car = nightshade();
 
 
 				makevectors(self.angles);

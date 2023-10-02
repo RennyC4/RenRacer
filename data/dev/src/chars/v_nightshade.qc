@@ -1,11 +1,11 @@
 //
-// truck cab - car 12
+// nightshade - car 12
 //
 
-entity() truckcab =
+entity() nightshade =
 {
-	self.vehicle = VEH_TRUCKCAB;
-	self.health = self.max_health = 150; // max health is also armor
+	self.vehicle = VEH_NIGHTSHADE;
+	self.health = self.max_health = 200; // max health is also armor
 	self.speed = 1250; // also acceleration
 	self.max_speed = 700;
 	self.handling = 35; // poor handling
@@ -13,7 +13,7 @@ entity() truckcab =
 	local entity obj, part;
 
 	obj = spawn();
-	obj.netname = "truckcab";
+	obj.netname = "nightshade";
 	obj.physobj_mass = 1000; // RennyC: This is used for car collision stuff, doesn't affect RenRacer
 	obj.physobj_impactevent = PushAndDamageTarget;
 	setorigin(obj, self.origin);
@@ -28,7 +28,7 @@ entity() truckcab =
 	part.owner = obj;
 	part.classname = "phys_static";
 	part.netname = "chassis";
-	part.model = "progs/truckcab.mdl";
+	part.model = "progs/Nightshade_body.mdl";
 	part.relative_org = '0 0 0';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
@@ -96,7 +96,7 @@ entity() truckcab =
 	part.owner = obj;
 	part.classname = "phys_static";
 	part.netname = "frontleft";
-	part.model = "progs/truckcab_wheel_f.mdl";
+	part.model = "progs/Nightshade_wheel_f.mdl";
 	part.relative_org = '43.5 30 -24';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
@@ -131,7 +131,7 @@ entity() truckcab =
 	part.owner = obj;
 	part.classname = "phys_static";
 	part.netname = "frontright";
-	part.model = "progs/truckcab_wheel_f.mdl";
+	part.model = "progs/Nightshade_wheel_f.mdl";
 	part.relative_org = '43.5 -30 -24';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
@@ -166,7 +166,7 @@ entity() truckcab =
 	part.owner = obj;
 	part.classname = "phys_static";
 	part.netname = "backleft";
-	part.model = "progs/truckcab_wheel_b.mdl";
+	part.model = "progs/Nightshade_wheel_b.mdl";
 	part.relative_org = '-43.5 30 -24';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
@@ -201,7 +201,7 @@ entity() truckcab =
 	part.owner = obj;
 	part.classname = "phys_static";
 	part.netname = "backright";
-	part.model = "progs/truckcab_wheel_b.mdl";
+	part.model = "progs/Nightshade_wheel_b.mdl";
 	part.relative_org = '-43.5 -30 -24';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
@@ -219,7 +219,7 @@ entity() truckcab =
 	part.owner = obj;
 	part.classname = "phys_particle";
 	part.netname = "point";
-	part.relative_org = '57 0 -5';
+	part.relative_org = '65 0 -5';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
@@ -259,7 +259,7 @@ entity() truckcab =
 	part.owner = obj;
 	part.classname = "phys_particle";
 	part.netname = "point";
-	part.relative_org = '-110 0 -8';
+	part.relative_org = '-118 0 -8';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';

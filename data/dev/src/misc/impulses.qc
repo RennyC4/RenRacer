@@ -31,14 +31,14 @@ void() CarSwap_Forward =
 	else if (self.vehicle == VEH_SANDROAMER)
 		self.vehicle = VEH_THOROGOOD;
 	else if (self.vehicle == VEH_THOROGOOD)
-		self.vehicle = VEH_TRUCKCAB;
-	else if (self.vehicle == VEH_TRUCKCAB)
+		self.vehicle = VEH_NIGHTSHADE;
+	else if (self.vehicle == VEH_NIGHTSHADE)
 		self.vehicle = VEH_HOTROD;
 };
 
 void() CarSwap_Backward =
 {
-	if (self.vehicle == VEH_TRUCKCAB)
+	if (self.vehicle == VEH_NIGHTSHADE)
 		self.vehicle = VEH_THOROGOOD;
 	else if (self.vehicle == VEH_THOROGOOD)
 		self.vehicle = VEH_SANDROAMER;
@@ -61,7 +61,7 @@ void() CarSwap_Backward =
 	else if (self.vehicle == VEH_WRAITH)
 		self.vehicle = VEH_HOTROD;
 	else if (self.vehicle == VEH_HOTROD)
-		self.vehicle = VEH_TRUCKCAB;
+		self.vehicle = VEH_NIGHTSHADE;
 };
 
 void() CheckImpulses =

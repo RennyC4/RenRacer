@@ -665,10 +665,10 @@ void() Fire_MachineGun =
 		newloc = '38 6 4.5';
 		newloc2 = '38 16 4.5';
 	}
-	else if (self.vehicle == VEH_TRUCKCAB)
+	else if (self.vehicle == VEH_NIGHTSHADE)
 	{
-		newloc = '84 23 12';
-		newloc2 = '84 23 12';
+		newloc = '102 23 13';
+		newloc2 = '102 23 13';
 	}
 	//
 
