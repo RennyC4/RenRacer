@@ -574,7 +574,8 @@ void() PlayerPostThink =
 	{
 		if (!self.observer)
 			PushPlayers();
-		SpecialRegenerate();
+		if (ragewar)
+			SpecialRegenerate();
 	}
 	if (self.forcejump)
 	{

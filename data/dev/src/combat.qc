@@ -369,7 +369,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 5) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			if(ragewar)stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
 			self.special_regen_finished = time + 60; // regen time
 		}
 	}
@@ -378,7 +378,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 4) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			if(ragewar)stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
 			self.special_regen_finished = time + 35; // regen time
 		}
 	}
@@ -387,7 +387,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 5) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			if(ragewar)stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
 			self.special_regen_finished = time + 35; // regen time
 		}
 	}
@@ -396,7 +396,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 5) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			if(ragewar)stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
 			self.special_regen_finished = time + 60; // regen time
 		}
 	}
@@ -405,7 +405,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 6) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			if(ragewar)stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
 			self.special_regen_finished = time + 10; // regen time
 		}
 	}
@@ -414,7 +414,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 3) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			if(ragewar)stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
 			self.special_regen_finished = time + 55; // regen time
 		}
 	}
@@ -423,7 +423,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 5) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			if(ragewar)stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
 			self.special_regen_finished = time + 35; // regen time
 		}
 	}
@@ -432,7 +432,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 5) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			if(ragewar)stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
 			self.special_regen_finished = time + 18; // regen time
 		}
 	}
@@ -441,7 +441,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 3) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			if(ragewar)stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
 			self.special_regen_finished = time + 35; // regen time
 		}
 	}
@@ -450,7 +450,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 1) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			if(ragewar)stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
 			self.special_regen_finished = time + 1; // regen time
 		}
 	}
@@ -459,8 +459,17 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 3) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			if(ragewar)stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
 			self.special_regen_finished = time + 70; // regen time
+		}
+	}
+	if (self.vehicle == VEH_NIGHTSHADE)
+	{
+		if (self.ammo_special < 1) // max held
+		{
+			self.ammo_special = self.ammo_special + 1;
+			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			self.special_regen_finished = time + 1; // regen time
 		}
 	}
 };
@@ -571,7 +580,7 @@ void() Fire_MachineGun =
 	setsize (bullet, '0 0 0', '0 0 0');
 
 	// Muzzleflash - flat
-	local entity mflash1 = spawn();
+	entity mflash1 = spawn();
 	mflash1.movetype = MOVETYPE_NONE;
 	mflash1.owner = self;
 	mflash1.solid = SOLID_NOT;
@@ -585,7 +594,7 @@ void() Fire_MachineGun =
 	setsize (mflash1, '0 0 0', '0 0 0');
 
 	// Muzzleflash - side
-	local entity mflash2 = spawn();
+	entity mflash2 = spawn();
 	mflash2.movetype = MOVETYPE_NONE;
 	mflash2.owner = self;
 	mflash2.solid = SOLID_NOT;
@@ -742,7 +751,7 @@ void() Rocket_Think =
 
 	if (self.enemy) // Home in on enemy
 	{
-		local vector vele, vels, ph;
+		vector vele, vels, ph;
 		vele = normalize(self.enemy.origin - self.origin);
 		vels = normalize(self.velocity);
 		ph = vele + (vels * 4);
@@ -848,7 +857,10 @@ void() Rocket_Touch =
 
 void(float type, float rear, float rzrbck_pos) Fire_Rocket =
 {
-	local entity rocket = spawn();
+	entity rocket = spawn();
+	float spawn_dist = 48;
+	if (self.vehicle == VEH_NIGHTSHADE)
+		spawn_dist = 64;
 
 	makevectors (self.realang);
 	if (rear)
@@ -919,15 +931,15 @@ void(float type, float rear, float rzrbck_pos) Fire_Rocket =
 	setsize (rocket, '0 0 0', '0 0 0');
 
 	if (type != 3)
-		setorigin (rocket, self.origin + v_up * 8 + v_forward * (48 + self.realspeed));
+		setorigin (rocket, self.origin + v_up * 8 + v_forward * (spawn_dist + self.realspeed));
 	else // razorback missile positions
 	{
 		if (!rzrbck_pos)
-			setorigin (rocket, self.origin + v_up * 32 + v_forward * (48 + self.realspeed));
+			setorigin (rocket, self.origin + v_up * 32 + v_forward * (spawn_dist + self.realspeed));
 		else if (rzrbck_pos == 1)
-			setorigin (rocket, self.origin + v_up * 16 + v_forward * (48 + self.realspeed) + v_right * 32);
+			setorigin (rocket, self.origin + v_up * 16 + v_forward * (spawn_dist + self.realspeed) + v_right * 32);
 		else
-			setorigin (rocket, self.origin + v_up * 16 + v_forward * (48 + self.realspeed) - v_right * 32);
+			setorigin (rocket, self.origin + v_up * 16 + v_forward * (spawn_dist + self.realspeed) - v_right * 32);
 	}
 
 	sound (self, CHAN_WEAPON, "combat/rocket.wav", 1, ATTN_NORM);
@@ -1064,7 +1076,7 @@ void() Napalm_Think =
 		self.gravity = 1.75;
 	if (self.enemy && self.velocity_z <= 0) // Home in on enemy
 	{
-		local vector vele, vels, ph;
+		vector vele, vels, ph;
 		vele = normalize(self.enemy.origin - self.origin);
 		vels = normalize(self.velocity);
 		ph = vele + (vels * 4);
@@ -1204,7 +1216,10 @@ void() Rico_Think =
 
 void(float rear) Fire_Ricochet =
 {
-	local entity rico = spawn();
+	entity rico = spawn();
+	float spawn_dist = 48;
+	if (self.vehicle == VEH_NIGHTSHADE)
+		spawn_dist = 64;
 
 	makevectors (self.realang);
 	
@@ -1236,7 +1251,7 @@ void(float rear) Fire_Ricochet =
 
 	setmodel (rico, "progs/ricochet.mdl");
 	setsize (rico, '0 0 0', '0 0 0');
-	setorigin (rico, self.origin + v_forward * (48 + self.realspeed));
+	setorigin (rico, self.origin + v_forward * (spawn_dist + self.realspeed));
 
 	sound (self, CHAN_WEAPON, "combat/ricochet.wav", 1, ATTN_NORM);
 
@@ -1268,7 +1283,7 @@ void() Remote_Think =
 		return;
 	}
 
-	// touched
+	// touch function
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
 		if (vlen(targ.origin - self.origin) <= 10 && targ != self.owner)
@@ -1294,11 +1309,6 @@ void() RemoteSignal_Think =
 		return;
 	}
 	frameskip(0.1);
-};
-
-void() Remote_Touch =
-{
-
 };
 
 void() Fire_Remote =
@@ -1366,7 +1376,7 @@ void() Freeze_Think =
 
 	if (self.enemy) // Home in on enemy
 	{
-		local vector vele, vels, ph;
+		vector vele, vels, ph;
 		vele = normalize(self.enemy.origin - self.origin);
 		vels = normalize(self.velocity);
 		ph = vele + (vels * 4);
@@ -1424,7 +1434,10 @@ void() Freeze_Touch =
 
 void(float rear) Fire_Freeze =
 {
-	local entity freeze = spawn();
+	entity freeze = spawn();
+	float spawn_dist = 48;
+	if (self.vehicle == VEH_NIGHTSHADE)
+		spawn_dist = 64;
 
 	makevectors (self.realang);
 	
@@ -1461,7 +1474,7 @@ void(float rear) Fire_Freeze =
 
 	setmodel (freeze, "progs/frzsmk.spr");
 	setsize (freeze, '0 0 0', '0 0 0');
-	setorigin (freeze, self.origin + v_up * 8 + v_forward * (40 + self.realspeed));
+	setorigin (freeze, self.origin + v_up * 8 + v_forward * (spawn_dist + self.realspeed));
 
 	sound (self, CHAN_WEAPON, "combat/freeze.wav", 1, ATTN_NORM);
 
@@ -1513,7 +1526,7 @@ void() Landmine_Think =
 
 void() Fire_Landmine =
 {
-	local entity landmine = spawn();
+	entity landmine = spawn();
 	landmine.owner = self;
 	landmine.solid = SOLID_TRIGGER;
 	landmine.movetype = MOVETYPE_TOSS;
@@ -2296,7 +2309,7 @@ void() SpecialWeapon_MinceMeat_Think =
 
 	if (self.enemy) // Home in on enemy
 	{
-		local vector vele, vels, ph;
+		vector vele, vels, ph;
 		vele = normalize(self.enemy.origin - self.origin);
 		vels = normalize(self.velocity);
 		ph = vele + (vels * 4);
