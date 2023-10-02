@@ -662,8 +662,8 @@ void() Fire_MachineGun =
 	}
 	else if (self.vehicle == VEH_THOROGOOD)
 	{
-		newloc = '51 0 2.5';
-		newloc2 = '51 12 2.5';
+		newloc = '38 6 4.5';
+		newloc2 = '38 16 4.5';
 	}
 	else if (self.vehicle == VEH_TRUCKCAB)
 	{

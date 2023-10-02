@@ -250,7 +250,7 @@ void(float r, float g, float b, float light, entity spawner) spawn_color_glow =
 
 	glowy.movetype = MOVETYPE_NOCLIP;
 	setorigin (glowy, spawner.origin + v_up*10);
-	setmodel (glowy, "progs/*null");
+	setmodel (glowy, "*null");
 	setsize (glowy, '0 0 0', '0 0 0');
 	glowy.solid = SOLID_NOT;
 	glowy.classname = "glowy";

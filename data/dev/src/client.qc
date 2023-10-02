@@ -600,7 +600,7 @@ void() PlayerPostThink =
 					trail1.colormod = '1 10 10';
 				}
 				else
-					setmodel (trail1, "progs/*null");
+					setmodel (trail1, "*null");
 
 				setsize (trail1, '0 0 0', '0 0 0');
 

@@ -30,7 +30,7 @@ void(vector org, float which, optional float cnt) create_waypoint =
 	if (cvar("developer") == 2)
 		setmodel (wp, "progs/s_debug.spr");
 	else
-		setmodel (wp, "progs/*null");
+		setmodel (wp, "*null");
 
 	setorigin(wp, org);
 	setsize (wp, '-128 -128 -128', '128 128 128'); // bigger touch box
@@ -56,7 +56,7 @@ void() bot_waypoint =
 	if (cvar("developer") == 2)
 		setmodel (self, "progs/s_debug.spr");
 	else
-		setmodel (self, "progs/*null");
+		setmodel (self, "*null");
 
 	setsize (self, '-128 -128 -128', '128 128 128'); // bigger touch box
 

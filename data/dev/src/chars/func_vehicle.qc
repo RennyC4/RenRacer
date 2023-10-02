@@ -1089,7 +1089,7 @@ void() func_vehicle =
 		precache_model("progs/debug/org.mdl");
 		precache_model("progs/debug/orgbig.mdl");
 	}
-	precache_model("progs/*null");
+	precache_model("*null");
 
 	self.think = StartFuncVehicle;
 	self.nextthink = 0.2;
@@ -1239,7 +1239,7 @@ void() vehicle_hotrod =
 		precache_model("progs/debug/org.mdl");
 		precache_model("progs/debug/orgbig.mdl");
 	}
-	precache_model("progs/*null");
+	precache_model("*null");
 
 	precache_model("progs/HotRod_body.mdl");
 	precache_model("progs/HotRod_roof.mdl");
