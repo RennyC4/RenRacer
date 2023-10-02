@@ -245,6 +245,7 @@ entity FindStaticOfName(string name, entity obj){
 void(entity car) Car_InitVehicle =
 {
 	local entity e;
+	local float hasStabilizer;
 
 	e = car.physobj_particlelist;
 	while (e)
@@ -259,6 +260,7 @@ void(entity car) Car_InitVehicle =
 			car.backleft = e;
 		e = e.physobj_next;
 	}
+	hasStabilizer = FALSE;
 	if (car.frontright && car.frontleft){
 		e = car.physobj_sticklist;
 		while (e)
@@ -266,12 +268,18 @@ void(entity car) Car_InitVehicle =
 			if (e.physobj_p1 == car.frontright || e.physobj_p2 == car.frontright){
 				if (e.physobj_p1 == car.frontleft || e.physobj_p2 == car.frontleft){
 					e.physobj_flags |= PHFLAGS_STABILIZERBAR;
+					hasStabilizer = TRUE;
 					break;
 				}
 			}
 			e = e.physobj_next;
 		}
+		if (!hasStabilizer){ // we better make one then
+			e = Phys_ObjectAddStick(car.frontright, car.frontleft, car);
+			Phys_ObjectAddStick(car.frontright, car.frontleft, car);
+		}
 	}
+	hasStabilizer = FALSE;
 	if (car.backright && car.backleft){
 		e = car.physobj_sticklist;
 		while (e)
@@ -279,10 +287,15 @@ void(entity car) Car_InitVehicle =
 			if (e.physobj_p1 == car.backright || e.physobj_p2 == car.backright){
 				if (e.physobj_p1 == car.backleft || e.physobj_p2 == car.backleft){
 					e.physobj_flags |= PHFLAGS_STABILIZERBAR;
+					hasStabilizer = TRUE;
 					break;
 				}
 			}
 			e = e.physobj_next;
+		}
+		if (!hasStabilizer){ // we better make one then
+			e = Phys_ObjectAddStick(car.backright, car.backleft, car);
+			Phys_ObjectAddStick(car.backright, car.backleft, car);
 		}
 	}
 	e = car.physobj_staticlist;
@@ -1055,7 +1068,7 @@ void() StartFuncVehicle =
 		}
 	}
 
-	Phys_MakeIntoPhysicsObject(self, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
+	Phys_MakeIntoPhysicsObject(self, self.origin, matrix_forward, matrix_left, matrix_up, '0 0 1', 0);
 	self.physobj_impactevent = PushAndDamageTarget;
 	Car_InitVehicle(self);
 }
@@ -1238,6 +1251,6 @@ void() vehicle_hotrod =
 	car.spawnflags = self.spawnflags;
 	
 	makevectors(self.angles);
-	car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
+	car = Phys_MakeIntoPhysicsObject(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
 	Car_InitVehicle(car);
 };

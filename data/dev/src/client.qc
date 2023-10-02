@@ -407,7 +407,8 @@ void() PlayerPreThink =
 
 
 				makevectors(self.angles);
-				car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
+				//car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
+				car = Phys_MakeIntoPhysicsObject(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
 				Car_InitVehicle(car);
 				self.spawncar = TRUE;
 				Spawn_RadarBlip(self);

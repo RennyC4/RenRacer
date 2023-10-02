@@ -436,7 +436,8 @@ void() CarReset =
 		car = thorogood();
 
 	makevectors(self.angles);
-	car = Phys_ObjectCreate(car, self.origin + v_up * 64, v_forward, -v_right, v_up, '0 0 1', 0);
+	//car = Phys_ObjectCreate(car, self.origin + v_up * 64, v_forward, -v_right, v_up, '0 0 1', 0);
+	car = Phys_MakeIntoPhysicsObject(car, self.origin + v_up * 64, v_forward, -v_right, v_up, '0 0 1', 0);
 	Car_InitVehicle(car);
 	self.car_reset_finished = time + 60;
 };
@@ -471,6 +472,7 @@ void(entity targ, vector newang) car_setangle =
 		car = razorback();
 
 	makevectors(targ.angles);
-	car = Phys_ObjectCreate(car, targ.origin + v_up * 64, v_forward, -v_right, v_up, '0 0 1', 0);
+//	car = Phys_ObjectCreate(car, targ.origin + v_up * 64, v_forward, -v_right, v_up, '0 0 1', 0);
+	car = Phys_MakeIntoPhysicsObject(car, self.origin + v_up * 64, v_forward, -v_right, v_up, '0 0 1', 0);
 	Car_InitVehicle(car);
 };

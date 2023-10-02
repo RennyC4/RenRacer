@@ -16,6 +16,7 @@ entity() wraith =
 	obj.netname = "wraith";
 	obj.physobj_mass = 1000; // RennyC: This is used for car collision stuff, doesn't affect RenRacer
 	obj.physobj_impactevent = PushAndDamageTarget;
+	setorigin(obj, self.origin);
 
 	//
 	// body / chassis
@@ -467,8 +468,5 @@ entity() wraith =
 	part.relative_up = '0 0 1';
 	part.th_pain = Car_Pain;
 
-	physobj_spawning = obj;
-	Phys_SpawnSticks();
-
-	return physobj_spawning;
+	return obj;
 }

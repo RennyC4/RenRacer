@@ -177,6 +177,7 @@ void() worldspawn =
 	precache_model("progs/Thorogood_Body.mdl");
 	precache_model("progs/Thorogood_Driver.mdl");
 	precache_model("progs/Thorogood_Wheel.mdl");
+	precache_model("progs/Thorogood_Sidecar.mdl");
 
 	//
 	// func_vehicle - end

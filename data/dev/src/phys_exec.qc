@@ -297,8 +297,69 @@ void(float ftime, float sv_gravity) Phys_Acceleration =
 
 const float STABILITY_MULTIPLIER = 1; // lower values make the object more soft, but less prone to randomly exploding
 
-// Run constraints on all particles
-void(float ftime) Phys_Constraints =
+vector(entity p1, entity p2, entity p3) GetGradient =
+{
+	vector p2p1 = p2.origin - p1.origin;
+	vector p3p1 = p3.origin - p1.origin;
+
+	return crossproduct(p2p1, p3p1);
+}
+
+// Run constraints on all tetras
+void(float ftime) Phys_Constraints_Volume =
+{
+	float C, wTotal, lambda;
+	float current_volume, rest_volume;
+	entity p1, p2, p3, p4, tetra;
+	vector grad1, grad2, grad3, grad4;
+	float w1, w2, w3, w4;
+
+	tetra = self.physobj_tetralist;
+	while(tetra)
+	{
+		wTotal = 0.0;
+
+		p1 = tetra.physobj_p1;
+		p2 = tetra.physobj_p2;
+		p3 = tetra.physobj_p3;
+		p4 = tetra.physobj_p4;
+
+		w1 = p1.physobj_inversemass;
+		w2 = p2.physobj_inversemass;
+		w3 = p3.physobj_inversemass;
+		w4 = p4.physobj_inversemass;
+
+		grad1 = GetGradient(p2, p4, p3);
+		wTotal += w1 * vlensqr(grad1);
+
+		grad2 = GetGradient(p1, p3, p4);
+		wTotal += w2 * vlensqr(grad2);
+
+		grad3 = GetGradient(p1, p4, p2);
+		wTotal += w3 * vlensqr(grad3);
+
+		grad4 = GetGradient(p1, p2, p3);
+		wTotal += w4 * vlensqr(grad4);
+
+		if (wTotal == 0)
+			continue;
+
+		current_volume = GetTetraVolumeSextupled(tetra, FALSE);
+		rest_volume = tetra.phys_volume;
+		C = current_volume - rest_volume;
+		lambda = -C / wTotal;
+
+		p1.destorigin += grad1 * lambda * w1;
+		p2.destorigin += grad2 * lambda * w2;
+		p3.destorigin += grad3 * lambda * w3;
+		p4.destorigin += grad4 * lambda * w4;
+
+		tetra = tetra.physobj_next;
+	}
+};
+
+// Run constraints on all sticks
+void(float ftime) Phys_Constraints_Linear =
 {
 	local float offsetlength, diff, lendiff;
 	local vector offset;
@@ -315,21 +376,13 @@ void(float ftime) Phys_Constraints =
 		if (stick.physobj_flags & PHFLAGS_STABILIZERBAR){
 			float p1_mult = p2.physobj_floor_frac - p1.physobj_floor_frac;
 			float p2_mult = p1.physobj_floor_frac - p2.physobj_floor_frac;
-
-			float stabilizer = stick.owner.driving.car_stabilizer; // RennyC
-
+			
 			if (p1_mult < 0)
-			{
-				p1.physobj_spring_mult = remap(p1_mult + 1, 0, 1, stabilizer, 1); // RennyC
-				//p1.physobj_spring_mult = remap(p1_mult + 1, 0, 1, -0.5, 1); //Original value
-			}
+				p1.physobj_spring_mult = remap(p1_mult + 1, 0, 1, -0.5, 1);
 			else
 				p1.physobj_spring_mult = 1;
 			if (p2_mult < 0)
-			{
-				p2.physobj_spring_mult = remap(p2_mult + 1, 0, 1, stabilizer, 1); // RennyC
-				//p2.physobj_spring_mult = remap(p2_mult + 1, 0, 1, -0.5, 1); // Original value
-			}
+				p2.physobj_spring_mult = remap(p2_mult + 1, 0, 1, -0.5, 1);
 			else
 				p2.physobj_spring_mult = 1;
 		}
@@ -742,7 +795,8 @@ void() Phys_ObjectThink =
 		{
 			steps--;
 			Phys_Acceleration(ftime*0.5, sv_gravity);
-			Phys_Constraints(ftime);
+			Phys_Constraints_Volume(ftime);
+			Phys_Constraints_Linear(ftime);
 			Phys_Move(ftime);
 			Phys_Acceleration(ftime*0.5, sv_gravity);
 		}
@@ -1081,9 +1135,36 @@ entity(vector org, entity basepart, entity obj) Phys_SpawnHitmodel =
 	return Phys_InitHitmodel(org, e, obj);
 };
 
+entity(entity basepart, entity obj) Phys_SpawnTetra =
+{
+	local entity e;
+
+	e = spawn();
+	e.classname = "tetra";
+	e.owner = obj;
+	if (e.owner)
+	{
+		e.physobj_next = obj.physobj_tetralist;
+		obj.physobj_tetralist = e;
+	}
+	if (basepart)
+	{
+		e.netname = basepart.netname;
+		e.phys_volume = basepart.phys_volume;
+		e.phys_radius = basepart.phys_radius;
+		e.phys_center = basepart.phys_center;
+		e.physobj_p1 = basepart.physobj_p1.enemy;
+		e.physobj_p2 = basepart.physobj_p2.enemy;
+		e.physobj_p3 = basepart.physobj_p3.enemy;
+		e.physobj_p4 = basepart.physobj_p4.enemy;
+		e.physobj_flags = basepart.physobj_flags;
+	}
+	return e;
+};
+
 entity(entity basepart, entity obj) Phys_SpawnStick =
 {
-	local entity e, p1, p2;
+	local entity e;
 
 	e = spawn();
 	e.classname = "stick";
@@ -1096,17 +1177,10 @@ entity(entity basepart, entity obj) Phys_SpawnStick =
 	if (basepart)
 	{
 		e.netname = basepart.netname;
-		e.physobj_p1 = p1 = basepart.physobj_p1.enemy;
-		e.physobj_p2 = p2 = basepart.physobj_p2.enemy;
+		e.physobj_p1 = basepart.physobj_p1.enemy;
+		e.physobj_p2 = basepart.physobj_p2.enemy;
 		e.physobj_flags = basepart.physobj_flags;
 		e.stick_preferredlength = basepart.stick_preferredlength;
-
-		if (p1.stick_preferredlength <= 0)
-			p1.stick_preferredlength = 99999999;
-		p1.stick_preferredlength = min(p1.stick_preferredlength, e.stick_preferredlength*0.5);
-		if (p2.stick_preferredlength <= 0)
-			p2.stick_preferredlength = 99999999;
-		p2.stick_preferredlength = min(p2.stick_preferredlength, e.stick_preferredlength*0.5);
 	}
 	return e;
 };
@@ -1119,6 +1193,7 @@ entity(entity basepart) Phys_ObjectSpawn =
 	e.netname = basepart.netname;
 	e.physobj_mass = basepart.physobj_mass;
 	e.physobj_impactevent = basepart.physobj_impactevent;
+	setorigin(e, basepart.origin);
 	e.think = Phys_ObjectThink;
 	e.nextthink = time;
 	//e.contentstransition = SUB_Null;
@@ -1213,49 +1288,9 @@ void(entity part, entity object) Phys_ObjectRemoveParticle =
 	remove(part);
 };
 
-const float STICK_SIMILARITY_THRESHOLD = 0.97; // raise to make less wobbly
-
-float(vector v, entity p1, entity p2) CheckStickSimilarity =
+entity(entity p1, entity p2, entity obj) Phys_ObjectAddStick =
 {
-	vector v_other = normalize(p1.relative_org - p2.relative_org);
-	if (fabs(v * v_other) > STICK_SIMILARITY_THRESHOLD) // similar direction
-		return TRUE; // this stick doesn't contribute to stability enough
-	return FALSE;
-}
-
-entity(entity p1, entity p2, entity obj, float force_add) Phys_ObjectAddStick =
-{
-	local vector v;
-	local entity e;
-	local float isStabilizerBar;
-
-	if (p1.netname == "frontright" || p2.netname == "frontright")
-	if (p1.netname == "frontleft"  || p2.netname == "frontleft")
-		isStabilizerBar = TRUE;
-	if (p1.netname == "backright"  || p2.netname == "backright")
-	if (p1.netname == "backleft"   || p2.netname == "backleft")
-		isStabilizerBar = TRUE;
-
-	if (!force_add && !isStabilizerBar)
-	{
-		v = normalize(p1.relative_org - p2.relative_org);
-		e = p1.physobj_next;
-		while(e)
-		{
-			if (e != p2 && CheckStickSimilarity(v, p1, e))
-				return world;
-			e = e.physobj_next;
-		}
-		e = p2.physobj_next;
-		while(e)
-		{
-			if (e != p1 && CheckStickSimilarity(v, p2, e))
-				return world;
-			e = e.physobj_next;
-		}
-	}
-
-	e = spawn();
+	entity e = spawn();
 	e.classname = "stick";
 	e.owner = obj;
 	if (e.owner)
@@ -1266,13 +1301,6 @@ entity(entity p1, entity p2, entity obj, float force_add) Phys_ObjectAddStick =
 	e.physobj_p1 = p1;
 	e.physobj_p2 = p2;
 	e.stick_preferredlength = vlen(p2.relative_org - p1.relative_org);
-	// the following is used by the physics to prevent sign errors
-	if (p1.stick_preferredlength <= 0)
-		p1.stick_preferredlength = 99999999;
-	p1.stick_preferredlength = min(p1.stick_preferredlength, e.stick_preferredlength*0.5);
-	if (p2.stick_preferredlength <= 0)
-		p2.stick_preferredlength = 99999999;
-	p2.stick_preferredlength = min(p2.stick_preferredlength, e.stick_preferredlength*0.5);
 	return e;
 };
 
@@ -1303,7 +1331,7 @@ entity(vector org, entity object) Phys_AddParticleToObject =
 	{
 		save_rel = part.relative_org;
 		part.relative_org = part.origin;
-		stick = Phys_ObjectAddStick(e, part, world, FALSE);
+		stick = Phys_ObjectAddStick(e, part, world);
 		part.relative_org = save_rel;
 		stick.owner = object;
 		end.physobj_next = stick;
@@ -1334,7 +1362,7 @@ void() Phys_SpawnSticks =
 		while (f < total_particles)
 		{
 			part2 = part2.physobj_next;
-			if (Phys_ObjectAddStick(part1, part2, physobj_spawning, FALSE))
+			if (Phys_ObjectAddStick(part1, part2, physobj_spawning))
 				total_sticks++;
 			f = f + 1;
 		}
@@ -1414,7 +1442,7 @@ entity(entity obj, vector org, vector forward, vector left, vector up) Phys_Init
 entity(entity obj, vector org, vector forward, vector left, vector up, vector toss, float randvel) Phys_MakeIntoPhysicsObject =
 {
 	local entity e;
-	local vector com;
+	local vector com, v;
 	local float particleCount;
 
 	physobj_spawning = obj;
@@ -1427,23 +1455,27 @@ entity(entity obj, vector org, vector forward, vector left, vector up, vector to
 	e = obj.physobj_particlelist;
 	while(e)
 	{
-		Phys_InitParticle(e.origin, e, physobj_spawning);
+		v = org + up*e.relative_org_z + left*e.relative_org_y + forward*e.relative_org_x;
+		Phys_InitParticle(v, e, physobj_spawning);
 		setvelocity(e, toss + randomvec()*randvel);
 		com += e.relative_org * e.part_mass;
 		e = e.physobj_next;
 		particleCount++;
 	}
-	Phys_SpawnSticks();
+	GenerateTetrahedrons(obj);
+	GenerateSticksFromTetrahedrons(obj);
 	e = obj.physobj_hitmodel;
 	while(e)
 	{
-		Phys_InitHitmodel(e.origin, e, physobj_spawning);
+		v = org + up*e.relative_org_z + left*e.relative_org_y + forward*e.relative_org_x;
+		Phys_InitHitmodel(v, e, physobj_spawning);
 		e = e.physobj_next;
 	}
 	e = obj.physobj_staticlist;
 	while(e)
 	{
-		Phys_InitStatic(e.origin, e, physobj_spawning);
+		v = org + up*e.relative_org_z + left*e.relative_org_y + forward*e.relative_org_x;
+		Phys_InitStatic(v, e, physobj_spawning);
 		e = e.physobj_next;
 	}
 	if (cvar("developer") != 0) {
@@ -1473,6 +1505,12 @@ entity(entity obj, vector org, vector forward, vector left, vector up, vector to
 		com += e.relative_org * e.part_mass;
 		e = e.physobj_next;
 		particleCount++;
+	}
+	e = obj.physobj_tetralist;
+	while (e)
+	{
+		Phys_SpawnTetra(e, physobj_spawning);
+		e = e.physobj_next;
 	}
 	e = obj.physobj_sticklist;
 	while (e)
