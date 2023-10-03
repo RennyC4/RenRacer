@@ -376,13 +376,14 @@ void(float ftime) Phys_Constraints_Linear =
 		if (stick.physobj_flags & PHFLAGS_STABILIZERBAR){
 			float p1_mult = p2.physobj_floor_frac - p1.physobj_floor_frac;
 			float p2_mult = p1.physobj_floor_frac - p2.physobj_floor_frac;
-			
+
+			float stabilizer = stick.owner.driving.car_stabilizer; // RennyC
 			if (p1_mult < 0)
-				p1.physobj_spring_mult = remap(p1_mult + 1, 0, 1, -0.5, 1);
+				p1.physobj_spring_mult = remap(p1_mult + 1, 0, 1, stabilizer, 1);
 			else
 				p1.physobj_spring_mult = 1;
 			if (p2_mult < 0)
-				p2.physobj_spring_mult = remap(p2_mult + 1, 0, 1, -0.5, 1);
+				p2.physobj_spring_mult = remap(p2_mult + 1, 0, 1, stabilizer, 1);
 			else
 				p2.physobj_spring_mult = 1;
 		}
