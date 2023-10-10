@@ -716,30 +716,33 @@ void() PlayerPostThink =
 		self.waterlevel = 0;
 
 	// EF_BRIGHTFIELD effects handler
-	if (!ragewar)
+	if (self.driving)
 	{
-		if (self.waterlevel > 0)
-			self.effects |= EF_BRIGHTFIELD;
-		else
-			self.effects &= ~(EF_BRIGHTFIELD);
-	}
-	else
-	{
-		if (self.invulnerable_finished > time)
+		if (!ragewar)
 		{
-			self.effects |= EF_BRIGHTFIELD;
-			if (self.onfire_finished > time)
-				self.onfire_finished = time;
-			if (self.frozen_finished > time)
-				self.frozen_finished = time;
-			if (self.blind_finished > time)
-				self.blind_finished = time;
+			if (self.waterlevel > 0)
+				self.effects |= EF_BRIGHTFIELD;
+			else
+				self.effects &= ~(EF_BRIGHTFIELD);
 		}
 		else
-			self.effects &= ~(EF_BRIGHTFIELD);
+		{
+			if (self.invulnerable_finished > time)
+			{
+				self.effects |= EF_BRIGHTFIELD;
+				if (self.onfire_finished > time)
+					self.onfire_finished = time;
+				if (self.frozen_finished > time)
+					self.frozen_finished = time;
+				if (self.blind_finished > time)
+					self.blind_finished = time;
+			}
+			else
+				self.effects &= ~(EF_BRIGHTFIELD);
 
-		if (self.onfire_finished > time && self.waterlevel > 0)
-			self.onfire_finished = time; // water removes fire
+			if (self.onfire_finished > time && self.waterlevel > 0)
+				self.onfire_finished = time; // water removes fire
+		}
 	}
 
 	if (self.driving && ragewar && self.health > 0 && self.invulnerable_finished < time && race_status == RACE_STARTED)
