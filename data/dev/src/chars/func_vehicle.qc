@@ -728,7 +728,7 @@ void TryUpdateVehicle(){
 		// RennyC: Speed Booster
 		if (self.speed > 0 && self.speedboost_finished > time)
 		{
-			self.car_stabilizer = -6; // Harder to tip while speed boosting
+			self.car_stabilizer = -2; // Harder to tip while speed boosting
 			car_boost(self.speed);
 			if (!self.waterlevel)
 				pointparticles(PART_SPEEDBOOST, self.origin - v_up * 16 - v_forward * 32, '0 0 0', 1);
@@ -830,7 +830,7 @@ void TryUpdateVehicle(){
 			{
 				if (!self.driftspeed_timer)
 					self.driftspeed_timer = 10;
-				self.car_stabilizer = -6; // Harder to tip while drifting (lowers chassis)
+				self.car_stabilizer = -2; // Harder to tip while drifting (lowers chassis)
 				car_drift();
 				if (self.turbo_fuel < 100)
 					self.turbo_fuel = self.turbo_fuel + 1; // Drift adds turbo fuel
