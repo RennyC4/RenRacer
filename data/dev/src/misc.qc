@@ -397,6 +397,34 @@ void(entity targ, vector dest, float silent, float stop) car_teleport =
 	}
 };
 
+// Alternative teleport + angle setting by Urre
+void(entity obj, vector org, vector rot, float keep_velocity) TeleportPhysObject =
+{
+	local entity e;
+	local vector v, forward, left, up;
+
+	makevectors(rot);
+	forward = v_forward;
+	left = -v_right;
+	up = v_up;
+
+	obj.physobj_flags -= (obj.physobj_flags & PHFLAGS_RESTING);
+
+	e = obj.physobj_particlelist;
+	while(e)
+	{
+		v = org + up*e.relative_org_z + left*e.relative_org_y + forward*e.relative_org_x;
+		e.physobj_flags -= (e.physobj_flags & PHFLAGS_RESTING);
+
+		setorigin(e, v);
+		e.destorigin = e.pushorigin = e.oldorigin = e.origin;
+		//if (!keep_velocity) // FIXME: need to figure out how to make this relative to orientation
+			setvelocity(e, 0);
+
+		e = e.physobj_next;
+	}
+};
+
 // Resets car: may be needed if stuck or physics explode hopefully this can be removed someday
 void() CarReset =
 {
@@ -440,39 +468,4 @@ void() CarReset =
 	car = Phys_MakeIntoPhysicsObject(car, self.origin + v_up * 64, v_forward, -v_right, v_up, '0 0 1', 0);
 	Car_InitVehicle(car);
 	self.car_reset_finished = time + 60;
-};
-
-// directly set the car angles WIP
-// this function sucks
-void(entity targ, vector newang) car_setangle =
-{
-	bprint ("car_setangle called\n");
-
-	// remove car
-	remove_car(targ.driving);
-
-	// set angle
-	targ.angles = newang;
-	targ.fixangle = TRUE;
-
-	// Recreate car
-	if (targ.vehicle == VEH_HOTROD)
-		entity car = hotrod();
-	if (targ.vehicle == VEH_WRAITH)
-		car = wraith();
-	if (targ.vehicle == VEH_ROADBASTARD)
-		car = roadbastard();
-	if (targ.vehicle == VEH_SKYSCRAPER)
-		car = skyscraper();
-	if (targ.vehicle == VEH_REDRAGE)
-		car = redrage();
-	if (targ.vehicle == VEH_LAWBREAKER)
-		car = lawbreaker();
-	if (targ.vehicle == VEH_RAZORBACK)
-		car = razorback();
-
-	makevectors(targ.angles);
-//	car = Phys_ObjectCreate(car, targ.origin + v_up * 64, v_forward, -v_right, v_up, '0 0 1', 0);
-	car = Phys_MakeIntoPhysicsObject(car, self.origin + v_up * 64, v_forward, -v_right, v_up, '0 0 1', 0);
-	Car_InitVehicle(car);
 };
