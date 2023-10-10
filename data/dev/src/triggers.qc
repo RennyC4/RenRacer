@@ -26,6 +26,8 @@ void() trigger_teleport_touch =
 {
 	if (!other.owner.driving)
 		return;
+	if (other.owner.driving.teleport_finished > time)
+		return;
 	if (other.owner.driving.health <= 0)
 		return;
 
@@ -41,9 +43,13 @@ void() trigger_teleport_touch =
 		stop = FALSE;
 
 	if !(self.spawnflags & 1)
-		car_teleport(toucher, e.origin, FALSE, stop);
+	{
+		TeleportPhysObject(toucher.driving, e.origin, e.mangle, stop);
+		spawn_telesfx(toucher);
+		spawn_televfx(toucher);
+	}
 	else
-		car_teleport(toucher, e.origin, TRUE, stop);
+		TeleportPhysObject(toucher.driving, e.origin, e.mangle, stop);
 	
 	toucher.teleport_finished = time + 1;
 };

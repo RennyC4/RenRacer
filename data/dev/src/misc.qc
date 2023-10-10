@@ -352,6 +352,7 @@ void(entity car) remove_car =
 	Phys_ObjectRemove(car);
 };
 
+/* OBSOLETE
 // Huge thanks to spike for the help with displacement
 void(entity targ, vector dest, float silent, float stop) car_teleport =
 {
@@ -373,7 +374,7 @@ void(entity targ, vector dest, float silent, float stop) car_teleport =
 		WriteCoord (MSG_BROADCAST, targ.origin_y);
 		WriteCoord (MSG_BROADCAST, targ.origin_z);
 	}
-	
+
 	entity part = targ.driving.physobj_particlelist;
 	vector displacement = dest - targ.origin;
     while(part)
@@ -385,7 +386,7 @@ void(entity targ, vector dest, float silent, float stop) car_teleport =
 			part.velocity = part.velocity / 1000;
 		part = part.physobj_next;
 	}
-	
+
 	if (!silent)
 	{
 		WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
@@ -395,6 +396,25 @@ void(entity targ, vector dest, float silent, float stop) car_teleport =
 		WriteCoord (MSG_BROADCAST, dest_z);
 		targ.alpha = 0.1; // Teleport effect
 	}
+};
+*/
+
+void(entity ent) spawn_telesfx =
+{
+	if (random() < 0.5)
+		sound (ent, CHAN_AUTO, "teleport1.wav", 1, ATTN_NORM);
+	else
+		sound (ent, CHAN_AUTO, "teleport2.wav", 1, ATTN_NORM);
+};
+
+void(entity ent) spawn_televfx =
+{
+	ent.alpha = 0.5;
+	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte (MSG_BROADCAST, TE_TELEPORT);
+	WriteCoord (MSG_BROADCAST, ent.origin_x);
+	WriteCoord (MSG_BROADCAST, ent.origin_y);
+	WriteCoord (MSG_BROADCAST, ent.origin_z);
 };
 
 // Alternative teleport + angle setting by Urre

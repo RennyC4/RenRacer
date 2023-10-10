@@ -494,8 +494,10 @@ void() RespawnPlayer =
 	self.enemy_displayname = "";
 	self.enemy_displayhealth = 0;
 	self.enemy_displaymaxhealth = 0;
-	TeleportPhysObject(self.driving, self.spawn_loc, self.spawn_loc, TRUE);
-	//car_teleport(self, self.spawn_loc, FALSE, TRUE);
+	// FIXME: Call for a new respawn location
+	TeleportPhysObject(self.driving, self.spawn_loc, self.spawn_loc_angles, FALSE);
+	spawn_telesfx(self);
+	spawn_televfx(self);
 	self.invulnerable_finished = time + 5; // disallow damage / firing
 	centerprint(self, "");
 	self.clearcprint_finished = time + 0.1;
