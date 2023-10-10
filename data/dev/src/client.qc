@@ -484,6 +484,8 @@ void() snailtrail_think =
 
 void() RespawnPlayer =
 {
+	entity spawn_spot = SelectSpawnSpot();
+
 	self.health = self.max_health;
 	self.colormod = '0 0 0';
 	self.deathcount = 0;
@@ -494,8 +496,9 @@ void() RespawnPlayer =
 	self.enemy_displayname = "";
 	self.enemy_displayhealth = 0;
 	self.enemy_displaymaxhealth = 0;
-	// FIXME: Call for a new respawn location
-	TeleportPhysObject(self.driving, self.spawn_loc, self.spawn_loc_angles, FALSE);
+	self.angles = spawn_spot.angles;
+	self.fixangle = TRUE;	
+	TeleportPhysObject(self.driving, spawn_spot.origin, spawn_spot.angles, FALSE);
 	spawn_telesfx(self);
 	spawn_televfx(self);
 	self.invulnerable_finished = time + 5; // disallow damage / firing
