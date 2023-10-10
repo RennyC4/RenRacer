@@ -42,6 +42,7 @@ this notice in its entirety.
 
 */
 
+void(entity obj, vector org, vector rot, float keep_velocity) TeleportPhysObject;
 void() headlights_on;
 void() headlights_off;
 void(entity targ, vector dest, float silent, float stop) car_teleport;
@@ -319,7 +320,7 @@ float stagger_think;
 
 void() BotAI =
 {
-	if (cvar("developer") == 2)
+	if (cvar("developer") == 2 && ragewar)
 		return;
 
 	// Traceline: Bot hit/close to wall

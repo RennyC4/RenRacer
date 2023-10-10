@@ -154,7 +154,11 @@ void() bot_ai_race =
 				if (race_status == RACE_STARTED)
 				{
 					if (!visible(self.goalentity))
+					{
 						self.bot_search_count = self.bot_search_count + 1; // count till targ switch
+						if (cvar("developer") == 2)
+							bprint ("Bot_search_count: ", ftos(self.bot_search_count), "\n");
+					}
 					else
 						self.bot_search_count = 0;
 				}
@@ -164,7 +168,7 @@ void() bot_ai_race =
 				{
 					for (entity targ = world;(targ = find(targ, classname, "player"));)
 					{
-						if (!visible(targ) && targ.trail.cnt && (targ.checkpoint > self.checkpoint || targ.waypoint > self.waypoint))
+						if (clienttype(targ) == CLIENTTYPE_REAL && !visible(targ) && targ.trail.cnt && (targ.checkpoint > self.checkpoint || targ.waypoint > self.waypoint))
 						{
 							// Steal player stats & update goal entities
 							if (targ.checkpoint > self.checkpoint)
@@ -182,16 +186,19 @@ void() bot_ai_race =
 
 							self.checkpoint_lastpos = targ.checkpoint_lastpos;
 							self.angles_y = targ.trail.angles_y;
-							self.fixangle = TRUE; // Is this needed?
+							self.fixangle = TRUE;
 							//
 							self.goalentity_time = 0;
 							self.bot_search_count = 0;
 							self.collide_finished = time + 1; // Don't bump player on teleport
 							makevectors(self.realang);
-							car_teleport(self, targ.trail.origin, TRUE, FALSE);
+
+							//car_teleport(self, targ.trail.origin, TRUE, FALSE);
+							TeleportPhysObject(self.driving, targ.trail.origin, targ.trail.angles, TRUE);
+
 							self.bot_search_count = 0;
 
-							if (cvar("developer") == 2)							
+							if (cvar("developer") == 2)
 								bprint ("Teleported bot to player trail entity\n");
 						}
 					}
@@ -200,7 +207,7 @@ void() bot_ai_race =
 			}
 
 			if (self.goalentity.classname == "bot_waypoint_goal")
-				local float goforgoal = TRUE;
+				float goforgoal = TRUE;
 			else
 				goforgoal = FALSE;
 

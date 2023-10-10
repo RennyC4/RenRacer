@@ -235,7 +235,7 @@ void() PlayerPreThink =
 {
 	if (cvar("developer") == 1) // Coord/Angle reporting, helps insert entities in hmp maps
 	{
-		local string x,y,z,ang_y,ang_x;
+		string x,y,z,ang_y,ang_x;
 		x = ftos(self.origin_x);
 		y = ftos(self.origin_y);
 		z = ftos(self.origin_z);
@@ -473,7 +473,7 @@ void() snailtrail_think =
 		return;
 	}
 
-	local float len = vlen(self.origin - self.owner.origin);
+	float len = vlen(self.origin - self.owner.origin);
 	if (len > 800) // Update trail origin
 	{
 		self.angles = self.owner.angles;
@@ -494,7 +494,8 @@ void() RespawnPlayer =
 	self.enemy_displayname = "";
 	self.enemy_displayhealth = 0;
 	self.enemy_displaymaxhealth = 0;
-	car_teleport(self, self.spawn_loc, FALSE, TRUE);
+	TeleportPhysObject(self.driving, self.spawn_loc, self.spawn_loc, TRUE);
+	//car_teleport(self, self.spawn_loc, FALSE, TRUE);
 	self.invulnerable_finished = time + 5; // disallow damage / firing
 	centerprint(self, "");
 	self.clearcprint_finished = time + 0.1;
@@ -586,11 +587,11 @@ void() PlayerPostThink =
 
 	if (!ragewar) // racing
 	{
-		if (self.ishuman && race_status == RACE_STARTED && self.driving) // Player snail trail waypoint
+		if (clienttype(self) == CLIENTTYPE_REAL && race_status == RACE_STARTED && self.driving) // Player snail trail waypoint
 		{
 			if (!self.trail)
 			{
-				local entity trail1 = spawn();
+				entity trail1 = spawn();
 				trail1.owner = self;
 				self.trail = trail1;
 				trail1.classname = "trail1";
@@ -604,6 +605,7 @@ void() PlayerPostThink =
 					setmodel (trail1, "*null");
 
 				setsize (trail1, '0 0 0', '0 0 0');
+				trail1.scale = 3;
 
 				trail1.think = snailtrail_think;
 				trail1.nextthink = time + 0.1;
@@ -611,7 +613,7 @@ void() PlayerPostThink =
 			else
 			{
 				makevectors(self.v_angle);
-				local float len = vlen(self.origin - self.trail.origin);
+				float len = vlen(self.origin - self.trail.origin);
 
 				if (infront2(self.trail, 0.3) || len < 250) // Removed visible();
 					self.trail.cnt = FALSE; // Frikbots can't teleport if the snail trail is being looked at
@@ -698,8 +700,8 @@ void() PlayerPostThink =
 	//
 	// Get liquid level - RennyC
 	//
-	local float contents = 0;
-	local vector point = self.origin;
+	float contents = 0;
+	vector point = self.origin;
 
 	point_z = point_z + self.mins_z + 1; // get the minimum water depth (waterlevel 1)
 	contents = pointcontents(point);
