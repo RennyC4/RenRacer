@@ -30,7 +30,7 @@ void() bot_ai_race =
 			if (self.checkpoint == self.goalentity.checkpoint) // Find next target
 			{
 				//if (self.findcheckpoint_fail > 1) // Reached the end of valid checkpoints
-				if (self.checkpoint == total_checkpoints)
+				if (self.checkpoint >= total_checkpoints)
 				{
 					self.goalentity = self.goalentity_goal;
 					self.goalentity_time = 0; // reset goalentity timer
@@ -57,9 +57,9 @@ void() bot_ai_race =
 
 	if (self.goalentity.classname != "bot_waypoint_goal")
 	{
-		if (self.checkpoint == total_checkpoints) // Start searching for goal point once all checkpoints are hit
+		if (self.checkpoint >= total_checkpoints) // Start searching for goal point once all checkpoints are hit
 		{
-			local float findgp = FindGoalPoint();
+			float findgp = FindGoalPoint();
 			if (findgp)
 			{
 				self.goalentity = self.goalentity_goal;
@@ -69,13 +69,13 @@ void() bot_ai_race =
 		}
 		if (self.goalentity_checkpoint || self.goalentity_waypoint)
 		{
-			local float check_dist_wp;
+			float check_dist_wp;
 			if (!self.goalentity_waypoint)
 				check_dist_wp = 9999999; // Waypoints don't always exist, checkpoints do
 			else
 				check_dist_wp = vlen(self.origin - self.goalentity_waypoint.origin);
 
-			local float check_dist_cp = vlen(self.origin - self.goalentity_checkpoint.origin);
+			float check_dist_cp = vlen(self.origin - self.goalentity_checkpoint.origin);
 
 			if (check_dist_cp > check_dist_wp) // waypoint is closer than checkpoint/marker
 			{
@@ -131,8 +131,8 @@ void() bot_ai_race =
 		float r = vlen(self.origin - self.goalentity.origin) * 0.1; // Find distance to goalentity target
 
 		// Debug distance to goalentity
-		// local string f = ftos(self.realspeed);
-		// local string n = ftos(r);
+		// string f = ftos(self.realspeed);
+		// string n = ftos(r);
 		// bprint ("Speed: ", f, " Dist: ", n, "\n");
 
 		// Back up for randomly for a second, hit a wall/obstacle
@@ -310,9 +310,9 @@ void() bot_ai_race =
 		/*
 		// Debugging prints
 		bprint (self.goalentity.classname, "\n");
-		local string d1 = ftos (self.goalentity.origin_x);
-		local string d2 = ftos (self.goalentity.origin_y);
-		local string d3 = ftos (self.goalentity.origin_z);
+		string d1 = ftos (self.goalentity.origin_x);
+		string d2 = ftos (self.goalentity.origin_y);
+		string d3 = ftos (self.goalentity.origin_z);
 		bprint (d1, "\n");
 		bprint (d2, "\n");
 		bprint (d3, "\n");
