@@ -168,7 +168,7 @@ void() bot_ai_race =
 				{
 					for (entity targ = world;(targ = find(targ, classname, "player"));)
 					{
-						if (clienttype(targ) == CLIENTTYPE_REAL && !visible(targ) && targ.trail.cnt && (targ.checkpoint > self.checkpoint || targ.waypoint > self.waypoint))
+						if (clienttype(targ) == CLIENTTYPE_REAL && !visible(targ) && targ.trail.cnt && (targ.checkpoint > self.checkpoint || targ.waypoint > self.waypoint) && targ.lap >= self.lap)
 						{
 							// Steal player stats & update goal entities
 							if (targ.checkpoint > self.checkpoint)
@@ -181,6 +181,8 @@ void() bot_ai_race =
 								self.waypoint = targ.waypoint;
 								FindWayPoint();
 							}
+							if (!self.goal_touched)
+								self.goal_touched = TRUE;
 							if (targ.lap > self.lap)
 								self.lap = targ.lap;
 
