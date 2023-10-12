@@ -94,7 +94,10 @@ void() worldspawn =
 	PART_GROCKET = particleeffectnum("ghostrocket");
 	PART_HOTDOGSPLAT = particleeffectnum("hotdogsplat");
 
+	precache_model("*null");
 	precache_model("progs/null.spr");
+	precache_model("progs/debug/org.mdl");
+	precache_model("progs/debug/orgbig.mdl");
 	precache_model("progs/s_debug.spr");
 	precache_model("progs/bullet.mdl");
 	precache_model("progs/rocket.mdl");
@@ -119,6 +122,7 @@ void() worldspawn =
 	precache_model("progs/turret_b.mdl");
 	precache_model("progs/demon.spr");
 	precache_model("progs/blood.spr");
+	precache_model("progs/sandstrm.mdl");
 
 	//
 	// func_vehicle - start
@@ -131,11 +135,8 @@ void() worldspawn =
 
 	// hotrod
 	precache_model("progs/HotRod_body.mdl");
-	precache_model("progs/HotRod_roof.mdl");
-	precache_model("progs/HotRod_wheel_front_L.mdl");
-	precache_model("progs/HotRod_wheel_rear_L.mdl");
-	precache_model("progs/HotRod_wheel_front_R.mdl");
-	precache_model("progs/HotRod_wheel_rear_R.mdl");
+	precache_model("progs/HotRod_wheel_front.mdl");
+	precache_model("progs/HotRod_wheel_rear.mdl");
 
 	// wraith
 	precache_model("progs/Wraith_body.mdl");
@@ -169,6 +170,7 @@ void() worldspawn =
 
 	// street king
 	precache_model("progs/Streetking_body.mdl");
+	precache_model("progs/Streetking_wheel.mdl");
 
 	// sand roamer
 	precache_model("progs/SandRoamer_body.mdl");
@@ -211,9 +213,7 @@ void() worldspawn =
 	precache_sound ("hit3.wav");
 	precache_sound ("hit4.wav");
 	precache_sound ("spdboost.wav");
-
 	precache_sound ("misc/metlbrk.wav");
-
 	precache_sound ("combat/mgun.wav");
 	precache_sound ("combat/fire.wav");
 	precache_sound ("combat/rocket.wav");
@@ -258,6 +258,7 @@ void() worldspawn =
 	precache_sound ("combat/tur_spin.wav");
 	precache_sound ("combat/tur_sight.wav");
 	precache_sound ("combat/thorogood.wav");
+	precache_sound ("combat/sandstrm.wav");
 
 	world_lights();
 	load_waypoints(); // Load waypoints

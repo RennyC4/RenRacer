@@ -120,6 +120,11 @@ void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 		bprint(attacker.netname, "'s turret took care of ");
 		bprint(targ.netname, "\n");
 	}
+	if (attackerclassname == "sandstorm") // sand storm
+	{
+		bprint(attacker.netname, "'s sand storm decimated ");
+		bprint(targ.netname, "\n");
+	}
 };
 
 // ---
@@ -447,11 +452,11 @@ void() SpecialRegenerate =
 	}
 	if (self.vehicle == VEH_SANDROAMER)
 	{
-		if (self.ammo_special < 1) // max held
+		if (self.ammo_special < 5) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
 			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
-			self.special_regen_finished = time + 1; // regen time
+			self.special_regen_finished = time + 35; // regen time
 		}
 	}
 	if (self.vehicle == VEH_THOROGOOD)
@@ -2574,7 +2579,6 @@ void() SpecialWeapon_StreetKing =
 	sound (head, CHAN_BODY, "combat/tur_deploy.wav", 1, ATTN_NORM);
 };
 
-
 //
 // Special Weapon - Thorogood (Hell Spawn)
 //
@@ -2651,6 +2655,83 @@ void(float rear) SpecialWeapon_Thorogood =
 
 	setorigin (hellspawn, self.origin + v_up * 8 + v_forward * (48 + self.realspeed));
 	sound (self, CHAN_WEAPON, "combat/thorogood.wav", 1, ATTN_NORM);
+};
+
+//
+// Special Weapon - Sand Roamer (Sand Storm)
+//
+
+.float sandstormhit_finished;
+void() SpecialWeapon_SandRoamer_Think =
+{
+	if (self.cnt) // Fade out
+	{
+		self.effects = EF_ADDITIVE;
+		if (self.alpha > 0)
+			self.alpha -= 0.005;
+		else
+		{
+			remove(self);
+			return;
+		}
+	}
+
+	if (self.scale < 9) // Grow
+		self.scale += 0.1;
+	else
+		self.cnt = TRUE;
+
+	// Damage logic
+	float size = self.scale * 40;
+	if (!self.cnt)
+	{
+		for (entity targ = world;(targ = find(targ, classname, "player"));)
+		{
+			if (vlen(targ.origin - self.origin) <= size && targ != self.owner && targ.sandstormhit_finished < time)
+			{
+				targ.sandstormhit_finished = time + 2;
+				DoDamage(targ, self.owner, 20, self.classname);
+				Create2DExplosion(targ.origin, 1);
+				sound (targ, CHAN_AUTO, "combat/xplode.wav", 1, ATTN_NORM);
+				entity part = targ.driving.physobj_particlelist;
+				while(part)
+				{
+					part.velocity -= (self.origin + '0 0 1' - targ.origin) * 2.5;
+					part = part.physobj_next;
+				}
+			}
+		}
+	}
+
+	setorigin (self, self.owner.origin - v_up * 8);
+	frameskip(0.01);
+};
+
+void() SpecialWeapon_SandRoamer =
+{
+	entity twist;
+	makevectors_mdl (self.angles);
+
+	twist = spawn ();
+	twist.owner = self;
+	twist.movetype = MOVETYPE_NOCLIP;
+	twist.solid = SOLID_NOT;
+	twist.takedamage = DAMAGE_NO;
+
+	if (random() < 0.5)
+		twist.avelocity = '0 1000 0';
+	else
+		twist.avelocity = '0 -1000 0';
+
+	twist.alpha = 0.9;
+	twist.classname = "sandstorm";
+	twist.think = SpecialWeapon_SandRoamer_Think;
+	twist.nextthink = time;
+	setmodel (twist, "progs/sandstrm.mdl");
+	setsize (twist, '0 0 0', '0 0 0');
+	setorigin (twist, self.origin - v_up * 8);
+
+	sound (twist, CHAN_AUTO, "combat/sandstrm.wav", 1, ATTN_NORM);
 };
 
 //
@@ -3124,7 +3205,7 @@ void(float type, float rear) CarAttack =
 								SpecialWeapon_StreetKing();
 							else
 							{
-								sprint (self, "Only 3 turrets can be deployed\n");
+								sprint(self, "Only 3 turrets can be deployed\n");
 								self.spcl_finished = time + 1;
 								return;
 							}
@@ -3136,6 +3217,11 @@ void(float type, float rear) CarAttack =
 							return;
 						}
 					}
+					if (self.vehicle == VEH_SANDROAMER) // Sand Roamer special
+					{
+						SpecialWeapon_SandRoamer();
+						self.spcl_finished = time + 2; // fires slower
+					}					
 					if (self.vehicle == VEH_THOROGOOD) // Thorogood special
 					{
 						if (!rear)
@@ -3151,7 +3237,7 @@ void(float type, float rear) CarAttack =
 				else
 				{
 					sprint(self, "Special weapon bay empty!\n");
-					stuffcmd (self, "play combat/empty.wav\n");
+					stuffcmd(self, "play combat/empty.wav\n");
 				}
 				if (self.spcl_finished < time)
 					self.spcl_finished = time + 1;
