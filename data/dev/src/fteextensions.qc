@@ -2483,8 +2483,8 @@ float(float modidx, float framenum, int eventidx, __out float timestamp, __out i
 
 #endif
 #define dotproduct(v1,v2) ((vector)(v1)*(vector)(v2))
-//vector(vector v1, vector v2) crossproduct = #0:crossproduct; /* Part of FTE_QC_CROSSPRODUCT
-//		Small helper function to calculate the crossproduct of two vectors. */
+vector(vector v1, vector v2) crossproduct = #0:crossproduct; /* Part of FTE_QC_CROSSPRODUCT
+		Small helper function to calculate the crossproduct of two vectors. */
 
 #if defined(CSQC) || defined(SSQC)
 float(entity pusher, vector move, vector amove) pushmove = #0:pushmove;

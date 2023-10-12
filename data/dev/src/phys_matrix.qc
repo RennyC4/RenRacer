@@ -1,3 +1,4 @@
+/*
 vector(vector a, vector b) crossproduct =
 {
 	local vector v;
@@ -6,6 +7,7 @@ vector(vector a, vector b) crossproduct =
 	v_z = a_x * b_y - a_y * b_x;
 	return v;
 };
+*/
 
 // Rodriguez vector aka Axis angle rotation, thanks LadyHavoc
 void(vector axis, float angle) Matrix_RotateByAxisAngle =
