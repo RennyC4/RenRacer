@@ -19,7 +19,7 @@ entity() hotrod =
 	setorigin(obj, self.origin);
 
 	//
-	// body / chassis + roof
+	// body / chassis
 	//
 
 	part = spawn();
@@ -34,19 +34,6 @@ entity() hotrod =
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
 
-	/*
-	part = spawn();
-	part.physobj_next = obj.physobj_staticlist;
-	obj.physobj_staticlist = part;
-	part.owner = obj;
-	part.classname = "phys_static";
-	part.netname = "roof";
-	part.model = "progs/HotRod_roof.mdl";
-	part.relative_org = '0 0 0';
-	part.relative_forward = '1 0 0';
-	part.relative_left = '0 1 0';
-	part.relative_up = '0 0 1';
-	*/
 	//
 
 	//Guns for ragewar
@@ -59,7 +46,7 @@ entity() hotrod =
 		part.classname = "phys_static";
 		part.netname = "GunLeft";
 		part.model = "progs/mountedgun.mdl";
-		part.relative_org = '0 22 5';
+		part.relative_org = '0 18 5';
 		part.relative_forward = '1 0 0';
 		part.relative_left = '0 -1 0';
 		part.relative_up = '0 0 1';
@@ -71,7 +58,7 @@ entity() hotrod =
 		part.classname = "phys_static";
 		part.netname = "GunRight";
 		part.model = "progs/mountedgun.mdl";
-		part.relative_org = '0 -22 5';
+		part.relative_org = '0 -18 5';
 		part.relative_forward = '1 0 0';
 		part.relative_left = '0 1 0';
 		part.relative_up = '0 0 1';
@@ -233,7 +220,7 @@ entity() hotrod =
 	part.owner = obj;
 	part.classname = "phys_particle";
 	part.netname = "point";
-	part.relative_org = '54.4 0 11.6';
+	part.relative_org = '50 0 10';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
@@ -253,7 +240,7 @@ entity() hotrod =
 	part.owner = obj;
 	part.classname = "phys_particle";
 	part.netname = "point";
-	part.relative_org = '-15 0 25';
+	part.relative_org = '-5 0 22.5';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
@@ -273,7 +260,7 @@ entity() hotrod =
 	part.owner = obj;
 	part.classname = "phys_particle";
 	part.netname = "point";
-	part.relative_org = '-65.1 0 -10.9';
+	part.relative_org = '-55 0 -10';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';

@@ -621,8 +621,8 @@ void() Fire_MachineGun =
 	vector newloc, newloc2;
 	if (self.vehicle == VEH_HOTROD)
 	{
-		newloc = '35 22.5 10.5'; // mgun 1 (right)
-		newloc2 = '35 22.5 10.5'; // mgun 2 (left)
+		newloc = '32 18 2'; // mgun 1 (right)
+		newloc2 = '32 18 2'; // mgun 2 (left)
 	}
 	else if (self.vehicle == VEH_WRAITH)
 	{
@@ -1610,7 +1610,7 @@ void() SpecialWeapon_HotRod_Touch =
 			other.owner.driving.onfire_finished = time + 5;
 			other.owner.driving.igniter = self.owner;
 		}
-		self.hitobject_finished = time + 0.12; // how fast to damage
+		self.hitobject_finished = time + 0.1; // how fast to damage
 	}
 };
 
