@@ -191,7 +191,11 @@ void() bot_ai_fight =
 						self.weapon = WEP_SPECIAL;
 						self.button4 = TRUE;
 					}
-					// TODO: Add sandstorm
+					if (self.vehicle == VEH_SANDROAMER && (rangetest == RANGE_NEAR || rangetest == RANGE_CLOSE))
+					{
+						self.weapon = WEP_SPECIAL;
+						self.button4 = TRUE;
+					}
 					if (self.vehicle == VEH_THOROGOOD && (rangetest == RANGE_NEAR || rangetest == RANGE_CLOSE))
 					{
 						self.weapon = WEP_SPECIAL;
