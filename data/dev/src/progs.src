@@ -39,6 +39,7 @@ chars/v_streetking.qc
 chars/v_sandroamer.qc
 chars/v_thorogood.qc
 chars/v_nightshade.qc
+chars/v_servent.qc
 //
 
 chars/peds.qc // Pedestrian

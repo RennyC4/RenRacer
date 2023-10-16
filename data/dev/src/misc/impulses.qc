@@ -73,6 +73,13 @@ void() CheckImpulses =
 	if (self.impulse == 255)
 		CarReset();
 
+	if (self.impulse == 95)
+		{
+		self.vehicle = VEH_SERVENT;
+		stuffcmd (self, "play combat/servent.wav\n");
+		}
+
+
 	// Weapon / Car select cycle
 	if (self.impulse == 10)
 	{
