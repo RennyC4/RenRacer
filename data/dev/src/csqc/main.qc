@@ -106,17 +106,17 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 					if (vehicle_type == VEH_RAZORBACK)
 						soundupdate(engine_sound, CHAN_BODY, "engine/razorback.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
 					if (vehicle_type == VEH_MINCEMEAT)
-						soundupdate(engine_sound, CHAN_BODY, "engine/razorback.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
+						soundupdate(engine_sound, CHAN_BODY, "engine/mincemeat.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
 					if (vehicle_type == VEH_STREETKING)
 						soundupdate(engine_sound, CHAN_BODY, "engine/streetking.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
 					if (vehicle_type == VEH_SANDROAMER)
-						soundupdate(engine_sound, CHAN_BODY, "engine/hotrod.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
+						soundupdate(engine_sound, CHAN_BODY, "engine/sandroamer.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
 					if (vehicle_type == VEH_THOROGOOD)
-						soundupdate(engine_sound, CHAN_BODY, "engine/hotrod.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
+						soundupdate(engine_sound, CHAN_BODY, "engine/thorogood.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
 					if (vehicle_type == VEH_NIGHTSHADE)
-						soundupdate(engine_sound, CHAN_BODY, "engine/skyscraper.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
-					if (vehicle_type == VEH_servant)
-						soundupdate(engine_sound, CHAN_BODY, "engine/razorback.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
+						soundupdate(engine_sound, CHAN_BODY, "engine/nightshade.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
+					if (vehicle_type == VEH_SERVANT)
+						soundupdate(engine_sound, CHAN_BODY, "engine/servant.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
 				}
 				else
 					soundupdate(engine_sound, CHAN_BODY, __NULL__ , -1, 0, 0, 0, 0);
@@ -249,12 +249,19 @@ float(string strCommand) CSQC_ConsoleCommand =
 void() CSQC_WorldLoaded  =
 {
 	precache_model ("progs/v_speed.mdl");
+
+	// engine sounds
 	precache_sound ("engine/hotrod.wav");
 	precache_sound ("engine/wraith.wav");
 	precache_sound ("engine/roadbstrd.wav");
 	precache_sound ("engine/skyscraper.wav");
 	precache_sound ("engine/redrage.wav");
 	precache_sound ("engine/lawbreaker.wav");
+	precache_sound ("engine/mincemeat.wav");
+	precache_sound ("engine/nightshade.wav");
+	precache_sound ("engine/sandroamer.wav");
+	precache_sound ("engine/servant.wav");
+	precache_sound ("engine/thorogood.wav");
 
 	engine_sound = spawn();
 	if (world.model != "maps/map4.hmp")
