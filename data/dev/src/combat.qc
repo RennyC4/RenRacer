@@ -684,7 +684,7 @@ void() Fire_MachineGun =
 		newloc = '102 23 13';
 		newloc2 = '102 23 13';
 	}
-	else if (self.vehicle == VEH_SERVENT)
+	else if (self.vehicle == VEH_SERVANT)
 	{
 		newloc = '140 21 -5';
 		newloc2 = '140 21 -5';
@@ -3120,7 +3120,7 @@ void(float type, float rear) CarAttack =
 		if (self.mgun_finished < time)
 		{
 			Fire_MachineGun();
-			if (self.vehicle == VEH_SERVENT) self.mgun_finished = time + 0.03;
+			if (self.vehicle == VEH_SERVANT) self.mgun_finished = time + 0.03;
 			else self.mgun_finished = time + 0.125;
 		}
 	}

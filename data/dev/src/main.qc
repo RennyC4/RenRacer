@@ -185,7 +185,12 @@ void() worldspawn =
 	precache_model("progs/Nightshade_body.mdl");
 	precache_model("progs/Nightshade_wheel_f.mdl");
 	precache_model("progs/Nightshade_wheel_b.mdl");
-
+	
+	// servant
+	precache_model("progs/servant_body.mdl");
+	precache_model("progs/servant_tread_l.mdl");
+	precache_model("progs/servant_tread_r.mdl");
+	
 	//
 	// func_vehicle - end
 	//

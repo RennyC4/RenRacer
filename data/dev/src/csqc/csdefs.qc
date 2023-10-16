@@ -2628,7 +2628,7 @@ float VEH_STREETKING = 128;
 float VEH_SANDROAMER = 256;
 float VEH_THOROGOOD = 512;
 float VEH_NIGHTSHADE = 1024;
-float VEH_SERVENT = 2048;
+float VEH_servant = 2048;
 
 float RACE_NOTSTARTED = 0;
 float RACE_COUNTDOWN = 1;

@@ -1,19 +1,19 @@
 //
-// servent - tank boss
+// servant - tank boss
 //
 
-entity() servent =
+entity() servant =
 {
-	self.vehicle = VEH_SERVENT;
+	self.vehicle = VEH_SERVANT;
 	self.health = self.max_health = 500; // max health is also armor
 	self.speed = 1000; // also acceleration
 	self.max_speed = 700;
-	self.handling = 35; // poor handling
+	self.handling = 96; // poor handling
 
 	local entity obj, part;
 
 	obj = spawn();
-	obj.netname = "servent";
+	obj.netname = "servant";
 	obj.physobj_mass = 1000; // RennyC: This is used for car collision stuff, doesn't affect RenRacer
 	obj.physobj_impactevent = PushAndDamageTarget;
 	setorigin(obj, self.origin);
@@ -28,7 +28,7 @@ entity() servent =
 	part.owner = obj;
 	part.classname = "phys_static";
 	part.netname = "chassis";
-	part.model = "progs/servent_body.mdl";
+	part.model = "progs/servant_body.mdl";
 	part.relative_org = '0 0 0';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
@@ -41,7 +41,7 @@ entity() servent =
 	part.owner = obj;
 	part.classname = "phys_static";
 	part.netname = "treadleft";
-	part.model = "progs/servent_tread_l.mdl";
+	part.model = "progs/servant_tread_l.mdl";
 	part.relative_org = '-70 45 0';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';
@@ -53,7 +53,7 @@ entity() servent =
 	part.owner = obj;
 	part.classname = "phys_static";
 	part.netname = "treadright";
-	part.model = "progs/servent_tread_r.mdl";
+	part.model = "progs/servant_tread_r.mdl";
 	part.relative_org = '-70 -45 0';
 	part.relative_forward = '1 0 0';
 	part.relative_left = '0 1 0';

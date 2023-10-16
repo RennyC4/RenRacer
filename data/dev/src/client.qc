@@ -404,8 +404,8 @@ void() PlayerPreThink =
 					car = thorogood();
 				if (self.vehicle == VEH_NIGHTSHADE)
 					car = nightshade();
-				if (self.vehicle == VEH_SERVENT)
-					car = servent();
+				if (self.vehicle == VEH_SERVANT)
+					car = servant();
 
 
 				makevectors(self.angles);

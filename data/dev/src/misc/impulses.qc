@@ -75,8 +75,8 @@ void() CheckImpulses =
 
 	if (self.impulse == 95)
 		{
-		self.vehicle = VEH_SERVENT;
-		stuffcmd (self, "play combat/servent.wav\n");
+		self.vehicle = VEH_SERVANT;
+		stuffcmd (self, "play combat/servant.wav\n");
 		}
 
 

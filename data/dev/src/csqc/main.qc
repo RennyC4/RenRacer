@@ -115,7 +115,7 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 						soundupdate(engine_sound, CHAN_BODY, "engine/hotrod.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
 					if (vehicle_type == VEH_NIGHTSHADE)
 						soundupdate(engine_sound, CHAN_BODY, "engine/skyscraper.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
-					if (vehicle_type == VEH_SERVENT)
+					if (vehicle_type == VEH_servant)
 						soundupdate(engine_sound, CHAN_BODY, "engine/razorback.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
 				}
 				else
