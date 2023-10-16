@@ -794,7 +794,12 @@ void TryUpdateVehicle(){
 				makevectors(self.realang);
 
 				if (!self.waterlevel)
-					pointparticles(PART_TURBO, self.origin - v_up * 16 - v_forward * 32, '0 0 0', 1);
+				{
+					if (self.vehicle == VEH_THOROGOOD)
+						pointparticles(PART_TURBO, self.origin - v_right * 16 - v_up * 16 - v_forward * 32, '0 0 0', 1);
+					else
+						pointparticles(PART_TURBO, self.origin - v_up * 16 - v_forward * 32, '0 0 0', 1);
+				}
 				else
 					pointparticles(PART_BUBBLE, self.origin - v_up * 16 - v_forward * 32, '0 0 0', 1);
 
