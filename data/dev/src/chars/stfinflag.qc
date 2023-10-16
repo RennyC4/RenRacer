@@ -63,6 +63,10 @@ void() rally_goal_proxy_think =
 						stuffcmd(targ, "wf\n");
 						targ.start_laptime = FALSE; // Turn off lap time recording
 						race_status = RACE_FINISHED;
+
+						targ.music = "sound/music/racewin.ogg";
+						stuffcmd (targ, sprintf("music %s\n", targ.music));
+
 						return; // needed otherwise map change happens immediately
 					}
 					else
@@ -172,11 +176,6 @@ void() rally_startfinish_flag =
 		else
 			goal.checkpoint = self.checkpoint;
 
-/*
-		if (!self.lap)
-			goal.lap = 2;
-		else
-*/
 		goal.lap = self.lap;
 
 		if (self.music)

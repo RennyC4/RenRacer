@@ -238,7 +238,8 @@ float(string strCommand) CSQC_ConsoleCommand =
 		showscores = TRUE;
 	else
 		showscores = FALSE;
-
+	if (strCommand == "restart")
+		localcmd("stopmusic\n");
     return FALSE;
 }
 

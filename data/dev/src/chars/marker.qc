@@ -68,10 +68,11 @@ void() marker_think =
 						if (cvar("developer") == 2)
 							sprint (targ, "CheckPoint_touch: ", ftos(self.checkpoint), " / ", ftos(total_checkpoints), "\n");
 
+						self.enemy.spawn_loc = self.enemy.origin; // update players spawn position during race
 						self.enemy.effects = EF_MUZZLEFLASH;
 						self.cnt = TRUE; // Start animation
 						self.effects = self.effects | EF_DIMLIGHT;
-						local string l = ftos(self.enemy.laptime);
+						string l = ftos(self.enemy.laptime);
 						l = sprintf("%.2f", self.enemy.laptime); // cut down numbers
 						centerprint (self.enemy, "/P^4[^bCheckpoint^b]\n", "^7Time: ^5", l, "\n");
 						self.enemy.clearcprint_finished = time + 1;

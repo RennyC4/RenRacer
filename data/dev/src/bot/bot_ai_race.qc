@@ -30,7 +30,7 @@ void() bot_ai_race =
 			if (self.checkpoint == self.goalentity.checkpoint) // Find next target
 			{
 				//if (self.findcheckpoint_fail > 1) // Reached the end of valid checkpoints
-				if (self.checkpoint >= total_checkpoints)
+				if (self.checkpoint >= total_checkpoints) // Reached the end of valid checkpoints
 				{
 					self.goalentity = self.goalentity_goal;
 					self.goalentity_time = 0; // reset goalentity timer
@@ -57,16 +57,18 @@ void() bot_ai_race =
 
 	if (self.goalentity.classname != "bot_waypoint_goal")
 	{
-		if (self.checkpoint >= total_checkpoints) // Start searching for goal point once all checkpoints are hit
+	/*
+		if (self.checkpoint >= total_checkpoints) // Start searching for goalpoint once all checkpoints are hit
 		{
 			float findgp = FindGoalPoint();
-			if (findgp)
+			if (findgp && self.goalentity != self.goalentity_goal)
 			{
-				self.goalentity = self.goalentity_goal;
 				self.goalentity_time = 0; // reset goalentity timer
-				//bprint ("Bot is going for goal point\n");
+				self.goalentity = self.goalentity_goal;
+				bprint ("Bot is going for goal point\n");
 			}
 		}
+	*/
 		if (self.goalentity_checkpoint || self.goalentity_waypoint)
 		{
 			float check_dist_wp;
@@ -136,7 +138,7 @@ void() bot_ai_race =
 		// bprint ("Speed: ", f, " Dist: ", n, "\n");
 
 		// Back up for randomly for a second, hit a wall/obstacle
-		if (self.goal_touched && /*self.bot_hitwall &&*/ (self.keys == KEY_MOVEFORWARD || (self.button0 && self.turbo_fuel > 0)) && self.realspeed <= 3)
+		if (self.goal_touched && /*self.bot_hitwall &&*/ (self.keys == KEY_MOVEFORWARD || (self.button0 && self.turbo_fuel > 0)) && self.realspeed <= 3 && self.bot_backup_finished < time)
 		{
 			self.keys = KEY_MOVEBACK;
 			self.bot_backup_finished = time + 0.3 + random()*0.3;
@@ -161,46 +163,6 @@ void() bot_ai_race =
 					}
 					else
 						self.bot_search_count = 0;
-				}
-
-				// Bot is stuck / lost, or is taking too long to hit its goal
-				if (self.bot_search_count >= 15 || self.goalentity_time >= 30)
-				{
-					for (entity targ = world;(targ = find(targ, classname, "player"));)
-					{
-						if (clienttype(targ) == CLIENTTYPE_REAL && !visible(targ) && targ.trail.cnt && (targ.checkpoint > self.checkpoint || targ.waypoint > self.waypoint) && targ.lap >= self.lap)
-						{
-							// Steal player stats & update goal entities
-							if (targ.checkpoint > self.checkpoint)
-							{
-								self.checkpoint = targ.checkpoint;
-								GetCheckPoint();
-							}
-							if (targ.waypoint > self.waypoint)
-							{
-								self.waypoint = targ.waypoint;
-								FindWayPoint();
-							}
-							if (!self.goal_touched)
-								self.goal_touched = TRUE;
-							if (targ.lap > self.lap)
-								self.lap = targ.lap;
-
-							self.checkpoint_lastpos = targ.checkpoint_lastpos;
-							self.angles_y = targ.trail.angles_y;
-							self.fixangle = TRUE;
-							//
-							self.goalentity_time = 0;
-							self.bot_search_count = 0;
-							self.collide_finished = time + 1; // Don't bump player on teleport
-							makevectors(self.realang);
-							TeleportPhysObject(self.driving, targ.trail.origin, targ.trail.angles, TRUE);
-							self.bot_search_count = 0;
-
-							if (cvar("developer") == 2)
-								bprint ("Teleported bot to player trail entity\n");
-						}
-					}
 				}
 				self.bot_search_finished = time + 0.1;
 			}
@@ -309,8 +271,8 @@ void() bot_ai_race =
 		if (self.turbo_fuel < 100)
 			self.turbo_fuel = 100;
 
-		/*
 		// Debugging prints
+/*
 		bprint (self.goalentity.classname, "\n");
 		string d1 = ftos (self.goalentity.origin_x);
 		string d2 = ftos (self.goalentity.origin_y);
@@ -318,6 +280,61 @@ void() bot_ai_race =
 		bprint (d1, "\n");
 		bprint (d2, "\n");
 		bprint (d3, "\n");
-		*/
+*/
+	}
+
+	//
+	// Bot is stuck / lost, or is taking too long to hit its goal
+	//
+
+	if (self.bot_search_count >= 15 || self.goalentity_time >= 30)
+	{
+		for (entity targ = world;(targ = find(targ, classname, "player"));)
+		{
+			if (clienttype(targ) == CLIENTTYPE_REAL && !visible(targ) && targ.trail.cnt && (targ.checkpoint > self.checkpoint || targ.waypoint > self.waypoint))// && (targ.lap > self.lap || targ.frags > self.frags))
+			{
+				// Steal player stats & update goal entities
+				if (targ.waypoint > self.waypoint)
+				{
+					self.waypoint = targ.waypoint;
+					FindWayPoint();
+				}
+				if (targ.checkpoint > self.checkpoint)
+				{
+					self.checkpoint = targ.checkpoint;
+					GetCheckPoint();
+				}
+		
+				if (self.checkpoint >= total_checkpoints)
+					self.goalentity = self.goalentity_goal;
+				else
+				{
+					self.goalentity = self.goalentity_checkpoint;
+					self.goalentity_time = 0; // reset goalentity timer
+				}
+
+				if (!self.goal_touched)
+					self.goal_touched = TRUE;
+				if (targ.lap > self.lap || targ.frags > self.frags)
+				{
+					self.frags = targ.frags;
+					self.lap = targ.lap;
+				}
+
+				self.checkpoint_lastpos = targ.checkpoint_lastpos;
+				self.angles_y = targ.trail.angles_y;
+				self.fixangle = TRUE;
+				//
+				self.goalentity_time = 0;
+				self.bot_search_count = 0;
+				self.bot_backup_finished = time;
+				self.collide_finished = time + 1; // Don't bump player on teleport
+				makevectors(self.realang);
+				TeleportPhysObject(self.driving, targ.trail.origin, targ.trail.angles, TRUE);
+
+				if (cvar("developer") == 2)
+					bprint ("Teleported bot to player trail entity\n");
+			}
+		}
 	}
 };

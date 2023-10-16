@@ -69,6 +69,7 @@ void() ClientDisconnect =
 	self.deadflag = FALSE;
 	self.deathcount = 0;
 	self.weapon = WEP_SPECIAL;
+	self.music = "";
 	self.ammo_firerocket = self.ammo_homingrocket = self.ammo_powerrocket = self.ammo_napalm = self.ammo_rico = self.ammo_remote = self.ammo_freeze = 0;
 };
 
@@ -263,6 +264,11 @@ void() PlayerPreThink =
 		{
 			if (race_status == RACE_NOTSTARTED || self.observer)
 			{
+				if (self.music != "sound/music/rwmenu.ogg" && framecount > 20)
+				{
+					self.music = "sound/music/rwmenu.ogg";
+					stuffcmd (self, sprintf("music %s\n", self.music));
+				}
 				// Print welcome message
 				if (self.vehicle == VEH_HOTROD)
 					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1HotRod^7\nSpecial Weapon: ^5Flame Thrower^7\n\nSpecial: [**** ]\nSpeed: [**   ]\nHandling: [**   ]\nArmor: [***  ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
@@ -288,14 +294,17 @@ void() PlayerPreThink =
 					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Thorogood^7\nSpecial Weapon: ^5Hell Spawn^7\n\nSpecial: [*****]\nSpeed: [**** ]\nHandling: [*****]\nArmor: [*     ]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
 				if (self.vehicle == VEH_NIGHTSHADE)
 					centerprint (self, "/P^3Welcome to RenRacer: Rage War^7\n__________________________________\n\nVehicle: ^1Nightshade^7\nSpecial Weapon: ^5Something cool I hope^7\n\nSpecial: [*   ]\nSpeed: [*    ]\nHandling: [*   ]\nArmor: [*****]\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to unleash carnage");
-
-
 			}
 		}
 		else if (!self.observer && !self.ready)
 		{
 			if (race_status == RACE_NOTSTARTED)
 			{
+				if (self.music != "sound/music/rmmenu.ogg" && framecount > 20)
+				{
+					self.music = "sound/music/rmmenu.ogg";
+					stuffcmd (self, sprintf("music %s\n", self.music));
+				}
 				if (self.vehicle == VEH_HOTROD)
 					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1HotRod^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
 				if (self.vehicle == VEH_WRAITH)
@@ -320,8 +329,6 @@ void() PlayerPreThink =
 					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1Thorogood^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
 				if (self.vehicle == VEH_NIGHTSHADE)
 					centerprint (self, "/P^3Welcome to RenRacer^7\n__________________________________\n\nVehicle: ^1Nightshade^7\n\nPress [^b^4CYCLE WEAPON^7^b] to swap cars\nPress [^b^1FIRE^7^b] to start the race");
-
-
 			}
 		}
 		Car_CheckAttach(); // Shove the player in the car
@@ -362,6 +369,12 @@ void() PlayerPreThink =
 
 			if (!self.spawncar)
 			{
+				if (self.music != "")
+				{
+					self.music = "";
+					stuffcmd (self, "stopmusic\n");
+				}
+
 				if (clienttype(self) == CLIENTTYPE_BOT)
 					Bot_SelectVehicle();
 				self.ready = TRUE; // important!
@@ -407,9 +420,7 @@ void() PlayerPreThink =
 				if (self.vehicle == VEH_SERVANT)
 					car = servant();
 
-
 				makevectors(self.angles);
-				//car = Phys_ObjectCreate(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
 				car = Phys_MakeIntoPhysicsObject(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
 				Car_InitVehicle(car);
 				self.spawncar = TRUE;

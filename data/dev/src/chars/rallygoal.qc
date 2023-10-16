@@ -5,6 +5,18 @@
 string nextmap;
 void() rally_goal_nextmap =
 {
+	if (world.model == "maps/map1.bsp")
+		nextmap = "map2";
+	if (world.model == "maps/map2.hmp")
+		nextmap = "map3";
+	if (world.model == "maps/map3.hmp")
+		nextmap = "map4";
+	if (world.model == "maps/map4.hmp")
+		nextmap = "map5";
+	if (world.model == "maps/map5.bsp")
+		nextmap = "map6";
+	if (world.model == "maps/map6.hmp")
+		nextmap = "map1";
 	changelevel(nextmap);
 };
 
@@ -63,6 +75,10 @@ void() rally_goal_touch =
 			sound (self, CHAN_AUTO, "camera.wav", 1, ATTN_NONE);
 			stuffcmd(other.owner.driving, "wf\n");
 			other.owner.driving.start_laptime = FALSE; // Turn off lap time recording
+
+			other.owner.driving.music = "sound/music/racewin.ogg";
+			stuffcmd (other.owner.driving, sprintf("music %s\n", other.owner.driving.music));
+
 			race_status = RACE_FINISHED;
 		}
 		else
