@@ -1614,13 +1614,13 @@ void() SpecialWeapon_HotRod_Touch =
 
 	if (self.frame < 7 && self.hitobject_finished < time)
 	{
-		DoDamage(other.owner.driving, self.owner, 1, self.classname);
+		DoDamage(other.owner.driving, self.owner, 2, self.classname);
 		if (other.owner.driving.frozen_finished < time)
 		{
 			other.owner.driving.onfire_finished = time + 5;
 			other.owner.driving.igniter = self.owner;
 		}
-		self.hitobject_finished = time + 0.1; // how fast to damage
+		self.hitobject_finished = time + 0.15; // how fast to damage
 	}
 };
 

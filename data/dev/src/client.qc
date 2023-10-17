@@ -70,6 +70,7 @@ void() ClientDisconnect =
 	self.deathcount = 0;
 	self.weapon = WEP_SPECIAL;
 	self.music = "";
+	self.max_colormod = 1;
 	self.ammo_firerocket = self.ammo_homingrocket = self.ammo_powerrocket = self.ammo_napalm = self.ammo_rico = self.ammo_remote = self.ammo_freeze = 0;
 };
 
@@ -646,22 +647,22 @@ void() PlayerPostThink =
 		if (self.health > 0)
 		{
 			// Smooth restore colormod
-			if (self.colormod_x > 1) // red
+			if (self.colormod_x > self.max_colormod) // red
 				self.colormod_x = self.colormod_x - 6 * frametime;
 			else
-				self.colormod_x = 0;
+				self.colormod_x = self.max_colormod;
 
-			if (self.colormod_y > 1) // green
+			if (self.colormod_y > self.max_colormod) // green
 				self.colormod_y = self.colormod_y - 6 * frametime;
 			else
-				self.colormod_y = 0;
+				self.colormod_y = self.max_colormod;
 
 			if (self.frozen_finished < time)
 			{
-				if (self.colormod_z > 1) // blue
+				if (self.colormod_z > self.max_colormod) // blue
 					self.colormod_z = self.colormod_z - 6 * frametime;
 				else
-					self.colormod_z = 0;
+					self.colormod_z = self.max_colormod;
 			}
 		}
 		else // death animation / thinking
@@ -1054,6 +1055,7 @@ void() PutClientInServer =
 	self.energy = 100;
 	self.weapon = WEP_SPECIAL;
 	self.spawncar = FALSE;
+	self.max_colormod = 1;
 
 	if (clienttype(self) == CLIENTTYPE_REAL)
 		human_players = human_players + 1;

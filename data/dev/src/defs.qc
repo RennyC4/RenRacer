@@ -481,6 +481,7 @@ string nextmap;
 .float car_reset_finished;
 .float car_reset;
 .float ready;
+.float max_colormod; // Used for removing colour off damage cars via colormod
 
 // Key flags
 .float keyflags;
