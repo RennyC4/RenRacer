@@ -30,7 +30,7 @@ entity() razorback =
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
 
-	//Guns for ragewar
+	//Attachments for ragewar
 	if (ragewar)
 	{
 		part = spawn();
@@ -56,6 +56,20 @@ entity() razorback =
 		part.relative_forward = '1 0 0';
 		part.relative_left = '0 1 0';
 		part.relative_up = '0 0 1';
+
+		part = spawn();
+		part.physobj_next = obj.physobj_staticlist;
+		obj.physobj_staticlist = part;
+		part.owner = obj;
+		part.classname = "phys_static";
+		part.netname = "RW_ATS";
+		part.model = "progs/Razorback_RW.mdl";
+		part.relative_org = '0 0 0';
+		part.relative_forward = '1 0 0';
+		part.relative_left = '0 1 0';
+		part.relative_up = '0 0 1';
+
+
 	}
 	//
 
