@@ -221,12 +221,23 @@ void() Car_ChassiThink =
 #endif
 
 	// RennyC - Send real (car) speed / angles to player
-	local float r = vlen(car.velocity) * 0.1;
-	local vector v = car.angles;
-	if (car.driving.classname == "player")
+	float r = vlen(car.velocity) * 0.1;
+	vector v = car.angles;
+	entity realowner = car.driving;
+	if (realowner.classname == "player")
 	{
-		car.driving.realang = v;
-		car.driving.realspeed = r;
+		realowner.realang = v;
+		realowner.realspeed = r;
+
+		// Car body damage frame logic (deformation)
+		if (realowner.health > (realowner.max_health * 0.75))
+			self.frame = 0;
+		if (realowner.health < (realowner.max_health * 0.75) && realowner.health > (realowner.max_health * 0.5))
+			self.frame = 1;
+		if (realowner.health < (realowner.max_health * 0.5) && realowner.health > (realowner.max_health * 0.25))
+			self.frame = 2;
+		if (realowner.health < (realowner.max_health * 0.25))
+			self.frame = 3;
 	}
 };
 
