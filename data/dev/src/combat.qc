@@ -1201,7 +1201,7 @@ void() Rico_Think =
 		if (targ == self.owner && self.cnt == 0)
 			do_hit = FALSE;
 		
-		if (vlen(targ.origin - self.origin) <= size && do_hit)
+		if (vlen(targ.origin - self.origin) <= size && do_hit & targ.invulnerable_finished < time)
 		{
 			float damage = self.cnt * 2;
 			DoDamage(targ, self.owner, 7+damage, self.classname); // base damage 7, bounce x 2, total: 27
