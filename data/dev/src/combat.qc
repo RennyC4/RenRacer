@@ -115,6 +115,11 @@ void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 		bprint(targ.netname, " blew up on ");
 		bprint(attacker.netname, "'s famous weiner\n");
 	}
+	if (attackerclassname == "hellspawn") // thorogood
+	{
+		bprint(attacker.netname, "'s personal demons scared ");
+		bprint(targ.netname, " to death\n");
+	}
 	if (attackerclassname == "bullet2") // king turret machine gun
 	{
 		bprint(attacker.netname, "'s turret took care of ");
