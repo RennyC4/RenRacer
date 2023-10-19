@@ -58,7 +58,6 @@ void() marker_think =
 								oldself = self;
 								self = targ;
 								TeleportPhysObject(self.driving, self.checkpoint_lastpos, self.checkpoint_lastpos_ang, TRUE);
-								bprint (ftos(self.checkpoint_lastpos_ang_y), "\n");
 								spawn_telesfx(self);
 								spawn_televfx(self);
 								self.teleport_finished = time + 2;
