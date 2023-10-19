@@ -127,3 +127,4 @@ HUD for Quake (https://github.com/whipowill/quake-mod-hud) - Used & Modified sco
 Mr.M - Boomerang model
 SinisterSpud - Created Wraith, Road Bastard, Law Breaker, Razorback models
 SingleTrac - Dead company, created Twisted Metal 1/2, using their assets
+Strideh - Cactus models to be used in Map3
