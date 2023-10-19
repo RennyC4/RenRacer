@@ -62,7 +62,7 @@ void() bot_ai_race =
 			{
 				self.goalentity_time = 0; // reset goalentity timer
 				self.goalentity = self.goalentity_goal;
-				bprint ("Bot is going for goal point\n");
+				//bprint ("Bot is going for goal point\n");
 			}
 		}
 
