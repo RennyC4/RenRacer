@@ -6,6 +6,8 @@ void() waypoint_touch =
 {
 	if (other.owner.driving.waypoint >= self.waypoint)
 		return;
+	if (!other.owner.driving.goal_touched)
+		return;
 	if (other.owner.driving.classname != "player")
 		return;
 

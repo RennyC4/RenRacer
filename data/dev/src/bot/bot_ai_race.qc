@@ -29,7 +29,6 @@ void() bot_ai_race =
 
 			if (self.checkpoint == self.goalentity.checkpoint) // Find next target
 			{
-				//if (self.findcheckpoint_fail > 1) // Reached the end of valid checkpoints
 				if (self.checkpoint >= total_checkpoints) // Reached the end of valid checkpoints
 				{
 					self.goalentity = self.goalentity_goal;
@@ -57,18 +56,16 @@ void() bot_ai_race =
 
 	if (self.goalentity.classname != "bot_waypoint_goal")
 	{
-	/*
-		if (self.checkpoint >= total_checkpoints) // Start searching for goalpoint once all checkpoints are hit
+		if (self.checkpoint >= total_checkpoints) // Start searching for goalpoint once all checkpoints / waypoints are hit
 		{
-			float findgp = FindGoalPoint();
-			if (findgp && self.goalentity != self.goalentity_goal)
+			if (self.goalentity != self.goalentity_goal)
 			{
 				self.goalentity_time = 0; // reset goalentity timer
 				self.goalentity = self.goalentity_goal;
 				bprint ("Bot is going for goal point\n");
 			}
 		}
-	*/
+
 		if (self.goalentity_checkpoint || self.goalentity_waypoint)
 		{
 			float check_dist_wp;
@@ -272,7 +269,7 @@ void() bot_ai_race =
 			self.turbo_fuel = 100;
 
 		// Debugging prints
-/*
+		/*
 		bprint (self.goalentity.classname, "\n");
 		string d1 = ftos (self.goalentity.origin_x);
 		string d2 = ftos (self.goalentity.origin_y);
@@ -280,7 +277,7 @@ void() bot_ai_race =
 		bprint (d1, "\n");
 		bprint (d2, "\n");
 		bprint (d3, "\n");
-*/
+		*/
 	}
 
 	//

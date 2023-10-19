@@ -148,6 +148,7 @@ void() rally_marker =
 		self.radius = 250;
 	if (!self.checkpoint)
 		error("rally_marker with no checkpoint value set\n");
-		
-	total_checkpoints = total_checkpoints + 1;
+
+	if (total_checkpoints < self.checkpoint) // Don't double count checkpoints on diverging paths, messes up bot AI
+		total_checkpoints = total_checkpoints + 1;
 };
