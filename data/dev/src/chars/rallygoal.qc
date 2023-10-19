@@ -1,5 +1,5 @@
 //
-// Start / Finish brush
+// Start / Finish flag - Brush format
 //
 
 string nextmap;
@@ -53,7 +53,7 @@ void() rally_goal_touch =
 			nextmap = mapname;
 			self.touch = SUB_Null;
 			self.think = rally_goal_nextmap;
-			self.nextthink = time + 8;
+			self.nextthink = time + 10;
 
 			if (other.owner.driving.laptime < other.owner.driving.fastest_lap) // Update best lap time if need be on race finish
 				other.owner.driving.fastest_lap = other.owner.driving.laptime;

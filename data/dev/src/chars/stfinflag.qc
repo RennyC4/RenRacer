@@ -1,11 +1,12 @@
 //
-// Goldcup Start / Finish flag 
+// Start / Finish flag 
 //
 
 // spawnflag 1:
 // The same as rally_goal_touch, except it spawns at the bottom of
 // the goal flag and uses findradius(); - mostly used for hmp maps
 // since adding brush entities is more difficult
+
 void() rally_goal_proxy_think =
 {
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
@@ -40,7 +41,7 @@ void() rally_goal_proxy_think =
 						// Setup map change
 						nextmap = mapname;
 						self.think = rally_goal_nextmap;
-						self.nextthink = time + 5;
+						self.nextthink = time + 10;
 
 						if (targ.laptime < targ.fastest_lap) // Update best lap time if need be on race finish
 							targ.fastest_lap = targ.laptime;
