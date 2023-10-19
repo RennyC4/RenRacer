@@ -976,6 +976,7 @@ entity() SelectSpawnSpot =
 				spot = find(spot, classname, "info_player_start");
 				return spot;
 			}
+			return spot;
 		}
 	}
 	else
@@ -996,7 +997,9 @@ entity() SelectSpawnSpot =
 				spot = find(spot, classname, "info_player_start");
 				return spot;
 			}
+			return spot;
 		}
+		return spot;
 	}
 
 	/*
