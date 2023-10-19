@@ -435,6 +435,7 @@ float gameover; // match is over (dm)
 .float radius;
 .entity driving;
 .vector checkpoint_lastpos;
+.vector checkpoint_lastpos_ang;
 .float teleport_finished;
 .float speedboost_finished; // How long speed booster lasts for
 .vector spawn_loc;

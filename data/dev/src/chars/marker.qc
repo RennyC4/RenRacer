@@ -4,8 +4,8 @@
 
 void() marker_think =
 {
-	local float OK = 0;
-	local entity oldself;
+	float OK = 0;
+	entity oldself;
 
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
@@ -20,6 +20,8 @@ void() marker_think =
 						if (targ.checkpoint == 0)
 						{
 							targ.checkpoint = self.checkpoint;
+							targ.checkpoint_lastpos = targ.origin;
+							targ.checkpoint_lastpos_ang = targ.angles;
 							self.enemy = targ;
 						}
 					}
@@ -29,6 +31,7 @@ void() marker_think =
 						{
 							targ.checkpoint = self.checkpoint;
 							targ.checkpoint_lastpos = targ.origin;
+							targ.checkpoint_lastpos_ang = targ.angles;
 							self.enemy = targ;
 						}
 						if (self.checkpoint > targ.checkpoint)
@@ -54,7 +57,8 @@ void() marker_think =
 								targ.clearcprint_finished = time + 2;
 								oldself = self;
 								self = targ;
-								TeleportPhysObject(self.driving, self.spawn_loc, self.spawn_loc_angles, TRUE);
+								TeleportPhysObject(self.driving, self.checkpoint_lastpos, self.checkpoint_lastpos_ang, TRUE);
+								bprint (ftos(self.checkpoint_lastpos_ang_y), "\n");
 								spawn_telesfx(self);
 								spawn_televfx(self);
 								self.teleport_finished = time + 2;
@@ -68,7 +72,6 @@ void() marker_think =
 						if (cvar("developer") == 2)
 							sprint (targ, "CheckPoint_touch: ", ftos(self.checkpoint), " / ", ftos(total_checkpoints), "\n");
 
-						self.enemy.spawn_loc = self.enemy.origin; // update players spawn position during race
 						self.enemy.effects = EF_MUZZLEFLASH;
 						self.cnt = TRUE; // Start animation
 						self.effects = self.effects | EF_DIMLIGHT;
