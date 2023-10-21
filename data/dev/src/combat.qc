@@ -125,10 +125,15 @@ void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 		bprint(attacker.netname, "'s turret took care of ");
 		bprint(targ.netname, "\n");
 	}
-	if (attackerclassname == "sandstorm") // sand storm
+	if (attackerclassname == "sandstorm") // sand roamer
 	{
 		bprint(attacker.netname, "'s sand storm decimated ");
 		bprint(targ.netname, "\n");
+	}
+	if (attackerclassname == "sandstorm") // nightshade
+	{
+		bprint(attacker.netname, " slowed and stopped ");
+		bprint(targ.netname, "'s attempt at being alive\n");
 	}
 };
 
@@ -379,7 +384,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 5) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			stuffcmd (self, "play combat/special.wav\n");
 			self.special_regen_finished = time + 60; // regen time
 		}
 	}
@@ -388,7 +393,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 4) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			stuffcmd (self, "play combat/special.wav\n");
 			self.special_regen_finished = time + 35; // regen time
 		}
 	}
@@ -397,7 +402,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 5) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			stuffcmd (self, "play combat/special.wav\n");
 			self.special_regen_finished = time + 35; // regen time
 		}
 	}
@@ -406,7 +411,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 5) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			stuffcmd (self, "play combat/special.wav\n");
 			self.special_regen_finished = time + 60; // regen time
 		}
 	}
@@ -415,7 +420,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 6) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			stuffcmd (self, "play combat/special.wav\n");
 			self.special_regen_finished = time + 10; // regen time
 		}
 	}
@@ -424,7 +429,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 3) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			stuffcmd (self, "play combat/special.wav\n");
 			self.special_regen_finished = time + 55; // regen time
 		}
 	}
@@ -433,7 +438,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 5) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			stuffcmd (self, "play combat/special.wav\n");
 			self.special_regen_finished = time + 35; // regen time
 		}
 	}
@@ -442,7 +447,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 5) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			stuffcmd (self, "play combat/special.wav\n");
 			self.special_regen_finished = time + 18; // regen time
 		}
 	}
@@ -451,7 +456,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 3) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			stuffcmd (self, "play combat/special.wav\n");
 			self.special_regen_finished = time + 35; // regen time
 		}
 	}
@@ -460,7 +465,7 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 5) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			stuffcmd (self, "play combat/special.wav\n");
 			self.special_regen_finished = time + 35; // regen time
 		}
 	}
@@ -469,17 +474,17 @@ void() SpecialRegenerate =
 		if (self.ammo_special < 3) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
+			stuffcmd (self, "play combat/special.wav\n");
 			self.special_regen_finished = time + 70; // regen time
 		}
 	}
 	if (self.vehicle == VEH_NIGHTSHADE)
 	{
-		if (self.ammo_special < 1) // max held
+		if (self.ammo_special < 3) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
-			stuffcmd (self, "play combat/special.wav\n"); // FIXME: Ugly
-			self.special_regen_finished = time + 1; // regen time
+			stuffcmd (self, "play combat/special.wav\n");
+			self.special_regen_finished = time + 20; // regen time
 		}
 	}
 };
@@ -2065,7 +2070,7 @@ void() SpecialWeapon_RedRage_touch =
 	{
 		Create2DExplosion(self.origin, 1);
 		DoDamage(other.owner.driving, self.owner, 13, self.classname);
-		other.owner.driving.forcejump_strength = 100;
+		other.owner.driving.forcejump_strength = 450;
 		other.owner.driving.forcejump = TRUE;
 	}
 	else if (other)
@@ -2208,7 +2213,7 @@ void() SpecialWeapon_Lawbreaker_Think =
 		if (!self.cnt) // run first damage function once
 		{
 			SpecialWeapon_Lawbreaker_VFX();
-			self.enemy.forcejump_strength = 600;
+			self.enemy.forcejump_strength = 900;
 			self.enemy.forcejump = TRUE;
 			DoDamage(self.enemy, self.owner, 10, self.classname);
 			self.cnt = TRUE;
@@ -2744,6 +2749,96 @@ void() SpecialWeapon_SandRoamer =
 	sound (twist, CHAN_AUTO, "combat/sandstrm.wav", 1, ATTN_NORM);
 };
 
+
+//
+// Special Weapon - Nightshade (Time Shifter)
+//
+
+void() SpecialWeapon_Nightshade_touch =
+{
+	makevectors_mdl(self.angles);
+	if (!other.takedamage) // Hit wall
+	{
+		remove(self);
+		return;
+	}
+	if (self.owner == other.owner.driving) // Hit self
+		return;
+
+	if (other.owner.driving) // other.owner.driving is the player
+	{
+		Create2DExplosion(self.origin, 1);
+		DoDamage(other.owner.driving, self.owner, 6, self.classname);
+		other.owner.driving.slow_finished = time + 5;
+		other.owner.driving.forcejump_strength = 100;
+		other.owner.driving.forcejump = TRUE;
+	}
+	else if (other)
+		DoDamage(other, self.owner, 11, self.classname);
+
+	remove(self);
+};
+
+void() SpecialWeapon_Nightshade_Think =
+{
+	if (!self.enemy)
+		GetTarget();
+	if (self.enemy)
+	{
+		vector dir = normalize(self.enemy.origin - self.origin);
+		self.velocity = dir * 1000;
+		self.angles = vectoangles(self.velocity);
+	}
+};
+
+void(float rear) SpecialWeapon_Nightshade =
+{
+	makevectors(self.realang);
+
+	if (rear)
+	{
+		vector v = self.realang;
+		v_y = v_y + 180;
+		makevectors(v);
+	}
+
+	entity beam = spawn();
+	beam.movetype = MOVETYPE_FLYMISSILE;
+	beam.owner = self;
+	beam.solid = SOLID_TRIGGER;
+	beam.classname = "nightshade";
+	beam.effects = EF_FULLBRIGHT | EF_ADDITIVE;
+	beam.flags = FL_ITEM; // bigger hitbox
+	beam.alpha = 0.9;
+	beam.colormod = '.1 2 2'; // colored purple
+	beam.scale = 2; // bigger
+	beam.touch = SpecialWeapon_Nightshade_touch;
+
+	beam.pflags = PFLAGS_FULLDYNAMIC | PFLAGS_CORONA;
+	beam.color = [2, 1, 2];
+	beam.light_lev = 100;
+
+	beam.velocity = aim(self, 1000);
+	beam.velocity = beam.velocity * 1000;
+
+	// Players forward velocity is added to projectiles
+	if (!self.backward)
+	{
+		beam.velocity_x = beam.velocity_x + self.driving.velocity_x;
+		beam.velocity_y = beam.velocity_y + self.driving.velocity_y;
+	}
+	beam.angles = vectoangles(beam.velocity);
+
+	beam.think = SpecialWeapon_Nightshade_Think;
+	beam.nextthink = time;
+
+	setmodel (beam, "progs/bullet.mdl");
+	setsize (beam, '0 0 0', '0 0 0');
+
+	setorigin (beam, self.origin + v_up * 8 + v_forward * (64 + self.realspeed));
+	sound (self, CHAN_WEAPON, "combat/nightshade.wav", 1, ATTN_NORM);
+};
+
 //
 // Command Specials
 //
@@ -3239,6 +3334,13 @@ void(float type, float rear) CarAttack =
 							SpecialWeapon_Thorogood(FALSE);
 						else
 							SpecialWeapon_Thorogood(TRUE);
+					}
+					if (self.vehicle == VEH_NIGHTSHADE) // Nightshade
+					{
+						if (!rear)
+							SpecialWeapon_Nightshade(FALSE);
+						else
+							SpecialWeapon_Nightshade(TRUE);
 					}
 
 					// Keep at bottom

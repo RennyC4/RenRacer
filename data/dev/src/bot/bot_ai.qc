@@ -271,7 +271,7 @@ void() Bot_SelectVehicle =
 	// Bot vehicle selection
 	if (!self.bot_select_vehicle)
 	{
-		float tt = ceil(random() * 11);
+		float tt = ceil(random() * 12);
 		if (tt == 1)
 			self.vehicle = VEH_HOTROD;
 		else if (tt == 2)
@@ -292,8 +292,11 @@ void() Bot_SelectVehicle =
 			self.vehicle = VEH_STREETKING; 
 		else if (tt == 10)
 			self.vehicle = VEH_SANDROAMER;
-		else
+		else if (tt == 11)
 			self.vehicle = VEH_THOROGOOD;
+		else
+			self.vehicle = VEH_NIGHTSHADE;
+
 		self.bot_select_vehicle = TRUE;
 	}
 };
