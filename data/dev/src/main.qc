@@ -56,6 +56,7 @@ void() CSEv_GrabCSQCValues =
 	clientstat(STAT_FIRE, EV_FLOAT, onfire_finished);
 	clientstat(STAT_FROZE, EV_FLOAT, frozen_finished);
 	clientstat(STAT_OBSERVE, EV_FLOAT, observer);
+	clientstat(STAT_SLOW, EV_FLOAT, slow_finished);
 };
 
 void() world_lights =

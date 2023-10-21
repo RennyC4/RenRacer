@@ -478,6 +478,7 @@ string nextmap;
 .float max_speed;
 .float handling;
 .float blind_finished;
+.float slow_finished;
 .float turrets; // max # of deployable king turrets
 .float car_reset_finished;
 .float car_reset;
@@ -607,6 +608,7 @@ var float PART_HOTDOGSPLAT;
 #define STAT_FIRE 62
 #define STAT_FROZE 63
 #define STAT_OBSERVE 64
+#define STAT_SLOW 65
 
 #define STAT_INTERMISSION 75
 

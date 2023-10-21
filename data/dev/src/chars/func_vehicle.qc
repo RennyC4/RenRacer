@@ -475,6 +475,11 @@ void(float speed, float maxspeed) Car_Accelerate =
 
 	if (!self.driving || self.drift) // RennyC
 		return;
+	if (self.slow_finished > time) // slow status
+	{
+		speed = speed / 2;
+		maxspeed = maxspeed / 2;
+	}
 	tleft = self.driving.backleft;
 	tright = self.driving.backright;
 	float allowAccelerateRight = tright.velocity * tright.lmat_forward < maxspeed;
@@ -491,6 +496,12 @@ void(float speed, float maxspeed) Car_Decelerate =
 {
 	entity tright, tleft;
 	maxspeed = maxspeed * -1; // reverse
+
+	if (self.slow_finished > time) // slow status
+	{
+		speed = speed / 2;
+		maxspeed = maxspeed / 2;
+	}
 
 	if (!self.driving || self.drift) // RennyC
 		return;

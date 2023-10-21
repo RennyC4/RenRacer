@@ -66,6 +66,7 @@ void(vector pos) DrawStatusEffects =
     float blind = getstatf(STAT_BLIND);
     float fire = getstatf(STAT_FIRE);
     float frozen = getstatf(STAT_FROZE);
+    float slow = getstatf(STAT_SLOW);
 	vector listpos = pos + '8 280';
 
     if (time < blind)
@@ -92,6 +93,16 @@ void(vector pos) DrawStatusEffects =
     {
         frozen = (frozen-time);
 		str = sprintf("^x66FFrozen! %.2f", frozen);
+
+        drawstring (listpos + '1 1', str, '8 8', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
+        drawstring (listpos, str, '8 8', '1 1 1', 1, DRAWFLAG_NORMAL);
+        listpos_y += 8;
+    }
+	
+    if (time < slow)
+    {
+        slow = (slow-time);
+		str = sprintf("^x90FSlow! %.2f", slow);
 
         drawstring (listpos + '1 1', str, '8 8', '0 0 0', 1, DRAWFLAG_NORMAL); // shadow
         drawstring (listpos, str, '8 8', '1 1 1', 1, DRAWFLAG_NORMAL);

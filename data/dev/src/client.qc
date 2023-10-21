@@ -508,6 +508,8 @@ void() RespawnPlayer =
 	self.igniter = world;
 	self.onfire_finished = time;
 	self.frozen_finished = time;
+	self.slow_finished = time;
+	self.blind_finished = time;
 	self.energy = 100;
 	self.enemy_displayname = "";
 	self.enemy_displayhealth = 0;
@@ -752,6 +754,8 @@ void() PlayerPostThink =
 					self.frozen_finished = time;
 				if (self.blind_finished > time)
 					self.blind_finished = time;
+				if (self.slow_finished > time)
+					self.slow_finished = time;
 			}
 			else
 				self.effects &= ~(EF_BRIGHTFIELD);
@@ -945,6 +949,7 @@ void() PlayerPostThink =
 		self.blind_finished = time + 3;
 		self.onfire_finished = time + 3;
 		self.frozen_finished = time + 3;
+		self.slow_finished = time + 3;
 	}
 	*/
 };
