@@ -60,6 +60,7 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 	else
 		pauseframe = 0;
 
+	float h = getstatf(STAT_HEALTH);
 	if (!intermiss)
 	{
 		if (rs >= RACE_COUNTDOWN)
@@ -89,7 +90,7 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 					pitch = 300;
 				float vehicle_type = getstatf(STAT_VEHICLE);
 				// Engine noises
-				if (!pause)
+				if (!pause && h > 0)
 				{
 					if (vehicle_type == VEH_HOTROD)
 						soundupdate(engine_sound, CHAN_BODY, "engine/hotrod.wav", vol * 1, 0, pitch, SOUNDFLAG_FORCELOOP, 0);
@@ -157,10 +158,9 @@ void(float width, float height, float menushown) CSQC_UpdateView =
 	}
 
 	// Turbo Press Status
-	local float speedl = getstatf(STAT_TURBO);
-	local float turbof = getstatf(STAT_TURBOFUEL);
-	local float speedb = getstatf(STAT_SPEEDBOOST);
-	local float h = getstatf(STAT_HEALTH);
+	float speedl = getstatf(STAT_TURBO);
+	float turbof = getstatf(STAT_TURBOFUEL);
+	float speedb = getstatf(STAT_SPEEDBOOST);
 	if (!intermiss && h > 0)
 	{
 		if (speedl && turbof > 0 && rs != RACE_FINISHED)
@@ -232,7 +232,7 @@ noref void(float apiver, string enginename, float enginever) CSQC_Init = {};
 
 float(string strCommand) CSQC_ConsoleCommand =
 {
-	local float rs = getstatf(STAT_RACESTATUS); // Game status
+	float rs = getstatf(STAT_RACESTATUS); // Game status
 
 	if (strCommand == "+showscores" && rs == RACE_STARTED)
 		showscores = TRUE;
