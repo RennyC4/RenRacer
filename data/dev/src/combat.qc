@@ -2769,12 +2769,12 @@ void() SpecialWeapon_Nightshade_touch =
 	{
 		Create2DExplosion(self.origin, 1);
 		DoDamage(other.owner.driving, self.owner, 6, self.classname);
-		other.owner.driving.slow_finished = time + 5;
+		other.owner.driving.slow_finished = time + 5; // slow target
 		other.owner.driving.forcejump_strength = 100;
 		other.owner.driving.forcejump = TRUE;
 	}
 	else if (other)
-		DoDamage(other, self.owner, 11, self.classname);
+		DoDamage(other, self.owner, 6, self.classname);
 
 	remove(self);
 };
@@ -2810,7 +2810,7 @@ void(float rear) SpecialWeapon_Nightshade =
 	beam.effects = EF_FULLBRIGHT | EF_ADDITIVE;
 	beam.flags = FL_ITEM; // bigger hitbox
 	beam.alpha = 0.9;
-	beam.colormod = '.1 2 2'; // colored purple
+	beam.colormod = '2 1 2'; // colored purple
 	beam.scale = 2; // bigger
 	beam.touch = SpecialWeapon_Nightshade_touch;
 
