@@ -794,9 +794,9 @@ void() Rocket_Touch =
 {
 	float dmg; // damage values
 	if (self.classname == "rocket")
-		dmg = 7;
-	if (self.classname == "rocket2")
 		dmg = 10;
+	if (self.classname == "rocket2")
+		dmg = 7;
 	if (self.classname == "rocket3")
 		dmg = 15;
 	if (self.classname == "rocket4")

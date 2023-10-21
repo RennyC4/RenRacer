@@ -355,6 +355,7 @@ void() PlayerPreThink =
 				{
 					if (human_players_ready == human_players)
 					{
+						stuffcmd (self, "play misc/menu_s1.wav\n");
 						spawn_car_countdown(); // Start countdown
 						race_status = RACE_COUNTDOWN;
 						sound (self, CHAN_AUTO, "engine/start.wav", 1, ATTN_NORM);
@@ -362,6 +363,7 @@ void() PlayerPreThink =
 				}
 				else
 				{
+					stuffcmd (self, "play misc/menu_s2.wav\n");
 					spawn_car_countdown(); // Start countdown
 					race_status = RACE_COUNTDOWN;
 					sound (self, CHAN_AUTO, "engine/start.wav", 1, ATTN_NORM);

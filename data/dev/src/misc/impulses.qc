@@ -10,6 +10,11 @@
 
 void() CarSwap_Forward =
 {
+	if (!ragewar)
+		stuffcmd (self, "play misc/menu_m1.wav\n");
+	else
+		stuffcmd (self, "play misc/menu_m2.wav\n");
+
 	if (self.vehicle == VEH_HOTROD)
 		self.vehicle = VEH_WRAITH;
 	else if (self.vehicle == VEH_WRAITH)
@@ -38,6 +43,11 @@ void() CarSwap_Forward =
 
 void() CarSwap_Backward =
 {
+	if (!ragewar)
+		stuffcmd (self, "play misc/menu_m1.wav\n");
+	else
+		stuffcmd (self, "play misc/menu_m2.wav\n");
+
 	if (self.vehicle == VEH_NIGHTSHADE)
 		self.vehicle = VEH_THOROGOOD;
 	else if (self.vehicle == VEH_THOROGOOD)

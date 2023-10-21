@@ -161,6 +161,7 @@ void() worldspawn =
 	// razorback
 	precache_model("progs/Razorback_body.mdl");
 	precache_model("progs/Razorback_wheel.mdl");
+	precache_model("progs/Razorback_RW.mdl");
 
 	// mince meat
 	precache_model("progs/Mincemeat_body.mdl");
