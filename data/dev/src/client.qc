@@ -196,7 +196,7 @@ void() PushPlayers =
 				{
 						if (self.collide_finished < time)
 							part.velocity *= 0.8;
-						part.velocity -= (b.origin - self.origin) * (101 - vlen(b.origin - self.origin)) * 0.12;
+						part.velocity -= (b.origin - self.origin) * (101 - vlen(b.origin - self.origin)) * 0.1;
 						//if(ragewar)
 							//part.velocity *= 0.5;
 						part = part.physobj_next;
