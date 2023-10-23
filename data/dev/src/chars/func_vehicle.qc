@@ -894,25 +894,25 @@ void TryUpdateVehicle(){
 				else
 					self.car_stabilizer = -1; // Restore normal stablizer
 
-				if (f_left.physobj_friction_ground_y < 4.4)
+				if (f_left.physobj_friction_ground_y < f_left.wheelsidefriction)
 					f_left.physobj_friction_ground_y = f_left.physobj_friction_ground_y + 1;
 				else
-					f_left.physobj_friction_ground_y = 4.4;
+					f_left.physobj_friction_ground_y = f_left.wheelsidefriction;
 
-				if (f_right.physobj_friction_ground_y < 4.4)
+				if (f_right.physobj_friction_ground_y < f_right.wheelsidefriction)
 					f_right.physobj_friction_ground_y = f_right.physobj_friction_ground_y + 1;
 				else
-					f_right.physobj_friction_ground_y = 4.4;
+					f_right.physobj_friction_ground_y = f_right.wheelsidefriction;
 					
-				if (b_left.physobj_friction_ground_y < 4.4)
+				if (b_left.physobj_friction_ground_y < b_left.wheelsidefriction)
 					b_left.physobj_friction_ground_y = b_left.physobj_friction_ground_y + 1;
 				else
-					b_left.physobj_friction_ground_y = 4.4;
+					b_left.physobj_friction_ground_y = b_left.wheelsidefriction;
 
-				if (b_right.physobj_friction_ground_y < 4.4)
+				if (b_right.physobj_friction_ground_y < b_right.wheelsidefriction)
 					b_right.physobj_friction_ground_y = b_right.physobj_friction_ground_y + 1;
 				else
-					b_right.physobj_friction_ground_y = 4.4;
+					b_right.physobj_friction_ground_y = b_right.wheelsidefriction;
 			}
 		}
 		//local string debug = ftos(self.driftspeed_timer);

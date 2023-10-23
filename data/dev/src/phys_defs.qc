@@ -54,6 +54,7 @@ entity physobj_spawning; // the current object in spawning
 .void(entity part, entity targ) physobj_impactevent;
 .float stick_preferredlength;
 .float part_mass;
+.float wheelsidefriction;
 
 float PHFLAGS_BLOCKED = 1;
 float PHFLAGS_BSPMODEL = 2;
