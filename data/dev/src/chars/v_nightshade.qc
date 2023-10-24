@@ -8,7 +8,7 @@ entity() nightshade =
 	self.health = self.max_health = 200; // max health is also armor
 	self.speed = 1250; // also acceleration
 	self.max_speed = 700;
-	self.handling = 35; // poor handling
+	self.handling = 75; // poor handling
 
 	local entity obj, part;
 
@@ -85,10 +85,13 @@ entity() nightshade =
 	part.physobj_stepup = 18;
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
-	part.physobj_friction_ground = '0.225 4.4 5';
+	part.physobj_friction_ground = '0.225 2 5';
+	if(!ragewar) part.physobj_friction_ground = '0.225 4.4 8';
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
+	part.wheelsidefriction = part.physobj_friction_ground_y;
+
 
 	part = spawn();
 	part.physobj_next = obj.physobj_staticlist;
@@ -120,10 +123,12 @@ entity() nightshade =
 	part.physobj_stepup = 18;
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
-	part.physobj_friction_ground = '0.225 4.4 5';
+	part.physobj_friction_ground = '0.225 2 5';
+	if(!ragewar) part.physobj_friction_ground = '0.225 4.4 8';
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
+	part.wheelsidefriction = part.physobj_friction_ground_y;
 
 	part = spawn();
 	part.physobj_next = obj.physobj_staticlist;
@@ -155,10 +160,12 @@ entity() nightshade =
 	part.physobj_stepup = 18;
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
-	part.physobj_friction_ground = '0.225 3.3 5';
+	part.physobj_friction_ground = '0.225 2 5';
+	if(!ragewar) part.physobj_friction_ground = '0.225 4.4 8';
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
+	part.wheelsidefriction = part.physobj_friction_ground_y;
 
 	part = spawn();
 	part.physobj_next = obj.physobj_staticlist;
@@ -190,10 +197,12 @@ entity() nightshade =
 	part.physobj_stepup = 18;
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
-	part.physobj_friction_ground = '0.225 3.3 5';
+	part.physobj_friction_ground = '0.225 2 5';
+	if(!ragewar) part.physobj_friction_ground = '0.225 4.4 8';
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
+	part.wheelsidefriction = part.physobj_friction_ground_y;
 
 	part = spawn();
 	part.physobj_next = obj.physobj_staticlist;

@@ -85,6 +85,7 @@ entity() servant =
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
+	part.wheelsidefriction = part.physobj_friction_ground_y;
 
 	part = spawn();
 	part.physobj_next = obj.physobj_staticlist;
@@ -120,6 +121,7 @@ entity() servant =
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
+	part.wheelsidefriction = part.physobj_friction_ground_y;
 
 	part = spawn();
 	part.physobj_next = obj.physobj_staticlist;
@@ -155,6 +157,7 @@ entity() servant =
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
+	part.wheelsidefriction = part.physobj_friction_ground_y;
 
 	part = spawn();
 	part.physobj_next = obj.physobj_staticlist;
@@ -190,6 +193,7 @@ entity() servant =
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
+	part.wheelsidefriction = part.physobj_friction_ground_y;
 
 	part = spawn();
 	part.physobj_next = obj.physobj_staticlist;

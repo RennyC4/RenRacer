@@ -8,7 +8,7 @@ entity() mincemeat =
 	self.health = self.max_health = 120; // max health is also armor
 	self.speed = 1500; // also acceleration
 	self.max_speed = 825;
-	self.handling = 45; // low handling
+	self.handling = 100; // low handling
 
 	local entity obj, part;
 
@@ -96,10 +96,12 @@ entity() mincemeat =
 	part.physobj_stepup = 18;
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
-	part.physobj_friction_ground = '0.225 4.4 5';
+	part.physobj_friction_ground = '0.225 2 5';
+	if(!ragewar) part.physobj_friction_ground = '0.225 4.4 8';
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
+	part.wheelsidefriction = part.physobj_friction_ground_y;
 
 	part = spawn();
 	part.physobj_next = obj.physobj_staticlist;
@@ -131,10 +133,12 @@ entity() mincemeat =
 	part.physobj_stepup = 18;
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
-	part.physobj_friction_ground = '0.225 4.4 5';
+	part.physobj_friction_ground = '0.225 2 5';
+	if(!ragewar) part.physobj_friction_ground = '0.225 4.4 8';
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
+	part.wheelsidefriction = part.physobj_friction_ground_y;
 
 	part = spawn();
 	part.physobj_next = obj.physobj_staticlist;
@@ -166,10 +170,12 @@ entity() mincemeat =
 	part.physobj_stepup = 18;
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
-	part.physobj_friction_ground = '0.225 3.3 5';
+	part.physobj_friction_ground = '0.225 2 5';
+	if(!ragewar) part.physobj_friction_ground = '0.225 4.4 8';
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
+	part.wheelsidefriction = part.physobj_friction_ground_y;
 
 	part = spawn();
 	part.physobj_next = obj.physobj_staticlist;
@@ -201,10 +207,12 @@ entity() mincemeat =
 	part.physobj_stepup = 18;
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
-	part.physobj_friction_ground = '0.225 3.3 5';
+	part.physobj_friction_ground = '0.225 2 5';
+	if(!ragewar) part.physobj_friction_ground = '0.225 4.4 8';
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
+	part.wheelsidefriction = part.physobj_friction_ground_y;
 
 	part = spawn();
 	part.physobj_next = obj.physobj_staticlist;
@@ -255,7 +263,7 @@ entity() mincemeat =
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
 	part.physobj_stepup = 1;
-	part.part_mass = 0.875;
+	part.part_mass = 1;
 	part.physobj_stiction = 50;
 	part.physobj_friction_ground = '8 8 8';
 	part.physobj_friction_air = '0.25 0.25 0.1';

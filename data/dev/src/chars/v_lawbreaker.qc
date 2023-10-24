@@ -84,10 +84,12 @@ entity() lawbreaker =
 	part.physobj_stepup = 18;
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
-	part.physobj_friction_ground = '0.225 3.3 5';
+	part.physobj_friction_ground = '0.225 2.5 5';
+	if(!ragewar) part.physobj_friction_ground = '0.225 4.4 8';
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
+	part.wheelsidefriction = part.physobj_friction_ground_y;
 
 	part = spawn();
 	part.physobj_next = obj.physobj_staticlist;
@@ -119,10 +121,13 @@ entity() lawbreaker =
 	part.physobj_stepup = 18;
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
-	part.physobj_friction_ground = '0.225 3.3 5';
+	part.physobj_friction_ground = '0.225 2.5 5';
+	if(!ragewar) part.physobj_friction_ground = '0.225 4.4 8';
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
+	part.wheelsidefriction = part.physobj_friction_ground_y;
+
 
 	part = spawn();
 	part.physobj_next = obj.physobj_staticlist;
@@ -154,10 +159,12 @@ entity() lawbreaker =
 	part.physobj_stepup = 18;
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
-	part.physobj_friction_ground = '0.225 3.3 5';
+	part.physobj_friction_ground = '0.225 2.8 5';
+	if(!ragewar) part.physobj_friction_ground = '0.225 4.4 8';
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
+	part.wheelsidefriction = part.physobj_friction_ground_y;
 
 	part = spawn();
 	part.physobj_next = obj.physobj_staticlist;
@@ -189,10 +196,12 @@ entity() lawbreaker =
 	part.physobj_stepup = 18;
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
-	part.physobj_friction_ground = '0.225 3.3 5';
+	part.physobj_friction_ground = '0.225 2.8 5';
+	if(!ragewar) part.physobj_friction_ground = '0.225 4.4 8';
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
+	part.wheelsidefriction = part.physobj_friction_ground_y;
 
 	part = spawn();
 	part.physobj_next = obj.physobj_staticlist;
