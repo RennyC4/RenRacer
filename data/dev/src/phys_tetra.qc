@@ -53,20 +53,37 @@ float(entity tetra, float local) GetTetraVolumeSextupled =
 
 entity(entity a, entity b, entity c, entity d) Tetrahedron_Circumcenter =
 {
+	const float EPSILON = 0.0001;
+
 	// Use coordinates relative to point 'a' of the tetrahedron.
 	vector ba = b.relative_org - a.relative_org;
 	vector ca = c.relative_org - a.relative_org;
 	vector da = d.relative_org - a.relative_org;
 
+	// Cross products of these edges.
+	vector cross_bc = crossproduct(ba, ca);
+	float tripleproduct = (da) * (cross_bc);
+	if (fabs(tripleproduct) < EPSILON){
+		/*
+		dprint("detected coplanar:\n");
+		dprint(vtos(a.relative_org));
+		dprint("\n");
+		dprint(vtos(b.relative_org));
+		dprint("\n");
+		dprint(vtos(c.relative_org));
+		dprint("\n");
+		dprint(vtos(d.relative_org));
+		dprint(" - end\n");
+		*/
+		return world;
+	}
+	vector cross_cd = crossproduct(ca, da);
+	vector cross_db = crossproduct(da, ba);
+
 	// Squares of lengths of the edges incident to 'a'.
 	float len_ba = vlensqr(ba);
 	float len_ca = vlensqr(ca);
 	float len_da = vlensqr(da);
-
-	// Cross products of these edges.
-	vector cross_cd = crossproduct(ca, da);
-	vector cross_db = crossproduct(da, ba);
-	vector cross_bc = crossproduct(ba, ca);
 
 	// Calculate the denominator of the formula.
 	float denominator = 0.5 / (ba * cross_cd);
