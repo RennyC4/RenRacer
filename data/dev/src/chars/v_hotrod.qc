@@ -9,6 +9,7 @@ entity() hotrod =
 	self.speed = 2000; // also acceleration
 	self.max_speed = 825;
 	self.handling = 100; // lowish handling
+	self.pushfactor = 0.11;
 
 	local entity obj, part;
 

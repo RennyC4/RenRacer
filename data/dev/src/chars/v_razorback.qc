@@ -8,7 +8,8 @@ entity() razorback =
 	self.health = self.max_health = 130; // max health is also armor
 	self.speed = 1750; // also acceleration
 	self.max_speed = 825;
-	self.handling = 45; // low handling
+	self.handling = 85; // low handling
+	self.pushfactor = 0.07;
 
 	local entity obj, part;
 

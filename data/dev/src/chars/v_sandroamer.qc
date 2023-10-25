@@ -9,6 +9,7 @@ entity() sandroamer =
 	self.speed = 1750; // also acceleration
 	self.max_speed = 955;
 	self.handling = 45; // low handling
+	self.pushfactor = 0.12;
 
 	local entity obj, part;
 

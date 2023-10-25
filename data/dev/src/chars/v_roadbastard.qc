@@ -9,6 +9,7 @@ entity() roadbastard =
 	self.speed = 3000; // also acceleration
 	self.max_speed = 915;
 	self.handling = 60; // intermediate
+	self.pushfactor = 0.12;
 
 	local entity obj, part;
 

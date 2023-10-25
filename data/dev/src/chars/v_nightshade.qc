@@ -9,6 +9,7 @@ entity() nightshade =
 	self.speed = 1250; // also acceleration
 	self.max_speed = 700;
 	self.handling = 75; // poor handling
+	self.pushfactor = 0.03;
 
 	local entity obj, part;
 

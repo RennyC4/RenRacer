@@ -634,10 +634,10 @@ void() car_drift =
 		return;
 
 	// Remove tire friction on drifts
-	f_left.physobj_friction_ground_y = 0;
-	f_right.physobj_friction_ground_y = 0;
-	b_left.physobj_friction_ground_y = 0;
-	b_right.physobj_friction_ground_y = 0;
+	f_left.physobj_friction_ground_y = 0.2;
+	f_right.physobj_friction_ground_y = 0.2;
+	b_left.physobj_friction_ground_y = 0.1;
+	b_right.physobj_friction_ground_y = 0.1;
 
 	local float strength = 2500;
 
@@ -654,11 +654,13 @@ void() car_drift =
 	float car_angs = self.driving.angles_y;
 	if (car_angs > 180)
 		car_angs -= 360;
+	/*
 
 	if (car_angs > self.v_angle_y)
 		Phys_Force(self.driving, self.driving.physobj_mass * 0.35, (v_right * strength * -1) * frametime, worldorg - v_right * 16, -v_right);
 	else
 		Phys_Force(self.driving, self.driving.physobj_mass * 0.35, v_right * strength * frametime, worldorg + v_right * 16, +v_right);
+	*/
 };
 
 // RennyC - helps to keep the car balanced if it's tipping in a cheaty manner

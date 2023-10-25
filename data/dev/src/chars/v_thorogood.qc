@@ -9,6 +9,7 @@ entity() thorogood =
 	self.speed = 4000; // also acceleration
 	self.max_speed = 1000;
 	self.handling = 100; // amazing handling
+	self.pushfactor = 0.15;
 
 	local entity obj, part;
 

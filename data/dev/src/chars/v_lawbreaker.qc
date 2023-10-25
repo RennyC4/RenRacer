@@ -9,6 +9,7 @@ entity() lawbreaker =
 	self.speed = 3000; // also acceleration
 	self.max_speed = 915;
 	self.handling = 60; // intermediate
+	self.pushfactor = 0.09;
 
 	local entity obj, part;
 

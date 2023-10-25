@@ -9,6 +9,7 @@ entity() redrage =
 	self.speed = 4500; // also acceleration
 	self.max_speed = 1250;
 	self.handling = 150; // amazing handling
+	self.pushfactor = 0.13;
 
 	local entity obj, part;
 

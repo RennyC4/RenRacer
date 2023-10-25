@@ -117,26 +117,27 @@ void() PushPlayers =
 		{
 			if (self.realspeed > b.realspeed)
 			{
-			/*
-				if (ragewar)
+			
+				if (ragewar && self.turbo)
 				{
 					if (self.vehicle != VEH_SKYSCRAPER)
 					{
 						b.forcejump_strength = ceil(200 + (self.realspeed * 1.75));
 						b.forcejump = TRUE;
 					}
-					else if (self.turbo || self.drift) // only skyscraper jumps on turbo/drift hit
+					else if (self.drift) // only skyscraper jumps on turbo/drift hit
 					{
 						self.forcejump_strength = ceil(200 + (self.realspeed * 1.75));
 						self.forcejump = TRUE;
 					}
 				}
+			/*
 				else
 				{
 					b.forcejump_strength = 240 + (self.realspeed);
 					b.forcejump = TRUE;
 				}
-				*/
+			*/
 				
 				if (self.collide_finished < time)
 				{
@@ -194,11 +195,11 @@ void() PushPlayers =
 				entity part = self.driving.physobj_particlelist;
 				while(part)
 				{
-						if (self.collide_finished < time)
-							part.velocity *= 0.8;
-						part.velocity -= (b.origin - self.origin) * (101 - vlen(b.origin - self.origin)) * 0.1;
-						//if(ragewar)
-							//part.velocity *= 0.5;
+						if (self.collide_finished < time) part.velocity *= 0.8;
+						if (b.turbo) part.velocity -= (b.origin - self.origin) * (101 - vlen(b.origin - self.origin)) * (self.pushfactor + 0.05);
+						else part.velocity -= (b.origin - self.origin) * (101 - vlen(b.origin - self.origin)) * self.pushfactor;
+						
+
 						part = part.physobj_next;
 				}
 			//}

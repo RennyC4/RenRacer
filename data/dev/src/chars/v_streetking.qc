@@ -9,6 +9,7 @@ entity() streetking =
 	self.speed = 3000; // also acceleration
 	self.max_speed = 1000;
 	self.handling = 80; // good handling
+	self.pushfactor = 0.11;
 
 	local entity obj, part;
 

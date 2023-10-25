@@ -9,6 +9,7 @@ entity() wraith =
 	self.speed = 4000; // also acceleration
 	self.max_speed = 1000;
 	self.handling = 90; // good handling
+	self.pushfactor = 0.13;
 
 	local entity obj, part;
 

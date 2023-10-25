@@ -9,6 +9,7 @@ entity() mincemeat =
 	self.speed = 1500; // also acceleration
 	self.max_speed = 825;
 	self.handling = 100; // low handling
+	self.pushfactor = 0.06;
 
 	local entity obj, part;
 

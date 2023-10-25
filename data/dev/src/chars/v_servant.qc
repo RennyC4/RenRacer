@@ -9,6 +9,7 @@ entity() servant =
 	self.speed = 1000; // also acceleration
 	self.max_speed = 700;
 	self.handling = 96; // poor handling
+	self.pushfactor = 0.05;
 
 	local entity obj, part;
 
