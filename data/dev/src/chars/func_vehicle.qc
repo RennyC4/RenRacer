@@ -477,7 +477,7 @@ void(float speed, float maxspeed) Car_Accelerate =
 		return;
 	if (self.slow_finished > time) // slow status
 	{
-		speed = speed / 2;
+		speed = speed / 6;
 		maxspeed = maxspeed / 2;
 	}
 	tleft = self.driving.backleft;

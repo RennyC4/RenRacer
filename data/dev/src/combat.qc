@@ -130,7 +130,7 @@ void(entity targ, entity attacker, string attackerclassname) PrintDeathMessage =
 		bprint(attacker.netname, "'s sand storm decimated ");
 		bprint(targ.netname, "\n");
 	}
-	if (attackerclassname == "sandstorm") // nightshade
+	if (attackerclassname == "timeshifter") // nightshade
 	{
 		bprint(attacker.netname, " slowed and stopped ");
 		bprint(targ.netname, "'s attempt at being alive\n");
@@ -2786,7 +2786,7 @@ void() SpecialWeapon_Nightshade_Think =
 	if (self.enemy)
 	{
 		vector dir = normalize(self.enemy.origin - self.origin);
-		self.velocity = dir * 1000;
+		self.velocity = dir * 3500;
 		self.angles = vectoangles(self.velocity);
 	}
 };
@@ -2806,7 +2806,7 @@ void(float rear) SpecialWeapon_Nightshade =
 	beam.movetype = MOVETYPE_FLYMISSILE;
 	beam.owner = self;
 	beam.solid = SOLID_TRIGGER;
-	beam.classname = "nightshade";
+	beam.classname = "timeshifter";
 	beam.effects = EF_FULLBRIGHT | EF_ADDITIVE;
 	beam.flags = FL_ITEM; // bigger hitbox
 	beam.alpha = 0.9;
@@ -2819,7 +2819,7 @@ void(float rear) SpecialWeapon_Nightshade =
 	beam.light_lev = 100;
 
 	beam.velocity = aim(self, 1000);
-	beam.velocity = beam.velocity * 1000;
+	beam.velocity = beam.velocity * 3500;
 
 	// Players forward velocity is added to projectiles
 	if (!self.backward)
