@@ -934,12 +934,12 @@ void() PlayerPostThink =
 	bprint (" MP Right: ", s, "\n");
 	*/
 	
-	if (clienttype(self) != CLIENTTYPE_BOT)
-		CommandSpecials();
-
 	//
 	// SPECIAL MOVE MOTIONS: Reset keys if timer is dropped
 	//
+
+	if (clienttype(self) == CLIENTTYPE_REAL)
+		CommandSpecials();
 
 	CheckImpulses();
 	

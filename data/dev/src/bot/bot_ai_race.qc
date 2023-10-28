@@ -288,7 +288,7 @@ void() bot_ai_race =
 	{
 		for (entity targ = world;(targ = find(targ, classname, "player"));)
 		{
-			if (clienttype(targ) == CLIENTTYPE_REAL && !visible(targ) && targ.trail.cnt && (targ.checkpoint > self.checkpoint || targ.waypoint > self.waypoint))// && (targ.lap > self.lap || targ.frags > self.frags))
+			if (clienttype(targ) == CLIENTTYPE_REAL && !visible(targ) && targ.trail.cnt && (targ.checkpoint > self.checkpoint && self.checkpoint > 0) || (targ.waypoint > self.waypoint && self.waypoint > 0)) // && (targ.lap > self.lap || targ.frags > self.frags))
 			{
 				// Steal player stats & update goal entities
 				if (targ.waypoint > self.waypoint)

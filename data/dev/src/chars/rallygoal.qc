@@ -58,12 +58,12 @@ void() rally_goal_touch =
 			if (other.owner.driving.laptime < other.owner.driving.fastest_lap) // Update best lap time if need be on race finish
 				other.owner.driving.fastest_lap = other.owner.driving.laptime;
 
-			local string l5 = ftos(other.owner.driving.fastest_lap);
+			string l5 = ftos(other.owner.driving.fastest_lap);
 			l5 = sprintf("%.2f", other.owner.driving.fastest_lap); // cut down numbers
 			if (other.owner.driving.fastest_lap > 0) // Print fastest lap time
 				bprint(other.owner.driving.netname, "'s Fastest lap: ", l5, "\n");
 
-			local string l6 = ftos(other.owner.driving.overall_time);
+			string l6 = ftos(other.owner.driving.overall_time);
 			l6 = sprintf("%.2f", other.owner.driving.overall_time); // cut down numbers
 			bprint(other.owner.driving.netname, "'s Overall Time: ", l6, "\n");
 
@@ -87,9 +87,9 @@ void() rally_goal_touch =
 			other.owner.driving.frags = other.owner.driving.lap; // FIXME: Hack for CSQC reading players 'frags' on scoreboard
 			other.owner.driving.checkpoint = 0; // Reset lap checkpoint counter
 
-			local string l = ftos(other.owner.driving.lap);
-			local string l2 = ftos(self.lap);
-			local string l3 = ftos(other.owner.driving.laptime);
+			string l = ftos(other.owner.driving.lap);
+			string l2 = ftos(self.lap);
+			string l3 = ftos(other.owner.driving.laptime);
 			l3 = sprintf("%.2f", other.owner.driving.laptime); // cut down numbers
 
 			// Record best lap time
@@ -102,13 +102,13 @@ void() rally_goal_touch =
 					if (other.owner.driving.lap != self.lap) // Don't play fastlap over finallap
 					{
 						stuffcmd (other.owner.driving, "play fastlap.wav\n"); // FIXME: Ugly
-						local float conflict = TRUE;
+						float conflict = TRUE;
 					}
 					other.owner.driving.fastest_lap = other.owner.driving.laptime;
 				}
 			}
 
-			local string l4 = ftos(other.owner.driving.fastest_lap);
+			string l4 = ftos(other.owner.driving.fastest_lap);
 			l4 = sprintf("%.2f", other.owner.driving.fastest_lap); // cut down numbers
 			if (other.owner.driving.fastest_lap > 0 && other.owner.driving.lap > 1) // Print fastest lap time
 				sprint (other.owner.driving, "Fastest Lap: ", l4, "\n");

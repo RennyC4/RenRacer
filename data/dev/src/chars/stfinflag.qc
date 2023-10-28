@@ -46,12 +46,12 @@ void() rally_goal_proxy_think =
 						if (targ.laptime < targ.fastest_lap) // Update best lap time if need be on race finish
 							targ.fastest_lap = targ.laptime;
 
-						local string l5 = ftos(targ.fastest_lap);
+						string l5 = ftos(targ.fastest_lap);
 						l5 = sprintf("%.2f", targ.fastest_lap); // cut down numbers
 						if (targ.fastest_lap > 0) // Print fastest lap time
 							bprint(targ.netname, "'s Fastest Lap: ", l5, "\n");
 
-						local string l6 = ftos(targ.overall_time);
+						string l6 = ftos(targ.overall_time);
 						l6 = sprintf("%.2f", targ.overall_time); // cut down numbers
 						bprint(targ.netname, "'s Overall Time: ", l6, "\n");
 
@@ -76,9 +76,9 @@ void() rally_goal_proxy_think =
 						targ.frags = targ.lap; // FIXME: Hack for CSQC reading players 'frags' on scoreboard
 						targ.checkpoint = 0; // Reset lap checkpoint counter
 
-						local string l = ftos(targ.lap);
-						local string l2 = ftos(self.lap);
-						local string l3 = ftos(targ.laptime);
+						string l = ftos(targ.lap);
+						string l2 = ftos(self.lap);
+						string l3 = ftos(targ.laptime);
 						l3 = sprintf("%.2f", targ.laptime); // cut down numbers
 
 						// Record best lap time
@@ -90,14 +90,14 @@ void() rally_goal_proxy_think =
 							{
 								if (targ.lap != self.lap) // Don't play fastlap.wav over finallap.wav
 								{
-									local float conflict = TRUE;
+									float conflict = TRUE;
 									stuffcmd (targ, "play fastlap.wav\n"); // FIXME: Ugly
 								}
 								targ.fastest_lap = targ.laptime;
 							}
 						}
 
-						local string l4 = ftos(targ.fastest_lap);
+						string l4 = ftos(targ.fastest_lap);
 						l4 = sprintf("%.2f", targ.fastest_lap); // cut down numbers
 						if (targ.fastest_lap > 0 && targ.lap > 1) // Print fastest lap time
 							sprint (targ, "Fastest Lap: ", l4, "\n");
