@@ -408,7 +408,7 @@ void() SpecialRegenerate =
 	}
 	if (self.vehicle == VEH_SKYSCRAPER)
 	{
-		if (self.ammo_special < 5) // max held
+		if (self.ammo_special < 2) // max held
 		{
 			self.ammo_special = self.ammo_special + 1;
 			stuffcmd (self, "play combat/special.wav\n");
