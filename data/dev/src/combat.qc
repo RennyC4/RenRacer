@@ -1628,7 +1628,7 @@ void() SpecialWeapon_HotRod_Touch =
 		if (other.owner.driving.frozen_finished < time)
 		{
 			other.owner.driving.onfire_finished = time + 5;
-			other.owner.driving.slow_finished = time + 1;
+			other.owner.driving.slow_finished = time + 2.5;
 			other.owner.driving.igniter = self.owner;
 		}
 		self.hitobject_finished = time + 0.15; // how fast to damage
@@ -2853,6 +2853,23 @@ void(float rear) SpecialWeapon_Nightshade =
 .float cmdspecial_napalm_step;
 .float cmdspecial_napalm_step_finished;
 
+void() Clear_CommandSpecialsFlags =
+{
+	self.cmdspecial_rear_step = 0;
+	self.cmdspecial_rear_step_finished = time;
+
+	self.cmdspecial_landmine_step = 0;
+	self.cmdspecial_landmine_step_finished = time;
+
+	self.cmdspecial_freezeburst_step = 0;
+	self.cmdspecial_freezeburst_step_finished = time;
+
+	self.cmdspecial_napalm_step = 0;
+	self.cmdspecial_napalm_step_finished = time;
+
+	self.moveprog1 = self.moveprog2 = self.moveprog3 = self.moveprog4 = 0;
+};
+
 void() CommandSpecials =
 {
 	if (!ragewar)
@@ -2875,7 +2892,7 @@ void() CommandSpecials =
 		sprint (self, "^2Command: ");
 		sprint (self, "^7Cloak\n");
 		self.commandspcl_finished = time + 5;
-		self.moveprog1 = self.moveprog2 = self.moveprog3 = self.moveprog4 = 0; // clear keyflags
+		Clear_CommandSpecialsFlags();
 		return;
 	}
 	//
@@ -2891,7 +2908,7 @@ void() CommandSpecials =
 		sprint (self, "^2Command: ");
 		sprint (self, "^7Shield\n");
 		self.commandspcl_finished = time + 3;
-		self.moveprog1 = self.moveprog2 = self.moveprog3 = self.moveprog4 = 0; // clear keyflags
+		Clear_CommandSpecialsFlags();
 		return;
 	}
 	//
@@ -2908,7 +2925,7 @@ void() CommandSpecials =
 		sprint (self, "^2Command: ");
 		sprint (self, "^7Jump\n");
 		self.commandspcl_finished = time + 1;
-		self.moveprog1 = self.moveprog2 = self.moveprog3 = self.moveprog4 = 0; // clear keyflags
+		Clear_CommandSpecialsFlags();
 		return;
 	}
 	//
@@ -2933,7 +2950,7 @@ void() CommandSpecials =
 		CarAttack(1, TRUE);
 		self.cmdspecial_rear_step = 0;
 		self.commandspcl_finished = time + 1;
-		self.moveprog1 = self.moveprog2 = self.moveprog3 = self.moveprog4 = 0; // clear keyflags
+		Clear_CommandSpecialsFlags();
 		return;
 	}
 	if (self.cmdspecial_rear_step > 0)
@@ -2964,7 +2981,7 @@ void() CommandSpecials =
 		Fire_Landmine();
 		self.cmdspecial_landmine_step = 0;
 		self.commandspcl_finished = time + 1;
-		self.moveprog1 = self.moveprog2 = self.moveprog3 = self.moveprog4 = 0; // clear keyflags
+		Clear_CommandSpecialsFlags();
 		return;
 	}
 	if (self.cmdspecial_landmine_step > 0)
@@ -2995,7 +3012,7 @@ void() CommandSpecials =
 		Fire_Freeze(FALSE);
 		self.cmdspecial_freezeburst_step = 0;
 		self.commandspcl_finished = time + 1;
-		self.moveprog1 = self.moveprog2 = self.moveprog3 = self.moveprog4 = 0; // clear keyflags
+		Clear_CommandSpecialsFlags();
 		return;
 	}
 	if (self.cmdspecial_freezeburst_step > 0)
@@ -3032,7 +3049,7 @@ void() CommandSpecials =
 		Fire_Napalm(FALSE);
 		self.cmdspecial_napalm_step = 0;
 		self.commandspcl_finished = time + 1;
-		self.moveprog1 = self.moveprog2 = self.moveprog3 = self.moveprog4 = 0; // clear keyflags
+		Clear_CommandSpecialsFlags();
 		return;
 	}
 	if (self.cmdspecial_napalm_step > 0)
