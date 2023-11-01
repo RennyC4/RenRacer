@@ -116,16 +116,18 @@ void Car_TirePlace(entity tire){
 		tire.angles_x += pitch * 0.1;
 	*/
 
-	traceline(tireparticle.origin, tireparticle.origin + tireparticle.lmat_up * -tire.frags, TRUE, tire);
-	float tracelen = fabs(tireparticle.physobj_spring_length);
-#if defined(SMOOTH)
-	float f = 0.1;
-#else
-	float f = frametime;
-#endif
-	tire.frags = min(tire.frags + f*30, tracelen*trace_fraction);
+	traceline(tireparticle.origin, tireparticle.origin - tireparticle.lmat_up * tire.frags, TRUE, tire);
 	tire.oldorigin = tire.origin;
-	setorigin(tire, trace_endpos + tireparticle.lmat_up * tireparticle.relative_size);
+	if (trace_fraction == 1 || trace_plane_normal_z > 0.7){
+		float tracelen = fabs(tireparticle.physobj_spring_length + tire.relative_size);
+		tire.frags = min(tire.frags + frametime*30, tracelen*trace_fraction);
+		tire.punchangle = trace_endpos + tireparticle.lmat_up * tire.relative_size;
+		setorigin(tire, tire.punchangle);
+		tire.punchangle -= tireparticle.origin;
+	}
+	else {
+		setorigin(tire, tireparticle.origin + tire.punchangle);
+	}
 	// RennyC: From build a delivery by shpuld
 	if (trace_fraction < 0.8)
 	{
@@ -210,15 +212,8 @@ void() Car_ChassiThink =
         e = e.physobj_next;
     }
     //
-	
-#if defined(SMOOTH)
-	car.frags = time + 0.1;
-	self.angles = vectoangles2(self.lmat_forward, self.lmat_up);
-	setorigin(self, self.view_ofs);
-	self.nextthink = time + 0.1;
-#else
+
 	self.nextthink = time;
-#endif
 
 	// RennyC - Send real (car) speed / angles to player
 	float r = vlen(car.velocity) * 0.1;
@@ -299,7 +294,7 @@ void(entity car) Car_InitVehicle =
 		}
 		if (!hasStabilizer){ // we better make one then
 			e = Phys_ObjectAddStick(car.frontright, car.frontleft, car);
-			Phys_ObjectAddStick(car.frontright, car.frontleft, car);
+			e.physobj_flags |= PHFLAGS_STABILIZERBAR;
 		}
 	}
 	hasStabilizer = FALSE;
@@ -318,7 +313,7 @@ void(entity car) Car_InitVehicle =
 		}
 		if (!hasStabilizer){ // we better make one then
 			e = Phys_ObjectAddStick(car.backright, car.backleft, car);
-			Phys_ObjectAddStick(car.backright, car.backleft, car);
+			e.physobj_flags |= PHFLAGS_STABILIZERBAR;
 		}
 	}
 	e = car.physobj_staticlist;
@@ -397,7 +392,7 @@ void Car_CheckAttach(){
 	}
 	entity e = findradius(self.origin + self.view_ofs, 100);
 	while(e){
-		if (e.classname == "physics_object"){
+		if (e.physobj_flags & PHFLAGS_VEHICLE){
 			if (!e.driving){
 				Car_AttachToVehicle(self, e);
 				break;
@@ -1109,6 +1104,7 @@ void() StartFuncVehicle =
 		}
 	}
 
+	self.physobj_flags |= PHFLAGS_VEHICLE;
 	Phys_MakeIntoPhysicsObject(self, self.origin, matrix_forward, matrix_left, matrix_up, '0 0 1', 0);
 	self.physobj_impactevent = PushAndDamageTarget;
 	Car_InitVehicle(self);

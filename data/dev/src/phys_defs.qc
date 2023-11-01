@@ -1,4 +1,4 @@
-//#define SMOOTH
+#define QUICKSPAWN
 
 float MOVE_NORMAL = 0; // same as FALSE
 float MOVE_NOMONSTERS = 1; // same as TRUE
@@ -52,7 +52,7 @@ entity physobj_spawning; // the current object in spawning
 .float physobj_spring_mult;
 .vector physobj_spring_force;
 .vector physobj_floor_plane_normal;
-.float physobj_floor_frac;
+.float physobj_floor_dist;
 .vector physobj_friction_ground, physobj_friction_water, physobj_friction_air;
 .float physobj_stiction;
 .float physobj_buoyancy;
@@ -70,6 +70,7 @@ float PHFLAGS_SPRING_TOUCH = 32;
 float PHFLAGS_FORCE = 64;
 float PHFLAGS_KILLME = 128;
 float PHFLAGS_STABILIZERBAR = 256;
+float PHFLAGS_VEHICLE = 512;
 
 .float force_calcdist, force_calcscale;
 
