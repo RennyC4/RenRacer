@@ -1306,7 +1306,7 @@ void() Remote_Think =
 	// touch function
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
-		if (vlen(targ.origin - self.origin) <= 10 && targ != self.owner)
+		if (vlen(targ.origin - self.origin) <= 75 && targ != self.owner)
 		{
 			Remote_Detonate();
 			return;

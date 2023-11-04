@@ -730,6 +730,17 @@ void() PlayerPostThink =
 				{
 					if (!self.deathcount)
 					{
+						if (self.vehicle == VEH_STREETKING) // Kill all of street kings turrets
+						{
+							for (entity targ = world;(targ = find(targ, classname, "turret"));)
+							{
+								if (targ.owner == self)
+								{
+									DoDamage(targ, targ, 999, "");
+									self.turrets = 0;
+								}
+							}
+						}
 						float tt = ceil(random() * 3);
 						if (tt == 1)
 							sound(self, CHAN_AUTO, "combat/death1.wav", 1, ATTN_NORM);
