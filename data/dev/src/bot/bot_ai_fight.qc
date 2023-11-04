@@ -201,7 +201,7 @@ void() bot_ai_fight =
 						self.weapon = WEP_SPECIAL;
 						self.button4 = TRUE;
 					}
-					if (self.vehicle == VEH_NIGHTSHADE && (rangetest == RANGE_NEAR || rangetest == RANGE_CLOSE))
+					if (self.vehicle == VEH_NIGHTSHADE && rangetest != RANGE_FAR)
 					{
 						self.weapon = WEP_SPECIAL;
 						self.button4 = TRUE;
