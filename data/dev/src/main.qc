@@ -267,6 +267,7 @@ void() worldspawn =
 	precache_sound ("combat/thorogood.wav");
 	precache_sound ("combat/sandstrm.wav");
 	precache_sound ("combat/nightshade.wav");
+	precache_sound ("combat/freezebrk.wav");
 
 	world_lights();
 	load_waypoints(); // Load waypoints

@@ -546,8 +546,59 @@ void() fire_think =
 	frameskip(0.01);
 };
 
+void() freeze_explode_vfx_think =
+{
+	if (self.think_finished < time)
+	{
+		if (self.alpha > 0)
+			self.alpha -= 0.005;
+		else
+		{
+			remove(self);
+			return;
+		}
+	}
+	frameskip(0.01);
+};
+
+void() freeze_explode_vfx =
+{
+	entity fxp;
+
+	fxp = spawn ();
+	fxp.angles_y = random() * 360;
+	makevectors (fxp.angles);
+	fxp.velocity = v_forward * (150 + random()*200);
+	fxp.velocity_z = ceil(500 + random()*250);
+	fxp.owner = self;
+	fxp.avelocity = '1000 200 650';
+	fxp.movetype = MOVETYPE_BOUNCE;
+	fxp.solid = SOLID_NOT;
+	fxp.alpha = 0.75;
+	fxp.effects = EF_ADDITIVE;
+	fxp.classname = "icexplode";
+	setmodel (fxp, "progs/frozen.mdl");
+	setsize (fxp, '0 0 0', '0 0 0');
+	makevectors (self.angles);
+	setorigin (fxp, self.origin);
+	fxp.think_finished = time + (3 + random()*3);
+
+	fxp.think = freeze_explode_vfx_think;
+	fxp.nextthink = time;
+};
+
 void() freeze_think =
 {
+	if (self.owner.shield_finished > time) // Shield break ice effect
+	{
+		float i = 3 + ceil(random()*4);
+		for (float t = 0 ; t < i ; t++)
+			freeze_explode_vfx();
+		sound(self, CHAN_AUTO, "combat/freezebrk.wav", 1, ATTN_NORM);		
+		self.owner.frozen = world;
+		remove(self);
+		return;		
+	}
 	if (self.cnt)
 	{
 		if (self.alpha > 0)
@@ -950,7 +1001,8 @@ void() PlayerPostThink =
 	{
 		self.blind_finished = time + 3;
 		self.onfire_finished = time + 3;
-		self.frozen_finished = time + 3;
+		if (self.shield_finished < time)
+			self.frozen_finished = time + 3;
 		self.slow_finished = time + 3;
 	}
 	*/

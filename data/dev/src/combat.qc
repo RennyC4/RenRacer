@@ -2884,7 +2884,7 @@ void() CommandSpecials =
 	//
 	// Cloak: Up, Up, Left
 	//
-	if (self.moveprog1 > 1 && self.moveprog3 > 0 && self.energy >= 50)
+	if (self.moveprog1 > 1 && self.moveprog3 > 0 && self.energy >= 50 && self.frozen_finished < time)
 	{
 		self.energy = self.energy - 50;
 		self.cloak_finished = time + 5;
@@ -2909,6 +2909,10 @@ void() CommandSpecials =
 		sprint (self, "^7Shield\n");
 		self.commandspcl_finished = time + 3;
 		Clear_CommandSpecialsFlags();
+		if (self.frozen_finished > time) // Shield breaks ice
+		{
+			self.frozen_finished = time;
+		}
 		return;
 	}
 	//
@@ -2916,7 +2920,7 @@ void() CommandSpecials =
 	//
 	// Jump: Down, Down, Up
 	//
-	if (self.moveprog1 > 0 && self.moveprog2 > 1 && self.energy >= 10)
+	if (self.moveprog1 > 0 && self.moveprog2 > 1 && self.energy >= 10 && self.frozen_finished < time)
 	{
 		self.energy = self.energy - 10;
 		self.forcejump_strength = 800;
@@ -2943,7 +2947,7 @@ void() CommandSpecials =
 		self.cmdspecial_rear_step = 2;
 		self.cmdspecial_rear_step_finished = time + 0.2;
 	}
-	if (self.cmdspecial_rear_step == 2 && self.moveprog2 == 1) // Hit last step, user hit down
+	if (self.cmdspecial_rear_step == 2 && self.moveprog2 == 1 && self.frozen_finished < time) // Hit last step, user hit down
 	{
 		sprint (self, "^2Command: ");
 		sprint (self, "^7Rear Attack\n");
@@ -2973,7 +2977,7 @@ void() CommandSpecials =
 		self.cmdspecial_landmine_step = 2;
 		self.cmdspecial_landmine_step_finished = time + 0.2;
 	}
-	if (self.cmdspecial_landmine_step == 2 && self.moveprog2 == 1 && self.energy >= 33) // Hit last step, user hit down
+	if (self.cmdspecial_landmine_step == 2 && self.moveprog2 == 1 && self.energy >= 33 && self.frozen_finished < time) // Hit last step, user hit down
 	{
 		self.energy = self.energy - 33;
 		sprint (self, "^2Command: ");
@@ -3004,7 +3008,7 @@ void() CommandSpecials =
 		self.cmdspecial_freezeburst_step = 2;
 		self.cmdspecial_freezeburst_step_finished = time + 0.2;
 	}
-	if (self.cmdspecial_freezeburst_step == 2 && self.moveprog1 == 1 && self.energy >= 80) // Hit last step, user hit up
+	if (self.cmdspecial_freezeburst_step == 2 && self.moveprog1 == 1 && self.energy >= 80 && self.frozen_finished < time) // Hit last step, user hit up
 	{
 		self.energy = self.energy - 80;
 		sprint (self, "^2Command: ");
@@ -3035,7 +3039,7 @@ void() CommandSpecials =
 		self.cmdspecial_napalm_step = 2;
 		self.cmdspecial_napalm_step_finished = time + 0.2;
 	}
-	if (self.cmdspecial_napalm_step == 2 && self.moveprog1 == 1 && self.energy >= 40) // Hit last step, user hit up
+	if (self.cmdspecial_napalm_step == 2 && self.moveprog1 == 1 && self.energy >= 40 && self.frozen_finished < time) // Hit last step, user hit up
 	{
 		if (self.waterlevel > 0)
 		{

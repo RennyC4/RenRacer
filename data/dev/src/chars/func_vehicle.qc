@@ -723,32 +723,35 @@ void TryUpdateVehicle(){
 	{
 		makevectors(self.v_angle);
 
-		if (self.frozen_finished < time)
-		{
-			float forw = v_forward * self.velocity;
-			if (forw > 100){
-				self.keyflags = self.keyflags | KEY_UP; // RennyC
+		float forw = v_forward * self.velocity;
+		if (forw > 100){
+			self.keyflags = self.keyflags | KEY_UP; // RennyC
+			if (self.frozen_finished < time)
+			{
 				if (!ragewar)
 					Car_Accelerate(3000, 950);
 				else
 					Car_Accelerate(self.speed, self.max_speed);
 			}
-			else if (forw < -100){
-				self.keyflags = self.keyflags | KEY_DOWN; // RennyC
+		}
+		else if (forw < -100){
+			self.keyflags = self.keyflags | KEY_DOWN; // RennyC
+			if (self.frozen_finished < time)
+			{
 				if (!ragewar)
 					Car_Decelerate(2500, 800);
 				else
 					Car_Decelerate(self.speed, self.max_speed / 2);
 			}
-			else
-			{
-				if (self.keyflags & KEY_UP)
-					self.keyflags = self.keyflags - KEY_UP;
-				if (self.keyflags & KEY_DOWN)
-					self.keyflags = self.keyflags - KEY_DOWN;
-			}
 		}
-		else // frozen status
+		else
+		{
+			if (self.keyflags & KEY_UP)
+				self.keyflags = self.keyflags - KEY_UP;
+			if (self.keyflags & KEY_DOWN)
+				self.keyflags = self.keyflags - KEY_DOWN;
+		}
+		if (self.frozen_finished > time) // frozen status
 		{
 			f_right.physobj_stiction = 99999;
 			f_left.physobj_stiction = 99999;
