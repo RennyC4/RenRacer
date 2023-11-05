@@ -1005,7 +1005,7 @@ void() PlayerPostThink =
 		CommandSpecials();
 
 	CheckImpulses();
-	
+
 	// Debug status effects
 	/*
 	if (self.driving)

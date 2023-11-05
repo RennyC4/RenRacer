@@ -272,16 +272,21 @@ void(entity targ, entity attacker, float damage, string attackerclassname) DoDam
 		if (targ.classname == "player")
 			targ.colormod_x = 2;
 
-		// Send stats to CSQC
+		// Send stats to CSQC + Bot targetting if hit
 		if (attacker != targ && (attacker.classname == "player" && targ.classname == "player"))
 		{
-			attacker.enemy_displayname = targ.netname;
-			attacker.enemy_displayhealth = targ.health;
-			attacker.enemy_displaymaxhealth = targ.max_health;
+			if (clienttype(targ) == CLIENTTYPE_REAL)
+			{
+				attacker.enemy_displayname = targ.netname;
+				attacker.enemy_displayhealth = targ.health;
+				attacker.enemy_displaymaxhealth = targ.max_health;
 
-			targ.enemy_displayname = attacker.netname;
-			targ.enemy_displayhealth = attacker.health;
-			targ.enemy_displaymaxhealth = attacker.max_health;
+				targ.enemy_displayname = attacker.netname;
+				targ.enemy_displayhealth = attacker.health;
+				targ.enemy_displaymaxhealth = attacker.max_health;
+			}
+			else // set bots enemy to the attacker
+				targ.enemy = attacker;
 		}
 	}
 
@@ -2625,6 +2630,15 @@ void() SpecialWeapon_Thorogood_touch =
 
 void() SpecialWeapon_Thorogood_Think =
 {
+	if (!self.enemy)
+		GetTarget();
+	if (self.enemy)
+	{
+		vector dir = normalize(self.enemy.origin - self.origin);
+		self.velocity = dir * 2000;
+		self.angles = vectoangles(self.velocity);
+	}
+
 	if (self.frame < 3)
 		self.frame += 1;
 	else

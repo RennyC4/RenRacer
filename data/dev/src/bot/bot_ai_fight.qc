@@ -11,7 +11,7 @@ entity() BotGetClosestPlayer =
 
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
-		if (targ == self || targ.health < 1 || targ.invulnerable_finished > time || targ.observer || targ.deadflag)
+		if (targ == self || targ.health < 1 || targ.invulnerable_finished > time || targ.observer)
 			continue; // skip
 
 		//vector heading = targ.origin - self.origin;
@@ -38,7 +38,7 @@ entity() Bot_FindClosestItem =
 
 	for (entity thing = world;(thing = find(thing, netname, "item"));)
 	{
-		if (thing.solid == SOLID_NOT || (thing.classname == "item_health" && self.health > self.max_health / 4))
+		if (thing.solid == SOLID_NOT || (thing.classname == "item_health" && self.health > self.max_health / 2))
 			continue; // skip
 			
 		//vector heading = thing.origin - self.origin;
