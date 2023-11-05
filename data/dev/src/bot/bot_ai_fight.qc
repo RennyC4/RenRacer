@@ -2,6 +2,7 @@
 .float bot_huntitem_finished;
 float(entity targ) range;
 void(float rear) Fire_Freeze;
+void() Fire_Landmine;
 
 entity() BotGetClosestPlayer =
 {
@@ -125,6 +126,14 @@ void() bot_ai_fight =
 
 	if (self.ammo_firerocket < 1 && self.ammo_homingrocket < 1 && self.ammo_powerrocket < 1 && self.ammo_napalm < 1 && self.ammo_rico < 1 && self.ammo_remote < 1 && self.ammo_freeze < 1)
 	{
+		// AI Special Command move - Landmine, randomly drop one here and there
+		if (self.energy >= 33 && self.frozen_finished < time && random() < 0.001 && self.commandspcl_finished < time)
+		{
+			Fire_Landmine();
+			self.energy -= 33;
+			self.commandspcl_finished = time + 1;
+		}
+
 		self.goalentity = Bot_FindClosestItem();
 		self.bot_huntitem_finished = time + 3;
 	}
@@ -140,11 +149,12 @@ void() bot_ai_fight =
 			if (infront(self.enemy, 0.75) && self.invulnerable_finished < time)
 			{
 				rangetest = range(self.enemy);
-				// AI Special Command moves
-				if (self.energy >= 80 && (rangetest == RANGE_NEAR || rangetest == RANGE_CLOSE) && random() < 0.025)
+				// AI Special Command move - Freeze
+				if (self.energy >= 80 && (rangetest == RANGE_NEAR || rangetest == RANGE_CLOSE) && random() < 0.025 && self.commandspcl_finished < time)
 				{
 					Fire_Freeze(FALSE);
 					self.energy = self.energy - 80;
+					self.commandspcl_finished = time + 1;					
 				}
 				if (self.ammo_special > 0)
 				{

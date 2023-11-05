@@ -736,7 +736,7 @@ void() PlayerPostThink =
 							{
 								if (targ.owner == self)
 								{
-									DoDamage(targ, targ, 999, "");
+									DoDamage(targ, targ, 999, ""); // Do it properly
 									self.turrets = 0;
 								}
 							}
