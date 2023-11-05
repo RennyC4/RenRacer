@@ -126,14 +126,6 @@ void() bot_ai_fight =
 
 	if (self.ammo_firerocket < 1 && self.ammo_homingrocket < 1 && self.ammo_powerrocket < 1 && self.ammo_napalm < 1 && self.ammo_rico < 1 && self.ammo_remote < 1 && self.ammo_freeze < 1)
 	{
-		// AI Special Command move - Landmine, randomly drop one here and there while item hunting
-		if (self.energy >= 33 && self.frozen_finished < time && random() < 0.001 && self.commandspcl_finished < time)
-		{
-			Fire_Landmine();
-			self.energy -= 33;
-			self.commandspcl_finished = time + 1;
-		}
-
 		self.goalentity = Bot_FindClosestItem();
 		self.bot_huntitem_finished = time + 3;
 	}
@@ -266,6 +258,13 @@ void() bot_ai_fight =
 		}
 		else
 		{
+			// AI Special Command move - Landmine, randomly drop one here and there while item hunting
+			if (self.energy >= 33 && self.frozen_finished < time && random() < 0.001 && self.commandspcl_finished < time)
+			{
+				Fire_Landmine();
+				self.energy -= 33;
+				self.commandspcl_finished = time + 1;
+			}
 			//bprint ("BOT: Can't see enemy, hunting item\n");
 			self.button3 = FALSE;
 			self.button4 = FALSE;

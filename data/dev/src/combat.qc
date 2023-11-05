@@ -2833,7 +2833,7 @@ void(float rear) SpecialWeapon_Nightshade =
 	beam.color = [2, 1, 2];
 	beam.light_lev = 100;
 
-	beam.velocity = aim(self, 1000);
+	beam.velocity = aim(self, 3500);
 	beam.velocity = beam.velocity * 3500;
 
 	// Players forward velocity is added to projectiles
