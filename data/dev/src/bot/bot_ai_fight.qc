@@ -11,7 +11,7 @@ entity() BotGetClosestPlayer =
 
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
-		if (targ == self || targ.health < 1 || targ.invulnerable_finished > time || targ.observer)
+		if (targ == self || targ.health < 1 || targ.invulnerable_finished > time || targ.observer || targ.deadflag)
 			continue; // skip
 
 		//vector heading = targ.origin - self.origin;
@@ -126,7 +126,7 @@ void() bot_ai_fight =
 
 	if (self.ammo_firerocket < 1 && self.ammo_homingrocket < 1 && self.ammo_powerrocket < 1 && self.ammo_napalm < 1 && self.ammo_rico < 1 && self.ammo_remote < 1 && self.ammo_freeze < 1)
 	{
-		// AI Special Command move - Landmine, randomly drop one here and there
+		// AI Special Command move - Landmine, randomly drop one here and there while item hunting
 		if (self.energy >= 33 && self.frozen_finished < time && random() < 0.001 && self.commandspcl_finished < time)
 		{
 			Fire_Landmine();
