@@ -136,7 +136,7 @@ void() bot_ai_fight =
 
 	if (self.goalentity || self.enemy)
 	{
-		if (visible(self.enemy) && self.enemy.cloak_finished < time && self.enemy.invulnerable_finished < time && self.frozen_finished < time && self.blind_finished < time && self.invulnerable_finished < time)
+		if (visible(self.enemy) && self.enemy.cloak_finished < time && self.enemy.invulnerable_finished < time && /*self.frozen_finished < time &&*/ self.blind_finished < time && self.invulnerable_finished < time)
 		{
 			// AI Special Command move - Cloak
 			if (self.health < (self.max_health / 3) && self.commandspcl_finished < time && random() < 0.012 && self.energy >= 50)
@@ -156,7 +156,7 @@ void() bot_ai_fight =
 			{
 				rangetest = range(self.enemy);
 				// AI Special Command move - Shield
-				if (self.health < (self.max_health / 2) || self.frozen_finished > time && self.commandspcl_finished < time && random() < 0.018 && self.energy >= 50)
+				if ((self.health < (self.max_health / 2) || self.frozen_finished > time) && self.commandspcl_finished < time && random() < 0.018 && self.energy >= 50)
 				{
 					self.energy -= 50;
 					self.shield_finished = time + 3;
