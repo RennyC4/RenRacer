@@ -85,6 +85,7 @@ void() item_health =
 	self.touch = item_health_touch;
 	self.scale = 1.5;
 	self.alpha = 0.9;
+	self.dimension_solid = 0;
 
 	setmodel (self, "progs/item_health.spr");
 	self.mdl = self.model; // can be restored on respawn
@@ -139,6 +140,7 @@ void() item_firerocket =
 	self.effects = EF_FULLBRIGHT;
 	self.touch = item_firerocket_touch;
 	self.scale = 1.5;
+	self.dimension_solid = 0;
 
 	setmodel (self, "progs/item_frckt.spr");
 	self.mdl = self.model; // can be restored on respawn
@@ -190,6 +192,7 @@ void() item_homingrocket =
 	self.effects = EF_FULLBRIGHT;
 	self.touch = item_homingrocket_touch;
 	self.scale = 1.5;
+	self.dimension_solid = 0;
 
 	setmodel (self, "progs/item_hrckt.spr");
 	self.mdl = self.model; // can be restored on respawn
@@ -241,6 +244,7 @@ void() item_powerrocket =
 	self.effects = EF_FULLBRIGHT;
 	self.touch = item_powerrocket_touch;
 	self.scale = 1.5;
+	self.dimension_solid = 0;
 
 	setmodel (self, "progs/item_prckt.spr");
 	self.mdl = self.model; // can be restored on respawn
@@ -292,6 +296,7 @@ void() item_napalm =
 	self.effects = EF_FULLBRIGHT;
 	self.touch = item_napalm_touch;
 	self.scale = 1.5;
+	self.dimension_solid = 0;
 
 	setmodel (self, "progs/item_napalm.spr");
 	self.mdl = self.model; // can be restored on respawn
@@ -343,6 +348,7 @@ void() item_ricochet =
 	self.effects = EF_FULLBRIGHT;
 	self.touch = item_ricochet_touch;
 	self.scale = 1.5;
+	self.dimension_solid = 0;
 
 	setmodel (self, "progs/item_rico.spr");
 	self.mdl = self.model; // can be restored on respawn
@@ -397,6 +403,7 @@ void() item_remote =
 	self.effects = EF_FULLBRIGHT;
 	self.touch = item_remote_touch;
 	self.scale = 1.5;
+	self.dimension_solid = 0;
 
 	setmodel (self, "progs/item_remote.spr");
 	self.mdl = self.model; // can be restored on respawn
@@ -452,10 +459,11 @@ void() item_freeze =
 	self.touch = item_freeze_touch;
 	self.colormod = '1 1 3';
 	self.scale = 1.5;
+	self.dimension_solid = 0;
 
 	setmodel (self, "progs/item_freeze.spr");
 	self.mdl = self.model; // can be restored on respawn
 	setsize (self, '0 0 0', '0 0 0');
-	
+
 	SetupItemDynamicLight(); // init dlights
 };
