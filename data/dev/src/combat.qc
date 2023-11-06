@@ -1259,6 +1259,7 @@ void(float rear) Fire_Ricochet =
 	rico.flags = FL_ITEM; // enlarge hitbox
 	rico.netname = "projectile";
 	rico.scale = 1;
+	rico.avelocity = '0 800 0';
 
 	rico.velocity = aim(self, 750);
 	rico.velocity = rico.velocity * 750;
@@ -1462,7 +1463,7 @@ void(float rear) Fire_Freeze =
 		spawn_dist = 64;
 
 	makevectors (self.realang);
-	
+
 	if (rear)
 	{
 		vector v = self.realang;
@@ -1478,9 +1479,9 @@ void(float rear) Fire_Freeze =
 	freeze.colormod = '1 1 3';
 	freeze.netname = "projectile";
 	freeze.effects = EF_ADDITIVE;
-	freeze.flags = FL_ITEM; // bigger hitbox
 	freeze.alpha = 0.75;
 	freeze.scale = 2;
+	freeze.dimension_solid = 0; // Fix being hit by other projectiles
 	freeze.touch = Freeze_Touch;
 
 	freeze.velocity = aim(self, 700);
