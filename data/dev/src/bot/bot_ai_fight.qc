@@ -4,6 +4,7 @@ float(entity targ) range;
 void(float rear) Fire_Freeze;
 void() Fire_Landmine;
 void(float type, float rear) CarAttack;
+void() Fire_Shield;
 
 entity() BotGetClosestPlayer =
 {
@@ -137,7 +138,15 @@ void() bot_ai_fight =
 	{
 		if (visible(self.enemy) && self.enemy.cloak_finished < time && self.enemy.invulnerable_finished < time && self.frozen_finished < time && self.blind_finished < time && self.invulnerable_finished < time)
 		{
-			// Rear attack
+			// AI Special Command move - Cloak
+			if (self.health < (self.max_health / 3) && self.commandspcl_finished < time && random() < 0.012 && self.energy >= 50)
+			{
+				self.energy -= 50;
+				self.cloak_finished = time + 5;
+				sound (self, CHAN_BODY, "combat/cloak.wav", 1, ATTN_NORM);
+				self.commandspcl_finished = time + 5;
+			}
+			// AI Special Command move - Rear attack
 			if (behind(self.enemy, 0.90) && self.commandspcl_finished < time && random() < 0.025)
 			{
 				CarAttack(1, TRUE);
@@ -146,11 +155,21 @@ void() bot_ai_fight =
 			if (infront(self.enemy, 0.75))
 			{
 				rangetest = range(self.enemy);
+				// AI Special Command move - Shield
+				if (self.health < (self.max_health / 2) || self.frozen_finished > time && self.commandspcl_finished < time && random() < 0.018 && self.energy >= 50)
+				{
+					self.energy -= 50;
+					self.shield_finished = time + 3;
+					Fire_Shield();
+					self.commandspcl_finished = time + 3;
+					if (self.frozen_finished > time) // Shield breaks ice
+						self.frozen_finished = time;
+				}
 				// AI Special Command move - Freeze
 				if (self.energy >= 80 && (rangetest == RANGE_NEAR || rangetest == RANGE_CLOSE) && random() < 0.025 && self.commandspcl_finished < time)
 				{
 					Fire_Freeze(FALSE);
-					self.energy = self.energy - 80;
+					self.energy -= 80;
 					self.commandspcl_finished = time + 1;					
 				}
 				if (self.ammo_special > 0)

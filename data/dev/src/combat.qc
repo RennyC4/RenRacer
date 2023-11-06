@@ -2214,7 +2214,7 @@ void() SpecialWeapon_Lawbreaker_Think =
 		if (!self.cnt) // run first damage function once
 		{
 			SpecialWeapon_Lawbreaker_VFX();
-			self.enemy.forcejump_strength = 900;
+			self.enemy.forcejump_strength = 625;
 			self.enemy.forcejump = TRUE;
 			DoDamage(self.enemy, self.owner, 10, self.classname);
 			self.cnt = TRUE;
@@ -2933,7 +2933,7 @@ void() CommandSpecials =
 	if (self.moveprog1 > 0 && self.moveprog2 > 1 && self.energy >= 10 && self.frozen_finished < time)
 	{
 		self.energy = self.energy - 10;
-		self.forcejump_strength = 800;
+		self.forcejump_strength = 625;
 		ForceJump();
 		sound (self, CHAN_BODY, "combat/jump.wav", 1, ATTN_NORM);
 		sprint (self, "^2Command: ");
