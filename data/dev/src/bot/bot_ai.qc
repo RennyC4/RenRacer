@@ -46,7 +46,9 @@ void(entity obj, vector org, vector rot, float keep_velocity) TeleportPhysObject
 void() headlights_on;
 void() headlights_off;
 float(float y1, float y2) angcomp;
+void(vector ang) makevectors_mdl;
 
+.float goalentity_time;
 .float bot_backup_finished;
 .float bot_search_finished;
 .float bot_search_count;
@@ -56,20 +58,35 @@ float(float y1, float y2) angcomp;
 .entity goalentity_checkpoint;
 .entity goalentity_goal;
 
-.float goalentity_time;
+/*
+=============
+behind (of car)
+
+returns 1 if the entity is behind of self by car angle
+=============
+*/
+float(entity targ, float howmuch) behind =
+{
+	makevectors (self.realang);
+	vector vec = normalize(realorigin(targ) - self.origin);
+	float dot = vec * (v_forward * -1);
+
+	if (dot > howmuch)
+		return TRUE;
+	return FALSE;
+};
 
 /*
 =============
 infront (of car)
 
-returns 1 if the entity is in front (in sight) of self
+returns 1 if the entity is in front (in sight) of self by car angle
 =============
 */
 float(entity targ, float howmuch) infront =
 {
 	makevectors (self.realang);
 	vector vec = normalize(realorigin(targ) - self.origin);
-	
 	float dot = vec * v_forward;
 
 	if (dot > howmuch)
@@ -81,14 +98,14 @@ float(entity targ, float howmuch) infront =
 =============
 infront2 (view angle)
 
-returns 1 if the entity is in front (in sight) of self
+returns 1 if the entity is in front (in sight) of self by v_angle
 =============
 */
 float(entity targ, float howmuch) infront2 =
 {
 	makevectors (self.v_angle);
-	local vector vec = normalize (targ.origin - self.origin);
-	local float dot = vec * v_forward;
+	vector vec = normalize (realorigin(targ) - self.origin);
+	float dot = vec * v_forward;
 
 	if (dot > howmuch)
 		return TRUE;
@@ -99,10 +116,9 @@ float(entity targ, float howmuch) infront2 =
 =============
 infront3 (angles)
 
-returns 1 if the entity is in front (in sight) of self
+returns 1 if the entity is in front (in sight) of self by model angle
 =============
 */
-void(vector ang) makevectors_mdl;
 float(entity targ, float howmuch) infront3 =
 {
 	makevectors_mdl(self.angles);

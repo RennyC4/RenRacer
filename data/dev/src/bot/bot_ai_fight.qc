@@ -3,6 +3,7 @@
 float(entity targ) range;
 void(float rear) Fire_Freeze;
 void() Fire_Landmine;
+void(float type, float rear) CarAttack;
 
 entity() BotGetClosestPlayer =
 {
@@ -89,7 +90,6 @@ void() bot_ai_fight =
 
 		self.button0 = FALSE;
 		self.keys = KEY_MOVEBACK;
-		//self.velocity = v_forward * -9999; // Backward
 	}
 	else // forward
 	{
@@ -106,7 +106,6 @@ void() bot_ai_fight =
 			self.button0 = FALSE;
 
 		self.keys = KEY_MOVEFORWARD;
-		//self.velocity = v_forward * 9999; // Forward
 	}
 
 	//
@@ -136,9 +135,15 @@ void() bot_ai_fight =
 
 	if (self.goalentity || self.enemy)
 	{
-		if (visible(self.enemy) && self.enemy.cloak_finished < time && self.enemy.invulnerable_finished < time && self.frozen_finished < time && self.blind_finished < time)
+		if (visible(self.enemy) && self.enemy.cloak_finished < time && self.enemy.invulnerable_finished < time && self.frozen_finished < time && self.blind_finished < time && self.invulnerable_finished < time)
 		{
-			if (infront(self.enemy, 0.75) && self.invulnerable_finished < time)
+			// Rear attack
+			if (behind(self.enemy, 0.90) && self.commandspcl_finished < time && random() < 0.025)
+			{
+				CarAttack(1, TRUE);
+				self.commandspcl_finished = time + 1;
+			}
+			if (infront(self.enemy, 0.75))
 			{
 				rangetest = range(self.enemy);
 				// AI Special Command move - Freeze

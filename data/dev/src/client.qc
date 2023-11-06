@@ -842,7 +842,6 @@ void() PlayerPostThink =
 	{
 		if (self.health > 0)
 		{
-			//centerprint (self, "You're on fire!\n");
 			if (self.onfire_tic < time)
 			{
 				float firedmg = ceil(random()*3 + 3);
@@ -874,8 +873,6 @@ void() PlayerPostThink =
 			fire1.pflags = PFLAGS_FULLDYNAMIC;
 			fire1.light_lev = 100;
 			fire1.color = [3, 1.25, 1];
-
-			//spawn_color_glow(3, 1.25, 1, 100, fire1); // dynamic light
 		}
 	}
 	else
@@ -916,7 +913,6 @@ void() PlayerPostThink =
 			freeze1.pflags = PFLAGS_FULLDYNAMIC;
 			freeze1.light_lev = 100;
 			freeze1.color = [1, 1, 3];
-			//spawn_color_glow(1, 1, 3, 100, freeze1); // dynamic light
 
 			sound (freeze1, CHAN_AUTO, "combat/frozen.wav", 1, ATTN_NORM);
 		}

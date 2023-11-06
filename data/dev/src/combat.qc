@@ -241,8 +241,6 @@ void(vector position, float size) Create2DFreezeExplosion =
 	xplode.pflags = PFLAGS_FULLDYNAMIC;
 	xplode.light_lev = 75;
 	xplode.color = [1, 1, 3];
-
-	//spawn_color_glow(1, 1, 3, 75, xplode); // dynamic light
 };
 
 void(entity targ, entity attacker) Death =
@@ -275,17 +273,16 @@ void(entity targ, entity attacker, float damage, string attackerclassname) DoDam
 		// Send stats to CSQC + Bot targetting if hit
 		if (attacker != targ && (attacker.classname == "player" && targ.classname == "player"))
 		{
-			if (clienttype(targ) == CLIENTTYPE_REAL)
-			{
-				attacker.enemy_displayname = targ.netname;
-				attacker.enemy_displayhealth = targ.health;
-				attacker.enemy_displaymaxhealth = targ.max_health;
+			attacker.enemy_displayname = targ.netname;
+			attacker.enemy_displayhealth = targ.health;
+			attacker.enemy_displaymaxhealth = targ.max_health;
 
-				targ.enemy_displayname = attacker.netname;
-				targ.enemy_displayhealth = attacker.health;
-				targ.enemy_displaymaxhealth = attacker.max_health;
-			}
-			else // set bots enemy to the attacker
+			targ.enemy_displayname = attacker.netname;
+			targ.enemy_displayhealth = attacker.health;
+			targ.enemy_displaymaxhealth = attacker.max_health;
+
+			// set bots enemy to the attacker
+			if (clienttype(targ) == CLIENTTYPE_BOT)
 				targ.enemy = attacker;
 		}
 	}
@@ -1374,7 +1371,7 @@ void() Fire_Remote =
 		signal.think = RemoteSignal_Think;
 		signal.nextthink = time;
 	}
-	else // Remote already in play
+	else // remote already in play
 	{
 		self.plyrremote.think = Remote_Detonate;
 		self.plyrremote.nextthink = time;
@@ -1511,8 +1508,6 @@ void(float rear) Fire_Freeze =
 	freeze.pflags = PFLAGS_FULLDYNAMIC;
 	freeze.light_lev = 150;
 	freeze.color = [1, 1, 3];
-
-	//spawn_color_glow(1, 1, 3, 150, freeze); // dynamic light
 };
 
 //
@@ -2314,7 +2309,6 @@ void() SpecialWeapon_Lawbreaker =
 	stuffcmd (self, "play combat/lawbreaker.wav\n"); // ew
 };
 
-
 //
 // Special Weapon - Splatter Dog (Mince Meat)
 //
@@ -2380,9 +2374,8 @@ void() SpecialWeapon_MinceMeat_Touch =
 void(float rear) SpecialWeapon_MinceMeat =
 {
 	entity hotdog = spawn();
-
 	makevectors (self.realang);
-	
+
 	if (rear)
 	{
 		vector v = self.realang;
@@ -2869,6 +2862,11 @@ void(float rear) SpecialWeapon_Nightshade =
 
 void() Clear_CommandSpecialsFlags =
 {
+	self.moveprog1 = 0;
+	self.moveprog2 = 0;
+	self.moveprog3 = 0;
+	self.moveprog4 = 0;
+
 	self.cmdspecial_rear_step = 0;
 	self.cmdspecial_rear_step_finished = time;
 
@@ -2924,9 +2922,7 @@ void() CommandSpecials =
 		self.commandspcl_finished = time + 3;
 		Clear_CommandSpecialsFlags();
 		if (self.frozen_finished > time) // Shield breaks ice
-		{
 			self.frozen_finished = time;
-		}
 		return;
 	}
 	//
