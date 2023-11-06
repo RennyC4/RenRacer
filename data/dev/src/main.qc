@@ -100,6 +100,7 @@ void() worldspawn =
 	precache_model("progs/debug/org.mdl");
 	precache_model("progs/debug/orgbig.mdl");
 	precache_model("progs/s_debug.spr");
+	precache_model("progs/watersplash.spr");
 	precache_model("progs/bullet.mdl");
 	precache_model("progs/rocket.mdl");
 	precache_model("progs/napalm.mdl");
@@ -220,6 +221,7 @@ void() worldspawn =
 	precache_sound ("hit3.wav");
 	precache_sound ("hit4.wav");
 	precache_sound ("spdboost.wav");
+	precache_sound ("watersplash.wav");
 	precache_sound ("misc/metlbrk.wav");
 	precache_sound ("combat/mgun.wav");
 	precache_sound ("combat/fire.wav");

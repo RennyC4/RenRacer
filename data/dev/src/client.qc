@@ -624,6 +624,49 @@ void() freeze_think =
 	frameskip(0.01);
 };
 
+void() VFX_WaterSplash_Think =
+{
+	if (!self.cnt) // Run once
+	{
+		droptofloor();
+		self.cnt = TRUE;
+	}
+
+	if (self.scale < 3)
+		self.scale += 0.1;
+	else
+	{
+		if (self.alpha > 0)
+			self.alpha -= 0.01;
+		else
+		{
+			remove(self);
+			return;
+		}
+	}
+
+	frameskip(0.01);
+};
+
+void() VFX_WaterSplash =
+{
+	entity splash = spawn();
+	splash.owner = self;
+	splash.classname = "watersplash";
+	splash.effects = EF_ADDITIVE;
+	splash.alpha = 0.8;
+	splash.movetype = MOVETYPE_NONE;
+	splash.solid = SOLID_NOT;
+	splash.hitcontentsmaski = CONTENTBIT_WATER | CONTENTBIT_SLIME | CONTENTBIT_LAVA;
+
+	splash.think = VFX_WaterSplash_Think;
+	splash.nextthink = time;
+
+	setorigin (splash, self.origin + v_up * 64);
+	setmodel (splash, "progs/watersplash.spr");
+	setsize (splash, '0 0 0', '0 0 0');
+};
+
 void() PlayerPostThink =
 {
 	if (clienttype(self) == CLIENTTYPE_BOT)
@@ -793,7 +836,18 @@ void() PlayerPostThink =
 	point_z = point_z + self.mins_z + 1; // get the minimum water depth (waterlevel 1)
 	contents = pointcontents(point);
 	if (contents >= CONTENT_LAVA && contents <= CONTENT_WATER)
+	{
+		if (self.onfire_finished > time && self.waterlevel > 0)
+			self.onfire_finished = time; // water removes fire
+
+		if (!self.waterlevel) // Splash VFX+SFX
+		{
+			VFX_WaterSplash();
+			sound (self, CHAN_AUTO, "watersplash.wav", 1, ATTN_NORM);
+		}
+
 		self.waterlevel = 1;
+	}
 	else
 		self.waterlevel = 0;
 
@@ -823,9 +877,6 @@ void() PlayerPostThink =
 			}
 			else
 				self.effects &= ~(EF_BRIGHTFIELD);
-
-			if (self.onfire_finished > time && self.waterlevel > 0)
-				self.onfire_finished = time; // water removes fire
 		}
 	}
 
