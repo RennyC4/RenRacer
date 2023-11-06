@@ -830,7 +830,7 @@ void() PlayerPostThink =
 	//
 	// Get liquid level - RennyC
 	//
-	float contents = 0;
+	float contents;// = 0;
 	vector point = self.origin;
 
 	point_z = point_z + self.mins_z + 1; // get the minimum water depth (waterlevel 1)
@@ -845,7 +845,6 @@ void() PlayerPostThink =
 			VFX_WaterSplash();
 			sound (self, CHAN_AUTO, "watersplash.wav", 1, ATTN_NORM);
 		}
-
 		self.waterlevel = 1;
 	}
 	else
