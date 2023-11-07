@@ -62,17 +62,119 @@ entity() Bot_FindClosestItem =
 	return world;
 };
 
-.float startmatch;
+.vector Last_RW_Waypoint; // first waypoint taken
+.vector Last_RW_Waypoint2; // second last waypoint taken
+.vector Last_RW_Waypoint3; // Last waypoint taken
+entity() Bot_FindClosestRW_Waypoint =
+{
+	float bestd = 9999999999999;
+	entity bestv = world;
+
+	for (entity thing = world;(thing = find(thing, classname, "rw_bot_waypoint"));)
+	{
+		if (thing.origin == self.Last_RW_Waypoint || thing.origin == self.Last_RW_Waypoint2 || thing.origin == self.Last_RW_Waypoint3)
+			continue; // skip
+
+		vector heading = realorigin(thing) - self.origin;
+		float d = heading * heading;
+
+		if (d < bestd)
+		{
+			bestd = d;
+			bestv = thing;
+		}
+
+		if (bestv)
+			return thing;
+	}
+	return world;
+};
+
+.float goalentity_bad_finished; // goalentity cycle
+.float rw_check_waypoint; // one time check
+float rw_use_waypoint_system; // global flag, waypoints exist
 void() bot_ai_fight =
 {
 	if (race_status != RACE_STARTED)
 		return;
+
+	// Turn waypoint mode on if they exist
+	if (!self.rw_check_waypoint)
+	{
+		for (entity targ = world;(targ = find(targ, classname, "rw_bot_waypoint"));)
+			rw_use_waypoint_system = TRUE;
+		self.rw_check_waypoint = TRUE;
+	}
 
 	makevectors(self.v_angle);
 
 	//
 	// Driving logic
 	//
+
+	// Waypoint usage
+	//if (rw_use_waypoint_system)
+	//	self.goalentity = Bot_FindClosestRW_Waypoint();
+
+	// Traceline: Test if bot is going to fall to their death
+	// TODO: Should only check when all 4 wheels are on the ground, remove false-positives
+	if (self.realspeed > 5)
+	{
+		if (!self.backward)
+		{
+			float test1, test2, distance;
+			makevectors(self.realang);
+
+			distance = 0;
+			vector start = self.origin + v_forward * (50 + self.realspeed);
+			vector end = self.origin + v_forward * + (self.realspeed * 6);
+
+			traceline (start, end, TRUE, self); // 1st trace forward
+
+			//bprint (trace_ent.owner.driving.classname, "\n"); // 
+			if (trace_fraction < 1 && !trace_ent.owner.driving)
+				test1 = TRUE; // hit something
+			else
+			{
+				test1 = FALSE; // go to next check
+				vector test2_vec = trace_endpos;
+			}
+
+			distance = 200; // how far to check downward
+			start = test2_vec;
+			end = test2_vec - (v_up * distance);
+			traceline (start, end, TRUE, self); // 2nd trace (down)
+
+			if (trace_fraction < 1)
+				test2 = TRUE; // hit something
+			else
+				test2 = FALSE;
+
+			if (!test1 && !test2) // this is a drop
+			{
+				if (self.goalentity && self.goalentity.classname != "rw_bot_waypoint") // mark goalentity as bad for 6 seconds, unless its a player
+				{
+					if (self.goalentity.classname == "player")
+					{
+						self.goalentity.goalentity_bad_finished = time + 3;
+						//bprint ("Set 1\n");
+					}
+					else
+					{
+						self.goalentity.goalentity_bad_finished = time + 6;
+						//bprint ("Set 2\n");
+					}
+					self.goalentity = world;
+					//bprint ("Change goal entity\n");
+				}
+				self.button0 = FALSE;
+				if (self.realspeed > 0)
+					self.bot_backup_finished = time + 0.1;
+
+				//self.bot_backup_finished = time + (self.realspeed / 25); // FIXME: This formula is bad
+			}
+		}
+	}
 
 	// Bot wall bump
 	if (self.bot_hitwall && self.keys == KEY_MOVEFORWARD && self.realspeed <= 3 && self.bot_backup_finished < time)
@@ -82,9 +184,18 @@ void() bot_ai_fight =
 	{
 		if (random() < 0.5)
 		{
-			self.enemy = BotGetClosestPlayer(); // Find new target while backing up
-			if (self.enemy)
-				self.goalentity = self.enemy;
+			if (rw_use_waypoint_system)
+			{
+				self.goalentity_waypoint = Bot_FindClosestRW_Waypoint();
+				//if (visible(self.goalentity_waypoint))
+					self.goalentity = self.goalentity_waypoint;
+			}
+			else
+			{
+				self.enemy = BotGetClosestPlayer(); // Find new target while backing up
+				if (self.enemy)
+					self.goalentity = self.enemy;
+			}
 		}
 		else
 			self.goalentity = Bot_FindClosestItem();
@@ -115,9 +226,26 @@ void() bot_ai_fight =
 
 	if (!self.enemy && self.bot_huntitem_finished < time)
 	{
-		self.enemy = BotGetClosestPlayer();
-		if (self.enemy)
-			self.goalentity = self.enemy;
+		if (rw_use_waypoint_system)
+		{
+			self.goalentity_waypoint = Bot_FindClosestRW_Waypoint();
+			//if (visible(self.goalentity_waypoint))
+				self.goalentity = self.goalentity_waypoint;
+			/*
+			else
+			{
+				self.enemy = BotGetClosestPlayer();
+				if (self.enemy)
+					self.goalentity = self.enemy;
+			}
+			*/
+		}
+		else
+		{
+			self.enemy = BotGetClosestPlayer();
+			if (self.enemy)
+				self.goalentity = self.enemy;
+		}
 	}
 
 	//
@@ -126,8 +254,24 @@ void() bot_ai_fight =
 
 	if (self.ammo_firerocket < 1 && self.ammo_homingrocket < 1 && self.ammo_powerrocket < 1 && self.ammo_napalm < 1 && self.ammo_rico < 1 && self.ammo_remote < 1 && self.ammo_freeze < 1)
 	{
-		self.goalentity = Bot_FindClosestItem();
-		self.bot_huntitem_finished = time + 3;
+		if (rw_use_waypoint_system)
+		{
+			self.goalentity_waypoint = Bot_FindClosestRW_Waypoint();
+			//if (visible(self.goalentity_waypoint))
+				self.goalentity = self.goalentity_waypoint;
+			/*
+			else
+			{
+				self.goalentity = Bot_FindClosestItem();
+				self.bot_huntitem_finished = time + 3;
+			}
+			*/
+		}
+		else
+		{
+			self.goalentity = Bot_FindClosestItem();
+			self.bot_huntitem_finished = time + 3;
+		}
 	}
 
 	//
@@ -278,7 +422,16 @@ void() bot_ai_fight =
 				self.button4 = FALSE;
 			}
 			if (self.bot_huntitem_finished < time)
-				self.goalentity = self.enemy;
+			{
+				if (rw_use_waypoint_system)
+				{
+					self.goalentity_waypoint = Bot_FindClosestRW_Waypoint();
+					//if (visible(self.goalentity_waypoint))
+						self.goalentity = self.goalentity_waypoint;
+				}
+				else
+					self.goalentity = self.enemy;
+			}
 		}
 		else
 		{
@@ -292,7 +445,14 @@ void() bot_ai_fight =
 			//bprint ("BOT: Can't see enemy, hunting item\n");
 			self.button3 = FALSE;
 			self.button4 = FALSE;
-			self.goalentity = Bot_FindClosestItem();
+			if (rw_use_waypoint_system)
+			{
+				self.goalentity_waypoint = Bot_FindClosestRW_Waypoint();
+				//if (visible(self.goalentity_waypoint))
+					self.goalentity = self.goalentity_waypoint;
+			}
+			else
+				self.goalentity = Bot_FindClosestItem();
 			self.enemy = BotGetClosestPlayer(); // Find new target while item hunting
 			if (self.bot_huntitem_finished < time)
 				self.bot_huntitem_finished = time + 3;
@@ -304,7 +464,15 @@ void() bot_ai_fight =
 		if (self.enemy)
 			self.goalentity = self.enemy;
 		else
-			self.goalentity = Bot_FindClosestItem();
+		{
+			if (rw_use_waypoint_system)
+			{
+				self.goalentity_waypoint = Bot_FindClosestRW_Waypoint();
+				self.goalentity = self.goalentity_waypoint;
+			}
+			else
+				self.goalentity = Bot_FindClosestItem();
+		}
 	}
 
 	bot_angle_set();

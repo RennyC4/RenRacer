@@ -60,6 +60,7 @@ chars/rallygoal.qc
 chars/stfinflag.qc
 chars/countdown.qc
 chars/waypoint.qc
+chars/rw_waypoint.qc
 chars/speedboost.qc
 
 // decorations

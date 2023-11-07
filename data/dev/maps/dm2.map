@@ -6083,3 +6083,452 @@
 ( 2098.5 -344.5 121.5 ) ( 2098.5 -344.5 133.5 ) ( 2055 -280 133.5 ) {bush [ -0.531550106735071 0.1625037194575315 0 52.515625 ] [ 0 0 -0.6666666666666666 58.507812 ] 7.531521 0.1875 0.15928963
 }
 }
+// entity 284
+{
+"classname" "misc_model"
+"origin" "-5208 -728 744"
+"model" "progs/s_rlight.spr"
+"angles" "0 0 0"
+"scale" "5"
+}
+// entity 285
+{
+"classname" "rw_bot_waypoint"
+"origin" "472 -2600 80"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 286
+{
+"classname" "rw_bot_waypoint"
+"origin" "1656 -2072 80"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 287
+{
+"classname" "rw_bot_waypoint"
+"origin" "2840 -1976 272"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 288
+{
+"classname" "rw_bot_waypoint"
+"origin" "3720 -2568 272"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 289
+{
+"classname" "rw_bot_waypoint"
+"origin" "4264 -3064 272"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 290
+{
+"classname" "rw_bot_waypoint"
+"origin" "4264 -2184 376"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 291
+{
+"classname" "rw_bot_waypoint"
+"origin" "4264 -1432 464"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 292
+{
+"classname" "rw_bot_waypoint"
+"origin" "4312 -120 464"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 293
+{
+"classname" "rw_bot_waypoint"
+"origin" "3416 -1368 464"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 294
+{
+"classname" "rw_bot_waypoint"
+"origin" "3528 840 464"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 295
+{
+"classname" "rw_bot_waypoint"
+"origin" "4600 1336 464"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 296
+{
+"classname" "rw_bot_waypoint"
+"origin" "4616 2392 464"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 297
+{
+"classname" "rw_bot_waypoint"
+"origin" "4408 3032 464"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 298
+{
+"classname" "rw_bot_waypoint"
+"origin" "3320 3096 464"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 299
+{
+"classname" "rw_bot_waypoint"
+"origin" "3048 2216 464"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 300
+{
+"classname" "rw_bot_waypoint"
+"origin" "2984 1400 464"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 301
+{
+"classname" "rw_bot_waypoint"
+"origin" "1896 2392 464"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 302
+{
+"classname" "rw_bot_waypoint"
+"origin" "1656 1544 464"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 303
+{
+"classname" "rw_bot_waypoint"
+"origin" "2568 -1352 464"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 304
+{
+"classname" "rw_bot_waypoint"
+"origin" "1656 -1272 464"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 305
+{
+"classname" "rw_bot_waypoint"
+"origin" "712 -1272 464"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 306
+{
+"classname" "rw_bot_waypoint"
+"origin" "728 -488 464"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 307
+{
+"classname" "rw_bot_waypoint"
+"origin" "1192 280 464"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 308
+{
+"classname" "rw_bot_waypoint"
+"origin" "-72 -1464 464"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 309
+{
+"classname" "rw_bot_waypoint"
+"origin" "-1752 -1416 368"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 310
+{
+"classname" "rw_bot_waypoint"
+"origin" "-1720 -2424 368"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 311
+{
+"classname" "rw_bot_waypoint"
+"origin" "-1912 -2952 368"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 312
+{
+"classname" "rw_bot_waypoint"
+"origin" "-2872 -3000 368"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 313
+{
+"classname" "rw_bot_waypoint"
+"origin" "-3592 -3000 368"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 314
+{
+"classname" "rw_bot_waypoint"
+"origin" "-4408 -2984 368"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 315
+{
+"classname" "rw_bot_waypoint"
+"origin" "-4552 -2216 368"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 316
+{
+"classname" "rw_bot_waypoint"
+"origin" "-4584 -1432 368"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 317
+{
+"classname" "rw_bot_waypoint"
+"origin" "-4584 -632 368"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 318
+{
+"classname" "rw_bot_waypoint"
+"origin" "-4488 840 -304"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 319
+{
+"classname" "rw_bot_waypoint"
+"origin" "-4472 1608 -304"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 320
+{
+"classname" "rw_bot_waypoint"
+"origin" "-4680 2456 -304"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 321
+{
+"classname" "rw_bot_waypoint"
+"origin" "-4680 2952 -304"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 322
+{
+"classname" "rw_bot_waypoint"
+"origin" "-3736 840 -304"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 323
+{
+"classname" "rw_bot_waypoint"
+"origin" "-3720 1624 -304"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 324
+{
+"classname" "rw_bot_waypoint"
+"origin" "-2888 1608 -304"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 325
+{
+"classname" "rw_bot_waypoint"
+"origin" "-2728 840 -304"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 326
+{
+"classname" "rw_bot_waypoint"
+"origin" "-1800 840 -304"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 327
+{
+"classname" "rw_bot_waypoint"
+"origin" "-1800 1240 -304"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 328
+{
+"classname" "rw_bot_waypoint"
+"origin" "-1800 2104 -304"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 329
+{
+"classname" "rw_bot_waypoint"
+"origin" "-2472 2136 -216"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 330
+{
+"classname" "rw_bot_waypoint"
+"origin" "-2808 2120 -120"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 331
+{
+"classname" "rw_bot_waypoint"
+"origin" "-3128 2152 -40"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 332
+{
+"classname" "rw_bot_waypoint"
+"origin" "-3416 2152 40"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 333
+{
+"classname" "rw_bot_waypoint"
+"origin" "-3976 2136 116"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 334
+{
+"classname" "rw_bot_waypoint"
+"origin" "-4008 2408 116"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 335
+{
+"classname" "rw_bot_waypoint"
+"origin" "-3864 2744 116"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 336
+{
+"classname" "rw_bot_waypoint"
+"origin" "-3432 2888 116"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 337
+{
+"classname" "rw_bot_waypoint"
+"origin" "-2776 2920 116"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 338
+{
+"classname" "rw_bot_waypoint"
+"origin" "-2072 2936 116"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 339
+{
+"classname" "rw_bot_waypoint"
+"origin" "-1368 2920 116"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 340
+{
+"classname" "rw_bot_waypoint"
+"origin" "-152 2824 -184"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 341
+{
+"classname" "rw_bot_waypoint"
+"origin" "280 3112 -184"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 342
+{
+"classname" "rw_bot_waypoint"
+"origin" "616 3080 -184"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 343
+{
+"classname" "rw_bot_waypoint"
+"origin" "632 2600 -88"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 344
+{
+"classname" "rw_bot_waypoint"
+"origin" "616 2136 72"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 345
+{
+"classname" "rw_bot_waypoint"
+"origin" "632 1656 216"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 346
+{
+"classname" "rw_bot_waypoint"
+"origin" "632 1272 328"
+"targetname" "wp1"
+"target" "wp2"
+}
+// entity 347
+{
+"classname" "rw_bot_waypoint"
+"origin" "600 904 440"
+"targetname" "wp1"
+"target" "wp2"
+}

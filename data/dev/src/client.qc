@@ -797,6 +797,8 @@ void() PlayerPostThink =
 						Create2DExplosion(self.origin + v_up * 64, 10);
 						self.onfire_finished = time + 9999; // cars on fire
 					}
+					if (self.cloak_finished > time)
+						self.cloak_finished = time;
 					self.colormod = '0.01 0.01 0.01'; // car is cooked/black on death
 					if (self.deathcount == 3 || self.deathcount == 6 || self.deathcount == 9 || self.deathcount == 12)
 						CreateExplosion(self.origin);
