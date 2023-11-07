@@ -25,7 +25,7 @@ void() rw_waypoint_touch =
 	bprint ("2: ", vtos(other.owner.driving.Last_RW_Waypoint2), "\n");
 	bprint ("3: ", vtos(other.owner.driving.Last_RW_Waypoint3), "\n");
 
-	self.rw_waypoint_finished = time + 1;
+	other.owner.driving.rw_waypoint_finished = time + 1;
 };
 
 void(vector org, float which, optional float cnt) rw_create_waypoint =
