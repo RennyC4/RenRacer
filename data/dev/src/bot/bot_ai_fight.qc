@@ -112,12 +112,9 @@ void() bot_ai_fight =
 	// Driving logic
 	//
 
-	// Waypoint usage
-	//if (rw_use_waypoint_system)
-	//	self.goalentity = Bot_FindClosestRW_Waypoint();
-
 	// Traceline: Test if bot is going to fall to their death
 	// TODO: Should only check when all 4 wheels are on the ground, remove false-positives
+	// TODO: Do backward check too
 	if (self.realspeed > 5)
 	{
 		if (!self.backward)
@@ -140,7 +137,7 @@ void() bot_ai_fight =
 				vector test2_vec = trace_endpos;
 			}
 
-			distance = 200; // how far to check downward
+			distance = 400; // how far to check downward
 			start = test2_vec;
 			end = test2_vec - (v_up * distance);
 			traceline (start, end, TRUE, self); // 2nd trace (down)
@@ -168,16 +165,14 @@ void() bot_ai_fight =
 					//bprint ("Change goal entity\n");
 				}
 				self.button0 = FALSE;
-				if (self.realspeed > 0)
-					self.bot_backup_finished = time + 0.1;
-
-				//self.bot_backup_finished = time + (self.realspeed / 25); // FIXME: This formula is bad
+				self.bot_backup_finished = time + (self.realspeed / 25); // FIXME: This formula is bad
 			}
 		}
+		//TODO: Add backward check!
 	}
 
 	// Bot wall bump
-	if (self.bot_hitwall && self.keys == KEY_MOVEFORWARD && self.realspeed <= 3 && self.bot_backup_finished < time)
+	if (self.bot_hitwall && self.keys == KEY_MOVEFORWARD && self.realspeed <= 5 && self.bot_backup_finished < time)
 		self.bot_backup_finished = time + 0.3 + random()*0.3;
 
 	if (self.bot_backup_finished > time)
@@ -460,18 +455,21 @@ void() bot_ai_fight =
 	}
 	else
 	{
-		self.enemy = BotGetClosestPlayer(); // Find new target
-		if (self.enemy)
-			self.goalentity = self.enemy;
+		if (rw_use_waypoint_system)
+		{
+			self.goalentity_waypoint = Bot_FindClosestRW_Waypoint();
+			self.goalentity = self.goalentity_waypoint;
+		}
 		else
 		{
-			if (rw_use_waypoint_system)
-			{
-				self.goalentity_waypoint = Bot_FindClosestRW_Waypoint();
-				self.goalentity = self.goalentity_waypoint;
-			}
-			else
+			if (random() < 0.5)
 				self.goalentity = Bot_FindClosestItem();
+			else
+			{
+				self.enemy = BotGetClosestPlayer(); // Find new target
+				if (self.enemy)
+					self.goalentity = self.enemy;
+			}
 		}
 	}
 

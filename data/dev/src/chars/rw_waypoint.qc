@@ -2,23 +2,30 @@
 // RennyC: Modified from AI Cafe, ragewar specific waypoint system
 //
 
+.float rw_waypoint_finished;
 void() rw_waypoint_touch =
 {
 	if (other.owner.driving.classname != "player")
 		return;
-	if (other.owner.driving)
-		entity toucher = other.owner.driving;
-	if (clienttype(toucher) == CLIENTTYPE_REAL)
+	if (clienttype(other.owner.driving) == CLIENTTYPE_REAL)
+		return;
+	if (other.owner.driving.rw_waypoint_finished > time)
+		return;
+	if (other.owner.driving.Last_RW_Waypoint == self.origin)
 		return;
 
-	if (toucher.Last_RW_Waypoint2)
-		toucher.Last_RW_Waypoint3 = toucher.Last_RW_Waypoint2;
-	if (toucher.Last_RW_Waypoint)
-		toucher.Last_RW_Waypoint2 = toucher.Last_RW_Waypoint;
+	// Update list
+	bprint ("Before 1: ", vtos(other.owner.driving.Last_RW_Waypoint), "\n");
 
-	//bprint (ftos(toucher.Last_RW_Waypoint3_y), "\n");
+	other.owner.driving.Last_RW_Waypoint3 = other.owner.driving.Last_RW_Waypoint2;
+	other.owner.driving.Last_RW_Waypoint2 = other.owner.driving.Last_RW_Waypoint;
+	other.owner.driving.Last_RW_Waypoint = self.origin;
 
-	toucher.Last_RW_Waypoint = self.origin;
+	bprint ("1: ", vtos(other.owner.driving.Last_RW_Waypoint), "\n");
+	bprint ("2: ", vtos(other.owner.driving.Last_RW_Waypoint2), "\n");
+	bprint ("3: ", vtos(other.owner.driving.Last_RW_Waypoint3), "\n");
+
+	self.rw_waypoint_finished = time + 1;
 };
 
 void(vector org, float which, optional float cnt) rw_create_waypoint =
