@@ -278,7 +278,7 @@ void() bot_ai_fight =
 		if (visible(self.enemy) && self.enemy.cloak_finished < time && self.enemy.invulnerable_finished < time && /*self.frozen_finished < time &&*/ self.blind_finished < time && self.invulnerable_finished < time)
 		{
 			// AI Special Command move - Cloak
-			if (self.health < (self.max_health / 3) && self.commandspcl_finished < time && random() < 0.012 && self.energy >= 50)
+			if (self.health < (self.max_health / 3) && self.commandspcl_finished < time && random() < 0.012 && self.energy >= 50 && self.frozen_finished < time)
 			{
 				self.energy -= 50;
 				self.cloak_finished = time + 5;
@@ -286,7 +286,7 @@ void() bot_ai_fight =
 				self.commandspcl_finished = time + 5;
 			}
 			// AI Special Command move - Rear attack
-			if (behind(self.enemy, 0.90) && self.commandspcl_finished < time && random() < 0.025)
+			if (behind(self.enemy, 0.90) && self.commandspcl_finished < time && random() < 0.025 && self.frozen_finished < time)
 			{
 				CarAttack(1, TRUE);
 				self.commandspcl_finished = time + 1;
@@ -305,7 +305,7 @@ void() bot_ai_fight =
 						self.frozen_finished = time;
 				}
 				// AI Special Command move - Freeze
-				if (self.energy >= 80 && (rangetest == RANGE_NEAR || rangetest == RANGE_CLOSE) && random() < 0.025 && self.commandspcl_finished < time)
+				if (self.energy >= 80 && (rangetest == RANGE_NEAR || rangetest == RANGE_CLOSE) && random() < 0.025 && self.commandspcl_finished < time && self.frozen_finished < time)
 				{
 					Fire_Freeze(FALSE);
 					self.energy -= 80;
@@ -431,7 +431,7 @@ void() bot_ai_fight =
 		else
 		{
 			// AI Special Command move - Landmine, randomly drop one here and there while item hunting
-			if (self.energy >= 33 && self.frozen_finished < time && random() < 0.001 && self.commandspcl_finished < time)
+			if (self.energy >= 33 && self.frozen_finished < time && random() < 0.001 && self.commandspcl_finished < time && self.frozen_finished < time)
 			{
 				Fire_Landmine();
 				self.energy -= 33;
