@@ -942,7 +942,7 @@ void(float type, float rear, float rzrbck_pos) Fire_Rocket =
 		}
 	}
 	// Players forward velocity is added to projectiles
-	if (!self.backward)
+	if (!self.backward && !rear)
 	{
 		rocket.velocity_x = rocket.velocity_x + self.driving.velocity_x;
 		rocket.velocity_y = rocket.velocity_y + self.driving.velocity_y;
@@ -1138,7 +1138,7 @@ void(float rear) Fire_Napalm =
 	napalm.hitcontentsmaski = CONTENTBIT_SOLID|0x00000002i|CONTENTBIT_BODY|CONTENTBIT_PLAYERCLIP|CONTENTBIT_WATER|CONTENTBIT_SLIME|CONTENTBIT_LAVA;
 
 	// Players forward velocity is added to projectiles
-	if (!self.backward)
+	if (!self.backward && !rear)
 	{
 		napalm.velocity_x = napalm.velocity_x + self.driving.velocity_x / 1.75;
 		napalm.velocity_y = napalm.velocity_y + self.driving.velocity_y / 1.75;
@@ -1265,7 +1265,7 @@ void(float rear) Fire_Ricochet =
 	rico.velocity = rico.velocity * 750;
 
 	// Players forward velocity is added to projectiles
-	if (!self.backward)
+	if (!self.backward && !rear)
 	{
 		rico.velocity_x = rico.velocity_x + self.driving.velocity_x;
 		rico.velocity_y = rico.velocity_y + self.driving.velocity_y;
@@ -1488,7 +1488,7 @@ void(float rear) Fire_Freeze =
 	freeze.velocity = freeze.velocity * 700;
 
 	// Players forward velocity is added to projectiles
-	if (!self.backward)
+	if (!self.backward && !rear)
 	{
 		freeze.velocity_x = freeze.velocity_x + self.driving.velocity_x;
 		freeze.velocity_y = freeze.velocity_y + self.driving.velocity_y;
@@ -1896,7 +1896,7 @@ void(float rear) SpecialWeapon_Wraith =
 	rocket.velocity = rocket.velocity * 1000;
 
 	// Players forward velocity is added to projectiles
-	if (!self.backward)
+	if (!self.backward && !rear)
 	{
 		rocket.velocity_x = rocket.velocity_x + self.driving.velocity_x;
 		rocket.velocity_y = rocket.velocity_y + self.driving.velocity_y;
@@ -2034,7 +2034,7 @@ void(float rear) SpecialWeapon_RoadBastard =
 	boomerang.velocity = boomerang.velocity * 800;
 
 	// Players forward velocity is added to projectiles
-	if (!self.backward)
+	if (!self.backward && !rear)
 	{
 		boomerang.velocity_x = boomerang.velocity_x + self.driving.velocity_x;
 		boomerang.velocity_y = boomerang.velocity_y + self.driving.velocity_y;
@@ -2124,7 +2124,7 @@ void(float rear) SpecialWeapon_RedRage =
 	beam.velocity = beam.velocity * 1500;
 
 	// Players forward velocity is added to projectiles
-	if (!self.backward)
+	if (!self.backward && !rear)
 	{
 		beam.velocity_x = beam.velocity_x + self.driving.velocity_x;
 		beam.velocity_y = beam.velocity_y + self.driving.velocity_y;
@@ -2400,7 +2400,7 @@ void(float rear) SpecialWeapon_MinceMeat =
 	hotdog.velocity = hotdog.velocity * 800;
 
 	// Players forward velocity is added to projectiles
-	if (!self.backward)
+	if (!self.backward && !rear)
 	{
 		hotdog.velocity_x = hotdog.velocity_x + self.driving.velocity_x;
 		hotdog.velocity_y = hotdog.velocity_y + self.driving.velocity_y;
@@ -2664,7 +2664,7 @@ void(float rear) SpecialWeapon_Thorogood =
 	hellspawn.velocity = hellspawn.velocity * 2000;
 
 	// Players forward velocity is added to projectiles
-	if (!self.backward)
+	if (!self.backward && !rear)
 	{
 		hellspawn.velocity_x = hellspawn.velocity_x + self.driving.velocity_x;
 		hellspawn.velocity_y = hellspawn.velocity_y + self.driving.velocity_y;
@@ -2831,7 +2831,7 @@ void(float rear) SpecialWeapon_Nightshade =
 	beam.velocity = beam.velocity * 3500;
 
 	// Players forward velocity is added to projectiles
-	if (!self.backward)
+	if (!self.backward && !rear)
 	{
 		beam.velocity_x = beam.velocity_x + self.driving.velocity_x;
 		beam.velocity_y = beam.velocity_y + self.driving.velocity_y;
