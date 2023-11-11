@@ -35,30 +35,6 @@ entity() thorogood =
 	part.relative_left = '0 1 0';
 	part.relative_up = '0 0 1';
 
-	part = spawn();
-	part.physobj_next = obj.physobj_staticlist;
-	obj.physobj_staticlist = part;
-	part.owner = obj;
-	part.classname = "phys_static";
-	part.netname = "driver";
-	part.model = "progs/Thorogood_Driver.mdl";
-	part.relative_org = '0 15 0';
-	part.relative_forward = '1 0 0';
-	part.relative_left = '0 1 0';
-	part.relative_up = '0 0 1';
-
-	part = spawn();
-	part.physobj_next = obj.physobj_staticlist;
-	obj.physobj_staticlist = part;
-	part.owner = obj;
-	part.classname = "phys_static";
-	part.netname = "driver";
-	part.model = "progs/Thorogood_Sidecar.mdl";
-	part.relative_org = '0 15 0';
-	part.relative_forward = '1 0 0';
-	part.relative_left = '0 1 0';
-	part.relative_up = '0 0 1';
-
 	//Guns for ragewar
 	if (ragewar)
 	{
