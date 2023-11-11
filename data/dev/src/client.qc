@@ -575,6 +575,7 @@ void() freeze_explode_vfx =
 	fxp.movetype = MOVETYPE_BOUNCE;
 	fxp.solid = SOLID_NOT;
 	fxp.alpha = 0.75;
+	fxp.dimension_hit = fxp.dimension_solid = 0;
 	fxp.effects = EF_ADDITIVE;
 	fxp.classname = "icexplode";
 	setmodel (fxp, "progs/frozen.mdl");
