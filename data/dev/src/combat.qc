@@ -1240,7 +1240,7 @@ void(float rear) Fire_Ricochet =
 {
 	entity rico = spawn();
 	float spawn_dist = 48;
-	if (self.vehicle == VEH_NIGHTSHADE)
+	if (self.vehicle == VEH_NIGHTSHADE || self.vehicle == VEH_THOROGOOD)
 		spawn_dist = 64;
 
 	makevectors (self.realang);
