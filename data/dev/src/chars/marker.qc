@@ -57,6 +57,8 @@ void() marker_think =
 								targ.clearcprint_finished = time + 2;
 								oldself = self;
 								self = targ;
+								self.angles = self.checkpoint_lastpos_ang;
+								self.fixangle = TRUE;
 								TeleportPhysObject(self.driving, self.checkpoint_lastpos, self.checkpoint_lastpos_ang, TRUE);
 								spawn_telesfx(self);
 								spawn_televfx(self);

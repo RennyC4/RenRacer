@@ -50,7 +50,10 @@ void() trigger_teleport_touch =
 	}
 	else
 		TeleportPhysObject(toucher.driving, e.origin, e.mangle, stop);
-	
+
+	toucher.angles = e.mangle;
+	toucher.fixangle = TRUE;
+
 	toucher.teleport_finished = time + 1;
 };
 
