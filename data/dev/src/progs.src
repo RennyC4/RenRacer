@@ -40,6 +40,7 @@ chars/v_sandroamer.qc
 chars/v_thorogood.qc
 chars/v_nightshade.qc
 chars/v_servant.qc
+chars/v_warwiener.qc
 //
 
 chars/peds.qc // Pedestrian

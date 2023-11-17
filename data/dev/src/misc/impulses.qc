@@ -89,6 +89,12 @@ void() CheckImpulses =
 		stuffcmd (self, "play combat/servant.wav\n");
 	}
 
+	if (self.impulse == 96)
+	{
+		self.vehicle = VEH_WARWIENER;
+		stuffcmd (self, "play combat/mincemeat.wav\n");
+	}
+
 	// Weapon / Car select cycle
 	if (self.impulse == 10)
 	{

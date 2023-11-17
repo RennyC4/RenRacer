@@ -423,6 +423,8 @@ void() PlayerPreThink =
 					car = nightshade();
 				if (self.vehicle == VEH_SERVANT)
 					car = servant();
+				if (self.vehicle == VEH_WARWIENER)
+					car = warwiener();
 
 				makevectors(self.angles);
 				car = Phys_MakeIntoPhysicsObject(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
