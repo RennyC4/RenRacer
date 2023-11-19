@@ -472,14 +472,14 @@ void() PlayerPreThink =
 		else
 			self.energy = 100;
 
-		if (self.start_laptime) // turned on by start/finish goal
+		if (self.start_laptime && race_status == RACE_STARTED) // turned on by start/finish goal
 		{
 			if (self.laptime_tic < time)
 			{
-				self.laptime = self.laptime + 0.01; // count half seconds
+				self.laptime += 0.01; // count half seconds
 				self.laptime_tic = time + 0.01;
 
-				self.overall_time = self.overall_time + 0.01;
+				self.overall_time += 0.01;
 			}
 		}
 	}
