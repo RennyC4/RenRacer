@@ -155,7 +155,7 @@ void() PushPlayers =
 
 			if (ragewar)
 			{
-				if ((self.turbo || self.drift) && self.collide_finished < time)
+				if ((self.turbo || self.drift) && self.collide_finished < time && self.frozen_finished < time)
 				{
 					// target damage
 					float dmg = floor(self.realspeed / 32) + floor(self.max_health / 5);
