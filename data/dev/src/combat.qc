@@ -2868,10 +2868,7 @@ void(float rear) SpecialWeapon_Nightshade =
 
 void() Clear_CommandSpecialsFlags =
 {
-	self.moveprog1 = 0;
-	self.moveprog2 = 0;
-	self.moveprog3 = 0;
-	self.moveprog4 = 0;
+	self.moveprog1 = self.moveprog2 = self.moveprog3 = self.moveprog4 = 0;
 
 	self.cmdspecial_rear_step = 0;
 	self.cmdspecial_rear_step_finished = time;
@@ -2884,8 +2881,8 @@ void() Clear_CommandSpecialsFlags =
 
 	self.cmdspecial_napalm_step = 0;
 	self.cmdspecial_napalm_step_finished = time;
-
-	self.moveprog1 = self.moveprog2 = self.moveprog3 = self.moveprog4 = 0;
+	
+	self.commandspcl_finished = time;
 };
 
 void() CommandSpecials =
@@ -2904,7 +2901,7 @@ void() CommandSpecials =
 	//
 	if (self.moveprog1 > 1 && self.moveprog3 > 0 && self.energy >= 50 && self.frozen_finished < time)
 	{
-		self.energy = self.energy - 50;
+		self.energy -= 50;
 		self.cloak_finished = time + 5;
 		sound (self, CHAN_BODY, "combat/cloak.wav", 1, ATTN_NORM);
 		sprint (self, "^2Command: ");
@@ -2920,7 +2917,7 @@ void() CommandSpecials =
 	//
 	if (self.moveprog1 > 1 && self.moveprog4 > 0 && self.energy >= 50)
 	{
-		self.energy = self.energy - 50;
+		self.energy -= 50;
 		self.shield_finished = time + 3;
 		Fire_Shield();
 		sprint (self, "^2Command: ");
@@ -2938,7 +2935,7 @@ void() CommandSpecials =
 	//
 	if (self.moveprog1 > 0 && self.moveprog2 > 1 && self.energy >= 10 && self.frozen_finished < time)
 	{
-		self.energy = self.energy - 10;
+		self.energy -= 10;
 		self.forcejump_strength = 625;
 		ForceJump();
 		sound (self, CHAN_BODY, "combat/jump.wav", 1, ATTN_NORM);
@@ -2995,7 +2992,7 @@ void() CommandSpecials =
 	}
 	if (self.cmdspecial_landmine_step == 2 && self.moveprog2 == 1 && self.energy >= 33 && self.frozen_finished < time) // Hit last step, user hit down
 	{
-		self.energy = self.energy - 33;
+		self.energy -= 33;
 		sprint (self, "^2Command: ");
 		sprint (self, "^7Landmine\n");
 		Fire_Landmine();
@@ -3026,7 +3023,7 @@ void() CommandSpecials =
 	}
 	if (self.cmdspecial_freezeburst_step == 2 && self.moveprog1 == 1 && self.energy >= 80 && self.frozen_finished < time) // Hit last step, user hit up
 	{
-		self.energy = self.energy - 80;
+		self.energy -= 80;
 		sprint (self, "^2Command: ");
 		sprint (self, "^7Freeze Blast\n");
 		Fire_Freeze(FALSE);
@@ -3063,7 +3060,7 @@ void() CommandSpecials =
 			sprint(self, "Can't fire napalm in water!\n");
 			return;
 		}
-		self.energy = self.energy - 40;
+		self.energy -= 40;
 		sprint (self, "^2Command: ");
 		sprint (self, "^7Napalm\n");
 		Fire_Napalm(FALSE);
