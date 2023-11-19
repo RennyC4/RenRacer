@@ -811,7 +811,7 @@ void TryUpdateVehicle(){
 			{
 				if (self.turbo_fuel <= 15 && !self.turbo_warning)
 				{
-					stuffcmd (self, "play warning.wav\n"); // FIXME: Ugly
+					stuffcmd (self, "play warning.wav\n");
 					self.turbo_warning = TRUE;
 				}
 				if (self.turbo_fuel > 15)
@@ -863,7 +863,7 @@ void TryUpdateVehicle(){
 		{
 			if (!self.handbreak_sfx)
 			{
-				stuffcmd (self, "play handbreak.wav\n"); // FIXME: Ugly
+				stuffcmd (self, "play handbreak.wav\n");
 				self.handbreak_sfx = TRUE;
 			}
 			if (self.airborne_cnt <= 10 && self.realspeed >= 20)

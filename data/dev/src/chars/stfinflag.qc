@@ -40,7 +40,21 @@ void() rally_goal_proxy_think =
 					{
 						// Setup map change
 						nextmap = mapname;
-						self.think = rally_goal_nextmap;
+						if (clienttype(targ) == CLIENTTYPE_BOT)
+						{
+							for (entity plyr = world;(plyr = find(plyr, classname, "player"));)
+							{
+								if (clienttype(plyr) == CLIENTTYPE_REAL)
+								{
+									stuffcmd(plyr, "play youlose.wav\n");
+									stuffcmd(plyr, "music sound/music/racelose.ogg\n");
+									centerprint(plyr, "/P^1\n!!! ^bYOU LOSE^b ^1!!!\n\n^3^b\nTry again!\n");
+								}
+							}
+							self.think = rally_goal_samemap; // players lost race, restart
+						}
+						else
+							self.think = rally_goal_nextmap;
 						self.nextthink = time + 10;
 
 						if (targ.laptime < targ.fastest_lap) // Update best lap time if need be on race finish
@@ -56,7 +70,7 @@ void() rally_goal_proxy_think =
 						bprint(targ.netname, "'s Overall Time: ", l6, "\n");
 
 						centerprint(targ, "/P^3!!! ^3^bYOU WIN^b^7 ^3!!!\n\n^7Fastest Lap: ", l5, "\n Overall Time: ", l6, "\n");
-						stuffcmd (targ, "play youwin.wav\n"); // FIXME: Ugly
+						stuffcmd (targ, "play youwin.wav\n");
 						bprint (targ.netname, " won the race!\n");
 
 						sound (self, CHAN_AUTO, "finish.wav", 1, ATTN_NONE);
@@ -91,7 +105,7 @@ void() rally_goal_proxy_think =
 								if (targ.lap != self.lap) // Don't play fastlap.wav over finallap.wav
 								{
 									float conflict = TRUE;
-									stuffcmd (targ, "play fastlap.wav\n"); // FIXME: Ugly
+									stuffcmd (targ, "play fastlap.wav\n");
 								}
 								targ.fastest_lap = targ.laptime;
 							}
@@ -111,14 +125,14 @@ void() rally_goal_proxy_think =
 
 						if (targ.lap == self.lap)
 						{
-							stuffcmd (targ, "play finallap.wav\n"); // FIXME: Ugly
+							stuffcmd (targ, "play finallap.wav\n");
 							centerprint(targ, "/P^b^1!! FINAL LAP !!^b\n", "^7Lap Time: ^4", l3);
 						}
 						else
 						{
 							centerprint(targ, "/PLap [^3", l, " ^7/ ^1", l2, "^7]\n ^7Lap Time: ^4", l3);
 							if (!conflict)
-								stuffcmd (targ, "play lap.wav\n"); // FIXME: Ugly
+								stuffcmd (targ, "play lap.wav\n");
 						}
 						targ.clearcprint_finished = time + 2;
 					}

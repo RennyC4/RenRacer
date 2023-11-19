@@ -3,6 +3,13 @@
 //
 
 string nextmap;
+
+// Players lost vs Bots
+void() rally_goal_samemap =
+{
+	changelevel(mapname); // repeat level
+};
+
 void() rally_goal_nextmap =
 {
 	if (world.model == "maps/map1.bsp")
@@ -52,7 +59,21 @@ void() rally_goal_touch =
 			// Setup map change
 			nextmap = mapname;
 			self.touch = SUB_Null;
-			self.think = rally_goal_nextmap;
+			if (clienttype(other.owner.driving) == CLIENTTYPE_BOT)
+			{
+				for (entity targ = world;(targ = find(targ, classname, "player"));)
+				{
+					if (clienttype(targ) == CLIENTTYPE_REAL)
+					{
+						stuffcmd(targ, "play youlose.wav\n");
+						stuffcmd(targ, "music sound/music/racelose.ogg\n");
+						centerprint(targ, "/P^1\n!!! ^bYOU LOSE^b ^1!!!\n\n^3^b\nTry again!\n");
+					}
+				}
+				self.think = rally_goal_samemap; // players lost race, restart
+			}
+			else
+				self.think = rally_goal_nextmap;
 			self.nextthink = time + 10;
 
 			if (other.owner.driving.laptime < other.owner.driving.fastest_lap) // Update best lap time if need be on race finish
@@ -68,7 +89,7 @@ void() rally_goal_touch =
 			bprint(other.owner.driving.netname, "'s Overall Time: ", l6, "\n");
 
 			centerprint(other.owner.driving, "/P^3!!! ^3^bYOU WIN^b^7 ^3!!!\n\n^7Fastest Lap: ", l5, "\n Overall Time: ", l6, "\n");
-			stuffcmd (other.owner.driving, "play youwin.wav\n"); // FIXME: Ugly
+			stuffcmd (other.owner.driving, "play youwin.wav\n");
 			bprint (other.owner.driving.netname, " won the race!\n");
 
 			sound (self, CHAN_AUTO, "finish.wav", 1, ATTN_NONE);
@@ -101,7 +122,7 @@ void() rally_goal_touch =
 				{
 					if (other.owner.driving.lap != self.lap) // Don't play fastlap over finallap
 					{
-						stuffcmd (other.owner.driving, "play fastlap.wav\n"); // FIXME: Ugly
+						stuffcmd (other.owner.driving, "play fastlap.wav\n");
 						float conflict = TRUE;
 					}
 					other.owner.driving.fastest_lap = other.owner.driving.laptime;
@@ -122,14 +143,14 @@ void() rally_goal_touch =
 
 			if (other.owner.driving.lap == self.lap)
 			{
-				stuffcmd (other.owner.driving, "play finallap.wav\n"); // FIXME: Ugly
+				stuffcmd (other.owner.driving, "play finallap.wav\n");
 				centerprint(other.owner.driving, "/P^b^1!! FINAL LAP !!^b\n", "^7Lap Time: ^4", l3);
 			}
 			else
 			{
 				centerprint(other.owner.driving, "/PLap [^3", l, " ^7/ ^1", l2, "^7]\n ^7Lap Time: ^4", l3);
 				if (!conflict)
-					stuffcmd (other.owner.driving, "play lap.wav\n"); // FIXME: Ugly
+					stuffcmd (other.owner.driving, "play lap.wav\n");
 			}
 			other.owner.driving.clearcprint_finished = time + 2;
 		}
