@@ -104,11 +104,12 @@ void() Setup_level_effects =
 
 //
 // RennyC: Fake push other cars/players out of the way, includes turbo/drifting ramming damage
+//         Note: collision_finished is used to disable collisions from occuring for x time
 //
 
 void() PushPlayers =
 {
-	if (self.frozen_finished > time || self.invulnerable_finished > time)
+	if (self.frozen_finished > time || self.invulnerable_finished > time || self.collide_finished > time)
 		return;
 
 	for (entity b = world;(b = find(b, classname, "player"));)
@@ -117,7 +118,6 @@ void() PushPlayers =
 		{
 			if (self.realspeed > b.realspeed)
 			{
-			
 				if (ragewar && self.turbo)
 				{
 					if (self.vehicle != VEH_SKYSCRAPER)
@@ -131,17 +131,9 @@ void() PushPlayers =
 						self.forcejump = TRUE;
 					}
 				}
-			/*
-				else
-				{
-					b.forcejump_strength = 240 + (self.realspeed);
-					b.forcejump = TRUE;
-				}
-			*/
-				
+
 				if (self.collide_finished < time)
 				{
-				
 					if (random() < 0.25)
 						sound (self, CHAN_AUTO, "hit1.wav", 1, ATTN_NORM);
 					else if (random() < 0.5)
@@ -155,7 +147,7 @@ void() PushPlayers =
 
 			if (ragewar)
 			{
-				if ((self.turbo || self.drift) && self.collide_finished < time && self.frozen_finished < time)
+				if (self.turbo || self.drift)
 				{
 					// target damage
 					float dmg = floor(self.realspeed / 32) + floor(self.max_health / 5);
@@ -171,7 +163,8 @@ void() PushPlayers =
 						sound (self, CHAN_AUTO, "combat/skyscraper.wav", 1, ATTN_NORM);
 						dmg = 15; // extra 15 damage
 						DoDamage(b, self, dmg, "skyscraper");
-						self.ammo_special -= 1;
+						if (self.ammo_special > 0)
+							self.ammo_special -= 1;
 					}
 				}
 			}
@@ -190,20 +183,19 @@ void() PushPlayers =
 
 			// Stop player thats doing the ramming
 			// FIXME: Let this work in race mode, but fix the AI backing up stuff
-			//if (ragewar)
-			//{
-				entity part = self.driving.physobj_particlelist;
-				while(part)
-				{
-						if (self.collide_finished < time) part.velocity *= 0.8;
-						if (b.turbo) part.velocity -= (b.origin - self.origin) * (101 - vlen(b.origin - self.origin)) * (self.pushfactor + 0.05);
-						else part.velocity -= (b.origin - self.origin) * (101 - vlen(b.origin - self.origin)) * self.pushfactor;
-						
+			entity part = self.driving.physobj_particlelist;
+			while (part)
+			{
+				if (self.collide_finished < time)
+					part.velocity *= 0.8;
+				if (b.turbo)
+					part.velocity -= (b.origin - self.origin) * (101 - vlen(b.origin - self.origin)) * (self.pushfactor + 0.05);
+				else
+					part.velocity -= (b.origin - self.origin) * (101 - vlen(b.origin - self.origin)) * self.pushfactor;
 
-						part = part.physobj_next;
-				}
-			//}
-			self.collide_finished = time + 1;
+				part = part.physobj_next;
+			}
+			self.collide_finished = time + 0.5;
 		}
 	}
 };

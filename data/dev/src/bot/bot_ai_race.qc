@@ -288,7 +288,7 @@ void() bot_ai_race =
 	{
 		for (entity targ = world;(targ = find(targ, classname, "player"));)
 		{
-			if (clienttype(targ) == CLIENTTYPE_REAL && !visible(targ) && targ.trail.cnt && ((targ.checkpoint > self.checkpoint && self.checkpoint > 0) || (targ.waypoint > self.waypoint && self.waypoint > 0))) // && (targ.lap > self.lap || targ.frags > self.frags))
+			if (clienttype(targ) == CLIENTTYPE_REAL && !visible(targ) && targ.trail.cnt && ((targ.checkpoint > self.checkpoint && self.checkpoint >= 1) || (targ.waypoint > self.waypoint && self.waypoint >= 1))) // && (targ.lap > self.lap || targ.frags > self.frags))
 			{
 				// Steal player stats & update goal entities
 				if (targ.waypoint > self.waypoint)
@@ -325,7 +325,7 @@ void() bot_ai_race =
 				self.goalentity_time = 0;
 				self.bot_search_count = 0;
 				self.bot_backup_finished = time;
-				self.collide_finished = time + 3; // Don't bump player on teleport
+				self.collide_finished = time + 3; // Disable player push on teleport
 				makevectors(self.realang);
 				TeleportPhysObject(self.driving, targ.trail.origin, targ.trail.angles, FALSE);
 
