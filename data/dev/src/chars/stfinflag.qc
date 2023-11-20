@@ -47,6 +47,7 @@ void() rally_goal_proxy_think =
 								if (clienttype(plyr) == CLIENTTYPE_REAL)
 								{
 									stuffcmd(plyr, "play youlose.wav\n");
+									stuffcmd(plyr, "play crowdboo.wav\n");
 									stuffcmd(plyr, "music sound/music/racelose.ogg\n");
 									centerprint(plyr, "/P^1\n!!! ^bYOU LOSE^b ^1!!!\n\n^3^b\nTry again!\n");
 								}

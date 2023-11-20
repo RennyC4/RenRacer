@@ -66,6 +66,7 @@ void() rally_goal_touch =
 					if (clienttype(targ) == CLIENTTYPE_REAL)
 					{
 						stuffcmd(targ, "play youlose.wav\n");
+						stuffcmd(targ, "play crowdboo.wav\n");
 						stuffcmd(targ, "music sound/music/racelose.ogg\n");
 						centerprint(targ, "/P^1\n!!! ^bYOU LOSE^b ^1!!!\n\n^3^b\nTry again!\n");
 					}
