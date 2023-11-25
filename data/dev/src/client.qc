@@ -186,12 +186,12 @@ void() PushPlayers =
 			entity part = self.driving.physobj_particlelist;
 			while (part)
 			{
-				if (self.collide_finished < time)
-					part.velocity *= 0.8;
+				float pf = self.pushfactor * 10;
+				
 				if (b.turbo)
-					part.velocity -= (b.origin - self.origin) * (101 - vlen(b.origin - self.origin)) * (self.pushfactor + 0.05);
+					part.velocity -= (b.origin - self.origin) * (101 - vlen(b.origin - self.origin)) * (pf + 0.05);
 				else
-					part.velocity -= (b.origin - self.origin) * (101 - vlen(b.origin - self.origin)) * self.pushfactor;
+					part.velocity -= (b.origin - self.origin) * (101 - vlen(b.origin - self.origin)) * pf;
 
 				part = part.physobj_next;
 			}
