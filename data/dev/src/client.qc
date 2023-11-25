@@ -207,17 +207,11 @@ void() ForceJump =
 	if (self.forcejump_finished > time)
 		return;
 
-	entity wheels[] = {
-		self.driving.frontleft,
-		self.driving.frontright,
-		self.driving.backleft,
-		self.driving.backright
-	};
-	for (float i = 0; i < wheels.length; i++)
-	{	
-		traceline(wheels[i].origin, wheels[i].origin - wheels[i].lmat_up * 32, MOVE_NOMONSTERS, wheels[i]);
-		if (trace_fraction < 1)
-			Phys_Force(self.driving, self.driving.physobj_mass, '0 0 1' * self.forcejump_strength, trace_endpos, wheels[i].lmat_up);
+	entity part = self.driving.physobj_particlelist;
+	while (part)
+	{
+		part.velocity_z += self.forcejump_strength;
+		part = part.physobj_next;
 	}
 	self.forcejump_finished = time + 0.1;
 };
