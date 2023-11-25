@@ -1050,16 +1050,14 @@ void() PlayerPostThink =
 	CheckImpulses();
 
 	// Debug status effects
-	/*
 	if (self.driving)
 	{
-		self.blind_finished = time + 3;
-		self.onfire_finished = time + 3;
+//		self.blind_finished = time + 3;
+//		self.onfire_finished = time + 3;
 		if (self.shield_finished < time)
 			self.frozen_finished = time + 3;
-		self.slow_finished = time + 3;
+//		self.slow_finished = time + 3;
 	}
-	*/
 };
 
 //----
