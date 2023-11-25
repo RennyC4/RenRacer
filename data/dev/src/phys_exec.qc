@@ -91,42 +91,12 @@ void(entity targ, float in_mass, vector inforce, vector hitspot, vector normal) 
 	}
 };
 
-void(entity obj) Phys_UpdateStatus = {
-	float f;
-	//float developer = cvar("developer");
-
-	entity part = obj.physobj_particlelist;
-	while(part){
-		Particle_CheckOnGround(part);
-		if (part.flags & FL_ONGROUND)
-			f++;
-		traceline(part.origin, part.origin, TRUE, part);
-		if (trace_startsolid) // we got jammed by a hitmodel or are generally stuck
-		{
-			//dprint("stuck :(\n");
-			traceline(obj.origin, part.origin, TRUE, part);
-			if (trace_fraction < 1){
-				//dprint("!!UNSTUCK!!\n");
-				//if (developer)
-					//Debug_DrawLine(obj.origin, part.origin, 100);
-				setorigin(part, trace_endpos + normalize(obj.origin - part.origin));
-				//if (developer)
-					//Debug_DrawLine(part.origin, part.origin + '0 0 32', 100);
-				obj.physobj_flags -= (obj.physobj_flags & PHFLAGS_RESTING);
-			}
-		}
-		part = part.physobj_next;
-	}
-	if (f < 3)
-		obj.physobj_flags -= (obj.physobj_flags & PHFLAGS_RESTING);
-}
-
 // Fixes the worst cases of being stuck inside walls and objects
 void(entity targ) Phys_CheckStatus =
 {
 	local float inverse_frametime, dot, success, best_dot, best_dist;
 	local vector best_normal;
-	local entity stick, part, oself, t_ent;
+	local entity stick, part, oself, t_ent, hitmodel;
 	local float f;
 
 	oself = self;
@@ -138,7 +108,13 @@ void(entity targ) Phys_CheckStatus =
 	}
 	else
 		part = self.physobj_particlelist;
-
+	// make our hitmodels non-collidey for a moment
+	hitmodel = self.physobj_hitmodel;
+	while (hitmodel)
+	{
+		hitmodel.solid = SOLID_NOT;
+		hitmodel = hitmodel.physobj_next;
+	}
 	while(part)
 	{
 		Particle_CheckOnGround(part);
@@ -248,16 +224,29 @@ void(entity targ) Phys_CheckStatus =
 	}
 	if (f < 3)
 		self.physobj_flags -= (self.physobj_flags & PHFLAGS_RESTING);
-
+	hitmodel = self.physobj_hitmodel;
+	while (hitmodel)
+	{
+		hitmodel.solid = SOLID_BSP;
+		setorigin(hitmodel, hitmodel.origin);
+		hitmodel = hitmodel.physobj_next;
+	}
 	self = oself;
 };
 
 // Particle acceleration, such as gravity, buoyancy
 void(float ftime, float sv_gravity) Phys_Acceleration =
 {
-	local entity part;
+	local entity part, hitmodel;
 
 	const float ANTIROLL_MULT = 1.25;
+
+	hitmodel = self.physobj_hitmodel;
+	while (hitmodel)
+	{
+		hitmodel.solid = SOLID_NOT;
+		hitmodel = hitmodel.physobj_next;
+	}
 
 	part = self.physobj_particlelist;
 	while(part)
@@ -272,7 +261,7 @@ void(float ftime, float sv_gravity) Phys_Acceleration =
 		
 		if (part.physobj_spring_length)
 		{
-			if (part.physobj_flags & PHFLAGS_SPRING_TOUCH)
+			if (part.flags & FL_ONGROUND && part.physobj_flags & PHFLAGS_SPRING_TOUCH)
 			{
 				// EXPERIMENTS
 				//float offsetDistance = part.physobj_spring_length;
@@ -280,12 +269,10 @@ void(float ftime, float sv_gravity) Phys_Acceleration =
 				//float sf = 0.4;
 				//float f = (offsetDistance-currentDistance)*sf * part.physobj_spring_mult;
 				//spring = springdir * max(0, (sf.y * p * ftime - damping * ftime));
-
-				float springdist = max(0, part.physobj_floor_dist - part.relative_size);
-				float spring_frac = 1 - springdist / part.physobj_spring_length;
 				
+				float p = 1-part.physobj_floor_frac;
 				vector v = part.physobj_spring_force;
-				float f = lerp(v_x, v_y, spring_frac*spring_frac) * part.physobj_spring_mult;
+				float f = lerp(v_x, v_y, p*p) * part.physobj_spring_mult;
 
 				//Debug_DrawLine(part.origin, part.origin + part.lmat_up * 50 * part.physobj_spring_mult, 0.02);
 
@@ -308,13 +295,20 @@ void(float ftime, float sv_gravity) Phys_Acceleration =
 		}
 		// Build future positions for particles
 		part.destorigin = part.origin + part.velocity * ftime * 2;
-		part.lip = 0;
 		Particle_Friction(part, ftime);
 		part = part.physobj_next;
 	}
+
+	hitmodel = self.physobj_hitmodel;
+	while (hitmodel)
+	{
+		hitmodel.solid = SOLID_BSP;
+		setorigin(hitmodel, hitmodel.origin);
+		hitmodel = hitmodel.physobj_next;
+	}
 };
 
-const float STABILITY_MULTIPLIER = 0.9;
+const float STABILITY_MULTIPLIER = 1; // lower values make the object more soft, but less prone to randomly exploding
 
 vector(entity p1, entity p2, entity p3) GetGradient =
 {
@@ -380,7 +374,7 @@ void(float ftime) Phys_Constraints_Volume =
 // Run constraints on all sticks
 void(float ftime) Phys_Constraints_Linear =
 {
-	local float offsetlength, diff, lendiff, springdist;
+	local float offsetlength, diff, lendiff;
 	local vector offset;
 	local entity stick;
 	local entity p1, p2;
@@ -392,15 +386,10 @@ void(float ftime) Phys_Constraints_Linear =
 		p1 = stick.physobj_p1;
 		p2 = stick.physobj_p2;
 
-		if (stick.physobj_flags & PHFLAGS_STABILIZERBAR && p1.physobj_spring_length && p2.physobj_spring_length){
-			springdist = max(0, p1.physobj_floor_dist - p1.relative_size);
-			float p1_spring_frac = springdist / p1.physobj_spring_length;
-			springdist = max(0, p2.physobj_floor_dist - p2.relative_size);
-			float p2_spring_frac = springdist / p2.physobj_spring_length;
+		if (stick.physobj_flags & PHFLAGS_STABILIZERBAR){
+			float p1_mult = p2.physobj_floor_frac - p1.physobj_floor_frac;
+			float p2_mult = p1.physobj_floor_frac - p2.physobj_floor_frac;
 
-			float p1_mult = p2_spring_frac - p1_spring_frac;
-			float p2_mult = p1_spring_frac - p2_spring_frac;
-			
 			float stabilizer = stick.owner.driving.car_stabilizer; // RennyC
 			if (p1_mult < 0)
 				p1.physobj_spring_mult = remap(p1_mult + 1, 0, 1, stabilizer, 1);
@@ -425,75 +414,61 @@ void(float ftime) Phys_Constraints_Linear =
 	}
 };
 
-// Floor offset constraint
-void(float ftime) Phys_Constraints_Floor =
+// Check if we're touching the ground
+void() Phys_CheckOnGround =
 {
-	vector add;
+	local entity part, hitmodel;
 
-	entity part = self.physobj_particlelist;
-	while(part)
+	hitmodel = self.physobj_hitmodel;
+	while (hitmodel)
 	{
-		if (part.relative_size){
-			traceline(part.origin, part.destorigin, part.physobj_movetype, part);
-			vector testpos = trace_endpos;
-			traceline(testpos, testpos - [0, 0, part.relative_size], part.physobj_movetype, part);
-			if (trace_fraction < 1 && trace_plane_normal_z > 0.7){
-				vector save_normal = trace_plane_normal;
-				vector save_endpos = trace_endpos;
-				float save_fraction = trace_fraction;
-				traceline(testpos, testpos - trace_plane_normal * part.relative_size, part.physobj_movetype, part);
-				if (trace_fraction < 1 && trace_plane_normal_z > 0.7){
-					add = trace_plane_normal * (part.relative_size * (1-trace_fraction));
-					//Debug_DrawLine(trace_endpos, trace_endpos + trace_plane_normal * 16, 10);
-				}
-				else{
-					add = save_normal * (part.relative_size * (1-save_fraction));
-					//Debug_DrawLine(save_endpos, save_endpos + save_normal * 16, 10);
-				}
-				part.lip = add_z;
-				part.destorigin += add;
-				// this doesn't add energy to the system, but will result in big rigs off the road racing, so let's not
-				//part.destorigin += [0, 0, part.relative_size * (1-trace_fraction)];
-			}
-		}
+		hitmodel.solid = SOLID_TRIGGER;
+		setorigin(hitmodel, hitmodel.origin);
+		hitmodel = hitmodel.physobj_next;
+	}
+
+	part = self.physobj_particlelist;
+	while (part)
+	{
+		Particle_CheckOnGround(part);
 		part = part.physobj_next;
+	}
+	hitmodel = self.physobj_hitmodel;
+	while (hitmodel)
+	{
+		hitmodel.solid = SOLID_BSP;
+		setorigin(hitmodel, hitmodel.origin);
+		hitmodel = hitmodel.physobj_next;
 	}
 };
 
 void(entity part) Particle_CheckOnGround =
 {
-	traceline(part.origin, part.origin - [0, 0, 1 + part.relative_size], FALSE, part);
-	if (trace_fraction < 1 && trace_plane_normal_z > 0.7)
-	{
-		part.flags = part.flags | FL_ONGROUND;
-		part.groundentity = trace_ent;
-		part.physobj_floor_plane_normal = trace_plane_normal;
+	local vector spring;
 
+	if (part.physobj_spring_length) // check for springs
+	{
+		spring = -part.lmat_up * part.physobj_spring_length;
+		traceline(part.origin, part.origin + spring, FALSE, part);
+		if (trace_fraction < 1)
+			part.physobj_flags = part.physobj_flags | PHFLAGS_SPRING_TOUCH;
+		else
+			part.physobj_flags = part.physobj_flags - (part.physobj_flags & PHFLAGS_SPRING_TOUCH);
 	}
 	else
 	{
-		part.flags -= (part.flags & FL_ONGROUND);
-		part.groundentity = world;
+		traceline(part.origin, part.origin + '0 0 -1', FALSE, part);
 	}
-
-
-	if (part.physobj_spring_length){
-		float checklen = part.relative_size + part.physobj_spring_length;
-
-		traceline(part.origin, part.origin - part.lmat_up * checklen, FALSE, part);
-		part.physobj_floor_dist = checklen * trace_fraction;
-		if (trace_fraction < 1 && trace_plane_normal_z > 0.7)
-		{
-			part.physobj_flags = part.physobj_flags | PHFLAGS_SPRING_TOUCH;
-			part.flags = part.flags | FL_ONGROUND;
-			part.groundentity = trace_ent;
-			part.physobj_floor_plane_normal = trace_plane_normal;
-			//Debug_DrawLine(trace_endpos, trace_endpos + trace_plane_normal * 16, 2);
-		}
-		else
-		{
-			part.physobj_flags -= (part.physobj_flags & PHFLAGS_SPRING_TOUCH);
-		}
+	// We're touching the ground
+	if (trace_fraction < 1)
+	{
+		part.flags = part.flags | FL_ONGROUND;
+		part.physobj_floor_plane_normal = trace_plane_normal;
+		part.physobj_floor_frac = trace_fraction;
+	}
+	else{
+		part.flags = part.flags - (part.flags & FL_ONGROUND);
+		part.physobj_floor_frac = 1;
 	}
 }
 
@@ -621,17 +596,25 @@ void(entity part, float ftime) Particle_Friction =
 // Velocity Verlet physics, meant to be used for all moving entities in the game
 void(float ftime) Phys_Move =
 {
-	local float bump;//, it;
+	local float bump, it;
 	local float t, f, inverse_frametime;
 	local float stuck;
 	local vector test_org;
-	local entity part, killme;
+	//local vector spring;
+	local entity part, killme, hitmodel;
 
 	local vector save_endpos;
 	local vector save_normal;
 	local vector save_velocity;
 	local float save_fraction;
 	local entity save_ent;
+
+	hitmodel = self.physobj_hitmodel;
+	while (hitmodel)
+	{
+		hitmodel.solid = SOLID_NOT;
+		hitmodel = hitmodel.physobj_next;
+	}
 
 	inverse_frametime = 1 / ftime;
 
@@ -642,11 +625,10 @@ void(float ftime) Phys_Move =
 	{
 		// Convert back from future positions set by constraints to velocities again
 		part.velocity = (part.destorigin - part.origin) * inverse_frametime;
-		part.velocity_z -= part.lip;
 
 		part.oldorigin = part.origin;
 		bump = 0;
-		//it = 0;
+		it = 0;
 		stuck = FALSE;
 		t = ftime;
 		test_org = part.origin;
@@ -656,9 +638,8 @@ void(float ftime) Phys_Move =
 		while (bump < 24)
 		{
 			// let's test if we're stuck first
-			//it = 0;
+			it = 0;
 			bump = bump + 1;
-			/*
 			if (!stuck && !(part.physobj_flags & PHFLAGS_BLOCKED))
 			{
 				traceline(part.origin, part.origin, TRUE, part);
@@ -680,13 +661,11 @@ void(float ftime) Phys_Move =
 				else
 					test_org = part.origin;
 			}
-			*/
 			part.hitcontentsmaski = CONTENTBIT_BODY|CONTENTBIT_SOLID|CONTENTBIT_PLAYERCLIP|CONTENTBIT_SKY; // RennyC
 			part.dimension_hit = player_dimension_hit; // RennyC: Disable player collisions
 			part.dimension_solid = player_dimension_solid; // RennyC: Disable player collisions
 			traceline(test_org, test_org + part.velocity*t, part.physobj_movetype, part);
 			//tracebox(test_org, part.mins, part.maxs, test_org + part.velocity*t, part.physobj_movetype, part);
-			/*
 			save_fraction = trace_fraction;
 			save_normal = trace_plane_normal;
 			save_endpos = trace_endpos;
@@ -704,7 +683,7 @@ void(float ftime) Phys_Move =
 			trace_endpos = save_endpos;
 			trace_plane_normal = save_normal;
 			trace_fraction = save_fraction;
-			*/
+			t = t*(1-trace_fraction);
 			if (trace_fraction < 1)
 			{
 				// Check for stair steps
@@ -714,19 +693,15 @@ void(float ftime) Phys_Move =
 					save_normal = trace_plane_normal;
 					save_endpos = trace_endpos;
 					save_ent = trace_ent;
-					vector testpos = test_org + [0, 0, part.physobj_stepup];
-					vector testvel = part.velocity;
-					testvel_z = 0;
-					traceline(testpos, testpos + testvel * t, part.physobj_movetype, part);
+					traceline(trace_endpos + '0 0 1'*part.physobj_stepup, trace_endpos + '0 0 1'*part.physobj_stepup + part.velocity * t, part.physobj_movetype, part);
 					//tracebox(trace_endpos + '0 0 1'*part.physobj_stepup, part.mins, part.maxs, trace_endpos + '0 0 1'*part.physobj_stepup + part.velocity * t, part.physobj_movetype, part);
 					if (!trace_startsolid && trace_fraction > 0.0001)
 					{
 						t = t * (1 - trace_fraction);
 						save_ent = trace_ent;
 						save_normal = trace_plane_normal;
-						traceline(trace_endpos, trace_endpos - [0, 0, part.physobj_stepup], part.physobj_movetype, part);
+						traceline(trace_endpos, trace_endpos + '0 0 -1'*part.physobj_stepup, part.physobj_movetype, part);
 						//tracebox(trace_endpos, part.mins, part.maxs, trace_endpos + '0 0 -1'*part.physobj_stepup, part.physobj_movetype, part);
-						//trace_plane_normal = save_normal;
 						trace_fraction = save_fraction;
 						trace_ent = save_ent;
 					}
@@ -736,7 +711,6 @@ void(float ftime) Phys_Move =
 						trace_plane_normal = save_normal;
 						trace_fraction = save_fraction;
 						trace_ent = save_ent;
-						t = t * (1 - trace_fraction);
 					}
 				}
 				// Let's push stuff we hit
@@ -748,7 +722,6 @@ void(float ftime) Phys_Move =
 				part.velocity = part.velocity - part.physobj_bounce*(trace_plane_normal * (trace_plane_normal * part.velocity));
 			}
 			else {
-				t = t*(1-trace_fraction);
 				// let's push monsters and players
 				save_fraction = trace_fraction;
 				save_endpos = trace_endpos;
@@ -761,11 +734,12 @@ void(float ftime) Phys_Move =
 				trace_fraction = save_fraction;
 				trace_endpos = save_endpos;
 			}
-
-			setorigin(part, trace_endpos);
-			force_retouch = 2;
-			test_org = part.origin;
-
+			if (trace_fraction >= 0.0001)
+			{
+				setorigin(part, trace_endpos);
+				force_retouch = 2;
+				test_org = part.origin;
+			}
 			if (trace_fraction == 1)
 				break;
 		}
@@ -789,10 +763,72 @@ void(float ftime) Phys_Move =
 		else
 			part = part.physobj_next;
 	}
-
+	hitmodel = self.physobj_hitmodel;
+	while (hitmodel)
+	{
+		hitmodel.solid = SOLID_BSP;
+		setorigin(hitmodel, hitmodel.origin);
+		hitmodel = hitmodel.physobj_next;
+	}
 	if (f < 3)
 		resting_allowed = FALSE;
 };
+
+void() Phys_CheckRestState =
+{
+	local float f, len;
+	local entity part, stick;
+
+	if (self.physobj_flags & PHFLAGS_ATTACHED)
+	{
+		self.physobj_flags = self.physobj_flags - (self.physobj_flags & PHFLAGS_RESTING);
+		return;
+	}
+
+	f = 0;
+	part = self.physobj_particlelist;
+	while(part)
+	{
+		if (!(part.physobj_flags & PHFLAGS_RESTING))
+		{
+			f = 0;
+			break;
+		}
+		if (part.flags & FL_ONGROUND)
+			f = f + 1;
+		part = part.physobj_next;
+	}
+
+	if (f > 2 && !(self.physobj_flags & PHFLAGS_RESTING))
+	{
+		stick = self.physobj_sticklist;
+		while (stick)
+		{
+			len = vlen(stick.physobj_p1.origin-stick.physobj_p2.origin);
+			if (len < stick.stick_preferredlength*0.95 && len > stick.stick_preferredlength*1.05)
+			{
+				//self.physobj_staticlist.colormod = '1 1 1';
+				self.physobj_flags = self.physobj_flags - (self.physobj_flags & PHFLAGS_RESTING);
+				return;
+			}
+			stick = stick.physobj_next;
+		}
+		self.physobj_flags = self.physobj_flags | PHFLAGS_RESTING;
+		//self.physobj_staticlist.colormod = '2 2 2';
+		part = self.physobj_particlelist;
+		while(part)
+		{
+			setorigin(part, part.oldorigin);
+			part.pushorigin = part.origin;
+			part = part.physobj_next;
+		}
+	}
+	else if (f <= 2)
+	{
+		//self.physobj_staticlist.colormod = '1 1 1';
+		self.physobj_flags = self.physobj_flags - (self.physobj_flags & PHFLAGS_RESTING);
+	}
+}
 
 // The think function for our physics objects in the game
 void() Phys_ObjectThink =
@@ -809,15 +845,8 @@ void() Phys_ObjectThink =
 
 	local float sv_gravity = cvar("sv_gravity");
 
-	hitmodel = self.physobj_hitmodel;
-	while (hitmodel)
-	{
-		hitmodel.solid = SOLID_NOT;
-		hitmodel = hitmodel.physobj_next;
-	}
+	Phys_CheckStatus(world); // Check in case we got pushed, blocked by a hitmodel or otherwise stuck
 
-	//Phys_CheckStatus(world); // Check in case we got pushed, got stuck, or the ground beneath us disappeared
-	Phys_UpdateStatus(self);
 	float car_physics_step = cvar("sv_car_physics_steps"); // RennyC, default 3
 
 	if (!(self.physobj_flags & PHFLAGS_RESTING))
@@ -832,7 +861,6 @@ void() Phys_ObjectThink =
 		{
 			steps--;
 			Phys_Acceleration(ftime*0.5, sv_gravity);
-			Phys_Constraints_Floor(ftime);
 			Phys_Constraints_Volume(ftime);
 			Phys_Constraints_Linear(ftime);
 			Phys_Move(ftime);
@@ -840,6 +868,7 @@ void() Phys_ObjectThink =
 		}
 		self.physobj_flags = self.physobj_flags - (self.physobj_flags & PHFLAGS_FORCE);
 
+		//If movement was very minor, and atleast three particles are on the ground, let's stick to the floor
 		if (resting_allowed) // resting still allowed after various checks
 			self.physobj_flags |= PHFLAGS_RESTING;
 
@@ -884,11 +913,15 @@ void() Phys_ObjectThink =
 			stat.lmat_up = matrix_up;
 			// Update euler angles for viewing ingame
 			// Static objects aren't affected by physics
+#if defined(SMOOTH)
+			stat.view_ofs = self.physobj_p1.origin + self.lmat_forward*stat.relative_org_x + self.lmat_left*stat.relative_org_y + self.lmat_up*stat.relative_org_z;
+#else
 			stat.angles = vectoangles(matrix_forward, matrix_up);
 			if (stat.physobj_flags & PHFLAGS_BSPMODEL)
 				stat.angles_x = stat.angles_x*-1;
 			stat.oldorigin = stat.origin;
 			setorigin (stat, self.physobj_p1.origin + self.lmat_forward*stat.relative_org_x + self.lmat_left*stat.relative_org_y + self.lmat_up*stat.relative_org_z);
+#endif
 			stat = stat.physobj_next;
 		}
 		// Pushing is broken somehow :(
@@ -918,9 +951,6 @@ void() Phys_ObjectThink =
 	hitmodel = self.physobj_hitmodel;
 	while (hitmodel)
 	{
-		hitmodel.solid = SOLID_BSP;
-		setorigin(hitmodel, hitmodel.origin); // relink
-
 		Matrix_Multiply(hitmodel.relative_forward, hitmodel.relative_left, hitmodel.relative_up, self.lmat_forward, self.lmat_left, self.lmat_up);
 		f = 1 / frametime;
 		vector offset = self.physobj_p1.origin + self.lmat_forward*hitmodel.relative_org_x + self.lmat_left*hitmodel.relative_org_y + self.lmat_up*hitmodel.relative_org_z;
@@ -943,9 +973,16 @@ entity(vector org, entity e, entity obj) Phys_InitStatic =
 {
 	local vector v;
 
-	e.solid = SOLID_NOT;
 	if (e.model)
 		setmodel(e, e.model);
+	else if (e.model) // assume bmodel
+		e.physobj_flags = e.physobj_flags | PHFLAGS_BSPMODEL;
+
+	//e.effects = EF_NOMODELFLAGS;
+#if defined(SMOOTH)
+	e.movetype = MOVETYPE_STEP;
+	e.flags = FL_FLY;
+#endif
 
 	e.th_die = SUB_Null;
 	e.th_pain = SUB_NullPain;
@@ -1005,6 +1042,8 @@ entity(vector org, entity e, entity obj) Phys_InitParticle =
 
 	if (e.model)
 		setmodel(e, e.model);
+	else if (e.model) // assume bmodel
+		e.physobj_flags = e.physobj_flags | PHFLAGS_BSPMODEL;
 
 	if (e.owner)
 	{
@@ -1111,8 +1150,7 @@ entity(vector org, entity e, entity obj) Phys_InitHitmodel =
 	e.movetype = MOVETYPE_PUSH;
 	e.health = 99999999;
 	//e.effects = EF_NOMODELFLAGS;
-	if (cvar("developer") < 3)
-		e.model = ""; // better way to nosend than EF_NODRAW
+	e.model = ""; // better way to nosend than EF_NODRAW
 
 	e.th_die = SUB_Null;
 	//e.contentstransition = SUB_Null;
@@ -1368,8 +1406,7 @@ entity(vector org, entity object) Phys_AddParticleToObject =
 	}
 	return e;
 };
-/*
-// obsolete
+
 void() Phys_SpawnSticks =
 {
 	local float f, total_particles, total_sticks;
@@ -1398,155 +1435,63 @@ void() Phys_SpawnSticks =
 		part1 = part1.physobj_next;
 	}
 }
-*/
 
 // find some particles far apart from eachother, nice for orientation of visible meshes
 void(entity obj) Phys_FindNiceOrientationParticles =
 {
-	entity e, temp;
+	entity e;
 	vector v = '10000 10000 10000';
-
-	// first particle
+	vector sv;
 	e = obj.physobj_particlelist;
 	while(e)
 	{
-		temp = e;
-		e = e.physobj_next;
-		if (temp.classname == "support_particle")
-			continue;
-		if (temp.relative_org.x <= v.x && temp.relative_org.y <= v.y && temp.relative_org.z <= v.z){
-			obj.physobj_p1 = temp;
-			v = temp.relative_org;
+		if (e.relative_org.x <= v.x && e.relative_org.y <= v.y && e.relative_org.z <= v.z){
+			obj.physobj_p1 = e;
+			v = e.relative_org;
 		}
+		e = e.physobj_next;
 	}
-
-	// second particle
+	sv = v;
 	e = obj.physobj_particlelist;
 	while(e)
 	{
-		temp = e;
+		if (e.relative_org.x > sv.x){
+			obj.physobj_p2 = e;
+			sv = e.relative_org;
+		}
 		e = e.physobj_next;
-		if (temp.classname == "support_particle")
-			continue;
-		if (temp == obj.physobj_p1)
-			continue;
-		if (temp.relative_org.x > v.x){
-			obj.physobj_p2 = temp;
-			v = temp.relative_org;
-		}
 	}
-	// found no second particle, include an equals check to be safe
-	if (!obj.physobj_p2){
-		e = obj.physobj_particlelist;
-		while(e)
-		{
-			temp = e;
-			e = e.physobj_next;
-			if (temp.classname == "support_particle")
-				continue;
-			if (temp == obj.physobj_p1)
-				continue;
-			if (temp.relative_org.x >= v.x){
-				obj.physobj_p2 = temp;
-				v = temp.relative_org;
-			}
-		}
-	}
-
-	// third particle
 	e = obj.physobj_particlelist;
 	while(e)
 	{
-		temp = e;
+		if (e.relative_org.y > v.y){
+			obj.physobj_p3 = e;
+			v = e.relative_org;
+		}
 		e = e.physobj_next;
-		if (temp.classname == "support_particle")
-			continue;
-		if (temp == obj.physobj_p1)
-			continue;
-		if (temp == obj.physobj_p2)
-			continue;
-		if (temp.relative_org.y > v.y){
-			obj.physobj_p3 = temp;
-			v = temp.relative_org;
-		}
-	}
-	// found no third particle, include an equals check to be safe
-	if (!obj.physobj_p3){
-		e = obj.physobj_particlelist;
-		while(e)
-		{
-			temp = e;
-			e = e.physobj_next;
-			if (temp.classname == "support_particle")
-				continue;
-			if (temp == obj.physobj_p1)
-				continue;
-			if (temp == obj.physobj_p2)
-				continue;
-			if (temp.relative_org.y >= v.y){
-				obj.physobj_p3 = temp;
-				v = temp.relative_org;
-			}
-		}
 	}
 	if (obj.physobj_p3)
 		return;
-	// still found no third particle, do the same thing but in the other direction
 	e = obj.physobj_particlelist;
 	while(e)
 	{
-		temp = e;
+		if (e.relative_org.y < v.y){
+			obj.physobj_p3 = e;
+			v = e.relative_org;
+		}
 		e = e.physobj_next;
-		if (temp.classname == "support_particle")
-			continue;
-		if (temp == obj.physobj_p1)
-			continue;
-		if (temp == obj.physobj_p2)
-			continue;
-		if (temp.relative_org.y < v.y){
-			obj.physobj_p3 = temp;
-			v = temp.relative_org;
-		}
-	}
-	if (!obj.physobj_p3){
-		e = obj.physobj_particlelist;
-		while(e)
-		{
-			temp = e;
-			e = e.physobj_next;
-			if (temp.classname == "support_particle")
-				continue;
-			if (temp == obj.physobj_p1)
-				continue;
-			if (temp == obj.physobj_p2)
-				continue;
-			if (temp.relative_org.y <= v.y){
-				obj.physobj_p3 = temp;
-				v = temp.relative_org;
-			}
-		}
 	}
 }
 
 void(entity obj) Phys_CheckFirstThreeParticles =
 {
-	if(obj.physobj_p1)
-	if(obj.physobj_p2)
-	if(obj.physobj_p3)
 	if(obj.physobj_p1 != obj.physobj_p2)
 	if(obj.physobj_p1 != obj.physobj_p3)
 	if(obj.physobj_p2 != obj.physobj_p3)
 		return;
-	dprint("func_vehicle Error: First three particles were wrong somehow, fallback to original approach\n");
 	obj.physobj_p1 = obj.physobj_particlelist;
-	while(obj.physobj_p1 && obj.physobj_p1.classname == "support_particle")
-		obj.physobj_p1 = obj.physobj_p1.physobj_next;
 	obj.physobj_p2 = obj.physobj_p1.physobj_next;
-	while(obj.physobj_p2 && obj.physobj_p2.classname == "support_particle")
-		obj.physobj_p2 = obj.physobj_p2.physobj_next;
 	obj.physobj_p3 = obj.physobj_p2.physobj_next;
-	while(obj.physobj_p3 && obj.physobj_p3.classname == "support_particle")
-		obj.physobj_p3 = obj.physobj_p3.physobj_next;
 }
 
 entity(entity obj, vector org, vector forward, vector left, vector up) Phys_InitPhysicsObject =
@@ -1625,6 +1570,9 @@ entity(entity obj, vector org, vector forward, vector left, vector up, vector to
 
 	physobj_spawning = obj;
 	obj.classname = "physics_object";
+	obj.think = Phys_ObjectThink;
+	obj.nextthink = time;
+	//obj.contentstransition = SUB_Null;
 	obj.solid = SOLID_TRIGGER;
 
 	e = obj.physobj_particlelist;
@@ -1638,6 +1586,7 @@ entity(entity obj, vector org, vector forward, vector left, vector up, vector to
 		particleCount++;
 	}
 	GenerateTetrahedrons(obj);
+	GenerateSticksFromTetrahedrons(obj);
 	e = obj.physobj_hitmodel;
 	while(e)
 	{
@@ -1660,8 +1609,7 @@ entity(entity obj, vector org, vector forward, vector left, vector up, vector to
 	return Phys_InitPhysicsObject(physobj_spawning, org, forward, left, up);
 };
 
-/*
-// obsolete
+// Used for creating the physics objects ingame
 entity(entity obj, vector org, vector forward, vector left, vector up, vector toss, float randvel) Phys_ObjectCreate =
 {
 	local entity e, part;
@@ -1712,4 +1660,3 @@ entity(entity obj, vector org, vector forward, vector left, vector up, vector to
 	}
 	return Phys_InitPhysicsObject(physobj_spawning, org, forward, left, up);
 };
-*/

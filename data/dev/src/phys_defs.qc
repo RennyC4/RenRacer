@@ -1,4 +1,4 @@
-#define QUICKSPAWN
+//#define SMOOTH
 
 float MOVE_NORMAL = 0; // same as FALSE
 float MOVE_NOMONSTERS = 1; // same as TRUE
@@ -14,11 +14,6 @@ entity physobj_spawning; // the current object in spawning
 .entity physobj_p2; // particle 2 of this stick (end)
 .entity physobj_p3; // particle 3 of this stick (rotation)
 .entity physobj_p4; // particle 4 of this tetrahedron
-
-.entity bad_tetra_start;
-.entity volume_start;
-.entity support_tris_start;
-.entity super_tetra_save;
 
 //entity p_damage_thinker;
 .entity p_damage_next;
@@ -52,7 +47,7 @@ entity physobj_spawning; // the current object in spawning
 .float physobj_spring_mult;
 .vector physobj_spring_force;
 .vector physobj_floor_plane_normal;
-.float physobj_floor_dist;
+.float physobj_floor_frac;
 .vector physobj_friction_ground, physobj_friction_water, physobj_friction_air;
 .float physobj_stiction;
 .float physobj_buoyancy;
@@ -70,7 +65,6 @@ float PHFLAGS_SPRING_TOUCH = 32;
 float PHFLAGS_FORCE = 64;
 float PHFLAGS_KILLME = 128;
 float PHFLAGS_STABILIZERBAR = 256;
-float PHFLAGS_VEHICLE = 512;
 
 .float force_calcdist, force_calcscale;
 

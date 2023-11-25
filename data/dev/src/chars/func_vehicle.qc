@@ -116,19 +116,16 @@ void Car_TirePlace(entity tire){
 		tire.angles_x += pitch * 0.1;
 	*/
 
-	traceline(tireparticle.origin, tireparticle.origin - tireparticle.lmat_up * tire.frags, TRUE, tire);
+	traceline(tireparticle.origin, tireparticle.origin + tireparticle.lmat_up * -tire.frags, TRUE, tire);
+	float tracelen = fabs(tireparticle.physobj_spring_length);
+#if defined(SMOOTH)
+	float f = 0.1;
+#else
+	float f = frametime;
+#endif
+	tire.frags = min(tire.frags + f*30, tracelen*trace_fraction);
 	tire.oldorigin = tire.origin;
-	if (trace_fraction == 1 || trace_plane_normal_z > 0.7){
-		//float tracelen = fabs(tireparticle.physobj_spring_length + tire.relative_size);
-		float tracelen = fabs(tireparticle.physobj_spring_length);
-		tire.frags = min(tire.frags + frametime*30, tracelen*trace_fraction);
-		tire.punchangle = trace_endpos + tireparticle.lmat_up * tire.relative_size;
-		setorigin(tire, tire.punchangle);
-		tire.punchangle -= tireparticle.origin;
-	}
-	else {
-		setorigin(tire, tireparticle.origin + tire.punchangle);
-	}
+	setorigin(tire, trace_endpos + tireparticle.lmat_up * tireparticle.relative_size);
 	// RennyC: From build a delivery by shpuld
 	if (trace_fraction < 0.8)
 	{
@@ -213,8 +210,15 @@ void() Car_ChassiThink =
         e = e.physobj_next;
     }
     //
-
+	
+#if defined(SMOOTH)
+	car.frags = time + 0.1;
+	self.angles = vectoangles2(self.lmat_forward, self.lmat_up);
+	setorigin(self, self.view_ofs);
+	self.nextthink = time + 0.1;
+#else
 	self.nextthink = time;
+#endif
 
 	// RennyC - Send real (car) speed / angles to player
 	float r = vlen(car.velocity) * 0.1;
@@ -295,7 +299,7 @@ void(entity car) Car_InitVehicle =
 		}
 		if (!hasStabilizer){ // we better make one then
 			e = Phys_ObjectAddStick(car.frontright, car.frontleft, car);
-			e.physobj_flags |= PHFLAGS_STABILIZERBAR;
+			Phys_ObjectAddStick(car.frontright, car.frontleft, car);
 		}
 	}
 	hasStabilizer = FALSE;
@@ -314,7 +318,7 @@ void(entity car) Car_InitVehicle =
 		}
 		if (!hasStabilizer){ // we better make one then
 			e = Phys_ObjectAddStick(car.backright, car.backleft, car);
-			e.physobj_flags |= PHFLAGS_STABILIZERBAR;
+			Phys_ObjectAddStick(car.backright, car.backleft, car);
 		}
 	}
 	e = car.physobj_staticlist;
@@ -393,7 +397,7 @@ void Car_CheckAttach(){
 	}
 	entity e = findradius(self.origin + self.view_ofs, 100);
 	while(e){
-		if (e.physobj_flags & PHFLAGS_VEHICLE){
+		if (e.classname == "physics_object"){
 			if (!e.driving){
 				Car_AttachToVehicle(self, e);
 				break;
@@ -724,35 +728,32 @@ void TryUpdateVehicle(){
 	{
 		makevectors(self.v_angle);
 
-		float forw = v_forward * self.velocity;
-		if (forw > 100){
-			self.keyflags = self.keyflags | KEY_UP; // RennyC
-			if (self.frozen_finished < time)
-			{
+		if (self.frozen_finished < time)
+		{
+			float forw = v_forward * self.velocity;
+			if (forw > 100){
+				self.keyflags = self.keyflags | KEY_UP; // RennyC
 				if (!ragewar)
 					Car_Accelerate(3000, 950);
 				else
 					Car_Accelerate(self.speed, self.max_speed);
 			}
-		}
-		else if (forw < -100){
-			self.keyflags = self.keyflags | KEY_DOWN; // RennyC
-			if (self.frozen_finished < time)
-			{
+			else if (forw < -100){
+				self.keyflags = self.keyflags | KEY_DOWN; // RennyC
 				if (!ragewar)
 					Car_Decelerate(2500, 800);
 				else
 					Car_Decelerate(self.speed, self.max_speed / 2);
 			}
+			else
+			{
+				if (self.keyflags & KEY_UP)
+					self.keyflags = self.keyflags - KEY_UP;
+				if (self.keyflags & KEY_DOWN)
+					self.keyflags = self.keyflags - KEY_DOWN;
+			}
 		}
-		else
-		{
-			if (self.keyflags & KEY_UP)
-				self.keyflags = self.keyflags - KEY_UP;
-			if (self.keyflags & KEY_DOWN)
-				self.keyflags = self.keyflags - KEY_DOWN;
-		}
-		if (self.frozen_finished > time) // frozen status
+		else // frozen status
 		{
 			f_right.physobj_stiction = 99999;
 			f_left.physobj_stiction = 99999;
@@ -811,7 +812,7 @@ void TryUpdateVehicle(){
 			{
 				if (self.turbo_fuel <= 15 && !self.turbo_warning)
 				{
-					stuffcmd (self, "play warning.wav\n");
+					stuffcmd (self, "play warning.wav\n"); // FIXME: Ugly
 					self.turbo_warning = TRUE;
 				}
 				if (self.turbo_fuel > 15)
@@ -863,7 +864,7 @@ void TryUpdateVehicle(){
 		{
 			if (!self.handbreak_sfx)
 			{
-				stuffcmd (self, "play handbreak.wav\n");
+				stuffcmd (self, "play handbreak.wav\n"); // FIXME: Ugly
 				self.handbreak_sfx = TRUE;
 			}
 			if (self.airborne_cnt <= 10 && self.realspeed >= 20)
@@ -1108,7 +1109,6 @@ void() StartFuncVehicle =
 		}
 	}
 
-	self.physobj_flags |= PHFLAGS_VEHICLE;
 	Phys_MakeIntoPhysicsObject(self, self.origin, matrix_forward, matrix_left, matrix_up, '0 0 1', 0);
 	self.physobj_impactevent = PushAndDamageTarget;
 	Car_InitVehicle(self);
