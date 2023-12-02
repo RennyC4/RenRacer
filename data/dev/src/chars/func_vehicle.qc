@@ -820,7 +820,7 @@ void TryUpdateVehicle(){
 			{
 				if (self.turbo_fuel <= 15 && !self.turbo_warning)
 				{
-					stuffcmd (self, "play warning.wav\n"); // FIXME: Ugly
+					stuffcmd (self, "play warning.wav\n");
 					self.turbo_warning = TRUE;
 				}
 				if (self.turbo_fuel > 15)
@@ -872,7 +872,7 @@ void TryUpdateVehicle(){
 		{
 			if (!self.handbreak_sfx)
 			{
-				stuffcmd (self, "play handbreak.wav\n"); // FIXME: Ugly
+				stuffcmd (self, "play handbreak.wav\n");
 				self.handbreak_sfx = TRUE;
 			}
 			if (self.airborne_cnt <= 10 && self.realspeed >= 20)
@@ -1004,7 +1004,8 @@ void TryUpdateVehicle(){
 	if (self.realspeed <= 10 && !self.keyflags) // RennyC: schpulds stuff applied to RenRacer
 		Car_Brake();
 
-	CarStabilizeCheat(); // RennyC: Car auto corrects to prevent flipping
+	if (self.health > 0)
+		CarStabilizeCheat(); // RennyC: Car auto corrects to prevent flipping, allow car to flip on death
 
 	makevectors(self.driving.angles);
 	float backwards = (self.driving.velocity * v_forward) < 0;
