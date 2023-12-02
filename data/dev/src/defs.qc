@@ -552,6 +552,7 @@ var float PART_FREEZEBLAST;
 var float PART_FLAME;
 var float PART_GROCKET;
 var float PART_HOTDOGSPLAT;
+var float PART_WATERDIRT;
 
 // Lap time stats
 .float start_laptime; // ON / OFF

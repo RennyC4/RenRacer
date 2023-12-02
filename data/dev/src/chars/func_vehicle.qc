@@ -137,9 +137,14 @@ void Car_TirePlace(entity tire){
 			local float r = strstrofs(s, "dirt", 0);
 			*/
 			//if (!r)
-			pointparticles(PART_DIRT, trace_endpos, normalize(tireparticle.velocity + '0 0 100'), 1);
-			play_skidding(tireparticle, (fabs(tireparticle.velocity * tireparticle.lmat_left) - 40) / 500);
-			
+			if (!plyrent_tireowner.waterlevel)
+			{
+				pointparticles(PART_DIRT, trace_endpos, normalize(tireparticle.velocity + '0 0 100'), 1);
+				play_skidding(tireparticle, (fabs(tireparticle.velocity * tireparticle.lmat_left) - 40) / 500);
+			}
+			else
+				pointparticles(PART_WATERDIRT, trace_endpos, normalize(tireparticle.velocity + '0 0 100'), 1);
+
 			//local string v = ftos(r);
 			//bprint (v, "\n");
 		}

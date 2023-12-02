@@ -94,6 +94,7 @@ void() worldspawn =
 	PART_FLAME = particleeffectnum("flamethrower");
 	PART_GROCKET = particleeffectnum("ghostrocket");
 	PART_HOTDOGSPLAT = particleeffectnum("hotdogsplat");
+	PART_WATERDIRT = particleeffectnum("waterdirt");
 
 	precache_model("*null");
 	precache_model("progs/null.spr");
