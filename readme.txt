@@ -114,7 +114,7 @@ spike - FTEQW / general help
 FrikaC - FrikBot X, now gutted
 Electro - Func_vehicles HotRod car model
 https://www.naturalreaders.com/online/ - Announcer voice
-MANUEL / GAS GAS GAS - Race1.ogg
+Gridluster - Race1.ogg
 The End By A-ONE ft Odyssey - Race2.ogg
 Touhou Adequate By Odyssey - Race3.ogg
 On The Moon By A-ONE ft Odyssey - Race4.ogg

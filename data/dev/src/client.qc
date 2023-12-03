@@ -170,7 +170,7 @@ void() PushPlayers =
 				}
 			}
 
-			// Fire stuff on car touch
+			// Fire spreading on car touch
 			if (self.onfire_finished > time && self.health > 0)
 			{
 				b.onfire_finished = time + 2.5;
@@ -183,7 +183,7 @@ void() PushPlayers =
 			}
 
 			// Stop player thats doing the ramming
-			// FIXME: Let this work in race mode, but fix the AI backing up stuff
+			// FIXME: Needs a cap!
 			entity part = self.driving.physobj_particlelist;
 			while (part)
 			{
