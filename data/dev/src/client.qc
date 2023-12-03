@@ -13,6 +13,7 @@ void(vector position, float scale) Create2DExplosion;
 void(entity targ, entity attacker, float damage, string attackerclassname) DoDamage;
 void() CommandSpecials;
 void() SpecialRegenerate;
+void(vector position, float size) Create2DFreezeExplosion;
 
 void() ClientKill =
 {
@@ -538,8 +539,8 @@ void() freeze_explode_vfx_think =
 {
 	if (self.think_finished < time)
 	{
-		if (self.alpha > 0)
-			self.alpha -= 0.005;
+		if (self.scale > 0)
+			self.scale -= 0.01;
 		else
 		{
 			remove(self);
@@ -551,9 +552,7 @@ void() freeze_explode_vfx_think =
 
 void() freeze_explode_vfx =
 {
-	entity fxp;
-
-	fxp = spawn ();
+	entity fxp = spawn ();
 	fxp.angles_y = random() * 360;
 	makevectors (fxp.angles);
 	fxp.velocity = v_forward * (150 + random()*200);
@@ -565,6 +564,7 @@ void() freeze_explode_vfx =
 	fxp.alpha = 0.75;
 	fxp.dimension_hit = fxp.dimension_solid = 0;
 	fxp.effects = EF_ADDITIVE;
+	fxp.scale = 0.5 + random()*1;
 	fxp.classname = "icexplode";
 	setmodel (fxp, "progs/frozen.mdl");
 	setsize (fxp, '0 0 0', '0 0 0');
@@ -585,6 +585,7 @@ void() freeze_think =
 			freeze_explode_vfx();
 		sound(self, CHAN_AUTO, "combat/freezebrk.wav", 1, ATTN_NORM);		
 		self.owner.frozen = world;
+		Create2DFreezeExplosion(self.origin + v_up * 24, 3);
 		remove(self);
 		return;		
 	}
@@ -1044,7 +1045,7 @@ void() PlayerPostThink =
 	CheckImpulses();
 
 	// Debug status effects
-/*
+	/*
 	if (self.driving)
 	{
 		self.blind_finished = time + 3;
@@ -1053,7 +1054,7 @@ void() PlayerPostThink =
 			self.frozen_finished = time + 3;
 		self.slow_finished = time + 3;
 	}
-*/
+	*/
 };
 
 //----
