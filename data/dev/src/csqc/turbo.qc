@@ -1,10 +1,19 @@
 void() DrawTurbo =
 {
-	local vector pos = [(g_width - stringwidth("", TRUE, '18 18 0'))/12-24, (g_height - 46)];
+	vector pos = [(g_width - stringwidth("", TRUE, '18 18 0'))/12-24, (g_height - 46)];
 
-	local float turbof = getstatf(STAT_TURBOFUEL);
-	local string f = ftos(turbof);
+	float turbof = getstatf(STAT_TURBOFUEL);
+	string f = ftos(turbof);
 	
+	// Bar
+	vector tbar_size = '58 8 0';
+	vector tbar_border_size = tbar_size + '1.6 1.5 0';
+	vector tbarpos = pos - '-32 1.5 0';
+	tbar_size_x = (turbof / 100) * tbar_size_x; // keep bar updated
+
+	drawfill(tbarpos + '1 1 0', tbar_size, '1 1 0', 1, DRAWFLAG_NORMAL);
+
+	// Text
 	if (turbof > 99)
 		f = "MAX";
 	if (turbof <= 15)

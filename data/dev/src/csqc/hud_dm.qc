@@ -126,23 +126,23 @@ void() HUD_Ragewar =
 
 	pos = [(g_width / 1.15), (g_height / 32)];
 	pos_y = pos_y + 80;
-	float health = getstatf(STAT_ENEMYHEALTH);
-	float maxhealth = getstatf(STAT_ENEMYMAXHEALTH);
-	vector hbar_size = '75 6 0';
-	vector hbar_border_size = hbar_size + '6 6 0';
-	vector hbar_border_pos = pos - '3 3 0';
-	hbar_size_x = (health / maxhealth) * hbar_size_x;
+	float e_health = getstatf(STAT_ENEMYHEALTH);
+	float e_maxhealth = getstatf(STAT_ENEMYMAXHEALTH);
+	vector e_hbar_size = '75 6 0';
+	vector e_hbar_border_size = e_hbar_size + '6 6 0';
+	vector e_hbar_border_pos = pos - '3 3 0';
+	e_hbar_size_x = (e_health / e_maxhealth) * e_hbar_size_x; // keep bar updated
 
-	if (health)
+	if (e_health)
 	{
-		drawfill(hbar_border_pos, hbar_border_size, '1 0 0', 0.25, DRAWFLAG_NORMAL);
-		drawfill(pos, hbar_size, '1 0 0', 0.75, DRAWFLAG_NORMAL);
+		drawfill(e_hbar_border_pos, e_hbar_border_size, '1 0 0', 0.25, DRAWFLAG_NORMAL);
+		drawfill(pos, e_hbar_size, '1 0 0', 0.75, DRAWFLAG_NORMAL);
 
 		pos = [(g_width / 1.15), (g_height / 32)];
-		string name = getstats(STAT_ENEMYNAME);
+		string e_name = getstats(STAT_ENEMYNAME);
 
-		drawstring (pos + '0 81', name, '8 8 0', '0 0 0', 1, DRAWFLAG_NORMAL); // text shadow
-		drawstring (pos + '0 80', name, '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
+		drawstring (pos + '0 81', e_name, '8 8 0', '0 0 0', 1, DRAWFLAG_NORMAL); // text shadow
+		drawstring (pos + '0 80', e_name, '8 8 0', '1 1 1', 1, DRAWFLAG_NORMAL);
 	}
 
 	//
@@ -151,6 +151,15 @@ void() HUD_Ragewar =
 
 	pos = [(g_width - stringwidth("", TRUE, '18 18 0'))/12-28, (g_height - 36)];
 
+	// Bar
+	vector hbar_size = '50 8 0';
+	vector hbar_border_size = hbar_size + '1.6 1.5 0';
+	vector hbarpos = pos - '-35 1.5 0';
+	hbar_size_x = (h / hmax) * hbar_size_x; // keep bar updated
+
+	drawfill(hbarpos + '1 1 0', hbar_size, '1 0 0', 1, DRAWFLAG_NORMAL);
+
+	// Text
 	if (h < -999) h = -999; // caps
 	if (h > 999) h = 999;
 
@@ -173,8 +182,18 @@ void() HUD_Ragewar =
 	// Draw Energy
 	//
 
-	pos = [(g_width - stringwidth("", TRUE, '18 18 0'))/12-32, (g_height - 26)];
 	float e = getstatf(STAT_ENERGY);
+	pos = [(g_width - stringwidth("", TRUE, '18 18 0'))/12-32, (g_height - 26)];
+	
+	// Bar
+	vector ebar_size = '50 8 0';
+	vector ebar_border_size = ebar_size + '1.6 1.5 0';
+	vector ebarpos = pos - '-35 1.5 0';
+	ebar_size_x = (e / 100) * ebar_size_x; // keep bar updated
+
+	drawfill(ebarpos + '1 1 0', ebar_size, '0 0 1', 1, DRAWFLAG_NORMAL);
+
+	// Text
 	string e1 = ftos(e);
 
 	drawstring (pos + '1 1', "Energy: ", '8 8 0', '0 0 0', 1, DRAWFLAG_NORMAL); // text shadow
