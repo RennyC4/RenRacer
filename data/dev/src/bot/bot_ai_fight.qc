@@ -114,17 +114,19 @@ void() bot_ai_fight =
 
 	// Traceline: Test if bot is going to fall to their death
 	// TODO: Should only check when all 4 wheels are on the ground, remove false-positives
-	// TODO: Do backward check too
-	if (self.realspeed > 5)
+	if (self.realspeed > 5 && rw_use_waypoint_system)
 	{
+		float test1, test2, distance = 0;
+
+		vector remove_bad_axis = self.realang;
+		remove_bad_axis_x = 0;
+		remove_bad_axis_z = 0;
+		makevectors(remove_bad_axis);
+
 		if (!self.backward)
 		{
-			float test1, test2, distance;
-			makevectors(self.realang);
-
-			distance = 0;
 			vector start = self.origin + v_forward * (50 + self.realspeed);
-			vector end = self.origin + v_forward * + (self.realspeed * 6);
+			vector end = self.origin + v_forward * (self.realspeed * 6);
 
 			traceline (start, end, TRUE, self); // 1st trace forward
 
@@ -132,20 +134,22 @@ void() bot_ai_fight =
 			if (trace_fraction < 1 && !trace_ent.owner.driving)
 				test1 = TRUE; // hit something
 			else
-			{
 				test1 = FALSE; // go to next check
+
+			if (!test1)
+			{
 				vector test2_vec = trace_endpos;
+
+				distance = 1000; // how far to check downward
+				start = test2_vec;
+				end = test2_vec - (v_up * distance);
+				traceline (start, end, TRUE, self); // 2nd trace (down)
+
+				if (trace_fraction < 1)
+					test2 = TRUE; // hit something
+				else
+					test2 = FALSE;
 			}
-
-			distance = 400; // how far to check downward
-			start = test2_vec;
-			end = test2_vec - (v_up * distance);
-			traceline (start, end, TRUE, self); // 2nd trace (down)
-
-			if (trace_fraction < 1)
-				test2 = TRUE; // hit something
-			else
-				test2 = FALSE;
 
 			if (!test1 && !test2) // this is a drop
 			{
@@ -169,6 +173,7 @@ void() bot_ai_fight =
 			}
 		}
 		//TODO: Add backward check!
+		// Same thing but tell the bot to move forward!
 	}
 
 	// Bot wall bump

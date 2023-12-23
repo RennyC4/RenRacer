@@ -427,6 +427,9 @@ void() BotAI =
 		// status bars, and the mod probably already compensated for that - FrikaC
 		if (self.health < 1 && !intermission_running && race_status == RACE_STARTED && ragewar) // bot respawn
 		{
+			// clear bot specific flags
+			self.bot_backup_finished = time;
+			
 			self.button3 = floor(random() * 2);
 			self.button0 = 0;
 			self.button2 = 0;
