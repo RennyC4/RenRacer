@@ -372,6 +372,35 @@ void() GetTarget =
 	}
 };
 
+// Used for machine guns aquiring targets
+void() GetTarget_MachineGun =
+{
+	float bestd = 9999999;
+	entity bestv = world;
+
+	for (entity targ = world;(targ = find(targ, classname, "player"));)
+	{
+		if (targ == self || targ.health < 1 || targ.invulnerable_finished > time)
+			continue; // skip
+
+		vector heading = targ.origin - self.origin;
+		float d = heading * heading;
+
+		if (d < bestd)
+		{
+			bestd = d;
+			bestv = targ;
+		}
+
+		if (bestv)
+		{
+			if (visible(targ) && infront3(targ, 0.96) && !self.enemy && targ.health > 0 && targ != self.owner && !targ.observer)
+				self.enemy = targ;
+		}
+	}
+};
+
+
 // ---
 // Special weapon regeneration
 // ---
@@ -547,10 +576,18 @@ void() MachineGunBullet_Touch =
 // this fixes reversing while firing
 void() MachineGunBullet_Think
 {
+	if (!self.enemy)
+		GetTarget_MachineGun();
+	if (self.enemy)
+	{
+		vector dir = normalize(self.enemy.origin - self.origin);
+		self.velocity = self.velocity + (dir * 1000);
+		self.angles = vectoangles(self.velocity);
+	}
+
 	self.dimension_hit = 255;
 	self.think = SUB_Remove;
 	self.nextthink = time + 1.5;
-
 };
 
 .float mgun;
@@ -603,7 +640,7 @@ void() Fire_MachineGun =
 	mflash1.solid = SOLID_NOT;
 	mflash1.classname = "mflash";
 	mflash1.effects = EF_FULLBRIGHT;
-	mflash1.drawonlytoclient = self; // do not network muzzle flashes
+	//mflash1.drawonlytoclient = self; // do not network muzzle flashes
 	mflash1.scale = 0.25;
 	mflash1.angles_y = self.realang_y + 90;
 	mflash1.angles_x = 90;
@@ -617,7 +654,7 @@ void() Fire_MachineGun =
 	mflash2.solid = SOLID_NOT;
 	mflash2.classname = "mflash";
 	mflash2.effects = EF_FULLBRIGHT;
-	mflash2.drawonlytoclient = self; // do not network muzzle flashes
+	//mflash2.drawonlytoclient = self; // do not network muzzle flashes
 	mflash2.scale = 0.25;
 
 	if (self.mgun)

@@ -415,7 +415,13 @@ void() PlayerPreThink =
 					car = warwiener();
 
 				makevectors(self.angles);
-				car = Phys_MakeIntoPhysicsObject(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
+
+				// Some vehicles need extra spawn height
+				if (self.vehicle == VEH_SKYSCRAPER || self.vehicle == VEH_NIGHTSHADE)
+					car = Phys_MakeIntoPhysicsObject(car, self.origin + v_up * 74, v_forward, -v_right, v_up, '0 0 1', 0);
+				else
+					car = Phys_MakeIntoPhysicsObject(car, self.origin, v_forward, -v_right, v_up, '0 0 1', 0);
+
 //				car.physobj_flags |= PHFLAGS_VEHICLE;
 				Car_InitVehicle(car);
 				self.spawncar = TRUE;
