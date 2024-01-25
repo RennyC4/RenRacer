@@ -125,3 +125,100 @@ origin "1325 1513 -14"
 checkpoint "8"
 waypoint_speed "999"
 }
+
+// cactus decor spawns
+{
+classname cactus
+origin "-77 -537 76"
+spawnflags "0"
+}
+
+{
+classname cactus
+origin "827 54 100"
+spawnflags "1"
+}
+
+{
+classname cactus
+origin "1085 -1041 150"
+spawnflags "2"
+}
+
+{
+classname cactus
+origin "670 -1409 -117"
+spawnflags "0"
+}
+
+{
+classname cactus
+origin "232 -1025 -47"
+spawnflags "4"
+}
+
+{
+classname cactus
+origin "-1112 -1439 185"
+spawnflags "2"
+}
+
+{
+classname cactus
+origin "-544 -1028 29"
+spawnflags "0"
+}
+
+{
+classname cactus
+origin "-48 -1668 -136"
+spawnflags "2"
+}
+
+{
+classname cactus
+origin "438 -2008 6"
+spawnflags "4"
+}
+
+{
+classname cactus
+origin "-178 -2107 3"
+spawnflags "0"
+}
+
+{
+classname cactus
+origin "568 -585 136"
+spawnflags "1"
+}
+
+{
+classname cactus
+origin "130 739 135"
+spawnflags "0"
+}
+
+{
+classname cactus
+origin "-1088 1802 150"
+spawnflags "2"
+}
+
+{
+classname cactus
+origin "-395 2784 140"
+spawnflags "0"
+}
+
+{
+classname cactus
+origin "1786 1312 275"
+spawnflags "1"
+}
+
+{
+classname cactus
+origin "203 3624 272"
+spawnflags "2"
+}

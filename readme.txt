@@ -32,7 +32,7 @@ This creates a new *.hmp file calleed "foo.hmp" located in the data/maps/ folder
 Once again, in the console (`) type:
 mapedit foo
 
-Mapedit will disable all game logic and allow easy editing of foo.hmp now. Press K to toggle
+Mapedit will disable all game logic and allow easy editing of foo.hmp now. Press M to toggle
 on CsAddon and you can now play around with editing terrain and other fun things; you'll also
 notice that you'll see black sky & water, the actual terrain is just 4 quake units below the water.
 

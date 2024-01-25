@@ -256,3 +256,26 @@
 "origin" "352 -144 88"
 "spawnflags" "4"
 }
+// entity 20
+{
+"classname" "cactus"
+"origin" "294 326 41"
+}
+// entity 21
+{
+"classname" "cactus"
+"origin" "296 232 40"
+"spawnflags" "1"
+}
+// entity 22
+{
+"classname" "cactus"
+"origin" "312 152 40"
+"spawnflags" "2"
+}
+// entity 23
+{
+"classname" "cactus"
+"origin" "312 56 40"
+"spawnflags" "4"
+}
