@@ -806,11 +806,12 @@ void() Rocket_Think =
 		if (self.classname != "rocket3")
 			GetTarget();
 
-	if (self.classname == "rocket" || self.classname == "rocket4")
+	// Cnt2 is used for colour trails for jingo missiles
+	if (self.classname == "rocket" || self.cnt2 == 1)
 		pointparticles(PART_ROCKET1, self.origin, '0 0 0', 1);
-	if (self.classname == "rocket2")
+	if (self.classname == "rocket2" || self.cnt2 == 2)
 		pointparticles(PART_ROCKET2, self.origin, '0 0 0', 1);
-	if (self.classname == "rocket3")
+	if (self.classname == "rocket3" || self.cnt2 == 3)
 		pointparticles(PART_ROCKET3, self.origin, '0 0 0', 1);
 
 	if (self.enemy) // Home in on enemy
@@ -951,10 +952,7 @@ void(float type, float rear, float rzrbck_pos) Fire_Rocket =
 		rocket.colormod = '1 1 10';
 	}
 	else // razorback rockets
-	{
 		rocket.classname = "rocket4";
-		rocket.colormod = '1 1 1';
-	}
 
 	rocket.netname = "projectile";
 	rocket.effects = EF_FULLBRIGHT | EF_DIMLIGHT;
@@ -999,11 +997,23 @@ void(float type, float rear, float rzrbck_pos) Fire_Rocket =
 	else // razorback missile positions
 	{
 		if (!rzrbck_pos)
+		{
 			setorigin (rocket, self.origin + v_up * 32 + v_forward * (spawn_dist + self.realspeed));
+			rocket.cnt2 = 1;
+		}
 		else if (rzrbck_pos == 1)
+		{
 			setorigin (rocket, self.origin + v_up * 16 + v_forward * (spawn_dist + self.realspeed) + v_right * 32);
+			rocket.cnt2 = 2;
+			rocket.colormod = '10 1 10';
+
+		}
 		else
+		{
 			setorigin (rocket, self.origin + v_up * 16 + v_forward * (spawn_dist + self.realspeed) - v_right * 32);
+			rocket.cnt2 = 3;
+			rocket.colormod = '1 1 10';
+		}
 	}
 
 	sound (self, CHAN_WEAPON, "combat/rocket.wav", 1, ATTN_NORM);
