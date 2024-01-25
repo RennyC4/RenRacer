@@ -211,7 +211,7 @@ void() bot_ai_fight =
 
 		float rangetest = range(self.goalentity);
 		float er = self.realang_x * -1;
-		if (self.goalentity.origin_z > self.origin_z && (er > 10 && er < 60) && infront(self.goalentity, 0.7) || (self.onfire_finished > time || self.frozen_finished > time)
+		if (self.goalentity.origin_z > self.origin_z && (er > 10 && er < 60) && infront(self.goalentity, 0.7) || (self.onfire_finished > time || self.frozen_finished > time || self.slow_finished > time)
 		|| (infront(self.goalentity, 0.8) && visible(self.goalentity) && self.turbo_fuel > 0 && rangetest != RANGE_CLOSE))
 			self.button0 = TRUE;
 		else
