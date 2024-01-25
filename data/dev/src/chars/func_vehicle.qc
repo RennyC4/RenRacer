@@ -707,7 +707,7 @@ void() CarStabilizeCheat =
 };
 //RennyC
 
-.float turbosfx; // RennyC
+.float turbosfx_finished; // RennyC
 .float turbo_warning; // RennyC
 .float handbreak_sfx; // RennyC
 void TryUpdateVehicle(){
@@ -826,12 +826,15 @@ void TryUpdateVehicle(){
 				if (self.turbo_fuel > 15)
 					self.turbo_warning = FALSE;
 
-				if (!self.turbosfx)
+				if (self.turbo_fuel > 99)
+					sound (self, CHAN_AUTO, "turbo.wav", 1, ATTN_NORM);
+
+				if (self.turbosfx_finished < time)
 				{
-					stuffcmd(self, "play turbo.wav\n");
-					//sound (self, CHAN_WEAPON, "turbo.wav", 1, ATTN_NORM);
-					self.turbosfx = TRUE;
+					sound (self, CHAN_AUTO, "turbo2.wav", 1, ATTN_NORM);
+					self.turbosfx_finished = time + 1;
 				}
+
 				Car_Accelerate(3000, 950);
 				if (self.frozen_finished < time)
 					car_boost(2000);
@@ -859,11 +862,6 @@ void TryUpdateVehicle(){
 			}
 			else
 				self.turbo = self.turbo_held = FALSE;
-		}
-		else
-		{
-			if (self.turbo_fuel > 0) // stop sound spam
-				self.turbosfx = FALSE;
 		}
 
 		if (!self.turbo)
