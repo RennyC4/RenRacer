@@ -221,6 +221,7 @@ void() PushPlayers =
 				part = part.physobj_next;
 			}
 			self.collide_finished = time + 0.5;
+			b.collide_finished = time + 0.5;
 		}
 	}
 };

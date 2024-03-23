@@ -627,8 +627,8 @@ void(float strength) car_boost =
 .float driftspeed_timer; // RennyC: Hold initial speed
 void() car_drift =
 {
-	local entity f_right, f_left;
-	local entity b_right, b_left;
+	entity f_right, f_left;
+	entity b_right, b_left;
 
 	f_left = self.driving.frontleft;
 	f_right = self.driving.frontright;
@@ -644,11 +644,6 @@ void() car_drift =
 	b_left.physobj_friction_ground_y = 0.1;
 	b_right.physobj_friction_ground_y = 0.1;
 
-	local float strength = 2500;
-
-	makevectors([-self.driving.angles.x, self.driving.angles.y, self.driving.angles.z]);
-	vector worldorg = self.driving.origin;
-
 	if (self.driftsfx_finished < time)
 	{
 		sound (self, CHAN_AUTO, "slide.wav", 1, ATTN_NORM);
@@ -659,8 +654,21 @@ void() car_drift =
 	float car_angs = self.driving.angles_y;
 	if (car_angs > 180)
 		car_angs -= 360;
-	/*
 
+	// HACK: Forcibly shove car particles to the ground on drifting to prevent turn-over
+	entity part = self.driving.physobj_particlelist;
+	while (part)
+	{
+		part.velocity_z -= 20;
+		part = part.physobj_next;
+	}
+
+	//float strength = 2500;
+
+	//makevectors([-self.driving.angles.x, self.driving.angles.y, self.driving.angles.z]);
+	//vector worldorg = self.driving.origin;
+
+	/*
 	if (car_angs > self.v_angle_y)
 		Phys_Force(self.driving, self.driving.physobj_mass * 0.35, (v_right * strength * -1) * frametime, worldorg - v_right * 16, -v_right);
 	else
