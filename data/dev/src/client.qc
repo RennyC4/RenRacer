@@ -110,12 +110,12 @@ void() Setup_level_effects =
 
 void() PushPlayers =
 {
-	if (self.frozen_finished > time || self.invulnerable_finished > time || self.collide_finished > time)
+	if (self.frozen_finished > time || self.invulnerable_finished > time || self.collide_finished > time || self.health < 1)
 		return;
 
 	for (entity b = world;(b = find(b, classname, "player"));)
 	{
-		if (vlen(b.origin - self.origin) <= 100 && b != self && b.invulnerable_finished < time && !b.observer)
+		if (vlen(b.origin - self.origin) <= 100 && b != self && b.invulnerable_finished < time && !b.observer && b.health > 0)
 		{
 			if (self.realspeed > b.realspeed)
 			{
@@ -221,7 +221,6 @@ void() PushPlayers =
 				part = part.physobj_next;
 			}
 			self.collide_finished = time + 0.5;
-			b.collide_finished = time + 0.5;
 		}
 	}
 };
