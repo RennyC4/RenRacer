@@ -189,12 +189,35 @@ void() PushPlayers =
 			while (part)
 			{
 				float pf = self.pushfactor * 10;
-				
-				if (b.turbo)
-					part.velocity -= (b.origin - self.origin) * (101 - vlen(b.origin - self.origin)) * (pf + 0.05);
-				else
-					part.velocity -= (b.origin - self.origin) * (101 - vlen(b.origin - self.origin)) * pf;
 
+				if (b.turbo)
+				{
+					vector push_cap = part.velocity -= (b.origin - self.origin) * (101 - vlen(b.origin - self.origin)) * (pf + 0.05);
+
+					if (push_cap_x > 500)
+						push_cap_x = 500;
+					if (push_cap_y > 500)
+						push_cap_y = 500;
+					if (push_cap_z > 500)
+						push_cap_z = 500;
+
+					part.velocity = '0 0 0';
+					part.velocity = push_cap;
+				}
+				else
+				{
+					push_cap = part.velocity -= (b.origin - self.origin) * (101 - vlen(b.origin - self.origin)) * (pf + 0.05);
+
+					if (push_cap_x > 250)
+						push_cap_x = 250;
+					if (push_cap_y > 250)
+						push_cap_y = 250;
+					if (push_cap_z > 250)
+						push_cap_z = 250;
+
+					part.velocity = '0 0 0';
+					part.velocity = push_cap;
+				}
 				part = part.physobj_next;
 			}
 			self.collide_finished = time + 0.5;
