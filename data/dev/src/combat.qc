@@ -685,8 +685,8 @@ void() Fire_MachineGun =
 	}
 	else if (self.vehicle == VEH_ROADBASTARD)
 	{
-		newloc = '37 24 -0.5';
-		newloc2 = '37 24 -0.5';
+		newloc = '34 26 -0.5';
+		newloc2 = '34 26 -0.5';
 	}
 	else if (self.vehicle == VEH_SKYSCRAPER)
 	{
