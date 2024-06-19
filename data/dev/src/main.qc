@@ -148,6 +148,7 @@ void() worldspawn =
 	// road bastard
 	precache_model("progs/Roadbstrd_body.mdl");
 	precache_model("progs/wheel2.mdl");
+	precache_model("progs/wheel2_bent.mdl");
 
 	// skyscraper
 	precache_model("progs/Skyscraper_body.mdl");
