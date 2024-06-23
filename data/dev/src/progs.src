@@ -69,6 +69,9 @@ chars/decor/pylon.qc
 chars/decor/barricade.qc
 chars/decor/flare.qc
 chars/decor/cactus.qc
+chars/decor/streetlamp.qc
+chars/decor/trashcan.qc
+chars/decor/stopsign.qc
 
 funcs.qc
 triggers.qc

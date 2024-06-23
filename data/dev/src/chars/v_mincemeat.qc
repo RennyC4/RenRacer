@@ -6,7 +6,7 @@ entity() mincemeat =
 {
 	self.vehicle = VEH_MINCEMEAT;
 	self.health = self.max_health = 120; // max health is also armor
-	self.speed = 1500; // also acceleration
+	self.speed = 1000; // also acceleration
 	self.max_speed = 825;
 	self.handling = 100; // low handling
 	self.pushfactor = 0.06;

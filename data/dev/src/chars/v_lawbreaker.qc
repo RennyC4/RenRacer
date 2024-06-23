@@ -6,7 +6,7 @@ entity() lawbreaker =
 {
 	self.vehicle = VEH_LAWBREAKER;
 	self.health = self.max_health = 95; // max health is also armor
-	self.speed = 3000; // also acceleration
+	self.speed = 1700; // also acceleration
 	self.max_speed = 915;
 	self.handling = 60; // intermediate
 	self.pushfactor = 0.09;

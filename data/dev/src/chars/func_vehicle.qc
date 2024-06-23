@@ -478,7 +478,7 @@ void(float speed, float maxspeed) Car_Accelerate =
 {
 	local entity tright, tleft;
 
-	if (!self.driving || self.drift) // RennyC
+	if (!self.driving||self.drift) // RennyC
 		return;
 	if (self.slow_finished > time) // slow status
 	{
@@ -639,8 +639,8 @@ void() car_drift =
 		return;
 
 	// Remove tire friction on drifts
-	f_left.physobj_friction_ground_y = 0.2;
-	f_right.physobj_friction_ground_y = 0.2;
+	f_left.physobj_friction_ground_y = 0.7;
+	f_right.physobj_friction_ground_y = 0.7;
 	b_left.physobj_friction_ground_y = 0.1;
 	b_right.physobj_friction_ground_y = 0.1;
 
@@ -659,7 +659,7 @@ void() car_drift =
 	entity part = self.driving.physobj_particlelist;
 	while (part)
 	{
-		part.velocity_z -= 20;
+		part.velocity_z -= 5;
 		part = part.physobj_next;
 	}
 

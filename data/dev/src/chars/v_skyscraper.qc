@@ -6,7 +6,7 @@ entity() skyscraper =
 {
 	self.vehicle = VEH_SKYSCRAPER;
 	self.health = self.max_health = 150; // max health is also armor
-	self.speed = 1250; // also acceleration
+	self.speed = 850; // also acceleration
 	self.max_speed = 700;
 	self.handling = 100; // poor handling
 	self.pushfactor = 0.03;

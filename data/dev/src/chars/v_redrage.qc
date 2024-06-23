@@ -6,7 +6,7 @@ entity() redrage =
 {
 	self.vehicle = VEH_REDRAGE;
 	self.health = self.max_health = 80; // max health is also armor
-	self.speed = 4500; // also acceleration
+	self.speed = 2500; // also acceleration
 	self.max_speed = 1250;
 	self.handling = 150; // amazing handling
 	self.pushfactor = 0.13;
