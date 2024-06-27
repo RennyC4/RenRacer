@@ -442,7 +442,10 @@ void(float turn, float backwards) Car_Turn =
 			turn += 180;
 	}
 
-	float want_yaw = bound(-30, turn, 30);
+	float want_yaw;
+	if(tright.velocity * tright.lmat_forward > 500 && !self.drift && clienttype(self) != CLIENTTYPE_BOT) want_yaw = bound(-15, turn, 15); //Lower turn radius at high speed like most racing games. -Spud
+	else want_yaw = bound(-35, turn, 35);
+	
 	if (want_yaw < 0)
 		car.ideal_yaw = max(want_yaw, car.ideal_yaw - f*frametime);
 	else if (want_yaw > 0)
@@ -478,7 +481,7 @@ void(float speed, float maxspeed) Car_Accelerate =
 {
 	local entity tright, tleft;
 
-	if (!self.driving||self.drift) // RennyC
+	if (!self.driving || self.drift) // RennyC
 		return;
 	if (self.slow_finished > time) // slow status
 	{
@@ -613,6 +616,41 @@ void(float speed, float maxspeed) Car_Pitch =
     }
 }
 
+void(float speed, float maxspeed) Car_Rotate = //for rotating on spot in ragewar
+{
+	local entity f_right, f_left;
+	local entity b_right, b_left;
+
+	if (!self.driving)
+		return;
+
+	f_left = self.driving.frontleft;
+	f_right = self.driving.frontright;
+	b_left = self.driving.backleft;
+	b_right = self.driving.backright;
+
+	if (f_right.flags & FL_ONGROUND && f_left.flags & FL_ONGROUND && b_right.flags & FL_ONGROUND && b_left.flags & FL_ONGROUND)  // all tires have to touch ground
+		{
+
+	float fright_lzvel = f_right.velocity * f_right.lmat_left;
+	float fleft_lzvel = f_left.velocity * f_left.lmat_left;
+	float bright_lzvel = b_right.velocity * b_right.lmat_left;
+	float bleft_lzvel = b_left.velocity * b_left.lmat_left;
+
+	float rel_bzvel = fabs(bright_lzvel - bleft_lzvel);
+	float rel_fzvel = fabs(fright_lzvel - fleft_lzvel);
+
+	float allowRollFront = (rel_fzvel) < maxspeed;
+	float allowRollBack = (rel_bzvel) < maxspeed;
+	if (allowRollFront && allowRollBack){
+		f_right.velocity = f_right.velocity - f_right.lmat_left *speed*frametime;
+		b_right.velocity = b_right.velocity + b_right.lmat_left *speed*frametime;
+		f_left.velocity = f_left.velocity - f_left.lmat_left *speed*frametime;	
+		b_left.velocity = b_left.velocity + b_left.lmat_left*speed*frametime;	
+		}
+	}
+}
+
 //
 // RennyC: Taken from Build-A-Delivery by shpuld
 //
@@ -639,10 +677,10 @@ void() car_drift =
 		return;
 
 	// Remove tire friction on drifts
-	f_left.physobj_friction_ground_y = 0.7;
-	f_right.physobj_friction_ground_y = 0.7;
-	b_left.physobj_friction_ground_y = 0.1;
-	b_right.physobj_friction_ground_y = 0.1;
+	f_left.physobj_friction_ground_y = 0.3;
+	f_right.physobj_friction_ground_y = 0.3;
+	b_left.physobj_friction_ground_y = 0.3;
+	b_right.physobj_friction_ground_y = 0.3;
 
 	if (self.driftsfx_finished < time)
 	{
@@ -659,7 +697,7 @@ void() car_drift =
 	entity part = self.driving.physobj_particlelist;
 	while (part)
 	{
-		part.velocity_z -= 5;
+		part.velocity_z -= 20;
 		part = part.physobj_next;
 	}
 
@@ -1031,6 +1069,8 @@ void TryUpdateVehicle(){
 		self.backward = FALSE;
 
 	Car_Turn(move, backwards);
+	if(ragewar && self.realspeed < 8)Car_Rotate(move*45,self.handling);
+	//if(self.drift)Car_Rotate(move*13,self.handling);
 	
 	self.velocity = '0 0 0';
 	self.frame = 0;
