@@ -428,7 +428,7 @@ void(float turn, float backwards) Car_Turn =
 	entity car = self.driving;
 	tleft = car.frontleft;
 	tright = car.frontright;
-	if (ragewar) // ragewar stat
+	if (ragewar && !self.drift) // ragewar stat
 		f = self.handling;
 	else
 		f = 135;
@@ -481,7 +481,7 @@ void(float speed, float maxspeed) Car_Accelerate =
 {
 	local entity tright, tleft;
 
-	if (!self.driving || self.drift) // RennyC
+	if (!self.driving||self.drift) // RennyC
 		return;
 	if (self.slow_finished > time) // slow status
 	{
@@ -511,7 +511,7 @@ void(float speed, float maxspeed) Car_Decelerate =
 		maxspeed = maxspeed / 2;
 	}
 
-	if (!self.driving || self.drift) // RennyC
+	if (!self.driving||self.drift) // RennyC
 		return;
 	tleft = self.driving.backleft;
 	tright = self.driving.backright;
@@ -677,10 +677,10 @@ void() car_drift =
 		return;
 
 	// Remove tire friction on drifts
-	f_left.physobj_friction_ground_y = 0.3;
-	f_right.physobj_friction_ground_y = 0.3;
-	b_left.physobj_friction_ground_y = 0.3;
-	b_right.physobj_friction_ground_y = 0.3;
+	f_left.physobj_friction_ground_y = 0.6;
+	f_right.physobj_friction_ground_y = 0.6;
+	b_left.physobj_friction_ground_y = 0.5;
+	b_right.physobj_friction_ground_y = 0.5;
 
 	if (self.driftsfx_finished < time)
 	{
@@ -694,17 +694,22 @@ void() car_drift =
 		car_angs -= 360;
 
 	// HACK: Forcibly shove car particles to the ground on drifting to prevent turn-over
+/*
 	entity part = self.driving.physobj_particlelist;
 	while (part)
 	{
 		part.velocity_z -= 20;
 		part = part.physobj_next;
 	}
+*/
+
+	Car_Roll(self.driving.velocity * v_right,100);
 
 	//float strength = 2500;
 
 	//makevectors([-self.driving.angles.x, self.driving.angles.y, self.driving.angles.z]);
 	//vector worldorg = self.driving.origin;
+	self.velocity *= 2;
 
 	/*
 	if (car_angs > self.v_angle_y)
@@ -798,7 +803,7 @@ void TryUpdateVehicle(){
 				if (!ragewar)
 					Car_Decelerate(2500, 800);
 				else
-					Car_Decelerate(self.speed, self.max_speed / 2);
+					Car_Decelerate(self.speed/2, self.max_speed / 2);
 			}
 		}
 		else
@@ -1055,8 +1060,11 @@ void TryUpdateVehicle(){
 		self.airborne_cnt = 0;
 	}
 	// RennyC
-	if (self.realspeed <= 10 && !self.keyflags) // RennyC: schpulds stuff applied to RenRacer
+	if (self.realspeed <= 15 && !self.keyflags) // RennyC: schpulds stuff applied to RenRacer
+		{
+		if(ragewar && self.frozen_finished < time)Car_Rotate(move*50,self.handling);
 		Car_Brake();
+		}
 
 	if (self.health > 0)
 		CarStabilizeCheat(); // RennyC: Car auto corrects to prevent flipping, allow car to flip on death
@@ -1069,8 +1077,6 @@ void TryUpdateVehicle(){
 		self.backward = FALSE;
 
 	Car_Turn(move, backwards);
-	if(ragewar && self.realspeed < 8)Car_Rotate(move*45,self.handling);
-	//if(self.drift)Car_Rotate(move*13,self.handling);
 	
 	self.velocity = '0 0 0';
 	self.frame = 0;
