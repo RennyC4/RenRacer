@@ -139,7 +139,8 @@ void Car_TirePlace(entity tire){
 			//if (!r)
 			if (!plyrent_tireowner.waterlevel)
 			{
-				pointparticles(PART_DIRT, trace_endpos, normalize(tireparticle.velocity + '0 0 100'), 1);
+				//pointparticles(PART_DIRT, trace_endpos, normalize(tireparticle.velocity * 0.1), 1); //add this back when we get seperate asphalt/dirt checks -Spud
+			pointparticles(PART_DIRT, trace_endpos + '0 0 3');
 				play_skidding(tireparticle, (fabs(tireparticle.velocity * tireparticle.lmat_left) - 40) / 500);
 			}
 			else
@@ -443,7 +444,7 @@ void(float turn, float backwards) Car_Turn =
 	}
 
 	float want_yaw;
-	if(tright.velocity * tright.lmat_forward > 500 && !self.drift && clienttype(self) != CLIENTTYPE_BOT) want_yaw = bound(-15, turn, 15); //Lower turn radius at high speed like most racing games. -Spud
+	if(tright.velocity * tright.lmat_forward > 500 && clienttype(self) != CLIENTTYPE_BOT) want_yaw = bound(-15, turn, 15); //Lower turn radius at high speed like most racing games. -Spud
 	else want_yaw = bound(-35, turn, 35);
 	
 	if (want_yaw < 0)
@@ -621,7 +622,7 @@ void(float speed, float maxspeed) Car_Rotate = //for rotating on spot in ragewar
 	local entity f_right, f_left;
 	local entity b_right, b_left;
 
-	if (!self.driving)
+	if (!self.driving||self.drift)
 		return;
 
 	f_left = self.driving.frontleft;
@@ -851,8 +852,8 @@ void TryUpdateVehicle(){
 
 		// RennyC
 		// Taken from Build-A-Delivery by shpuld
-		if (!self.drift)
-		{
+	//	if (!self.drift)
+	//	{
 			if (self.button0)
 			{
 				self.turbo_held = TRUE;
@@ -865,7 +866,7 @@ void TryUpdateVehicle(){
 				self.turbo = FALSE;
 			}
 			//self.turbo = self.button0;
-		}
+	//	}
 		if (self.turbo)
 		{
 			if (self.turbo_fuel > 0)
