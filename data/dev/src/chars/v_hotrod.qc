@@ -88,7 +88,7 @@ entity() hotrod =
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
 	part.physobj_friction_ground = '0.1 2 0.225';
-	if(!ragewar) part.physobj_friction_ground = '0.225 4.4 8';
+	if(clienttype(self) == CLIENTTYPE_BOT) part.physobj_friction_ground = '0.225 4.4 8';
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
@@ -125,7 +125,7 @@ entity() hotrod =
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
 	part.physobj_friction_ground = '0.1 2 0.225';
-	if(!ragewar) part.physobj_friction_ground = '0.225 4.4 8';
+	if(clienttype(self) == CLIENTTYPE_BOT) part.physobj_friction_ground = '0.225 4.4 8';
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
@@ -162,7 +162,7 @@ entity() hotrod =
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
 	part.physobj_friction_ground = '0.225 2 0.225';
-	if(!ragewar) part.physobj_friction_ground = '0.225 4.4 8';
+	if(clienttype(self) == CLIENTTYPE_BOT) part.physobj_friction_ground = '0.225 4.4 8';
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;

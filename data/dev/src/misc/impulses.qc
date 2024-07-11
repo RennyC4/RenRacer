@@ -15,30 +15,9 @@ void() CarSwap_Forward =
 	else
 		stuffcmd (self, "play misc/menu_m2.wav\n");
 
-	if (self.vehicle == VEH_HOTROD)
-		self.vehicle = VEH_WRAITH;
-	else if (self.vehicle == VEH_WRAITH)
-		self.vehicle = VEH_ROADBASTARD;
-	else if (self.vehicle == VEH_ROADBASTARD)
-		self.vehicle = VEH_SKYSCRAPER;
-	else if (self.vehicle == VEH_SKYSCRAPER)
-		self.vehicle = VEH_REDRAGE;
-	else if (self.vehicle == VEH_REDRAGE)
-		self.vehicle = VEH_LAWBREAKER;
-	else if (self.vehicle == VEH_LAWBREAKER)
-		self.vehicle = VEH_RAZORBACK;
-	else if (self.vehicle == VEH_RAZORBACK)
-		self.vehicle = VEH_MINCEMEAT;
-	else if (self.vehicle == VEH_MINCEMEAT)
-		self.vehicle = VEH_STREETKING;
-	else if (self.vehicle == VEH_STREETKING)
-		self.vehicle = VEH_SANDROAMER;
-	else if (self.vehicle == VEH_SANDROAMER)
-		self.vehicle = VEH_THOROGOOD;
-	else if (self.vehicle == VEH_THOROGOOD)
-		self.vehicle = VEH_NIGHTSHADE;
-	else if (self.vehicle == VEH_NIGHTSHADE)
-		self.vehicle = VEH_HOTROD;
+	if (self.vehicle == 0) self.vehicle++;
+	else if(self.vehicle >=  1024) self.vehicle = 0;
+	else self.vehicle *= 2;
 };
 
 void() CarSwap_Backward =
@@ -48,30 +27,9 @@ void() CarSwap_Backward =
 	else
 		stuffcmd (self, "play misc/menu_m2.wav\n");
 
-	if (self.vehicle == VEH_NIGHTSHADE)
-		self.vehicle = VEH_THOROGOOD;
-	else if (self.vehicle == VEH_THOROGOOD)
-		self.vehicle = VEH_SANDROAMER;
-	else if (self.vehicle == VEH_SANDROAMER)
-		self.vehicle = VEH_STREETKING;
-	else if (self.vehicle == VEH_STREETKING)
-		self.vehicle = VEH_MINCEMEAT;
-	else if (self.vehicle == VEH_MINCEMEAT)
-		self.vehicle = VEH_RAZORBACK;
-	else if (self.vehicle == VEH_RAZORBACK)
-		self.vehicle = VEH_LAWBREAKER;
-	else if (self.vehicle == VEH_LAWBREAKER)
-		self.vehicle = VEH_REDRAGE;
-	else if (self.vehicle == VEH_REDRAGE)
-		self.vehicle = VEH_SKYSCRAPER;
-	else if (self.vehicle == VEH_SKYSCRAPER)
-		self.vehicle = VEH_ROADBASTARD;
-	else if (self.vehicle == VEH_ROADBASTARD)
-		self.vehicle = VEH_WRAITH;
-	else if (self.vehicle == VEH_WRAITH)
-		self.vehicle = VEH_HOTROD;
-	else if (self.vehicle == VEH_HOTROD)
-		self.vehicle = VEH_NIGHTSHADE;
+	if (self.vehicle <= 0) self.vehicle = 1024;
+	else if(self.vehicle ==  1) self.vehicle = 0;
+	else self.vehicle /= 2;
 };
 
 void() CheckImpulses =

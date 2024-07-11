@@ -110,7 +110,7 @@ entity() thorogood =
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
 	part.physobj_friction_ground = '0.225 3 8';
-	if(!ragewar) part.physobj_friction_ground = '0.225 4.4 8';
+	if(clienttype(self) == CLIENTTYPE_BOT) part.physobj_friction_ground = '0.225 4.4 8';
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
@@ -147,7 +147,7 @@ entity() thorogood =
 	part.part_mass = 1;
 	part.physobj_stiction = 0;
 	part.physobj_friction_ground = '0.225 3 8';
-	if(!ragewar) part.physobj_friction_ground = '0.225 4.4 8';
+	if(clienttype(self) == CLIENTTYPE_BOT) part.physobj_friction_ground = '0.225 4.4 8';
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
@@ -184,7 +184,7 @@ entity() thorogood =
 	part.part_mass = 1;
 	part.physobj_stiction = 10;
 	part.physobj_friction_ground = '0.225 5 8';
-	if(!ragewar) part.physobj_friction_ground = '0.225 4.4 8';
+	if(clienttype(self) == CLIENTTYPE_BOT) part.physobj_friction_ground = '0.225 4.4 8';
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
@@ -221,7 +221,7 @@ entity() thorogood =
 	part.part_mass = 1;
 	part.physobj_stiction = 0;
 	part.physobj_friction_ground = '0.225 3 8';
-	if(!ragewar) part.physobj_friction_ground = '0.225 4.4 8';
+	if(clienttype(self) == CLIENTTYPE_BOT) part.physobj_friction_ground = '0.225 4.4 8';
 	part.physobj_friction_water = '2 2 2';
 	part.physobj_bounce = 1.025;
 	part.physobj_buoyancy = -0.75;
