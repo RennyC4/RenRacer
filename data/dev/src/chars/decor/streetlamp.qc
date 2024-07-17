@@ -76,7 +76,7 @@ void() streetlamp =
 		self.movetype = MOVETYPE_NONE;
 		lightoffset.pflags = PFLAGS_FULLDYNAMIC;
 		lightoffset.light_lev = 150;
-		lightoffset.color = [3, 3, 2.5];
+		lightoffset.color = [2, 2, 1.5];
 		lightoffset.think = lightoffset_think;
 		lightoffset.nextthink = time;
 };

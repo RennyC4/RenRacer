@@ -804,7 +804,7 @@ void TryUpdateVehicle(){
 				if (!ragewar)
 					Car_Decelerate(2500, 800);
 				else
-					Car_Decelerate(self.speed/2, self.max_speed / 2);
+					Car_Decelerate(self.speed, self.max_speed / 2);
 			}
 		}
 		else
@@ -1061,7 +1061,7 @@ void TryUpdateVehicle(){
 		self.airborne_cnt = 0;
 	}
 	// RennyC
-	if (self.realspeed <= 15 && !self.keyflags) // RennyC: schpulds stuff applied to RenRacer
+	if (self.realspeed <= 20 && !self.keyflags) // RennyC: schpulds stuff applied to RenRacer
 		{
 		if(ragewar && self.frozen_finished < time)Car_Rotate(move*50,self.handling);
 		Car_Brake();
