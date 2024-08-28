@@ -288,6 +288,8 @@ void() worldspawn =
 	registercvar("ragewar", "0"); // ragewar on/off
 	ragewar = cvar("ragewar");
 
+	registercvar("rw_stationary_rotation", "1");
+
 	// physic cvar setup
 	registercvar("sv_car_physics_steps", "4"); // func_vehicle physics steps, higher is more stable with perf hit
 	if (substring(world.model, -3, 3) == "hmp") // thanks reki

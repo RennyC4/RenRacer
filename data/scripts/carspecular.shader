@@ -117,6 +117,22 @@ progs/Razorback_body.mdl_0
 	}
 }
 
+progs/Razorback_RW.mdl_0
+{
+    {
+		program defaultskin
+		map progs/Razorback_body
+		rgbGen lightingDiffuse // proper shading for vertex lit models, or something. 
+    }		
+	{
+		map progs/carspec
+		blendFunc GL_SRC_ALPHA GL_ONE
+		alphaGen const 0.05
+		tcGen environment
+		rgbgen entity
+	}
+}
+
 // Mince Meat specular
 progs/Mincemeat_body.mdl_0
 {
