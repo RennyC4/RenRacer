@@ -238,22 +238,22 @@ void() Car_ChassiThink =
 		// Car body damage logic (deformation / colormod / skin) changes
 		if (realowner.health > (realowner.max_health * 0.75))
 		{
-			self.frame = 0;
+			self.frame = self.skin = 0;
 			realowner.max_colormod = 1;
 		}
 		if (realowner.health < (realowner.max_health * 0.75) && realowner.health > (realowner.max_health * 0.5))
 		{
-			self.frame = 1;
+			self.frame = self.skin = 1;
 			realowner.max_colormod = 0.75;
 		}
 		if (realowner.health < (realowner.max_health * 0.5) && realowner.health > (realowner.max_health * 0.25))
 		{
-			self.frame = 2;
+			self.frame = self.skin = 2;
 			realowner.max_colormod = 0.5;
 		}
 		if (realowner.health < (realowner.max_health * 0.25))
 		{
-			self.frame = 3;
+			self.frame = self.skin = 3;
 			realowner.max_colormod = 0.25;
 		}
 	}
