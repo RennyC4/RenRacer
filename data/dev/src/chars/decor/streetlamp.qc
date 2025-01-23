@@ -6,7 +6,7 @@ $frame death1 death2 death3 death4 death5 death6 death7 death8
 $frame death9 death10 death11
 
 void()	lamp_die1	=[	$death1,	lamp_die2	] {};
-void()	lamp_die2	=[	$death2,	lamp_die3	] {self.angles_y = random()*360;self.solid = SOLID_NOT;};
+void()	lamp_die2	=[	$death2,	lamp_die3	] {self.angles_y = random()*360;self.solid = SOLID_NOT;self.skin = 1;};
 void()	lamp_die3	=[	$death3,	lamp_die4	] {};
 void()	lamp_die4	=[	$death4,	lamp_die5	] {};
 void()	lamp_die5	=[	$death5,	lamp_die6	] {};
