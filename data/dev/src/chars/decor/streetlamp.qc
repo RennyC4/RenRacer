@@ -17,7 +17,6 @@ void()	lamp_die9	=[	$death9,	lamp_die10	] {};
 void()	lamp_die10	=[	$death10,	lamp_die11	] {};
 void()	lamp_die11	=[	$death11,	lamp_die11	] {};
 
-
 void () streetlamp_die =
 {
 	if (other.owner.driving)
@@ -31,16 +30,15 @@ void () streetlamp_die =
 	lamp_die2();
 }
 
-
 void() lightoffset_think =
 {
 	if (self.owner.frame > 0)
 	{
-	remove(self);
+		remove(self);
+		return;
 	}
 	frameskip(0.01);
 };
-
 
 void() streetlamp =
 {

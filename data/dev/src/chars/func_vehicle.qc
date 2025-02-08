@@ -1,5 +1,6 @@
 .entity frontright, frontleft, backright, backleft;
 entity() hotrod;
+void() spawn_smokepuff;
 
 void PushAndDamageThink(){
 // RennyC: Disable this
@@ -238,24 +239,43 @@ void() Car_ChassiThink =
 		// Car body damage logic (deformation / colormod / skin) changes
 		if (realowner.health > (realowner.max_health * 0.75))
 		{
-			self.frame = self.skin = 0;
-			realowner.max_colormod = 1;
+			if (self.skin != 0)
+			{
+				self.frame = self.skin = 0;
+				realowner.max_colormod = 1;
+			}
 		}
 		if (realowner.health < (realowner.max_health * 0.75) && realowner.health > (realowner.max_health * 0.5))
 		{
-			self.frame = self.skin = 1;
-			realowner.max_colormod = 0.75;
+			if (self.skin != 1 && realowner.health < realowner.old_health)
+				spawn_smokepuff();
+			if (self.skin != 1)
+			{
+				self.frame = self.skin = 1;
+				realowner.max_colormod = 0.75;
+			}
 		}
 		if (realowner.health < (realowner.max_health * 0.5) && realowner.health > (realowner.max_health * 0.25))
 		{
-			self.frame = self.skin = 2;
-			realowner.max_colormod = 0.5;
+			if (self.skin != 2 && realowner.health < realowner.old_health)
+				spawn_smokepuff();
+			if (self.skin != 2)
+			{
+				self.frame = self.skin = 2;
+				realowner.max_colormod = 0.5;
+			}
 		}
 		if (realowner.health < (realowner.max_health * 0.25))
 		{
-			self.frame = self.skin = 3;
-			realowner.max_colormod = 0.25;
+			if (self.skin != 3 && realowner.health < realowner.old_health)
+				spawn_smokepuff();
+			if (self.skin != 3)
+			{
+				self.frame = self.skin = 3;
+				realowner.max_colormod = 0.25;
+			}	
 		}
+		//
 	}
 };
 
@@ -882,7 +902,18 @@ void TryUpdateVehicle(){
 				if (!self.turbosfx)
 				{
 					if (self.turbo_fuel > 99)
+					{
 						sound (self, CHAN_AUTO, "turbo.wav", 1, ATTN_NORM);
+						sound (self, CHAN_AUTO, "turboom.wav", 1, ATTN_NORM);
+
+						// Spawn shockwave
+						makevectors(self.angles);
+						WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+						WriteByte (MSG_BROADCAST, TE_TELEPORT);
+						WriteCoord (MSG_BROADCAST, self.origin_x);
+						WriteCoord (MSG_BROADCAST, self.origin_y);
+						WriteCoord (MSG_BROADCAST, self.origin_z);
+					}
 					self.turbosfx = TRUE;
 				}
 

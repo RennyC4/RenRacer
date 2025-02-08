@@ -491,3 +491,52 @@ void() CarReset =
 	Car_InitVehicle(car);
 	self.car_reset_finished = time + 60;
 };
+
+void() smokepuff_think =
+{
+	if (self.animation_finished < time)
+	{
+		if (self.frame < 7)
+			self.frame += 1;
+		else
+			self.frame = 0;
+		self.animation_finished = time + 0.05;
+	}
+
+	if (self.removeme_finished < time)
+	{
+		remove(self);
+		return;
+	}
+
+	self.scale += 0.025;
+	self.alpha -= 0.0035;
+
+	frameskip(0.01);
+};
+
+void() spawn_smokepuff =
+{
+	entity smoke = spawn();
+
+	makevectors (self.realang);
+
+	smoke.movetype = MOVETYPE_NOCLIP;
+	smoke.owner = self;
+	smoke.solid = SOLID_NOT;
+	smoke.classname = "smokepuff";
+	smoke.netname = "projectile";
+	smoke.effects = EF_ADDITIVE;
+	smoke.alpha = 1;
+
+	setmodel (smoke, "progs/puff.spr");
+	setsize (smoke, '0 0 0', '0 0 0');
+	setorigin (smoke, self.origin);
+	sound (self, CHAN_WEAPON, "combat/rocket.wav", 1, ATTN_NORM); // Renove me
+
+	smoke.velocity_z = 50;
+	smoke.removeme_finished = time + 3;
+
+	smoke.think = smokepuff_think;
+	smoke.nextthink = time;
+};

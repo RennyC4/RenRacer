@@ -53,6 +53,9 @@ void() CheckImpulses =
 		stuffcmd (self, "play combat/mincemeat.wav\n");
 	}
 
+	//if (self.impulse == 16) // test
+	//	DoDamage(self, self, 10, self.classname);
+
 	// Weapon / Car select cycle
 	if (self.impulse == 10)
 	{

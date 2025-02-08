@@ -258,17 +258,19 @@ void(entity targ, entity attacker, float damage, string attackerclassname) DoDam
 		return;
 	if (targ.invulnerable_finished > time)
 		return;
-	if (targ == world)
+	if (!targ)
 		return;
 
 	if (damage > 0)
 	{
+		targ.old_health = targ.health; // record old health value
+
 		if (targ.shield_finished < time)
 			targ.health = targ.health - damage;
 		else
-			targ.health = targ.health - ceil(damage / 2);
+			targ.health = targ.health - ceil(damage / 2); // shield cuts 50% damage
 		if (targ.classname == "player")
-			targ.colormod_x = 2;
+			targ.colormod_x = 2; // red colour on hit (feedback)
 
 		// Send stats to CSQC + Bot targetting if hit
 		if (attacker != targ && (attacker.classname == "player" && targ.classname == "player"))

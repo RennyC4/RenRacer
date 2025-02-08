@@ -110,6 +110,7 @@ void() worldspawn =
 	precache_model("progs/fire.spr");
 	precache_model("progs/xplode1.spr");
 	precache_model("progs/landmine.spr");
+	precache_model("progs/puff.spr");
 	precache_model("progs/shield.mdl");
 	precache_model("progs/ricochet.mdl");
 	precache_model("progs/remote.spr");
@@ -205,6 +206,7 @@ void() worldspawn =
 	precache_sound ("camera.wav");
 	precache_sound ("turbo.wav");
 	precache_sound ("turbo2.wav");
+	precache_sound ("turboom.wav");
 	precache_sound ("cntdwn.wav");
 	precache_sound ("gogo.wav");
 	precache_sound ("youwin.wav");
