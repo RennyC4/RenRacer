@@ -637,12 +637,12 @@ void(float speed, float maxspeed) Car_Pitch =
     }
 }
 
-void(float speed, float maxspeed) Car_Rotate = //for rotating on spot in ragewar
+void(float speed, float maxspeed) Car_Rotate = // for rotating on spot in ragewar
 {
 	local entity f_right, f_left;
 	local entity b_right, b_left;
 
-	if (!self.driving||self.drift)
+	if (!self.driving)
 		return;
 
 	f_left = self.driving.frontleft;
@@ -714,30 +714,9 @@ void() car_drift =
 	if (car_angs > 180)
 		car_angs -= 360;
 
-	// HACK: Forcibly shove car particles to the ground on drifting to prevent turn-over
-/*
-	entity part = self.driving.physobj_particlelist;
-	while (part)
-	{
-		part.velocity_z -= 20;
-		part = part.physobj_next;
-	}
-*/
-
 	Car_Roll(self.driving.velocity * v_right,100);
 
-	//float strength = 2500;
-
-	//makevectors([-self.driving.angles.x, self.driving.angles.y, self.driving.angles.z]);
-	//vector worldorg = self.driving.origin;
 	self.velocity *= 2;
-
-	/*
-	if (car_angs > self.v_angle_y)
-		Phys_Force(self.driving, self.driving.physobj_mass * 0.35, (v_right * strength * -1) * frametime, worldorg - v_right * 16, -v_right);
-	else
-		Phys_Force(self.driving, self.driving.physobj_mass * 0.35, v_right * strength * frametime, worldorg + v_right * 16, +v_right);
-	*/
 };
 
 // RennyC - helps to keep the car balanced if it's tipping in a cheaty manner
@@ -783,16 +762,16 @@ void() CarStabilizeCheat =
 .float turbosfx; // RennyC
 .float turbo_warning; // RennyC
 .float handbreak_sfx; // RennyC
-void TryUpdateVehicle(){
-	if (!check_camera_state){
+void TryUpdateVehicle()
+{
+	if (!check_camera_state)
 		check_camera_state = TRUE;
-	}
 	if (!self.driving)
 		return;
 
 	// RennyC	
-	local entity f_right, f_left;
-	local entity b_right, b_left;
+	entity f_right, f_left;
+	entity b_right, b_left;
 
 	f_left = self.driving.frontleft;
 	f_right = self.driving.frontright;
@@ -870,23 +849,50 @@ void TryUpdateVehicle(){
 				self.keyflags = self.keyflags - KEY_LEFT;
 		}
 
+		float car_angs = self.driving.angles_y;
+		if (car_angs > 180)
+			car_angs -= 360;
+		float move = car_angs - self.v_angle_y;
+		if (car_angs > self.v_angle_y)
+		{
+			if (move > 180)
+				move = move - 360;
+		}
+		else
+		{
+			if (move < -180)
+				move = move + 360;
+		}
+
+		car_angs = self.driving.angles_x;
+		if (car_angs > 180)
+			car_angs -= 360;
+		float pitch = car_angs - self.v_angle_x;
+		if (car_angs > self.v_angle_x)
+		{
+			if (pitch > 180)
+				pitch = pitch - 360;
+		}
+		else
+		{
+			if (pitch < -180)
+				pitch = pitch + 360;
+		}
+
 		// RennyC
 		// Taken from Build-A-Delivery by shpuld
-	//	if (!self.drift)
-	//	{
-			if (self.button0)
-			{
-				self.turbo_held = TRUE;
-				if (self.turbo_fuel >= 15 && self.turbo_held)
-					self.turbo = TRUE;
-			}
-			else
-			{
-				self.turbo_held = FALSE;
-				self.turbo = FALSE;
-			}
-			//self.turbo = self.button0;
-	//	}
+		if (self.button0)
+		{
+			self.turbo_held = TRUE;
+			if (self.turbo_fuel >= 15 && self.turbo_held)
+				self.turbo = TRUE;
+		}
+		else
+		{
+			self.turbo_held = FALSE;
+			self.turbo = FALSE;
+		}
+	
 		if (self.turbo)
 		{
 			if (self.turbo_fuel > 0)
@@ -906,7 +912,7 @@ void TryUpdateVehicle(){
 						sound (self, CHAN_AUTO, "turbo.wav", 1, ATTN_NORM);
 						sound (self, CHAN_AUTO, "turboom.wav", 1, ATTN_NORM);
 
-						// Spawn shockwave
+						// Spawn turbo shockwave
 						makevectors(self.angles);
 						WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
 						WriteByte (MSG_BROADCAST, TE_TELEPORT);
@@ -972,6 +978,7 @@ void TryUpdateVehicle(){
 					self.driftspeed_timer = 10;
 				self.car_stabilizer = -2; // Harder to tip while drifting (lowers chassis)
 				car_drift();
+				Car_Rotate(move * 50, self.handling);
 				if (self.turbo_fuel < 100)
 					self.turbo_fuel = self.turbo_fuel + 1; // Drift adds turbo fuel
 				else
@@ -1020,35 +1027,6 @@ void TryUpdateVehicle(){
 		//bprint ("Drift Speed: ", debug, "\n");
 		//RennyC
 
-		float car_angs = self.driving.angles_y;
-		if (car_angs > 180)
-			car_angs -= 360;
-		float move = car_angs - self.v_angle_y;
-		if (car_angs > self.v_angle_y)
-		{
-			if (move > 180)
-				move = move - 360;
-		}
-		else
-		{
-			if (move < -180)
-				move = move + 360;
-		}
-
-		car_angs = self.driving.angles_x;
-		if (car_angs > 180)
-			car_angs -= 360;
-		float pitch = car_angs - self.v_angle_x;
-		if (car_angs > self.v_angle_x)
-		{
-			if (pitch > 180)
-				pitch = pitch - 360;
-		}
-		else
-		{
-			if (pitch < -180)
-				pitch = pitch + 360;
-		}
 		// RennyC: Game started & unfrozen , unlock tires
 		if (self.frozen_finished < time)
 		{
@@ -1093,10 +1071,11 @@ void TryUpdateVehicle(){
 	}
 	// RennyC
 	if (self.realspeed <= 20 && !self.keyflags) // RennyC: schpulds stuff applied to RenRacer
-		{
-		if(ragewar && cvar("rw_stationary_rotation") && self.frozen_finished < time)Car_Rotate(move*50,self.handling);
+	{
+		if (ragewar && cvar("rw_stationary_rotation") && self.frozen_finished < time)
+			Car_Rotate(move * 50, self.handling);
 		Car_Brake();
-		}
+	}
 
 	if (self.health > 0)
 		CarStabilizeCheat(); // RennyC: Car auto corrects to prevent flipping, allow car to flip on death

@@ -875,14 +875,7 @@ void() PlayerPostThink =
 	// EF_BRIGHTFIELD effects handler
 	if (self.driving)
 	{
-		if (!ragewar)
-		{
-			if (self.waterlevel > 0)
-				self.effects |= EF_BRIGHTFIELD;
-			else
-				self.effects &= ~(EF_BRIGHTFIELD);
-		}
-		else
+		if (ragewar)
 		{
 			if (self.invulnerable_finished > time)
 			{
