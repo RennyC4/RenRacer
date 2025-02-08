@@ -344,3 +344,30 @@ void(float n) frameskip =
 			self.nextthink = self.ltime + n;
 	}
 };
+
+/*
+=============
+checkground
+
+returns whether or not an entity is touching the ground using tracebox, replaces checkbottom
+as checkbottom is slow
+
+0 is false
+1 is true
+=============
+*/
+
+float(entity e) checkground =
+{
+	local vector source, dest;
+
+	source = e.origin;
+	dest = e.origin - v_up * 1;
+		
+	tracebox (source, e.mins, e.maxs, dest, TRUE, e);
+
+	if (trace_fraction == 1 || trace_ent.classname == "func_fall" || trace_ent.classname == "breakable") // Hit nothing
+		return FALSE;
+
+	return TRUE;
+};
