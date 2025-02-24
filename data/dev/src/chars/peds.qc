@@ -159,16 +159,11 @@ void() spawn_pedestrian1 =
 
 void() pedestrian2_think =
 {
-	if (self.alpha < 1)
-		self.alpha += 0.1;
-	if (self.animation_finished < time)
-	{
-		if (self.frame < 1)
-			self.frame += 1;
-		else
-			self.frame = 0;
-		self.animation_finished = time + 0.25;
-	}
+	if (self.frame == 3) self.velocity += '0 0 275';
+	if (self.frame < 14)
+		self.frame ++;
+	else
+		self.frame = 0;
 	
 	frameskip(0.1);
 };
@@ -183,16 +178,15 @@ void() spawn_pedestrian2 =
 		ped.takedamage = DAMAGE_YES;
 		ped.solid = SOLID_TRIGGER;
 		ped.touch = pedestrian_touch;
-		ped.scale = 0.75;
 		ped.owner = self;
 		ped.classname = "pedestrian";
 		ped.alpha = 0;
 		ped.health = 1;
 		ped.th_die = pedestrian_die;
 
-		setmodel(ped, "progs/ped2.spr");
-		setsize(ped, '-8 -8 -22', '8 8 8');
-		setorigin(ped, self.origin);
+		setmodel(ped, "progs/ped2.mdl");
+		setsize(ped, '-7 -14 -29', '7 11 15');
+		setorigin(ped, self.origin + v_up * 16);
 
 		ped.think = pedestrian2_think;
 		ped.nextthink = time;
@@ -318,7 +312,7 @@ void() pedestrian =
 
 	if (self.spawnflags & 1) // Jumping flag dude
 	{
-		precache_model ("progs/ped2.spr");
+		precache_model ("progs/ped2.mdl");
 		self.think = spawn_pedestrian2;
 		self.nextthink = time + 0.2;
 	}
