@@ -1072,11 +1072,11 @@ void TryUpdateVehicle()
 		self.airborne_cnt = 0;
 	}
 	// RennyC
-	if (self.realspeed <= 20 && !self.keyflags) // RennyC: schpulds stuff applied to RenRacer
+	if (!self.keyflags) // RennyC: schpulds stuff applied to RenRacer
 	{
-		if (ragewar && cvar("rw_stationary_rotation") && self.frozen_finished < time)
-			Car_Rotate(move * 25, self.handling);
-		Car_Brake();
+		if (ragewar && cvar("rw_stationary_rotation") && self.frozen_finished < time && self.realspeed <= 10 )
+			Car_Rotate(move * 50, self.handling);
+		if (self.realspeed <= 25)Car_Brake();
 	}
 
 	if (self.health > 0)
