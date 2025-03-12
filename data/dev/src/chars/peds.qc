@@ -70,9 +70,9 @@ void() pedestrian_die =
 	if (!self.owner.spawnflags) // Business Man
 		self.frame = 16; // Set to first death frame
 	if (self.owner.spawnflags & 1) // Jumping flag dude
-		self.frame = 0;
+		self.frame = 16;
 	if (self.owner.spawnflags & 2) // Jiving weirdo
-		self.frame = 4;
+		self.frame = 16;
 	if (self.owner.spawnflags & 4) // Lazy chair lad
 		self.frame = 1;
 
@@ -202,23 +202,12 @@ void() spawn_pedestrian2 =
 
 void() pedestrian3_think =
 {
-	if (self.alpha < 1)
-		self.alpha += 0.1;
-	if (self.animation_finished < time)
-	{
-		if (!self.frags)
-			self.frame += 1;
-		else
-			self.frame -= 1;
-		
-		if (self.frame > 2)
-			self.frags = TRUE;
-		else if (self.frame < 1)
-			self.frags = FALSE;
+	if (self.frame < 14)
+		self.frame ++;
+	else
+		self.frame = 0;
 
-		self.animation_finished = time + 0.25;
-	}
-	pedestrian_move(3);
+	pedestrian_move(10);
 	frameskip(0.1);
 };
 
@@ -232,16 +221,16 @@ void() spawn_pedestrian3 =
 		ped.takedamage = DAMAGE_YES;
 		ped.solid = SOLID_TRIGGER;
 		ped.touch = pedestrian_touch;
-		ped.scale = 0.75;
+		ped.scale = 0.9;
 		ped.owner = self;
 		ped.classname = "pedestrian";
 		ped.alpha = 0;
 		ped.health = 1;
 		ped.th_die = pedestrian_die;
 
-		setmodel(ped, "progs/ped3.spr");
-		setsize(ped, '-8 -8 -22', '8 8 8');
-		setorigin(ped, self.origin);
+		setmodel(ped, "progs/ped3.mdl");
+		setsize(ped, '-7 -14 -23', '7 11 15');
+		setorigin(ped, self.origin + v_up * 16);
 
 		ped.think = pedestrian3_think;
 		ped.nextthink = time;
@@ -319,7 +308,7 @@ void() pedestrian =
 
 	if (self.spawnflags & 2) // Jiving guy
 	{
-		precache_model ("progs/ped3.spr");
+		precache_model ("progs/ped3.mdl");
 		self.think = spawn_pedestrian3;
 		self.nextthink = time + 0.2;
 	}

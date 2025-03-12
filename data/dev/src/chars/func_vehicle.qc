@@ -698,10 +698,12 @@ void() car_drift =
 		return;
 
 	// Remove tire friction on drifts
-	f_left.physobj_friction_ground_y = 0.6;
-	f_right.physobj_friction_ground_y = 0.6;
-	b_left.physobj_friction_ground_y = 0.5;
-	b_right.physobj_friction_ground_y = 0.5;
+	
+	f_left.physobj_friction_ground_y = 0.3;
+	f_right.physobj_friction_ground_y = 0.3;
+	b_left.physobj_friction_ground_y = 0.6;
+	b_right.physobj_friction_ground_y = 0.6;
+	
 
 	if (self.driftsfx_finished < time)
 	{
@@ -978,7 +980,7 @@ void TryUpdateVehicle()
 					self.driftspeed_timer = 10;
 				self.car_stabilizer = -2; // Harder to tip while drifting (lowers chassis)
 				car_drift();
-				Car_Rotate(move * 50, self.handling);
+				Car_Rotate(move * 7, self.handling);
 				if (self.turbo_fuel < 100)
 					self.turbo_fuel = self.turbo_fuel + 1; // Drift adds turbo fuel
 				else
@@ -1073,7 +1075,7 @@ void TryUpdateVehicle()
 	if (self.realspeed <= 20 && !self.keyflags) // RennyC: schpulds stuff applied to RenRacer
 	{
 		if (ragewar && cvar("rw_stationary_rotation") && self.frozen_finished < time)
-			Car_Rotate(move * 50, self.handling);
+			Car_Rotate(move * 25, self.handling);
 		Car_Brake();
 	}
 
