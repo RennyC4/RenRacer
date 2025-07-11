@@ -57,7 +57,7 @@ classname rally_startfinish_flag
 origin "38 981 31"
 angles "0 -90 0"
 spawnflags "1"
-lap "5"
+lap "3"
 checkpoint "9" // must match last marker
 music "sound/music/race6.ogg"
 message "!! NEVER FEAR !!\n\n !!! THE FAST IS HERE !!!\n"
