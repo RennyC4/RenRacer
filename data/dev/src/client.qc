@@ -652,7 +652,6 @@ void() PlayerPostThink =
 		self.onfire_finished = time;
 		self.blind_finished = time;
 		self.frozen_finished = time;
-		centerprint(self, "");
 		IntermissionThink ();
 		return;
 	}

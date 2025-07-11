@@ -95,6 +95,7 @@ void() execute_changelevel =
 	other = find (world, classname, "player");
 	while (other)
 	{
+		centerprint(other, ""); // clear screen
 		other.angles = other.v_angle = pos.mangle;
 		other.fixangle = TRUE;
 		other.view_ofs = '0 0 0';
@@ -115,7 +116,7 @@ void() IntermissionThink = // called from PostThink
 
 	if (!self.button0 && !self.button1 && !self.button2 && !self.button3 && !self.button4)
 		return;
-	
+
 	GotoNextMap ();
 };
 
