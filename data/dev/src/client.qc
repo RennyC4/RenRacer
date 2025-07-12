@@ -193,13 +193,20 @@ void() PushPlayers =
 				if (b.turbo)
 				{
 					vector push_cap = part.velocity -= (b.origin - self.origin) * (101 - vlen(b.origin - self.origin)) * (pf + 0.05);
+					
+					if (push_cap_x > 800)
+						push_cap_x = 800;
+					if (push_cap_y > 800)
+						push_cap_y = 800;
+					if (push_cap_z > 800)
+						push_cap_z = 800;
 
-					if (push_cap_x > 500)
-						push_cap_x = 500;
-					if (push_cap_y > 500)
-						push_cap_y = 500;
-					if (push_cap_z > 500)
-						push_cap_z = 500;
+					if (push_cap_x < -800)
+						push_cap_x = -800;
+					if (push_cap_y < -800)
+						push_cap_y = -800;
+					if (push_cap_z < -800)
+						push_cap_z = -800;
 
 					part.velocity = '0 0 0';
 					part.velocity = push_cap;
@@ -208,16 +215,31 @@ void() PushPlayers =
 				{
 					push_cap = part.velocity -= (b.origin - self.origin) * (101 - vlen(b.origin - self.origin)) * (pf + 0.05);
 
-					if (push_cap_x > 250)
-						push_cap_x = 250;
-					if (push_cap_y > 250)
-						push_cap_y = 250;
-					if (push_cap_z > 250)
-						push_cap_z = 250;
+					if (push_cap_x > 500)
+						push_cap_x = 500;
+					if (push_cap_y > 500)
+						push_cap_y = 500;
+					if (push_cap_z > 500)
+						push_cap_z = 500;
+
+					if (push_cap_x < -500)
+						push_cap_x = -500;
+					if (push_cap_y < -500)
+						push_cap_y = -500;
+					if (push_cap_z < -500)
+						push_cap_z = -500;
 
 					part.velocity = '0 0 0';
 					part.velocity = push_cap;
 				}
+				// debugging
+				/*
+				string x = ftos(push_cap_x);
+				string y = ftos(push_cap_y);
+				string z = ftos(push_cap_z);				
+				bprint ("X: ", x, "Y: ", y, "Z: ", z, "\n");
+				*/
+
 				part = part.physobj_next;
 			}
 			self.collide_finished = time + 0.5;
@@ -496,7 +518,7 @@ void() RespawnPlayer =
 	spawn_telesfx(self);
 	spawn_televfx(self);
 	self.invulnerable_finished = time + 5; // disallow damage / firing
-	centerprint(self, "");
+	centerprint(self, ""); // clear screen
 	self.clearcprint_finished = time + 0.1;
 	sound (self, CHAN_AUTO, "engine/start.wav", 1, ATTN_NORM);
 };
@@ -1171,4 +1193,6 @@ void() PutClientInServer =
 	ragewar = cvar("ragewar");
 	if (ragewar)
 		self.observer = TRUE; // important now
+	
+	CarSelection_Update(); // Display menu on connect
 };
