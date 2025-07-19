@@ -1094,10 +1094,10 @@ void() CreateNapalmFire =
 
 void() NapalmTouch_Think =
 {
-	if (self.scale < 12)
+	if (self.scale < 18)
 		self.scale = self.scale + 0.1;
 	if (self.alpha > 0.01)
-		self.alpha = self.alpha - 0.01;
+		self.alpha = self.alpha - 0.005;
 	else
 	{
 		remove(self);
