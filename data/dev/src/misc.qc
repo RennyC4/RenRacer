@@ -510,13 +510,18 @@ void() smokepuff_think =
 		return;
 	}
 
-	self.scale += 0.025;
-	self.alpha -= 0.0035;
+	if (!self.cnt) // regular car damage smoke
+	{
+		self.scale += 0.025;
+		self.alpha -= 0.0035;
+	}
+	else // Fire_Freeze smoke
+		self.alpha -= 0.0040;
 
 	frameskip(0.01);
 };
 
-void() spawn_smokepuff =
+void(float type) spawn_smokepuff =
 {
 	entity smoke = spawn();
 
@@ -529,14 +534,27 @@ void() spawn_smokepuff =
 	smoke.netname = "projectile";
 	smoke.effects = EF_ADDITIVE;
 	smoke.alpha = 1;
+	smoke.cnt = type;
 
 	setmodel (smoke, "progs/puff.spr");
 	setsize (smoke, '0 0 0', '0 0 0');
-	setorigin (smoke, self.origin);
 	sound (self, CHAN_WEAPON, "combat/rocket.wav", 1, ATTN_NORM); // Renove me
 
-	smoke.velocity_z = 50;
-	smoke.removeme_finished = time + 3;
+	makevectors (self.angles);
+	if (!type)
+	{
+		setorigin (smoke, self.origin);
+		smoke.velocity_z = 75;
+		smoke.removeme_finished = time + 3;
+	}
+	else // Fire_Freeze smoke
+	{
+		setorigin (smoke, self.origin + v_up * 25);
+		smoke.scale = 1.75;
+		smoke.alpha = 0.75;
+		smoke.velocity_z = 100;
+		smoke.removeme_finished = time + 1.5;
+	}
 
 	smoke.think = smokepuff_think;
 	smoke.nextthink = time;

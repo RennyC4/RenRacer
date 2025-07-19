@@ -15,6 +15,7 @@ void() flare =
         setsize (self, '-10 -2 -2', '10 2 2');
         self.movetype = MOVETYPE_NONE;
         self.solid = SOLID_NOT;
+		self.classname = "decor";
 		self.origin_z = self.origin_z + 1;
 
 		self.pflags = PFLAGS_FULLDYNAMIC | PFLAGS_CORONA;

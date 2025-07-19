@@ -51,7 +51,7 @@ void() bot_ai_race =
 	}
 
 	//
-	// Goalentity is set management: Compare distances - switch to closest
+	// Goalentity set management: Compare distances - switch to closest
 	//
 
 	if (self.goalentity.classname != "bot_waypoint_goal")
@@ -264,9 +264,12 @@ void() bot_ai_race =
 
 		bot_angle_set();
 
-		// AI cheats, can always turbo
+		// AI cheating, affected by skill setting
 		if (self.turbo_fuel < 100)
-			self.turbo_fuel = 100;
+		{
+			if (cvar("skill") > 1)
+				self.turbo_fuel = 100;
+		}
 
 		// Debugging prints
 		/*
@@ -284,6 +287,7 @@ void() bot_ai_race =
 	// Bot is stuck / lost, or is taking too long to hit its goal
 	//
 
+	// FIXME: Sometimes bots ignore this when they shouldn't, unsure why
 	if (self.bot_search_count >= 15 || self.goalentity_time >= 30)
 	{
 		for (entity targ = world;(targ = find(targ, classname, "player"));)
@@ -312,7 +316,7 @@ void() bot_ai_race =
 
 				if (!self.goal_touched)
 					self.goal_touched = TRUE;
-				if (targ.lap > self.lap || targ.frags > self.frags)
+				if (targ.lap > self.lap) // || targ.frags > self.frags)
 				{
 					self.frags = targ.frags;
 					self.lap = targ.lap;
@@ -327,10 +331,10 @@ void() bot_ai_race =
 				self.bot_backup_finished = time;
 				self.collide_finished = time + 3; // Disable player push on teleport
 				makevectors(self.realang);
-				TeleportPhysObject(self.driving, targ.trail.origin, targ.trail.angles, FALSE);
+				TeleportPhysObject(self.driving, targ.trail.origin, targ.trail.angles, FALSE); // teleport car
 
 				if (cvar("developer") == 2)
-					bprint ("Teleported bot to player trail entity\n");
+					bprint (self.netname, " bot teleported to player trail entity\n");
 			}
 		}
 	}

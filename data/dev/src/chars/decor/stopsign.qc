@@ -18,8 +18,6 @@ void()	sign_die10	=[	$death10,	sign_die11	] {};
 void()	sign_die11	=[	$death11,	sign_die12	] {};
 void()	sign_die12	=[	$death12,	sign_die12	] {};
 
-
-
 void () stopsign_die =
 {
 	if (other.owner.driving)
@@ -33,25 +31,18 @@ void () stopsign_die =
 	sign_die2();
 }
 
-
-
-
 void() stopsign =
 {
-
-	local vector offset;
-
-
-		precache_model ("progs/w_stopsign.mdl");
-		precache_sound ("misc/hitsign.wav");
-		setmodel (self, "progs/w_stopsign.mdl");
-		setsize (self, '-9 -9 -17', '10 8 38');
-		self.movetype = MOVETYPE_NONE;
-		self.solid = SOLID_TRIGGER;
-		self.takedamage = DAMAGE_NO;
-		self.origin_z = self.origin_z - 8;
-//		self.health = 1;
-		self.touch = stopsign_die;
-		droptofloor();
-
+	precache_model ("progs/w_stopsign.mdl");
+	precache_sound ("misc/hitsign.wav");
+	setmodel (self, "progs/w_stopsign.mdl");
+	setsize (self, '-9 -9 -17', '10 8 38');
+	self.movetype = MOVETYPE_NONE;
+	self.solid = SOLID_TRIGGER;
+	self.takedamage = DAMAGE_NO;
+	self.classname = "decor";
+	self.origin_z = self.origin_z - 8;
+	//	self.health = 1;
+	self.touch = stopsign_die;
+	droptofloor();
 };

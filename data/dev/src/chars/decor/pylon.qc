@@ -4,7 +4,7 @@
 
 void() rally_cone_think =
 {
-	local vector v;
+	vector v;
 	for (entity targ = world;(targ = find(targ, classname, "player"));)
 	{
 		if (vlen(targ.origin - self.origin) <= 40 && self.hitobject_finished < time && targ.realspeed >= 12)

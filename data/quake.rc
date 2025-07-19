@@ -23,7 +23,7 @@ stuffcmds
 map map1
 
 //
-// set RenRacer defaults
+// set RenRacer defaults - be careful when changing these as things can break
 //
 
 sv_sound_land ""
@@ -66,7 +66,7 @@ r_dynamic 0 // fixes odd ugly lighting
 r_shadows 2 // realtime shadows
 r_coronas 1
 musicvolume 0.75
-sv_gravity 1200 // feels best
+sv_gravity 1200 // feels best for RenRacer
 sv_autooffload 0 // 1 = smoother performance? judderfest
 cl_lerp_smooth 1
 r_shadow_realtime_world 1
@@ -75,6 +75,12 @@ r_waterwarp 1
 v_cshift_water 0
 r_particledesc "classic high tsshaft"
 v_deathtilt 0
+
+// this prevents data drops on dedicated servers / other real players
+sv_maxrate 0
+setinfo rate 0
+//
+
 sv_playerslots 4 // load bots on first run
 
 //mod_terrain_shadows 1 // Broken

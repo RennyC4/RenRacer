@@ -37,44 +37,42 @@ void() lightoffset_think =
 		remove(self);
 		return;
 	}
-	frameskip(0.01);
+	frameskip(0.1);
 };
 
 void() streetlamp =
 {
+//	vector offset = self.origin + (v_forward * 95);;
 
-	local vector offset;
+	precache_model ("progs/w_streetlamp.mdl");
+	precache_sound ("misc/hitpole.wav");
+	setmodel (self, "progs/w_streetlamp.mdl");
+	setsize (self, '-9 -9 -17', '10 8 38');
+	self.movetype = MOVETYPE_NONE;
+	self.solid = SOLID_TRIGGER;
+	self.takedamage = DAMAGE_NO;
+	self.classname = "decor";
+	self.origin_z = self.origin_z - 8;
+//	self.health = 1;
+	self.touch = streetlamp_die;
+	droptofloor();
 
+	// glowy dynamic light
 
-		precache_model ("progs/w_streetlamp.mdl");
-		precache_sound ("misc/hitpole.wav");
-		setmodel (self, "progs/w_streetlamp.mdl");
-		setsize (self, '-9 -9 -17', '10 8 38');
-		self.movetype = MOVETYPE_NONE;
-		self.solid = SOLID_TRIGGER;
-		self.takedamage = DAMAGE_NO;
-		self.origin_z = self.origin_z - 8;
-//		self.health = 1;
-		self.touch = streetlamp_die;
-		droptofloor();
-
-
-		//glowy light crap
-
-		makevectors (self.angles);
-		local entity lightoffset = spawn();
-		lightoffset.owner = self;
-		lightoffset.movetype = MOVETYPE_NOCLIP;
-		lightoffset.solid = SOLID_NOT;
-		setorigin (lightoffset,self.origin + v_forward * 95 + '0 0 48');
-		setmodel (lightoffset, "*null");
-		lightoffset.color = [1, 1, 1];
-		lightoffset.light_lev = 200;
-		//offset = self.origin + (v_forward * 95);
-		self.movetype = MOVETYPE_NONE;
-		lightoffset.pflags = PFLAGS_FULLDYNAMIC;
-		lightoffset.light_lev = 150;
-		lightoffset.color = [2, 2, 1.5];
-		lightoffset.think = lightoffset_think;
-		lightoffset.nextthink = time;
+	makevectors (self.angles);
+	entity lightoffset = spawn();
+	lightoffset.owner = self;
+	lightoffset.movetype = MOVETYPE_NOCLIP;
+	lightoffset.solid = SOLID_NOT;
+	setorigin (lightoffset, self.origin + v_forward * 95 + '0 0 48');
+	setmodel (lightoffset, "*null");
+	lightoffset.color = [1, 1, 1];
+	lightoffset.light_lev = 200;
+	//offset 
+	self.movetype = MOVETYPE_NONE;
+	lightoffset.pflags = PFLAGS_FULLDYNAMIC;
+	lightoffset.light_lev = 150;
+	lightoffset.color = [2, 2, 1.5];
+	lightoffset.think = lightoffset_think;
+	lightoffset.nextthink = time;
 };

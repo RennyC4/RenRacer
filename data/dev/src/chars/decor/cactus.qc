@@ -31,6 +31,7 @@ void() cactus =
 
         self.movetype = MOVETYPE_NONE;
         self.solid = SOLID_NOT;
+		self.classname = "decor";
 		self.origin_z = self.origin_z + 1;
 		self.angles_y = random()*360;
 		droptofloor();

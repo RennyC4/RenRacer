@@ -1442,6 +1442,7 @@ void() Freeze_Think =
 	if (self.removeme_finished < time)
 	{
 		Create2DFreezeExplosion(self.origin, 3);
+		spawn_smokepuff(1);
 		remove(self);
 		return;
 	}
@@ -1485,6 +1486,7 @@ void() Freeze_Touch =
 	if (other.solid == SOLID_BSP && !other.owner || other.owner.driving.invulnerable_finished > time) // Hit wall / invunerable player
 	{
 		Create2DFreezeExplosion(self.origin - v_forward * 32, 3);
+		spawn_smokepuff(1);
 		remove(self);
 		return;
 	}
@@ -1506,6 +1508,7 @@ void() Freeze_Touch =
 	}
 
 	Create2DFreezeExplosion(self.origin, 3);
+	spawn_smokepuff(1);
 	remove(self);
 };
 
@@ -1985,11 +1988,11 @@ void() SpecialWeapon_RoadBastard_Think =
 			self.frame = 0;
 			sound(self, CHAN_BODY, "combat/boomerang2.wav", 1, ATTN_NORM);
 		}
-		self.animation_finished = time + 0.025;
+		self.animation_finished = time + 0.02;
 	}
 	if (self.owner && self.cnt >= 90) // Come back to owner
 	{
-		setsize (self, '-16 -16 -1', '16 16 1'); // larger hitbox on return
+		setsize (self, '-32 -32 -1', '32 32 1'); // larger hitbox on return
 		pointparticles(PART_ROCKET1, self.origin, '0 0 0', 1); // Particle effect
 		vector vele, vels, ph;
 		vele = normalize(self.owner.origin - self.origin);
@@ -2008,13 +2011,12 @@ void() SpecialWeapon_RoadBastard_Think =
 	{
 		pointparticles(PART_ROCKET1, self.origin, '0 0 0', 1); // Particle effect
 		self.cnt2 = TRUE; // Do the increased damage
-		self.colormod = '.25 .25 .25';
+		self.colormod = '.5 .5 .5';
 		self.angles_y += 2;
 		self.cnt += 1;
 		makevectors_mdl(self.angles);
 		self.velocity = v_forward * 800;
 	}
-
 	frameskip(0.01);
 };
 
@@ -2022,12 +2024,15 @@ void() SpecialWeapon_RoadBastard_Touch =
 {
 	if (other.owner == self.owner) // Projectile conflict fix
 		return;
+	if (other.classname == "decor") // don't allow decor to remove boomerang
+		return;
 
 	if (self.owner == other.owner.driving) // Owner stuff
 	{
 		if (self.cnt >= 90)
 		{
 			other.owner.driving.ammo_special += 1; // give wasted shot back
+			stuffcmd (other.owner.driving, "play combat/special.wav\n");
 			remove(self);
 		}
 		return;
@@ -2096,7 +2101,7 @@ void(float rear) SpecialWeapon_RoadBastard =
 	boomerang.angles = vectoangles(boomerang.velocity);
 
 	setmodel (boomerang, "progs/boomerang.mdl");
-	setsize (boomerang, '0 0 0', '0 0 0');
+	setsize (boomerang, '-16 -16 -1', '16 16 1');
 
 	setorigin (boomerang, self.origin + v_up * 8 + v_forward * (48 + self.realspeed));
 
@@ -2915,6 +2920,9 @@ void(float rear) SpecialWeapon_Nightshade =
 .float cmdspecial_napalm_step;
 .float cmdspecial_napalm_step_finished;
 
+.float cmdspecial_napalm_block;
+.float cmdspecial_freeze_block;
+
 void() Clear_CommandSpecialsFlags =
 {
 	self.moveprog1 = self.moveprog2 = self.moveprog3 = self.moveprog4 = 0;
@@ -3062,13 +3070,23 @@ void() CommandSpecials =
 	//
 	if (self.moveprog3 == 1) // User pressed left
 	{
-		self.cmdspecial_freezeburst_step = 1;
-		self.cmdspecial_freezeburst_step_finished = time + 0.2;
+		if (!self.cmdspecial_napalm_step)
+			self.cmdspecial_napalm_block = time + 0.3; // temporarily block napalm inputs once Freeze Burst has started
+
+		if (self.cmdspecial_freeze_block < time)
+		{
+			self.cmdspecial_freezeburst_step = 1;
+			self.cmdspecial_freezeburst_step_finished = time + 0.2;
+		}
 	}
 	if (self.cmdspecial_freezeburst_step == 1 && self.moveprog4 == 1) // User pressed right
 	{
-		self.cmdspecial_freezeburst_step = 2;
-		self.cmdspecial_freezeburst_step_finished = time + 0.2;
+		self.cmdspecial_napalm_block = time + 0.3; // temporarily block napalm inputs once Freeze Burst has started
+		if (self.cmdspecial_freeze_block < time)
+		{
+			self.cmdspecial_freezeburst_step = 2;
+			self.cmdspecial_freezeburst_step_finished = time + 0.2;
+		}
 	}
 	if (self.cmdspecial_freezeburst_step == 2 && self.moveprog1 == 1 && self.energy >= 80 && self.frozen_finished < time) // Hit last step, user hit up
 	{
@@ -3093,13 +3111,23 @@ void() CommandSpecials =
 	//
 	if (self.moveprog4 == 1) // User pressed right
 	{
-		self.cmdspecial_napalm_step = 1;
-		self.cmdspecial_napalm_step_finished = time + 0.2;
+		if (!self.cmdspecial_freezeburst_step)
+			self.cmdspecial_freeze_block = time + 0.3; // temporarily block freeze inputs once Napalm has started
+
+		if (self.cmdspecial_napalm_block < time)
+		{
+			self.cmdspecial_napalm_step = 1;
+			self.cmdspecial_napalm_step_finished = time + 0.2;
+		}
 	}
 	if (self.cmdspecial_napalm_step == 1 && self.moveprog3 == 1) // User pressed left
 	{
-		self.cmdspecial_napalm_step = 2;
-		self.cmdspecial_napalm_step_finished = time + 0.2;
+		self.cmdspecial_freeze_block = time + 0.3; // temporarily block freeze inputs once Napalm has started
+		if (self.cmdspecial_napalm_block < time)
+		{
+			self.cmdspecial_napalm_step = 2;
+			self.cmdspecial_napalm_step_finished = time + 0.2;
+		}
 	}
 	if (self.cmdspecial_napalm_step == 2 && self.moveprog1 == 1 && self.energy >= 40 && self.frozen_finished < time) // Hit last step, user hit up
 	{

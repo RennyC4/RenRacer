@@ -1,6 +1,6 @@
 .entity frontright, frontleft, backright, backleft;
 entity() hotrod;
-void() spawn_smokepuff;
+void(float type) spawn_smokepuff;
 
 void PushAndDamageThink(){
 // RennyC: Disable this
@@ -248,7 +248,7 @@ void() Car_ChassiThink =
 		if (realowner.health < (realowner.max_health * 0.75) && realowner.health > (realowner.max_health * 0.5))
 		{
 			if (self.skin != 1 && realowner.health < realowner.old_health)
-				spawn_smokepuff();
+				spawn_smokepuff(0);
 			if (self.skin != 1)
 			{
 				self.frame = self.skin = 1;
@@ -258,7 +258,7 @@ void() Car_ChassiThink =
 		if (realowner.health < (realowner.max_health * 0.5) && realowner.health > (realowner.max_health * 0.25))
 		{
 			if (self.skin != 2 && realowner.health < realowner.old_health)
-				spawn_smokepuff();
+				spawn_smokepuff(0);
 			if (self.skin != 2)
 			{
 				self.frame = self.skin = 2;
@@ -268,7 +268,7 @@ void() Car_ChassiThink =
 		if (realowner.health < (realowner.max_health * 0.25))
 		{
 			if (self.skin != 3 && realowner.health < realowner.old_health)
-				spawn_smokepuff();
+				spawn_smokepuff(0);
 			if (self.skin != 3)
 			{
 				self.frame = self.skin = 3;

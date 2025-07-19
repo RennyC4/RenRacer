@@ -285,7 +285,7 @@ void() bot_ai_fight =
 			// AI Special Command move - Cloak
 			if (self.health < (self.max_health / 3) && self.commandspcl_finished < time && random() < 0.012 && self.energy >= 50 && self.frozen_finished < time)
 			{
-				if (random() < 0.012) // Another random check so they don't spam it so often
+				if (random() < 0.33) // Another random check so they don't spam it so often
 				{
 					self.energy -= 50;
 					self.cloak_finished = time + 5;
@@ -293,7 +293,7 @@ void() bot_ai_fight =
 					self.commandspcl_finished = time + 5;
 				}
 				else
-					self.commandspcl_finished = time + 0.8; // allow another try in 0.8 seconds
+					self.commandspcl_finished = time + 1; // allow another try in a second
 			}
 			// AI Special Command move - Rear attack
 			if (behind(self.enemy, 0.90) && self.commandspcl_finished < time && random() < 0.025 && self.frozen_finished < time)

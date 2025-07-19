@@ -34,6 +34,7 @@ void() rally_barricade =
         setsize (self, '-13 -29 -9', '13 23 21');
         self.movetype = MOVETYPE_TOSS;
         self.solid = SOLID_NOT;
+		self.classname = "decor";
 		self.origin_z = self.origin_z + 1;
 		droptofloor();
 
