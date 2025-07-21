@@ -5,7 +5,7 @@
 "mapversion" "220"
 "classname" "worldspawn"
 "wad" "C:/Games/RenRacer/data/dev/wads/tm1.wad;C:/Games/RenRacer/data/dev/wads/colours.wad;C:/Games/RenRacer/data/dev/wads/tm2.wad"
-"message" "District 69"
+"message" "Place of Two Lanes"
 "_bounce" "1"
 "_dirt" "1"
 "_sun_mangle" "-60 -45 0"
@@ -5312,6 +5312,7 @@
 "_tb_type" "_tb_group"
 "_tb_name" "BridgeClip"
 "_tb_id" "1"
+"_tb_linked_group_id" "{1b7bbd10-77e0-45e8-b288-0a6984a0be97}"
 // brush 0
 {
 ( 128 936 160 ) ( 128 936 144 ) ( 128 952 144 ) clip [ 0 -1 0 8 ] [ 0 0 -1 16 ] 0 1 1
@@ -5383,6 +5384,7 @@
 "_tb_type" "_tb_group"
 "_tb_name" "BridgeClip"
 "_tb_id" "2"
+"_tb_linked_group_id" "{82b8e343-df9c-4e0c-a673-d6d2d30378da}"
 // brush 0
 {
 ( 128 1192 160 ) ( 128 1176 144 ) ( 128 1192 144 ) clip [ 0 1 0 -8 ] [ 0 0 -1 16 ] 180 1 1
@@ -5454,6 +5456,7 @@
 "_tb_type" "_tb_group"
 "_tb_name" "BridgeClip"
 "_tb_id" "4"
+"_tb_linked_group_id" "{78afb59c-3491-47f9-a093-1cc0c3f87310}"
 // brush 0
 {
 ( 128 -664 160 ) ( 128 -680 144 ) ( 128 -664 144 ) clip [ 0 1 0 -8.000061 ] [ 0 0 -1 16 ] 180 1 1
@@ -5652,6 +5655,7 @@
 "_tb_type" "_tb_group"
 "_tb_name" "BridgeClip"
 "_tb_id" "3"
+"_tb_linked_group_id" "{508d6d16-0cc3-4946-84fc-9053e59cd0d1}"
 // brush 0
 {
 ( 128 -920 160 ) ( 128 -920 144 ) ( 128 -904 144 ) clip [ 0 -1 0 8 ] [ 0 0 -1 16 ] 0 1 1
