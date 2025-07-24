@@ -261,7 +261,7 @@ void() spawn_pedestrian4 =
 		ped.takedamage = DAMAGE_YES;
 		ped.solid = SOLID_TRIGGER;
 		ped.touch = pedestrian_touch;
-		ped.scale = 0.75;
+		ped.scale = 0.6;
 		ped.owner = self;
 		ped.classname = "pedestrian";
 		ped.alpha = 0;
@@ -271,10 +271,10 @@ void() spawn_pedestrian4 =
 		ped.nextthink = time;
 
 		setmodel(ped, "progs/ped4.spr");
-		setsize(ped, '-8 -8 -8', '8 8 8');
-		setorigin(ped, self.origin);
+		setsize(ped, '-8 -8 -16', '8 8 8');
+		setorigin(ped, self.origin + v_up * 16);
 
-		self.cnt += 1; // 3 peds max per spawner
+		self.cnt += 1; // 1 peds max per spawner
 	}
 	self.nextthink = time + 60 + random()*30; // spawn timer
 };

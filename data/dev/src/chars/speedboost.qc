@@ -31,7 +31,7 @@ void() speedboost =
 	if (!self.speed)
 		self.speed = 5000;
 	if (!self.speedboost_finished)
-		self.speedboost_finished = 1;
+		self.speedboost_finished = time + 1;
 
 	self.solid = SOLID_TRIGGER;
 	setmodel (self, self.model); // link into world

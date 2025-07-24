@@ -502,7 +502,7 @@ void(float speed, float maxspeed) Car_Accelerate =
 {
 	local entity tright, tleft;
 
-	if (!self.driving||self.drift) // RennyC
+	if (!self.driving || self.drift) // RennyC
 		return;
 	if (self.slow_finished > time) // slow status
 	{
@@ -637,10 +637,10 @@ void(float speed, float maxspeed) Car_Pitch =
     }
 }
 
-void(float speed, float maxspeed) Car_Rotate = // for rotating on spot in ragewar
+void(float speed, float maxspeed) Car_Rotate = // car stationary rotation
 {
-	local entity f_right, f_left;
-	local entity b_right, b_left;
+	entity f_right, f_left;
+	entity b_right, b_left;
 
 	if (!self.driving)
 		return;
@@ -651,23 +651,23 @@ void(float speed, float maxspeed) Car_Rotate = // for rotating on spot in ragewa
 	b_right = self.driving.backright;
 
 	if (f_right.flags & FL_ONGROUND && f_left.flags & FL_ONGROUND && b_right.flags & FL_ONGROUND && b_left.flags & FL_ONGROUND)  // all tires have to touch ground
+	{
+		float fright_lzvel = f_right.velocity * f_right.lmat_left;
+		float fleft_lzvel = f_left.velocity * f_left.lmat_left;
+		float bright_lzvel = b_right.velocity * b_right.lmat_left;
+		float bleft_lzvel = b_left.velocity * b_left.lmat_left;
+
+		float rel_bzvel = fabs(bright_lzvel - bleft_lzvel);
+		float rel_fzvel = fabs(fright_lzvel - fleft_lzvel);
+
+		float allowRollFront = (rel_fzvel) < maxspeed;
+		float allowRollBack = (rel_bzvel) < maxspeed;
+		if (allowRollFront && allowRollBack)
 		{
-
-	float fright_lzvel = f_right.velocity * f_right.lmat_left;
-	float fleft_lzvel = f_left.velocity * f_left.lmat_left;
-	float bright_lzvel = b_right.velocity * b_right.lmat_left;
-	float bleft_lzvel = b_left.velocity * b_left.lmat_left;
-
-	float rel_bzvel = fabs(bright_lzvel - bleft_lzvel);
-	float rel_fzvel = fabs(fright_lzvel - fleft_lzvel);
-
-	float allowRollFront = (rel_fzvel) < maxspeed;
-	float allowRollBack = (rel_bzvel) < maxspeed;
-	if (allowRollFront && allowRollBack){
-		f_right.velocity = f_right.velocity - f_right.lmat_left *speed*frametime;
-		b_right.velocity = b_right.velocity + b_right.lmat_left *speed*frametime;
-		f_left.velocity = f_left.velocity - f_left.lmat_left *speed*frametime;	
-		b_left.velocity = b_left.velocity + b_left.lmat_left*speed*frametime;	
+			f_right.velocity = f_right.velocity - f_right.lmat_left *speed*frametime;
+			b_right.velocity = b_right.velocity + b_right.lmat_left *speed*frametime;
+			f_left.velocity = f_left.velocity - f_left.lmat_left *speed*frametime;	
+			b_left.velocity = b_left.velocity + b_left.lmat_left*speed*frametime;	
 		}
 	}
 }
@@ -823,17 +823,6 @@ void TryUpdateVehicle()
 			b_left.physobj_stiction = 99999;
 		}
 
-		// RennyC: Speed Booster
-		if (self.speed > 0 && self.speedboost_finished > time)
-		{
-			self.car_stabilizer = -2; // Harder to tip while speed boosting
-			car_boost(self.speed);
-			if (!self.waterlevel)
-				pointparticles(PART_SPEEDBOOST, self.origin - v_up * 16 - v_forward * 32, '0 0 0', 1);
-			else
-				pointparticles(PART_BUBBLE, self.origin - v_up * 16 - v_forward * 32, '0 0 0', 1);
-		}
-
 		float roll = v_right * self.velocity;
 		if (roll > 100){
 			self.keyflags = self.keyflags | KEY_RIGHT; // RennyC
@@ -881,6 +870,29 @@ void TryUpdateVehicle()
 				pitch = pitch + 360;
 		}
 
+		// RennyC: Speed Booster
+		if (self.speed > 0 && self.speedboost_finished > time)
+		{
+			self.car_stabilizer = -2; // Harder to tip while speed boosting
+
+			if (!ragewar)
+				Car_Rotate(move * 7, 150);
+			else
+				Car_Rotate(move * 7, self.handling);
+
+			if (!ragewar)
+				Car_Accelerate(6000, 950 * 1.4);
+			else
+				Car_Accelerate(self.speed * 1.15, self.max_speed * 1.4);
+			if (self.frozen_finished < time)
+				car_boost(2000);
+
+			if (!self.waterlevel)
+				pointparticles(PART_SPEEDBOOST, self.origin - v_up * 16 - v_forward * 32, '0 0 0', 1);
+			else
+				pointparticles(PART_BUBBLE, self.origin - v_up * 16 - v_forward * 32, '0 0 0', 1);
+		}
+
 		// RennyC
 		// Taken from Build-A-Delivery by shpuld
 		if (self.button0)
@@ -894,7 +906,7 @@ void TryUpdateVehicle()
 			self.turbo_held = FALSE;
 			self.turbo = FALSE;
 		}
-	
+
 		if (self.turbo)
 		{
 			if (self.turbo_fuel > 0)
@@ -931,11 +943,14 @@ void TryUpdateVehicle()
 					self.turbosfx_finished = time + 1;
 				}
 
-				Car_Accelerate(3000, 950);
+				if (!ragewar)
+					Car_Accelerate(6000, 950 * 1.4);
+				else
+					Car_Accelerate(self.speed * 1.15, self.max_speed * 1.4);
 				if (self.frozen_finished < time)
 					car_boost(2000);
-				makevectors(self.realang);
 
+				makevectors(self.realang);
 				if (!self.waterlevel)
 				{
 					if (self.vehicle == VEH_THOROGOOD)
@@ -980,7 +995,10 @@ void TryUpdateVehicle()
 					self.driftspeed_timer = 10;
 				self.car_stabilizer = -2; // Harder to tip while drifting (lowers chassis)
 				car_drift();
-				Car_Rotate(move * 7, self.handling);
+				if (!ragewar)
+					Car_Rotate(move * 7, 150);
+				else
+					Car_Rotate(move * 7, self.handling);
 				if (self.turbo_fuel < 100)
 					self.turbo_fuel = self.turbo_fuel + 1; // Drift adds turbo fuel
 				else
@@ -1074,9 +1092,10 @@ void TryUpdateVehicle()
 	// RennyC
 	if (!self.keyflags) // RennyC: schpulds stuff applied to RenRacer
 	{
-		if (ragewar && cvar("rw_stationary_rotation") && self.frozen_finished < time && self.realspeed <= 10 )
+		if (ragewar && cvar("rw_stationary_rotation") && self.frozen_finished < time && self.realspeed <= 10)
 			Car_Rotate(move * 50, self.handling);
-		if (self.realspeed <= 25)Car_Brake();
+		if (self.realspeed <= 25)
+			Car_Brake();
 	}
 
 	if (self.health > 0)

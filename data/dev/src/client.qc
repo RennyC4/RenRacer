@@ -146,28 +146,29 @@ void() PushPlayers =
 				}
 			}
 
-			// damage routine
+			// damage routine - ramming
 			if (ragewar)
 			{
 				if (!self.backward && (self.turbo || self.drift))
 				{
-					// target damage
-					float dmg = floor(self.realspeed / 32) + floor(self.max_health / 5);
-					DoDamage(b, self, dmg, "ramming");
-
-					// self damage
-					dmg = floor(dmg / 4);
-					if (self.vehicle != VEH_SKYSCRAPER)
-						DoDamage(self, self, dmg, "ramming");
-
+					// RennyC: Run SkyScraper's special before regular vehicle damage is done
 					if (self.vehicle == VEH_SKYSCRAPER && self.ammo_special > 0 && b.health > 0)
 					{
 						sound (self, CHAN_AUTO, "combat/skyscraper.wav", 1, ATTN_NORM);
-						dmg = 15; // extra 15 damage
-						DoDamage(b, self, dmg, "skyscraper");
+						DoDamage(b, self, 15, "skyscraper"); // extra 15 damage
 						if (self.ammo_special > 0)
 							self.ammo_special -= 1;
 					}
+
+					// calculate regular ramming damage
+					float dmg = floor(self.realspeed / 32) + floor(self.max_health / 5);
+					float dmg2 = ceil(dmg / 2); // RennyC: Ramming damage was reportedly too high
+					DoDamage(b, self, dmg2, "ramming");
+
+					// self damage
+					dmg = floor(dmg / 4);
+					if (self.vehicle != VEH_SKYSCRAPER) // skyscraper doesn't suffer from ramming damage
+						DoDamage(self, self, dmg, "ramming");
 				}
 			}
 
