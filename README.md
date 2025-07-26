@@ -2,4 +2,11 @@
 RenRacer
 By RenegadeC
 
-Credits goes to Urre/Polo for func_vechicle, Chazz for GoldCup assets, and Ender for Scratch
+# Credits:
+
+Urre/Polo - func_vechicle
+Chazz - GoldCup assets
+Ender - Scratch
+Gridluster - Music for Map1
+SinisterSpud - Models, coding and general contributions
+xaGe - Testing, TrenchBroom FGD support, general misc/help
