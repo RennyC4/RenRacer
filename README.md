@@ -1,6 +1,5 @@
 # RenRacer
-RenRacer
-By RenegadeC
+RenRacer By RenegadeC
 
 # Credits:
 
@@ -15,3 +14,5 @@ Gridluster - Music for Map1
 SinisterSpud - Models, coding and general contributions
 
 xaGe - Testing, TrenchBroom FGD support, general misc/help
+
+Join us on discord: https://discord.com/invite/7VQpDvy
