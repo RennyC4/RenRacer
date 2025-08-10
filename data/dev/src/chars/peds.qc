@@ -74,7 +74,10 @@ void() pedestrian_die =
 	if (self.owner.spawnflags & 2) // Jiving weirdo
 		self.frame = 16;
 	if (self.owner.spawnflags & 4) // Lazy chair lad
-		self.frame = 1;
+		{
+		self.frame = 20;
+		frameskip(0.1);
+		}
 
 	self.movetype = MOVETYPE_TOSS;
 	self.avelocity = '200 200 0'; // spin in air
@@ -120,8 +123,8 @@ void() pedestrian1_think =
 	if (self.frame < 14)
 		self.frame ++;
 	else
+		
 		self.frame = 0;
-
 	pedestrian_move(2.5);
 	frameskip(0.1);
 };
@@ -246,10 +249,42 @@ void() spawn_pedestrian3 =
 
 void() pedestrian4_think =
 {
-	if (self.alpha < 1)
-		self.alpha += 0.1;	
-	frameskip(0.1);
+	if (self.frame < 19)
+		{
+		self.frame ++;
+		frameskip(0.1);
+		}
+	else //pause between beer drink anim
+		{
+		frameskip(3);
+		self.frame = 0;
+		}
+
 };
+
+void() pedestrian4chair_think =
+{
+	setorigin(self, self.owner.origin);
+	if (self.owner.deadflag == DEAD_DEAD)
+		self.th_die();
+	frameskip(0.5);
+};
+
+
+void() pedestrian4chair_die =
+{
+	self.frame = 1;
+	self.avelocity = '0 0 0';
+	self.angles_x = 0;
+	self.takedamage = DAMAGE_NO;
+	self.deadflag = DEAD_DEAD;
+	self.think = SUB_Remove;
+	self.nextthink = time + 15.2; // Dead body clean up
+	return;
+	
+};
+
+
 
 void() spawn_pedestrian4 =
 {
@@ -261,7 +296,6 @@ void() spawn_pedestrian4 =
 		ped.takedamage = DAMAGE_YES;
 		ped.solid = SOLID_TRIGGER;
 		ped.touch = pedestrian_touch;
-		ped.scale = 0.6;
 		ped.owner = self;
 		ped.classname = "pedestrian";
 		ped.alpha = 0;
@@ -270,9 +304,25 @@ void() spawn_pedestrian4 =
 		ped.think = pedestrian4_think;
 		ped.nextthink = time;
 
-		setmodel(ped, "progs/ped4.spr");
-		setsize(ped, '-8 -8 -16', '8 8 8');
+		setmodel(ped, "progs/ped4.mdl");
+		setsize(ped, '-7 -14 -20', '7 11 15');
 		setorigin(ped, self.origin + v_up * 16);
+
+		//chair
+
+		entity chair = spawn();
+		chair.owner = ped;
+		chair.movetype = MOVETYPE_STEP;
+		chair.solid = SOLID_NOT;
+		chair.takedamage = DAMAGE_NO;
+		makevectors (self.angles);
+		chair.classname = "ped4_chair";
+		chair.think = pedestrian4chair_think;
+		chair.nextthink = time + 0.1;
+		chair.th_die = pedestrian4chair_die;
+		setmodel (chair, "progs/ped4_chair.mdl");
+		setsize (chair, '0 0 0', '0 0 0');
+		setorigin (chair, self.origin + v_up * 16);
 
 		self.cnt += 1; // 1 peds max per spawner
 	}
@@ -315,7 +365,8 @@ void() pedestrian =
 
 	if (self.spawnflags & 4) // Lazy chair lad
 	{
-		precache_model ("progs/ped4.spr");
+		precache_model ("progs/ped4.mdl");
+		precache_model ("progs/ped4_chair.mdl");
 		self.think = spawn_pedestrian4;
 		self.nextthink = time + 0.2;
 	}
